@@ -8,10 +8,10 @@
   <meta name="theme-color" content="#9f1f1f" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/site.css" />
-  <script defer src="js/config.js"></script>
-  <script defer src="js/data.js"></script>
-  <script defer src="js/site.js"></script>
-  <script defer src="js/catalog.js"></script>
+  <script defer src="js/config.js?v=20260801-2105"></script>
+  <script defer src="js/data.js?v=20260801-2105"></script>
+  <script defer src="js/site.js?v=20260801-2105"></script>
+  <script defer src="js/catalog.js?v=20260801-2105"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Lewati ke konten utama</a>
@@ -73,8 +73,19 @@
   </footer>
 
   <div class="drawer-backdrop" hidden data-drawer-backdrop></div>
-  <aside class="quick-drawer" aria-hidden="true" data-quick-drawer>
-    <div class="drawer-head"><h2>Pilih varian</h2><button class="drawer-close" type="button" aria-label="Tutup" data-drawer-close>×</button></div>
+  <aside
+    class="quick-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-hidden="true"
+    aria-labelledby="quickDrawerTitle"
+    tabindex="-1"
+    data-quick-drawer
+  >
+    <div class="drawer-head">
+      <h2 id="quickDrawerTitle">
+        Pilih varian
+      </h2><button class="drawer-close" type="button" aria-label="Tutup" data-drawer-close>×</button></div>
     <div class="drawer-content" data-drawer-content></div>
   </aside>
 </body>

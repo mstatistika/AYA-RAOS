@@ -2672,3 +2672,247 @@ p { margin-bottom: 0; color: var(--aya-copy); }
 }
 
 /* AYA TESTIMONIALS PAGE FINAL — END */
+
+/* AYA COMMERCE ACTION SWEEP — BEGIN */
+
+.mt-18 {
+  margin-top: 18px;
+}
+
+.product-grid-empty {
+  grid-column: 1 / -1;
+}
+
+.product-detail-placeholder {
+  min-height: 470px;
+  aspect-ratio: 1.08;
+}
+
+.purchase-box-note {
+  margin-top: 7px;
+}
+
+/* Toast must remain visible above drawers and header */
+.toast {
+  position: fixed;
+  z-index: 220;
+  right: 24px;
+  bottom: 24px;
+  min-height: 52px;
+  padding: 13px 16px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 15px;
+  color: #fff;
+  background: var(--aya-ink);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+  transition:
+    opacity .22s ease,
+    transform .22s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Quick product drawer */
+.drawer-backdrop {
+  position: fixed;
+  z-index: 130;
+  inset: 0;
+  background: rgba(24, 15, 12, .48);
+  backdrop-filter: blur(3px);
+}
+
+.drawer-backdrop[hidden] {
+  display: none;
+}
+
+.quick-drawer {
+  position: fixed;
+  z-index: 140;
+  top: 0;
+  right: 0;
+  width: min(440px, 100%);
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--aya-line);
+  background: var(--aya-ivory);
+  box-shadow:
+    -24px 0 70px
+    rgba(36, 27, 24, .18);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(104%);
+  visibility: hidden;
+  transition:
+    transform .28s ease,
+    opacity .22s ease,
+    visibility 0s linear .28s;
+}
+
+.quick-drawer.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.drawer-head {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--aya-line);
+}
+
+.drawer-head h2 {
+  color: var(--aya-red-dark);
+  font-size: 28px;
+}
+
+.drawer-close {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border: 1px solid var(--aya-line);
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.drawer-close:hover,
+.drawer-close:focus-visible {
+  color: #fff;
+  border-color: var(--aya-red);
+  background: var(--aya-red);
+}
+
+.drawer-content {
+  flex: 1;
+  min-height: 0;
+  padding: 22px;
+  overflow-y: auto;
+}
+
+.drawer-product {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.drawer-product img,
+.drawer-product-placeholder {
+  width: 104px;
+  height: 104px;
+  border-radius: 15px;
+  object-fit: cover;
+  background: var(--aya-cream);
+}
+
+.drawer-product-placeholder {
+  display: grid;
+  place-items: center;
+  color: var(--aya-red);
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+  font-size: 25px;
+}
+
+.drawer-product h3 {
+  margin-top: 5px;
+  color: var(--aya-red-dark);
+  font-size: 25px;
+}
+
+.drawer-product p {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.drawer-actions {
+  margin-top: 24px;
+}
+
+.drawer-actions .button {
+  margin-top: 14px;
+}
+
+.product-quick-add {
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
+}
+
+.product-quick-add:hover,
+.product-quick-add:focus-visible {
+  background: var(--aya-red-dark);
+  box-shadow:
+    0 8px 20px
+    rgba(159, 31, 31, .24);
+  transform: scale(1.06);
+}
+
+.product-quick-add:focus-visible,
+.drawer-close:focus-visible,
+.quantity-control button:focus-visible,
+.remove-link:focus-visible {
+  outline: 3px solid
+    rgba(185, 138, 58, .35);
+  outline-offset: 3px;
+}
+
+.checkout-form {
+  display: grid;
+}
+
+.checkout-form .form-field:first-child {
+  margin-top: 20px;
+}
+
+@media (max-width: 680px) {
+  .quick-drawer {
+    width: 100%;
+  }
+
+  .drawer-head {
+    min-height: 72px;
+    padding: 16px 18px;
+  }
+
+  .drawer-content {
+    padding: 19px 18px 28px;
+  }
+
+  .drawer-product {
+    grid-template-columns: 86px 1fr;
+  }
+
+  .drawer-product img,
+  .drawer-product-placeholder {
+    width: 86px;
+    height: 86px;
+  }
+
+  .toast {
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+  }
+}
+
+/* AYA COMMERCE ACTION SWEEP — END */

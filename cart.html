@@ -7,7 +7,7 @@
   <meta name="description" content="Periksa produk AYA yang dipilih dan finalisasi pesanan melalui WhatsApp." />
   <meta name="theme-color" content="#9f1f1f" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" /><link rel="stylesheet" href="css/site.css" />
-  <script defer src="js/config.js"></script><script defer src="js/data.js"></script><script defer src="js/site.js"></script><script defer src="js/cart-page.js"></script>
+  <script defer src="js/config.js?v=20260801-2105"></script><script defer src="js/data.js?v=20260801-2105"></script><script defer src="js/site.js?v=20260801-2105"></script><script defer src="js/cart-page.js?v=20260801-2105"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Lewati ke konten utama</a>
@@ -42,7 +42,7 @@
     <section class="section"><div class="container cart-layout">
       <div>
         <div class="cart-list" data-cart-list></div>
-        <div class="empty-state" data-cart-empty><h2>Keranjang masih kosong.</h2><p>Pilih beberapa produk dari katalog terlebih dahulu.</p><a class="button button-primary" href="products.html" style="margin-top:18px">Lihat Produk</a></div>
+        <div class="empty-state" data-cart-empty><h2>Keranjang masih kosong.</h2><p>Pilih beberapa produk dari katalog terlebih dahulu.</p><a class="button button-primary" href="products.html" class="mt-18">Lihat Produk</a></div>
       </div>
       <aside class="order-summary">
         <h2>Ringkasan pesanan</h2>
@@ -50,9 +50,15 @@
           class="checkout-form"
           data-checkout-form
           novalidate
-        >
+         id="checkoutForm">
 
-        <div class="form-field mt-20"><label for="customerName">Nama, opsional</label><input id="customerName" type="text" autocomplete="name" placeholder="Nama Anda" / name="customerName"></div>
+        <div class="form-field mt-20"><label for="customerName">Nama, opsional</label><input
+            id="customerName"
+            type="text"
+            name="customerName"
+            autocomplete="name"
+            placeholder="Nama Anda"
+          /></div>
         <div class="form-field"><label for="deliveryZone">Wilayah pengiriman</label><select id="deliveryZone" name="deliveryZone" autocomplete="shipping address-level2"><option value="lippo-utara">Lippo Utara</option><option value="jabodetabek">Jabodetabek</option><option value="luar-jabodetabek-indonesia">Luar Jabodetabek / Indonesia</option><option value="akan-dikonfirmasi">Akan dikonfirmasi</option></select></div>
         <div class="form-field"><label for="orderNotes">Catatan, opsional</label><textarea id="orderNotes" placeholder="Contoh: mohon kirim Sabtu jika memungkinkan" name="orderNotes" autocomplete="off"></textarea></div>
         <div class="summary-line"><span>Estimasi subtotal</span><strong data-cart-subtotal>Rp0</strong></div>

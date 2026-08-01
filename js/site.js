@@ -50,21 +50,37 @@
   let memoryCart = [];
 
   function getCart() {
-    if (!storage) return memoryCart;
+    if (!storage) {
+      return Array.isArray(memoryCart)
+        ? memoryCart
+        : [];
+    }
 
-    return safeParse(
+    const parsed = safeParse(
       storage.getItem(CART_KEY),
       []
     );
+
+    /*
+      Cart lama atau storage yang rusak tidak boleh
+      menghentikan tombol tambah keranjang.
+    */
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
   }
 
   function saveCart(cart) {
-    memoryCart = cart;
+    const safeCart = Array.isArray(cart)
+      ? cart
+      : [];
+
+    memoryCart = safeCart;
 
     try {
       storage?.setItem(
         CART_KEY,
-        JSON.stringify(cart)
+        JSON.stringify(safeCart)
       );
     } catch (error) {
       console.error(
@@ -81,7 +97,7 @@
 
     window.dispatchEvent(
       new CustomEvent("aya:cart-updated", {
-        detail: { cart }
+        detail: { cart: safeCart }
       })
     );
 
