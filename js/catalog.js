@@ -19,6 +19,11 @@
           "[data-result-count]"
         );
 
+      const toolbar =
+        document.querySelector(
+          ".catalog-toolbar"
+        );
+
       const drawer =
         document.querySelector(
           "[data-quick-drawer]"
@@ -280,6 +285,34 @@
 
         footer.appendChild(priceBox);
 
+        const productActions =
+          make(
+            "div",
+            "product-actions"
+          );
+
+        const detailLink =
+          make(
+            "a",
+            "product-detail-link",
+            "Detail →"
+          );
+
+        detailLink.href =
+          detailUrl;
+
+        detailLink.setAttribute(
+          "aria-label",
+          `Lihat detail ${
+            product.name ||
+            "produk AYA"
+          }`
+        );
+
+        productActions.appendChild(
+          detailLink
+        );
+
         if (
           product.available &&
           product.variants?.length
@@ -303,10 +336,6 @@
             }`
           );
 
-          /*
-            Listener langsung: tidak bergantung pada
-            event delegation document.
-          */
           quickAdd.addEventListener(
             "click",
             event => {
@@ -328,23 +357,14 @@
             }
           );
 
-          footer.appendChild(
+          productActions.appendChild(
             quickAdd
           );
-        } else {
-          const detailLink =
-            make(
-              "a",
-              "text-link",
-              "Detail"
-            );
-
-          detailLink.href = detailUrl;
-
-          footer.appendChild(
-            detailLink
-          );
         }
+
+        footer.appendChild(
+          productActions
+        );
 
         body.appendChild(footer);
 
@@ -973,6 +993,41 @@
           render();
         }
       );
+
+      /* AYA CATALOG STICKY STATE */
+      const updateToolbarState = () => {
+        if (!toolbar) return;
+
+        const headerHeight =
+          parseFloat(
+            getComputedStyle(
+              document.documentElement
+            ).getPropertyValue(
+              "--aya-header-height"
+            )
+          ) || 82;
+
+        toolbar.classList.toggle(
+          "is-stuck",
+          toolbar
+            .getBoundingClientRect()
+            .top <=
+            headerHeight + 9
+        );
+      };
+
+      window.addEventListener(
+        "scroll",
+        updateToolbarState,
+        { passive: true }
+      );
+
+      window.addEventListener(
+        "resize",
+        updateToolbarState
+      );
+
+      updateToolbarState();
 
       const params =
         new URLSearchParams(

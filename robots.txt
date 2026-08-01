@@ -1,0 +1,5 @@
+# AYA RAOS staging environment
+# Indexing will be enabled during production launch.
+
+User-agent: *
+Disallow: /
