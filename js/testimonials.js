@@ -1,43 +1,64 @@
 (() => {
-  const STORAGE_KEY =
-    "aya-raos-testimonial-submissions";
+  const fallbackTestimonials =
+    window.AYA_TESTIMONIALS
+      ?.texts || [];
 
-  const fallbackTestimonials = [
-    {
-      quote:
-        "Makan di CFC pun tetap pakai Sambal Bawang AYA.",
-      name: "@Rafaelers",
-      meta: "Sambal Bawang"
-    },
-    {
-      quote:
-        "Enak bangettt—jadi stok pendamping makan di rumah.",
-      name: "Pelanggan AYA",
-      meta: "Bawang Goreng"
-    },
-    {
-      quote:
-        "Rasanya gurih, renyah, dan bikin nasi hangat langsung habis.",
-      name: "@dapur.nita",
-      meta: "Bawang Goreng"
-    }
-  ];
+  const make = (
+    tag,
+    className = "",
+    text
+  ) => {
+    const node =
+      document.createElement(tag);
 
-  function getTestimonials() {
-    const fromData =
-      window.AYA_TESTIMONIALS?.texts;
-
-    if (
-      Array.isArray(fromData) &&
-      fromData.length
-    ) {
-      return fromData;
+    if (className) {
+      node.className =
+        className;
     }
 
-    return fallbackTestimonials;
+    if (text !== undefined) {
+      node.textContent = text;
+    }
+
+    return node;
+  };
+
+  function normalizeRemoteItem(
+    item
+  ) {
+    return {
+      quote:
+        item.public_text || "",
+
+      name:
+        item.display_name ||
+        "Pelanggan AYA",
+
+      meta: [
+        item.product_name,
+        item.city
+      ]
+        .filter(Boolean)
+        .join(" · "),
+
+      format:
+        item.testimonial_format ||
+        "text",
+
+      mediaUrl:
+        item.public_media_url ||
+        "",
+
+      featured:
+        Boolean(
+          item.is_featured
+        )
+    };
   }
 
-  function renderTestimonials() {
+  function renderTestimonials(
+    items
+  ) {
     const wall =
       document.querySelector(
         "[data-testimonial-wall]"
@@ -45,50 +66,138 @@
 
     if (!wall) return;
 
-    const items =
-      getTestimonials().slice(0, 8);
-
     wall.replaceChildren();
 
-    items.forEach(item => {
-      const article =
-        document.createElement("article");
+    const visibleItems =
+      items.slice(0, 10);
 
-      article.className =
-        "testimonial-written-card";
+    if (!visibleItems.length) {
+      const empty =
+        make(
+          "div",
+          "testimonial-empty-state"
+        );
+
+      empty.appendChild(
+        make(
+          "strong",
+          "",
+          "Testimoni sedang disiapkan."
+        )
+      );
+
+      empty.appendChild(
+        make(
+          "p",
+          "",
+          "Pengalaman pelanggan akan tampil setelah melalui proses persetujuan."
+        )
+      );
+
+      wall.appendChild(empty);
+      return;
+    }
+
+    visibleItems.forEach(item => {
+      const article =
+        make(
+          "article",
+          "testimonial-written-card"
+        );
 
       const quote =
-        document.createElement("p");
-
-      quote.textContent =
-        `“${item.quote || ""}”`;
+        make(
+          "p",
+          "",
+          `“${item.quote || ""}”`
+        );
 
       const footer =
-        document.createElement("footer");
+        document.createElement(
+          "footer"
+        );
 
-      const name =
-        document.createElement("strong");
+      footer.append(
+        make(
+          "strong",
+          "",
+          item.name ||
+            "Pelanggan AYA"
+        ),
 
-      name.textContent =
-        item.name || "Pelanggan AYA";
+        make(
+          "span",
+          "",
+          item.meta ||
+            "Produk AYA"
+        )
+      );
 
-      const meta =
-        document.createElement("span");
+      article.append(
+        quote,
+        footer
+      );
 
-      meta.textContent =
-        item.meta ||
-        item.product ||
-        "Produk AYA";
-
-      footer.append(name, meta);
-      article.append(quote, footer);
       wall.appendChild(article);
     });
   }
 
+  async function loadApproved() {
+    const wall =
+      document.querySelector(
+        "[data-testimonial-wall]"
+      );
+
+    if (!wall) return;
+
+    renderTestimonials(
+      fallbackTestimonials
+    );
+
+    if (
+      !window.AYA_SUPABASE
+        ?.isConfigured
+    ) {
+      return;
+    }
+
+    try {
+      const data =
+        await window
+          .AYA_SUPABASE
+          .rpc(
+            "get_approved_aya_testimonials",
+            {
+              p_environment:
+                window
+                  .AYA_SUPABASE
+                  .environment
+            }
+          );
+
+      if (
+        Array.isArray(data) &&
+        data.length
+      ) {
+        renderTestimonials(
+          data.map(
+            normalizeRemoteItem
+          )
+        );
+      }
+    } catch (error) {
+      console.warn(
+        "AYA approved testimonials:",
+        error
+      );
+    }
+  }
+
   function populateProducts() {
     const select =
-      document.querySelector("#product");
+      document.querySelector(
+        "#product"
+      );
 
     if (!select) return;
 
@@ -100,30 +209,46 @@
     select.replaceChildren();
 
     const placeholder =
-      document.createElement("option");
+      document.createElement(
+        "option"
+      );
 
     placeholder.value = "";
     placeholder.textContent =
       "Pilih produk";
 
-    select.appendChild(placeholder);
+    select.appendChild(
+      placeholder
+    );
 
     products.forEach(product => {
-      if (!product?.id || !product?.name) {
+      if (
+        !product?.id ||
+        !product?.name
+      ) {
         return;
       }
 
       const option =
-        document.createElement("option");
+        document.createElement(
+          "option"
+        );
 
-      option.value = product.id;
-      option.textContent = product.name;
+      option.value =
+        product.id;
 
-      select.appendChild(option);
+      option.textContent =
+        product.name;
+
+      select.appendChild(
+        option
+      );
     });
   }
 
-  function getProductName(productId) {
+  function getProductName(
+    productId
+  ) {
     const products =
       window.AYA_PRODUCTS ||
       window.AYA?.products ||
@@ -132,25 +257,100 @@
     return (
       products.find(
         product =>
-          product.id === productId
+          product.id ===
+          productId
       )?.name ||
       productId
     );
   }
 
-  function saveLocally(payload) {
-    const current = JSON.parse(
-      localStorage.getItem(
-        STORAGE_KEY
-      ) || "[]"
-    );
+  function setStatus(
+    status,
+    message,
+    type = ""
+  ) {
+    status.className =
+      "testimonial-form-status";
 
-    current.push(payload);
+    if (type) {
+      status.classList.add(
+        `is-${type}`
+      );
+    }
 
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify(current)
-    );
+    status.textContent =
+      message;
+
+    if (message) {
+      status.focus({
+        preventScroll: true
+      });
+    }
+  }
+
+  function applyFormat(
+    form,
+    selectedFormat
+  ) {
+    form
+      .querySelectorAll(
+        "[data-format-field]"
+      )
+      .forEach(field => {
+        const isMatch =
+          field.dataset
+            .formatField ===
+          selectedFormat;
+
+        field.hidden = !isMatch;
+
+        field
+          .querySelectorAll(
+            "input, textarea, select"
+          )
+          .forEach(input => {
+            input.disabled =
+              !isMatch;
+
+            input.required =
+              isMatch;
+          });
+      });
+  }
+
+  function bindFormatFields(
+    form
+  ) {
+    const radios = [
+      ...form.querySelectorAll(
+        "[data-format-toggle]"
+      )
+    ];
+
+    if (!radios.length) {
+      return;
+    }
+
+    const update = () => {
+      const selected =
+        form.querySelector(
+          "[data-format-toggle]:checked"
+        )?.value || "text";
+
+      applyFormat(
+        form,
+        selected
+      );
+    };
+
+    radios.forEach(radio => {
+      radio.addEventListener(
+        "change",
+        update
+      );
+    });
+
+    update();
   }
 
   function bindForm() {
@@ -164,17 +364,21 @@
         "[data-form-status]"
       );
 
-    if (!form || !status) return;
+    if (!form || !status) {
+      return;
+    }
+
+    bindFormatFields(form);
 
     form.addEventListener(
       "submit",
       async event => {
         event.preventDefault();
 
-        status.className =
-          "testimonial-form-status";
-
-        status.textContent = "";
+        setStatus(
+          status,
+          ""
+        );
 
         const honeypot =
           form.elements.website;
@@ -184,10 +388,28 @@
           honeypot.value.trim()
         ) {
           form.reset();
+          applyFormat(
+            form,
+            "text"
+          );
           return;
         }
 
-        if (!form.reportValidity()) {
+        if (
+          !form.reportValidity()
+        ) {
+          return;
+        }
+
+        if (
+          !window.AYA_SUPABASE
+            ?.isConfigured
+        ) {
+          setStatus(
+            status,
+            "Sistem pengiriman testimoni belum terhubung.",
+            "error"
+          );
           return;
         }
 
@@ -196,53 +418,41 @@
 
         const productId =
           String(
-            formData.get("product") || ""
+            formData.get(
+              "product"
+            ) || ""
           );
 
-        const payload = {
-          customerName:
+        const format =
+          String(
+            formData.get(
+              "testimonialFormat"
+            ) || "text"
+          );
+
+        let mediaUrl = "";
+
+        if (
+          format === "photo"
+        ) {
+          mediaUrl =
             String(
               formData.get(
-                "customerName"
+                "photoUrl"
               ) || ""
-            ).trim(),
+            ).trim();
+        }
 
-          productId,
-
-          productName:
-            getProductName(productId),
-
-          testimonial:
+        if (
+          format === "video"
+        ) {
+          mediaUrl =
             String(
               formData.get(
-                "testimonial"
+                "videoUrl"
               ) || ""
-            ).trim(),
-
-          mediaType:
-            String(
-              formData.get(
-                "mediaType"
-              ) || "text"
-            ),
-
-          mediaUrl:
-            String(
-              formData.get(
-                "mediaUrl"
-              ) || ""
-            ).trim(),
-
-          consent:
-            Boolean(
-              formData.get("consent")
-            ),
-
-          status: "pending",
-
-          submittedAt:
-            new Date().toISOString()
-        };
+            ).trim();
+        }
 
         const submitButton =
           form.querySelector(
@@ -250,63 +460,115 @@
           );
 
         const originalText =
-          submitButton?.textContent;
+          submitButton
+            ?.textContent;
 
         if (submitButton) {
-          submitButton.disabled = true;
+          submitButton.disabled =
+            true;
+
           submitButton.textContent =
             "Mengirim…";
         }
 
         try {
-          const endpoint =
-            window.AYA_CONFIG
-              ?.testimonialEndpoint
-              ?.trim();
+          await window
+            .AYA_SUPABASE
+            .rpc(
+              "submit_aya_testimonial",
+              {
+                p_display_name:
+                  String(
+                    formData.get(
+                      "customerName"
+                    ) || ""
+                  ).trim(),
 
-          if (endpoint) {
-            const response =
-              await fetch(endpoint, {
-                method: "POST",
-                headers: {
-                  "Content-Type":
-                    "application/json"
-                },
-                body: JSON.stringify(payload)
-              });
+                p_city:
+                  String(
+                    formData.get(
+                      "city"
+                    ) || ""
+                  ).trim(),
 
-            if (!response.ok) {
-              throw new Error(
-                "Endpoint menolak kiriman."
-              );
-            }
-          } else {
-            saveLocally(payload);
-          }
+                p_email:
+                  String(
+                    formData.get(
+                      "email"
+                    ) || ""
+                  ).trim(),
+
+                p_product_id:
+                  productId,
+
+                p_product_name:
+                  getProductName(
+                    productId
+                  ),
+
+                p_testimonial_text:
+                  String(
+                    formData.get(
+                      "testimonial"
+                    ) || ""
+                  ).trim(),
+
+                p_testimonial_format:
+                  format,
+
+                p_media_url:
+                  mediaUrl || null,
+
+                p_consent_to_publish:
+                  Boolean(
+                    formData.get(
+                      "consent"
+                    )
+                  ),
+
+                p_environment:
+                  window
+                    .AYA_SUPABASE
+                    .environment,
+
+                p_website:
+                  String(
+                    formData.get(
+                      "website"
+                    ) || ""
+                  )
+              }
+            );
 
           form.reset();
 
-          status.classList.add(
-            "is-success"
+          applyFormat(
+            form,
+            "text"
           );
 
-          status.textContent =
-            "Terima kasih. Testimoni Anda sudah diterima dan menunggu persetujuan.";
+          setStatus(
+            status,
+            "Terima kasih. Testimoni Anda sudah diterima dan menunggu persetujuan.",
+            "success"
+          );
         } catch (error) {
           console.error(
-            "Testimonial submission error:",
+            "AYA testimonial submission:",
             error
           );
 
-          status.classList.add(
-            "is-error"
+          setStatus(
+            status,
+            error?.message ||
+              "Testimoni belum berhasil dikirim. Silakan coba kembali.",
+            "error"
           );
-
-          status.textContent =
-            "Testimoni belum berhasil dikirim. Silakan coba kembali.";
         } finally {
           if (submitButton) {
-            submitButton.disabled = false;
+            submitButton.disabled =
+              false;
+
             submitButton.textContent =
               originalText;
           }
@@ -318,7 +580,7 @@
   document.addEventListener(
     "DOMContentLoaded",
     () => {
-      renderTestimonials();
+      loadApproved();
       populateProducts();
       bindForm();
     }
