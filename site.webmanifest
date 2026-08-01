@@ -1,0 +1,9 @@
+{
+  "name": "AYA RAOS",
+  "short_name": "AYA RAOS",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fffdf8",
+  "theme_color": "#9f1f1f",
+  "icons": []
+}
