@@ -64,3 +64,27 @@
     render();
   });
 })();
+
+/* AYA CHECKOUT FORM ENHANCEMENT — BEGIN */
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector(
+    "[data-checkout-form]"
+  );
+
+  const checkoutButton = form?.querySelector(
+    "[data-checkout]"
+  );
+
+  if (!form || !checkoutButton) return;
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+
+    /*
+      Mempertahankan checkout handler yang sudah ada.
+      Submit melalui Enter akan menjalankan aksi tombol.
+    */
+    checkoutButton.click();
+  });
+});
+/* AYA CHECKOUT FORM ENHANCEMENT — END */

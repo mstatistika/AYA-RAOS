@@ -11,39 +11,360 @@
 </head>
 <body>
   <a class="skip-link" href="#main">Lewati ke konten utama</a>
-  <header class="site-header"><div class="container site-header-inner"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><nav class="primary-nav"><a href="index.html">Beranda</a><a href="products.html">Semua Produk</a><a href="testimonials.html" aria-current="page">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a></nav><div class="header-actions"><a class="header-cta" href="#kirim">Kirim Testimoni</a><a class="cart-link" href="cart.html"><span>Keranjang</span><span class="cart-count" data-cart-count>0</span></a><button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button></div></div><nav class="mobile-panel" data-mobile-panel><a href="index.html">Beranda</a><a href="products.html">Semua Produk</a><a href="index.html#cerita-aya">Tentang AYA</a><a href="testimonials.html">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="cart.html">Keranjang</a></nav></header>
+  <header class="site-header">
+    <div class="container site-header-inner">
+      <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda"><strong>AYA</strong><small>RAOS</small></a>
+      <nav class="primary-nav" aria-label="Navigasi utama">
+        <a href="index.html">Beranda</a>
+        <a href="products.html">Semua Produk</a>
+        
+        <a href="testimonials.html">Testimoni</a>
+        <a href="information.html#cara-pesan">Cara Pesan</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-cta" href="products.html">Mulai Pesan</a>
+        <a class="cart-link" href="cart.html" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-count" data-cart-count>0</span></a>
+        <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
+      <a href="index.html">Beranda</a>
+      <a href="products.html">Semua Produk</a>
+      <a href="index.html#cerita-aya">Tentang AYA</a>
+      <a href="testimonials.html">Testimoni</a>
+      <a href="information.html#cara-pesan">Cara Pesan</a>
+      <a href="cart.html">Keranjang</a>
+    </nav>
+  </header>
 
-  <main id="main" class="page-shell">
-    <section class="page-hero"><div class="container"><div class="breadcrumb"><a href="index.html">Beranda</a><span>/</span><span>Testimoni</span></div><h1>Cerita pelanggan, ditampilkan dengan persetujuan.</h1><p>Testimoni dibagi ke dalam tiga format: video, foto besar dengan kutipan, serta tulisan singkat yang dapat digeser atau berjalan otomatis.</p></div></section>
+  <main
+    class="testimonials-page"
+    id="main"
+  >
+    <section class="testimonial-page-hero">
+      <div class="container testimonial-page-hero-inner">
+        <div>
+          <span class="eyebrow">
+            Pengalaman Pelanggan
+          </span>
 
-    <section class="section testimonials-home">
-      <div class="container">
-        <div class="section-heading"><div><span class="eyebrow">Video testimonial</span><h2>Pengalaman yang terasa lebih nyata.</h2></div><p>Video tidak diputar otomatis dan hanya ditampilkan setelah mendapat izin serta persetujuan admin AYA.</p></div>
-        <div class="testimonial-video-grid"><div class="video-empty"><div><div class="play-symbol">▶</div><h3>Belum ada video yang disetujui</h3><p>Area ini sudah siap menerima video pelanggan setelah sistem approval dihubungkan.</p></div></div><div class="video-note"><span class="eyebrow">Standar publikasi</span><h3>Privasi pelanggan tetap menjadi prioritas.</h3><p>Nama tampilan, foto, dan video hanya akan digunakan sesuai persetujuan yang diberikan dalam form.</p><a class="button button-primary" href="#kirim">Bagikan Pengalaman</a></div></div>
+          <h1>
+            Cerita nyata dari pelanggan
+            yang menikmati produk AYA.
+          </h1>
+        </div>
 
-        <article class="big-picture-testimonial"><img src="assets/images/testimonial-bawang.webp" alt="Bawang goreng AYA dari pelanggan" /><div class="big-picture-copy"><span>Big picture testimonial</span><blockquote>“Enak bangettt.”</blockquote><strong>Pelanggan AYA</strong><small>Bawang Goreng · testimoni arsip</small></div></article>
+        <div class="testimonial-page-hero-copy">
+          <p>
+            Setiap testimoni ditampilkan setelah melalui
+            proses persetujuan. Nama, foto, dan video hanya
+            digunakan sesuai izin yang diberikan pelanggan.
+          </p>
 
-        <div class="text-testimonial-block"><div class="testimonial-toolbar"><h3>Testimoni tulisan</h3><div class="carousel-controls"><button class="carousel-control" type="button" aria-label="Sebelumnya" data-carousel-prev>←</button><button class="carousel-control" type="button" aria-label="Berikutnya" data-carousel-next>→</button></div></div><div class="text-carousel" tabindex="0" data-text-carousel></div></div>
+          <a
+            class="button button-primary"
+            href="#kirim"
+          >
+            Bagikan Pengalaman
+          </a>
+        </div>
       </div>
     </section>
 
-    <section class="section" id="kirim">
-      <div class="container testimonial-form-grid">
-        <div class="form-intro"><span class="eyebrow">Kirim testimoni</span><h2>Bagikan pengalaman Anda bersama AYA.</h2><p>Kiriman tidak langsung tampil. Admin AYA akan memeriksa isi, media, dan persetujuan sebelum menentukan format publikasinya.</p><div class="approval-steps"><div class="approval-step"><span>1</span><div><strong>Kirim pengalaman</strong><small>Isi form dan tambahkan media jika ada.</small></div></div><div class="approval-step"><span>2</span><div><strong>Review admin</strong><small>Status awal setiap kiriman adalah pending.</small></div></div><div class="approval-step"><span>3</span><div><strong>Publikasi terpilih</strong><small>Admin menentukan video, big picture, atau text-only.</small></div></div></div></div>
+    <section class="section testimonial-showcase-section">
+      <div class="container">
+        <div class="testimonial-page-showcase">
+          <article class="testimonial-feature-card">
+            <img
+              src="assets/images/testimonial-bawang.webp"
+              alt="Bawang goreng AYA yang dinikmati pelanggan"
+              width="1200"
+              height="900"
+            />
 
-        <form class="form-card" enctype="multipart/form-data" data-testimonial-form>
-          <div class="form-grid-two"><div class="form-field"><label for="name">Nama tampilan</label><input id="name" name="name" type="text" required maxlength="60" autocomplete="name" /></div><div class="form-field"><label for="city">Kota, opsional</label><input id="city" name="city" type="text" maxlength="60" /></div></div>
-          <div class="form-grid-two"><div class="form-field"><label for="product">Produk yang dibeli</label><select id="product" name="product" required><option value="">Pilih produk</option><option>Sambal Bawang</option><option>Bawang Goreng Sumenep</option><option>Rendang Daging Sapi</option><option>Ayam Goreng Kuning</option><option>Dimsum + Chili Oil</option><option>Beras Pilihan</option><option>Kacang Tanah Jumbo</option><option>Kacang Mede Jumbo</option><option>Cireng</option><option>Es Buah AYA</option><option>Produk lainnya</option></select></div><div class="form-field"><label for="displayType">Format yang dikirim</label><select id="displayType" name="displayType" required><option value="text">Tulisan</option><option value="photo">Foto + tulisan</option><option value="video">Video + tulisan</option></select></div></div>
-          <div class="form-field"><label for="testimonial">Testimoni</label><textarea id="testimonial" name="testimonial" required minlength="10" maxlength="800" placeholder="Ceritakan pengalaman Anda dengan produk AYA"></textarea></div>
-          <div class="form-field"><label for="media">Foto atau video, opsional · maksimal 10 MB</label><input id="media" name="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" /></div>
-          <div class="checkbox-field"><input id="consent" name="consent" type="checkbox" required value="yes" /><label for="consent">Saya menyetujui AYA meninjau dan, jika disetujui, menampilkan testimoni ini pada website atau kanal resmi dengan nama tampilan yang saya isi.</label></div>
-          <button class="button button-primary button-full" type="submit" style="margin-top:20px">Kirim untuk Ditinjau</button>
-          <div class="form-status" tabindex="-1" data-form-status></div>
+            <div class="testimonial-feature-overlay">
+              <span>Testimoni pilihan</span>
+
+              <blockquote>
+                “Enak bangettt.”
+              </blockquote>
+
+              <strong>Pelanggan AYA</strong>
+
+              <small>
+                Bawang Goreng · testimoni arsip
+              </small>
+            </div>
+          </article>
+
+          <aside class="testimonial-written-panel">
+            <header class="testimonial-written-head">
+              <span class="eyebrow">
+                Testimoni Tulisan
+              </span>
+
+              <h2>
+                Yang mereka ceritakan.
+              </h2>
+
+              <p>
+                Pengalaman singkat pelanggan setelah
+                mencoba produk AYA.
+              </p>
+            </header>
+
+            <div
+              class="testimonial-written-list"
+              data-testimonial-wall
+              aria-live="polite"
+            >
+              <article class="testimonial-written-card">
+                <p>
+                  “Makan di CFC pun tetap pakai
+                  Sambal Bawang AYA.”
+                </p>
+
+                <footer>
+                  <strong>@Rafaelers</strong>
+                  <span>Sambal Bawang</span>
+                </footer>
+              </article>
+
+              <article class="testimonial-written-card">
+                <p>
+                  “Enak bangettt—jadi stok pendamping
+                  makan di rumah.”
+                </p>
+
+                <footer>
+                  <strong>Pelanggan AYA</strong>
+                  <span>Bawang Goreng</span>
+                </footer>
+              </article>
+            </div>
+
+            <footer class="testimonial-written-footer">
+              <a
+                class="text-link"
+                href="#kirim"
+              >
+                Bagikan pengalaman →
+              </a>
+            </footer>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm testimonial-video-section">
+      <div class="container">
+        <article class="testimonial-video-status">
+          <div
+            class="testimonial-video-icon"
+            aria-hidden="true"
+          >
+            <svg viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z"></path>
+            </svg>
+          </div>
+
+          <div class="testimonial-video-copy">
+            <span class="eyebrow">
+              Video Pelanggan
+            </span>
+
+            <h2>
+              Belum ada video yang disetujui.
+            </h2>
+
+            <p>
+              Area ini sudah disiapkan untuk video pelanggan
+              setelah proses persetujuan dan moderasi selesai.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section
+      class="section testimonial-submit-section"
+      id="kirim"
+    >
+      <div class="container testimonial-submit-grid">
+        <div class="testimonial-submit-intro">
+          <span class="eyebrow">
+            Bagikan Pengalaman
+          </span>
+
+          <h2>
+            Ceritakan produk AYA yang paling Anda sukai.
+          </h2>
+
+          <p>
+            Testimoni dapat berupa tulisan atau tautan menuju
+            foto dan video. Setiap kiriman akan diperiksa
+            terlebih dahulu sebelum dipublikasikan.
+          </p>
+
+          <div class="testimonial-privacy-note">
+            <strong>
+              Privasi pelanggan tetap menjadi prioritas.
+            </strong>
+
+            <p>
+              Nama, foto, dan video tidak akan digunakan
+              di luar persetujuan yang diberikan melalui
+              formulir ini.
+            </p>
+          </div>
+        </div>
+
+        <form
+          class="testimonial-submit-form"
+          data-testimonial-form
+        >
+          <div
+            class="form-honeypot"
+            aria-hidden="true"
+          >
+            <label for="testimonialWebsite">
+              Website
+            </label>
+
+            <input
+              id="testimonialWebsite"
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="testimonial-form-grid">
+            <div class="form-field">
+              <label for="testimonialName">
+                Nama
+              </label>
+
+              <input
+                id="testimonialName"
+                type="text"
+                name="customerName"
+                autocomplete="name"
+                placeholder="Nama atau username"
+                required
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="product">
+                Produk AYA
+              </label>
+
+              <select
+                id="product"
+                name="product"
+                required
+              >
+                <option value="">
+                  Pilih produk
+                </option>
+              </select>
+            </div>
+
+            <div class="form-field form-field-wide">
+              <label for="testimonialMessage">
+                Cerita Anda
+              </label>
+
+              <textarea
+                id="testimonialMessage"
+                name="testimonial"
+                rows="5"
+                maxlength="700"
+                placeholder="Ceritakan pengalaman Anda menikmati produk AYA."
+                required
+              ></textarea>
+            </div>
+
+            <div class="form-field">
+              <label for="testimonialFormat">
+                Format
+              </label>
+
+              <select
+                id="testimonialFormat"
+                name="mediaType"
+              >
+                <option value="text">
+                  Tulisan
+                </option>
+
+                <option value="photo">
+                  Foto
+                </option>
+
+                <option value="video">
+                  Video
+                </option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="testimonialMedia">
+                Link foto atau video
+              </label>
+
+              <input
+                id="testimonialMedia"
+                type="url"
+                name="mediaUrl"
+                inputmode="url"
+                placeholder="Opsional"
+              />
+            </div>
+          </div>
+
+          <label class="testimonial-consent">
+            <input
+              type="checkbox"
+              name="consent"
+              required
+            />
+
+            <span>
+              Saya mengizinkan AYA meninjau dan
+              mempublikasikan testimoni ini.
+            </span>
+          </label>
+
+          <button
+            class="button button-primary"
+            type="submit"
+          >
+            Kirim Testimoni
+          </button>
+
+          <p
+            class="testimonial-form-status"
+            data-form-status
+            role="status"
+            aria-live="polite"
+          ></p>
         </form>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><p>Perjalanan rasa dari Tanah Sunda.</p></div><div class="footer-column"><h3>Produk</h3><a href="products.html?line=spice">Spice Haven</a><a href="products.html?line=farm">Farm</a><a href="products.html?line=snack">Snack &amp; Drinks</a></div><div class="footer-column"><h3>Informasi</h3><a href="index.html#cerita-aya">Tentang</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div><div class="footer-column"><h3>Bantuan</h3><a href="information.html#faq">FAQ</a><a href="information.html#privasi">Privasi</a><button data-direct-whatsapp>WhatsApp</button></div></div><div class="container footer-bottom"><span>© <span data-current-year></span> AYA RAOS.</span><span>Lippo Utara · Indonesia</span></div><div class="footer-accent"></div></footer>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><p>Perjalanan rasa dari Tanah Sunda melalui hasil bumi, pendamping makanan, camilan, dan minuman.</p></div>
+      <div class="footer-column"><h3>Produk Kami</h3><a href="products.html?line=spice">AYA Spice Haven</a><a href="products.html?line=farm">AYA Farm</a><a href="products.html?line=snack">AYA Snack &amp; Drinks</a></div>
+      <div class="footer-column"><h3>Informasi</h3><a href="index.html#cerita-aya">Tentang AYA</a><a href="testimonials.html">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div>
+      <div class="footer-column"><h3>Bantuan</h3><a href="information.html#faq">FAQ</a><a href="information.html#syarat">Syarat Pemesanan</a><a href="information.html#privasi">Privasi</a><button type="button" data-direct-whatsapp>WhatsApp</button></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span data-current-year></span> AYA RAOS. Semua hak dilindungi.</span><span>Lippo Utara · Jabodetabek · Indonesia</span></div>
+    <div class="footer-accent"></div>
+  </footer>
 </body>
 </html>
