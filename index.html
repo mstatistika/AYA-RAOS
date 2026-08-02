@@ -3,103 +3,70 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AYA RAOS — Perjalanan Rasa dari Tanah Sunda</title>
-  <meta name="description" content="AYA RAOS menaungi AYA Spice Haven, AYA Farm, dan AYA Snack & Drinks. Temukan pendamping makanan, hasil bumi, camilan, dan minuman untuk keseharian." />
+  <title>AYA RAOS — Ada Rasa</title>
+  <meta name="description" content="AYA RAOS adalah satu rumah bagi AYA Spice Haven, AYA Farm, serta AYA Snack & Drinks—dipertemukan oleh rasa, bahan, proses, dan momen keseharian." />
   <meta name="theme-color" content="#9f1f1f" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/site.css?v=20260801-ux-supabase-1" />
-  <script defer src="js/config.js?v=20260801-ux-supabase-1"></script>
-  <script defer src="js/data.js?v=20260801-ux-supabase-1"></script>
-  <script defer src="js/site.js?v=20260801-ux-supabase-1"></script>
-  <script defer src="js/home.js?v=20260801-ux-supabase-1"></script>
+  <link rel="stylesheet" href="css/site.css?v=20260802-frontend-v2" />
+  <link rel="stylesheet" href="css/frontend-v2.css?v=20260802-frontend-v2" />
+  <script defer src="js/config.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/data.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/site.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/home.js?v=20260802-frontend-v2"></script>
 
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta property="og:title" content="AYA RAOS — Ada Rasa" />
+  <meta property="og:description" content="Rasa yang tumbuh dari alam, diolah dengan rempah, dan hadir di setiap momen." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AYA RAOS" />
+  <meta property="og:locale" content="id_ID" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="AYA RAOS — Ada Rasa" />
+  <meta name="twitter:description" content="Rasa yang tumbuh dari alam, diolah dengan rempah, dan hadir di setiap momen." />
+  <link rel="manifest" href="site.webmanifest" />
 
-  <!-- AYA STAGING METADATA — BEGIN -->
-  <meta
-    name="robots"
-    content="noindex, nofollow, noarchive"
-  />
-  <meta
-    name="referrer"
-    content="strict-origin-when-cross-origin"
-  />
-
-  <meta
-    property="og:title"
-    content="AYA RAOS — Perjalanan Rasa dari Tanah Sunda"
-  />
-  <meta
-    property="og:description"
-    content="AYA RAOS menaungi AYA Spice Haven, AYA Farm, dan AYA Snack &amp; Drinks. Temukan pendamping makanan, hasil bumi, camilan, dan minuman untuk keseharian."
-  />
-  <meta
-    property="og:type"
-    content="website"
-  />
-  <meta
-    property="og:site_name"
-    content="AYA RAOS"
-  />
-  <meta
-    property="og:locale"
-    content="id_ID"
-  />
-
-  <meta
-    name="twitter:card"
-    content="summary"
-  />
-  <meta
-    name="twitter:title"
-    content="AYA RAOS — Perjalanan Rasa dari Tanah Sunda"
-  />
-  <meta
-    name="twitter:description"
-    content="AYA RAOS menaungi AYA Spice Haven, AYA Farm, dan AYA Snack &amp; Drinks. Temukan pendamping makanan, hasil bumi, camilan, dan minuman untuk keseharian."
-  />
-
-  <link
-    rel="manifest"
-    href="site.webmanifest"
-  />
-  <!-- AYA STAGING METADATA — END -->
-  <!-- AYA STAGING JSON-LD — BEGIN -->
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "AYA RAOS",
-  "description": "AYA RAOS menaungi AYA Spice Haven, AYA Farm, dan AYA Snack & Drinks. Temukan pendamping makanan, hasil bumi, camilan, dan minuman untuk keseharian.",
-  "sameAs": [
-    "https://www.instagram.com/aya.spice.haven/"
-  ]
-}
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AYA RAOS",
+    "description": "AYA RAOS menaungi AYA Spice Haven, AYA Farm, serta AYA Snack & Drinks.",
+    "sameAs": ["https://www.instagram.com/aya.spice.haven/"]
+  }
   </script>
-  <!-- AYA STAGING JSON-LD — END -->
 </head>
-<body>
+<body class="v2-page">
   <a class="skip-link" href="#main">Lewati ke konten utama</a>
+  <div class="v2-top-note">Pesanan disiapkan 2–3 hari setelah pembayaran diterima · Pengiriman Jabodetabek menggunakan tarif aktual Grab/Gojek</div>
 
   <header class="site-header">
     <div class="container site-header-inner">
-      <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda"><strong>AYA</strong><small>RAOS</small></a>
+      <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda">
+        <strong>AYA</strong><small>RAOS</small>
+      </a>
       <nav class="primary-nav" aria-label="Navigasi utama">
         <a href="index.html" aria-current="page">Beranda</a>
-        <a href="products.html">Semua Produk</a>
-        
+        <a href="#cerita-aya">Cerita AYA</a>
+        <a href="products.html">Produk</a>
+        <a href="business.html">Pesanan Usaha</a>
         <a href="testimonials.html">Testimoni</a>
-        <a href="information.html#cara-pesan">Cara Pesan</a>
       </nav>
       <div class="header-actions">
         <a class="header-cta" href="products.html">Mulai Pesan</a>
-        <a class="cart-link" href="cart.html" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-count" data-cart-count>0</span></a>
-        <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
+        <a class="cart-link" href="cart.html" aria-label="Buka keranjang">
+          <span>Keranjang</span><span class="cart-count" data-cart-count>0</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle>
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
     <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
       <a href="index.html">Beranda</a>
-      <a href="products.html">Semua Produk</a>
-      <a href="index.html#cerita-aya">Tentang AYA</a>
+      <a href="#cerita-aya">Cerita AYA</a>
+      <a href="products.html">Produk</a>
+      <a href="business.html">Pesanan Usaha</a>
       <a href="testimonials.html">Testimoni</a>
       <a href="information.html#cara-pesan">Cara Pesan</a>
       <a href="cart.html">Keranjang</a>
@@ -107,229 +74,199 @@
   </header>
 
   <main id="main">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <span class="eyebrow">Dari dapur kami, untuk hidangan Anda</span>
-          <h1>Pendamping makanan dengan rasa yang dekat.</h1>
-          <p>AYA RAOS menghadirkan hasil bumi, pendamping makanan, camilan, dan minuman yang dibuat dalam jumlah terbatas dengan perhatian pada rasa, tekstur, dan konsistensi.</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="products.html">Lihat Semua Produk</a>
-            <a class="button button-secondary" href="index.html#cerita-aya">Kenali AYA</a>
+    <section class="v2-hero" aria-labelledby="homeHeroTitle">
+      <div class="container v2-hero-grid">
+        <div class="v2-hero-copy">
+          <span class="eyebrow">AYA RAOS · Ada Rasa</span>
+          <h1 id="homeHeroTitle">Rasa yang tumbuh dari alam, diolah dengan rempah, dan hadir di setiap <em>momen.</em></h1>
+          <p>AYA RAOS adalah satu rumah bagi hasil pertanian dan peternakan, produk yang memperoleh karakter dari rempah, serta camilan dan minuman untuk keseharian.</p>
+          <div class="v2-actions">
+            <a class="button button-primary" href="#cerita-aya">Kenali AYA</a>
+            <a class="button button-secondary" href="products.html">Jelajahi Produk</a>
           </div>
-          <div class="hero-meta" aria-label="Informasi utama">
-            <span><strong>Batch kecil</strong>Perhatian lebih terjaga</span>
-            <span><strong>Pesan fleksibel</strong>Pilih beberapa produk</span>
-            <span><strong>Finalisasi mudah</strong>Langsung ke WhatsApp</span>
+          <div class="v2-hero-meta" aria-label="Perjalanan rasa AYA">
+            <div class="v2-meta-item"><strong>Berakar dari alam</strong><span>Bahan dan hasil usaha yang menjadi awal perjalanan rasa.</span></div>
+            <div class="v2-meta-item"><strong>Dibangun melalui rasa</strong><span>Rempah, pengolahan, dan perhatian membentuk karakter produk.</span></div>
+            <div class="v2-meta-item"><strong>Hadir untuk keseharian</strong><span>Untuk makan di rumah, momen bersama, serta kebutuhan usaha.</span></div>
           </div>
         </div>
 
-        <div class="hero-visual">
-          <div class="hero-frame">
-            <img src="assets/images/hero-sambal.webp" alt="Sambal Bawang AYA dalam kemasan toples" width="1200" height="1000" fetchpriority="high" />
-            <div class="hero-seal">Rasa pilihan<br />dibuat dengan<br />perhatian</div>
-            <div class="hero-caption">
-              <div><small>Hero product</small><strong>Sambal AYA</strong></div>
-              <span>Produk utama AYA Spice Haven untuk menemani berbagai hidangan.</span>
+        <div class="v2-hero-visual">
+          <div class="v2-hero-frame">
+            <img src="assets/images/hero-sambal.webp" alt="Sambal AYA sebagai hero product AYA Spice Haven" width="1200" height="1000" fetchpriority="high" />
+            <div class="v2-hero-badge">Hero Product</div>
+            <div class="v2-hero-caption">
+              <small>Rasa utama AYA Spice Haven</small>
+              <strong>Sambal AYA</strong>
+              <span>Produk yang membuka perjalanan AYA melalui rasa pedas, gurih, dan rempah yang dekat dengan hidangan sehari-hari.</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section lines-section" id="lini">
-      <div class="container">
-        <div class="lines-title">
-          <span>Tiga pilihan, satu kualitas</span>
-          <h2>AYA RAOS</h2>
-          <p>
-            Tiga lini produk untuk kebutuhan berbeda, dipertemukan
-            oleh perhatian yang sama terhadap kualitas dan pengalaman pelanggan.
-          </p>
+    <section class="v2-section v2-section-soft" id="cerita-aya" aria-labelledby="philosophyTitle">
+      <div class="container v2-philosophy-grid">
+        <div class="v2-philosophy-copy">
+          <span class="v2-kicker">Filosofi AYA RAOS</span>
+          <h2 id="philosophyTitle">Bukan sekadar nama. AYA RAOS berarti <em>Ada Rasa.</em></h2>
+          <p>Bagi AYA, rasa tidak berhenti pada pedas, gurih, manis, atau segar. Rasa juga hadir dalam bahan yang dipilih, proses yang dijaga, pengalaman saat menikmati, dan momen yang tercipta bersama.</p>
         </div>
-
-        <div class="line-grid">
-          <article class="line-card">
-            <div class="line-card-image">
-              <img
-                src="assets/images/sambal.webp"
-                alt="Produk Sambal AYA"
-                loading="lazy"
-              />
-            </div>
-
-            <div class="line-card-body">
-              <h3 class="line-card-title">AYA SAMBAL</h3>
-              <p>Sambal premium dengan rasa autentik.</p>
-              <a
-                class="text-link"
-                href="products.html?line=spice"
-              >
-                Lihat produk →
-              </a>
-            </div>
-          </article>
-
-          <article class="line-card">
-            <div class="line-card-image">
-              <img
-                src="assets/images/beras.webp"
-                alt="Beras dan hasil pertanian AYA Farm"
-                loading="lazy"
-              />
-            </div>
-
-            <div class="line-card-body">
-              <h3 class="line-card-title">AYA FARM</h3>
-              <p>Beras dan hasil pertanian pilihan.</p>
-              <a
-                class="text-link"
-                href="products.html?line=farm"
-              >
-                Lihat produk →
-              </a>
-            </div>
-          </article>
-
-          <article class="line-card">
-            <div class="line-card-image">
-              <img
-                src="assets/images/cireng.webp"
-                alt="Produk AYA Snack and Drinks"
-                loading="lazy"
-              />
-            </div>
-
-            <div class="line-card-body">
-              <h3 class="line-card-title">
-                AYA SNACK &amp; DRINKS
-              </h3>
-              <p>Camilan dan minuman praktis untuk momen Anda.</p>
-              <a
-                class="text-link"
-                href="products.html?line=snack"
-              >
-                Lihat produk →
-              </a>
-            </div>
-          </article>
+        <div class="v2-pillars" aria-label="Tiga pilar filosofi AYA RAOS">
+          <article class="v2-pillar"><span>01 · Tumbuh</span><h3>Berawal dari alam.</h3><p>Hasil pertanian dan peternakan menjadi bagian awal dari ekosistem AYA.</p></article>
+          <article class="v2-pillar"><span>02 · Diolah</span><h3>Diberi karakter.</h3><p>Rempah dan proses pengolahan membangun rasa yang lebih khas.</p></article>
+          <article class="v2-pillar"><span>03 · Dinikmati</span><h3>Hadir dalam momen.</h3><p>Produk AYA menemani makan sehari-hari, waktu santai, acara, dan kebutuhan usaha.</p></article>
         </div>
       </div>
     </section>
 
-    <section
-      class="section story-trust-section"
-      id="cerita-aya"
-    >
-      
-
+    <section class="v2-section" id="lini" aria-labelledby="linesTitle">
       <div class="container">
-        <header class="story-trust-intro">
-          <span class="eyebrow">
-            Cerita &amp; Kepercayaan AYA
-          </span>
-
-          <h2>
-            Rasa rumahan yang tumbuh menjadi
-            <em>kepercayaan.</em>
-          </h2>
-
-          <p>
-            AYA RAOS percaya bahwa sajian sehari-hari dapat
-            terasa lebih istimewa ketika dipadukan dengan
-            produk yang tepat. Kepercayaan itu tumbuh dari
-            pengalaman pelanggan yang telah menikmati
-            produk AYA.
-          </p>
+        <header class="v2-section-head center">
+          <span class="v2-kicker">Tiga perjalanan rasa</span>
+          <h2 id="linesTitle">Tiga jalan, satu rasa.</h2>
+          <p>Setiap lini memiliki peran berbeda, tetapi tetap berada dalam satu identitas AYA RAOS.</p>
         </header>
 
-        <div class="story-trust-grid">
-          <article
-            class="big-picture-testimonial story-trust-featured"
-          >
-            <img
-              src="assets/images/testimonial-bawang.webp"
-              alt="Bawang goreng AYA dari pelanggan"
-              loading="lazy"
-            />
-
-            <div class="big-picture-copy">
-              <span>Testimoni pilihan</span>
-
-              <blockquote>
-                “Enak bangettt.”
-              </blockquote>
-
-              <strong>Pelanggan AYA</strong>
-
-              <small>
-                Bawang Goreng · testimoni arsip
-              </small>
+        <div class="v2-line-grid">
+          <article class="v2-line-card spice">
+            <img src="assets/images/sambal.webp" alt="Produk AYA Spice Haven" loading="lazy" />
+            <div class="v2-line-card-body">
+              <span class="v2-kicker">AYA Spice Haven</span>
+              <h3>Rasa yang dibangun dari rempah.</h3>
+              <p>Sambal, bawang goreng, lauk, dan produk lain yang karakter utamanya dibentuk melalui bumbu dan rempah.</p>
+              <a class="text-link" href="products.html?line=spice">Jelajahi Spice Haven →</a>
             </div>
           </article>
 
-          <section
-            class="testimonial-ticker-panel story-trust-ticker"
-            aria-labelledby="testimonialTickerTitle"
-          >
-            <div class="ticker-panel-top">
-              <span>
-                Punya pengalaman bersama AYA?
-              </span>
-
-              <a
-                class="text-link"
-                href="share.html"
-              >
-                Bagikan pengalaman →
-              </a>
+          <article class="v2-line-card farm">
+            <img src="assets/images/beras.webp" alt="Hasil pertanian AYA Farm" loading="lazy" />
+            <div class="v2-line-card-body">
+              <span class="v2-kicker">AYA Farm</span>
+              <h3>Rasa yang tumbuh dari alam.</h3>
+              <p>Hasil pertanian dan peternakan primer atau minim proses yang dipersiapkan sebagai bagian dari ekosistem AYA.</p>
+              <a class="text-link" href="products.html?line=farm">Jelajahi AYA Farm →</a>
             </div>
+          </article>
 
-            <div class="ticker-panel-head">
-              <h3 id="testimonialTickerTitle">
-                Cerita pelanggan lainnya
-              </h3>
+          <article class="v2-line-card snack">
+            <img src="assets/images/cireng.webp" alt="Produk AYA Snack and Drinks" loading="lazy" />
+            <div class="v2-line-card-body">
+              <span class="v2-kicker">AYA Snack &amp; Drinks</span>
+              <h3>Rasa yang menemani momen.</h3>
+              <p>Kacang, cireng, dimsum, serta minuman untuk waktu santai, berbagi, dan berbagai kebutuhan acara.</p>
+              <a class="text-link" href="products.html?line=snack">Jelajahi Snack &amp; Drinks →</a>
             </div>
-
-            <div
-              class="testimonial-ticker-viewport"
-              tabindex="0"
-              data-text-carousel
-              aria-label="Testimoni pelanggan bergerak dari bawah ke atas"
-            >
-              <div
-                class="testimonial-ticker-track"
-                data-testimonial-track
-              ></div>
-            </div>
-
-            <div class="ticker-panel-bottom">
-              <a
-                class="text-link"
-                href="testimonials.html"
-              >
-                Lihat semua →
-              </a>
-            </div>
-          </section>
+          </article>
         </div>
       </div>
     </section>
 
-<section class="section-sm">
-      <div class="container cta-banner">
-        <div><h2>Pilih produk, masukkan ke keranjang, lalu finalisasi melalui WhatsApp.</h2><p>Harga produk dapat dilihat lebih dahulu. Ketersediaan dan ongkir dikonfirmasi bersama admin AYA.</p></div>
-        <a class="button" href="products.html">Mulai Memilih Produk</a>
+    <section class="v2-section v2-section-soft" aria-labelledby="sambalTitle">
+      <div class="container v2-feature-grid">
+        <div class="v2-feature-media">
+          <img src="assets/images/hero-sambal.webp" alt="Sambal AYA dengan bahan pendamping" loading="lazy" />
+        </div>
+        <div class="v2-feature-copy">
+          <span class="v2-kicker">Hero Product AYA</span>
+          <h2 id="sambalTitle">Sambal AYA, rasa utama yang membuka perjalanan kami.</h2>
+          <p>Sambal dekat dengan kebiasaan makan sehari-hari dan mewakili karakter rempah AYA Spice Haven. Pilih varian yang paling sesuai untuk menemani hidangan Anda.</p>
+          <div class="v2-variant-list" aria-label="Varian Sambal AYA">
+            <span>Original</span><span>Cumi/Pete</span><span>Jengkol</span><span>Teri Nasi</span>
+          </div>
+          <a class="button button-primary" href="product.html?id=sambal-bawang">Lihat Varian Sambal</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="v2-section" aria-labelledby="testimonialTitle">
+      <div class="container">
+        <header class="v2-section-head">
+          <div>
+            <span class="v2-kicker">Pengalaman pelanggan</span>
+            <h2 id="testimonialTitle">Rasa yang kembali diceritakan.</h2>
+          </div>
+          <p>Testimoni membantu pelanggan baru memahami pengalaman nyata menikmati produk AYA.</p>
+        </header>
+
+        <div class="v2-testimonial-grid">
+          <article class="v2-testimonial-featured">
+            <img src="assets/images/testimonial-bawang.webp" alt="Bawang goreng AYA dari pelanggan" loading="lazy" />
+            <div class="v2-testimonial-copy">
+              <blockquote>“Enak bangettt.”</blockquote>
+              <strong>Pelanggan AYA</strong><br />
+              <small>Bawang Goreng · testimoni arsip</small>
+            </div>
+          </article>
+          <div class="v2-testimonial-stack">
+            <article><blockquote>“Apapun makanannya, wajib pakai Sambal AYA.”</blockquote><strong>Edgar</strong><br /><small>Sambal AYA</small></article>
+            <article><blockquote>“Makan di CFC pun tetap pakai Sambal Bawang AYA.”</blockquote><strong>@Rafaelers</strong><br /><small>Sambal Bawang</small></article>
+          </div>
+        </div>
+        <div class="v2-testimonial-actions">
+          <a class="button button-primary" href="testimonials.html">Lihat Semua Testimoni</a>
+          <a class="text-link" href="share.html">Bagikan pengalaman Anda →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="v2-section v2-section-soft" id="cara-pesan" aria-labelledby="orderStepsTitle">
+      <div class="container">
+        <header class="v2-section-head center">
+          <span class="v2-kicker">Cara Pesan</span>
+          <h2 id="orderStepsTitle">Proses yang jelas, dari memilih hingga pesanan diproses.</h2>
+        </header>
+        <div class="v2-steps">
+          <article class="v2-step"><span class="v2-step-number">01</span><h3>Pilih produk</h3><p>Jelajahi katalog dan pilih varian yang sesuai dengan kebutuhan Anda.</p></article>
+          <article class="v2-step"><span class="v2-step-number">02</span><h3>Masukkan ke keranjang</h3><p>Periksa produk, varian, jumlah, dan estimasi subtotal sebelum dikirim.</p></article>
+          <article class="v2-step"><span class="v2-step-number">03</span><h3>Konfirmasi ketersediaan dan jadwal</h3><p>Admin AYA memeriksa ketersediaan dan memberikan estimasi produksi atau pengiriman.</p></article>
+          <article class="v2-step"><span class="v2-step-number">04</span><h3>Tinjau total akhir</h3><p>Produk, ongkir aktual Grab/Gojek, pilihan tambahan, dan diskon ditampilkan dengan jelas.</p></article>
+          <article class="v2-step"><span class="v2-step-number">05</span><h3>Lakukan pembayaran</h3><p>Bayar sesuai nominal final yang sudah dikunci untuk pesanan Anda.</p></article>
+          <article class="v2-step"><span class="v2-step-number">06</span><h3>Pesanan diproses</h3><p>Pesanan disiapkan sesuai jadwal dan dikirim setelah pembayaran dinyatakan lunas.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="v2-section" aria-labelledby="businessEntryTitle">
+      <div class="container v2-business-entry">
+        <div>
+          <span class="v2-kicker">Pesanan Usaha &amp; Acara</span>
+          <h2 id="businessEntryTitle">Lengkapi kebutuhan sekali, lalu AYA melanjutkan prosesnya.</h2>
+          <p>Produk, jumlah, jadwal, pengiriman, dan kebutuhan tambahan diisi dalam satu alur. Setelah pembayaran awal diterima, pesanan masuk antrean peninjauan AYA.</p>
+          <div class="v2-actions">
+            <a class="button button-secondary" href="business.html">Mulai Buat Pesanan</a>
+          </div>
+        </div>
+        <div class="v2-business-types" aria-label="Jenis kebutuhan usaha">
+          <span>Usaha &amp; Acara</span>
+          <span>Bulk &amp; Custom</span>
+          <span>Perusahaan</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="v2-section v2-section-soft">
+      <div class="container v2-final-cta">
+        <span class="v2-kicker">Mulai dari kebutuhan Anda</span>
+        <h2>Ada rasa untuk kebutuhan Anda.</h2>
+        <p>Belanja untuk keseharian atau buat pesanan usaha dengan proses yang lebih terstruktur.</p>
+        <div class="v2-actions">
+          <a class="button button-primary" href="products.html">Belanja Produk</a>
+          <a class="button button-secondary" href="business.html">Pesanan Usaha</a>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div class="footer-brand"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><p>Perjalanan rasa dari Tanah Sunda melalui hasil bumi, pendamping makanan, camilan, dan minuman.</p></div>
+      <div class="footer-brand">
+        <a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a>
+        <p>Satu rumah bagi hasil alam, olahan rempah, camilan, dan minuman—dipertemukan oleh rasa.</p>
+      </div>
       <div class="footer-column"><h3>Produk Kami</h3><a href="products.html?line=spice">AYA Spice Haven</a><a href="products.html?line=farm">AYA Farm</a><a href="products.html?line=snack">AYA Snack &amp; Drinks</a></div>
-      <div class="footer-column"><h3>Informasi</h3><a href="index.html#cerita-aya">Tentang AYA</a><a href="testimonials.html">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div>
-      <div class="footer-column"><h3>Bantuan</h3><a href="information.html#faq">FAQ</a><a href="information.html#syarat">Syarat Pemesanan</a><a href="information.html#privasi">Privasi</a><button type="button" data-direct-whatsapp>WhatsApp</button></div>
+      <div class="footer-column"><h3>Informasi</h3><a href="#cerita-aya">Cerita AYA</a><a href="testimonials.html">Testimoni</a><a href="#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div>
+      <div class="footer-column"><h3>Bantuan</h3><a href="business.html">Pesanan Usaha &amp; Acara</a><a href="information.html#faq">FAQ</a><a href="information.html#syarat">Syarat Pemesanan</a><a href="information.html#privasi">Privasi</a><button type="button" data-direct-whatsapp>WhatsApp</button></div>
     </div>
     <div class="container footer-bottom"><span>© <span data-current-year></span> AYA RAOS. Semua hak dilindungi.</span><span>Lippo Utara · Jabodetabek · Indonesia</span></div>
     <div class="footer-accent"></div>
