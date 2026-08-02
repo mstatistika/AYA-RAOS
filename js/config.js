@@ -1,12 +1,23 @@
 window.AYA_CONFIG = Object.freeze({
   // Nomor WhatsApp dalam format internasional,
   // tanpa tanda +, spasi, atau strip.
-  whatsappNumber: "",
+  whatsappNumber: "628562646444",
 
   instagramUrl: "https://www.instagram.com/aya.spice.haven/",
   instagramHandle: "@aya.spice.haven",
   businessName: "AYA RAOS",
   leadTime: "2–3 hari setelah pembayaran dikonfirmasi",
+
+  /*
+    Tarif extra charge disimpan sebagai konfigurasi bisnis.
+    Nilai null berarti tarif belum dimasukkan ke source preview.
+    Saat tarif resmi tersedia, cukup isi angka tanpa mengubah UI wizard.
+  */
+  businessExtraCharges: Object.freeze([
+    Object.freeze({ id: "hampers", name: "Kemasan hampers", price: null }),
+    Object.freeze({ id: "custom-label", name: "Custom label", price: null }),
+    Object.freeze({ id: "greeting-card", name: "Kartu ucapan", price: null })
+  ]),
 
   /*
     Browser hanya memakai publishable key.
