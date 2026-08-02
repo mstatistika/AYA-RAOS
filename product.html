@@ -4,113 +4,72 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Detail Produk — AYA RAOS</title>
-  <meta name="description" content="Detail produk AYA RAOS." />
+  <meta name="description" content="Lihat detail, varian, harga, penyimpanan, dan informasi pemesanan produk AYA RAOS." />
   <meta name="theme-color" content="#9f1f1f" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/site.css?v=20260801-ux-supabase-1" />
-  <script defer src="js/config.js?v=20260801-ux-supabase-1"></script><script defer src="js/data.js?v=20260801-ux-supabase-1"></script><script defer src="js/site.js?v=20260801-ux-supabase-1"></script><script defer src="js/product.js?v=20260801-ux-supabase-1"></script>
-
-
-  <!-- AYA STAGING METADATA — BEGIN -->
-  <meta
-    name="robots"
-    content="noindex, nofollow, noarchive"
-  />
-  <meta
-    name="referrer"
-    content="strict-origin-when-cross-origin"
-  />
-
-  <meta
-    property="og:title"
-    content="Detail Produk — AYA RAOS"
-  />
-  <meta
-    property="og:description"
-    content="Detail produk AYA RAOS."
-  />
-  <meta
-    property="og:type"
-    content="website"
-  />
-  <meta
-    property="og:site_name"
-    content="AYA RAOS"
-  />
-  <meta
-    property="og:locale"
-    content="id_ID"
-  />
-
-  <meta
-    name="twitter:card"
-    content="summary"
-  />
-  <meta
-    name="twitter:title"
-    content="Detail Produk — AYA RAOS"
-  />
-  <meta
-    name="twitter:description"
-    content="Detail produk AYA RAOS."
-  />
-
-  <link
-    rel="manifest"
-    href="site.webmanifest"
-  />
-  <!-- AYA STAGING METADATA — END -->
+  <link rel="stylesheet" href="css/site.css?v=20260802-frontend-v2" />
+  <link rel="stylesheet" href="css/frontend-v2.css?v=20260802-frontend-v2" />
+  <script defer src="js/config.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/data.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/site.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/product.js?v=20260802-frontend-v2"></script>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta property="og:title" content="Detail Produk — AYA RAOS" />
+  <meta property="og:description" content="Detail produk dan varian AYA RAOS." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AYA RAOS" />
+  <meta property="og:locale" content="id_ID" />
+  <link rel="manifest" href="site.webmanifest" />
 </head>
-<body>
+<body class="v2-page">
   <a class="skip-link" href="#main">Lewati ke konten utama</a>
+  <div class="v2-top-note">Harga produk terlihat sebelum memesan · Pesanan disiapkan 2–3 hari setelah pembayaran diterima</div>
+
   <header class="site-header">
     <div class="container site-header-inner">
       <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda"><strong>AYA</strong><small>RAOS</small></a>
-      <nav class="primary-nav" aria-label="Navigasi utama">
-        <a href="index.html">Beranda</a>
-        <a href="products.html">Semua Produk</a>
-        
-        <a href="testimonials.html">Testimoni</a>
-        <a href="information.html#cara-pesan">Cara Pesan</a>
-      </nav>
+      <nav class="primary-nav" aria-label="Navigasi utama"></nav>
       <div class="header-actions">
-        <a class="header-cta" href="products.html">Mulai Pesan</a>
+        <a class="header-cta" href="products.html">Lihat Produk</a>
         <a class="cart-link" href="cart.html" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-count" data-cart-count>0</span></a>
         <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
       </div>
     </div>
-    <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
-      <a href="index.html">Beranda</a>
-      <a href="products.html">Semua Produk</a>
-      <a href="index.html#cerita-aya">Tentang AYA</a>
-      <a href="testimonials.html">Testimoni</a>
-      <a href="information.html#cara-pesan">Cara Pesan</a>
-      <a href="cart.html">Keranjang</a>
-    </nav>
+    <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel></nav>
   </header>
 
   <main id="main" class="page-shell">
-    <section class="page-hero"><div class="container"><div class="breadcrumb"><a href="index.html">Beranda</a><span>/</span><a href="products.html">Produk</a><span>/</span><span>Detail</span></div></div></section>
-    <section class="section"><div class="container" data-product-detail>
-        <div class="product-loading-state">
-          <span class="eyebrow">Detail produk</span>
-          <h1 data-product-title>
-            Detail Produk AYA
-          </h1>
-          <p>
-            Informasi produk sedang dimuat.
-          </p>
+    <section class="page-hero compact-page-hero">
+      <div class="container">
+        <div class="breadcrumb"><a href="index.html">Beranda</a><span>/</span><a href="products.html">Produk</a><span>/</span><span>Detail</span></div>
+        <p>Periksa varian, harga, informasi produk, serta ketentuan produksi sebelum menambahkan ke keranjang.</p>
+      </div>
+    </section>
+
+    <section class="section product-detail-section">
+      <div class="container" data-product-detail aria-live="polite"></div>
+    </section>
+
+    <section class="section-sm v2-section-soft">
+      <div class="container v2-business-entry">
+        <div>
+          <span class="v2-kicker">Membutuhkan jumlah lebih besar?</span>
+          <h2>Gunakan alur Pesanan Usaha untuk kebutuhan bulk, custom, acara, atau perusahaan.</h2>
+          <p>Produk dari keranjang dapat diteruskan ke formulir B2B. Setelah pembayaran awal diterima, AYA meninjau ketersediaan dan jadwal.</p>
+          <div class="v2-actions"><a class="button button-secondary" href="business.html?prefill=cart">Lanjut ke Pesanan Usaha</a></div>
         </div>
-</div></section>
-    <section class="section-sm"><div class="container cta-banner"><div><h2>Masih ingin membandingkan produk lain?</h2><p>Kembali ke katalog tanpa kehilangan isi keranjang Anda.</p></div><a class="button" href="products.html">Lihat Semua Produk</a></div></section>
+        <div class="v2-business-types"><span>Satu formulir lengkap</span><span>Pembayaran awal</span><span>Revisi tercatat</span></div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div class="footer-brand"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><p>Perjalanan rasa dari Tanah Sunda melalui hasil bumi, pendamping makanan, camilan, dan minuman.</p></div>
+      <div class="footer-brand"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><p>Satu rumah bagi hasil alam, olahan rempah, camilan, dan minuman—dipertemukan oleh rasa.</p></div>
       <div class="footer-column"><h3>Produk Kami</h3><a href="products.html?line=spice">AYA Spice Haven</a><a href="products.html?line=farm">AYA Farm</a><a href="products.html?line=snack">AYA Snack &amp; Drinks</a></div>
-      <div class="footer-column"><h3>Informasi</h3><a href="index.html#cerita-aya">Tentang AYA</a><a href="testimonials.html">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div>
-      <div class="footer-column"><h3>Bantuan</h3><a href="information.html#faq">FAQ</a><a href="information.html#syarat">Syarat Pemesanan</a><a href="information.html#privasi">Privasi</a><button type="button" data-direct-whatsapp>WhatsApp</button></div>
+      <div class="footer-column"><h3>Informasi</h3><a href="index.html#cerita-aya">Cerita AYA</a><a href="testimonials.html">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div>
+      <div class="footer-column"><h3>Bantuan</h3><a href="business.html">Pesanan Usaha &amp; Acara</a><a href="information.html#faq">FAQ</a><a href="information.html#syarat">Syarat Pemesanan</a><a href="information.html#privasi">Privasi</a><button type="button" data-direct-whatsapp>WhatsApp</button></div>
     </div>
     <div class="container footer-bottom"><span>© <span data-current-year></span> AYA RAOS. Semua hak dilindungi.</span><span>Lippo Utara · Jabodetabek · Indonesia</span></div>
     <div class="footer-accent"></div>
