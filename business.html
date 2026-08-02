@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pesanan Usaha & Acara — AYA RAOS</title>
+  <meta name="description" content="Lengkapi kebutuhan usaha, acara, bulk, custom, atau perusahaan dalam satu alur. Pembayaran awal mengaktifkan penanganan pesanan AYA." />
+  <meta name="theme-color" content="#9f1f1f" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/site.css?v=20260802-frontend-v2" />
+  <link rel="stylesheet" href="css/frontend-v2.css?v=20260802-frontend-v2" />
+  <script defer src="js/config.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/data.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/site.js?v=20260802-frontend-v2"></script>
+  <script defer src="js/business.js?v=20260802-frontend-v2"></script>
+
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta property="og:title" content="Pesanan Usaha & Acara — AYA RAOS" />
+  <meta property="og:description" content="Satu formulir, pembayaran awal, lalu AYA meninjau ketersediaan dan jadwal." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AYA RAOS" />
+  <meta property="og:locale" content="id_ID" />
+  <link rel="manifest" href="site.webmanifest" />
+</head>
+<body class="v2-page">
+  <a class="skip-link" href="#main">Lewati ke konten utama</a>
+  <div class="v2-top-note">Pesanan usaha ditangani setelah pembayaran awal diterima · Pengiriman setelah pembayaran lunas</div>
+
+  <header class="site-header">
+    <div class="container site-header-inner">
+      <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda"><strong>AYA</strong><small>RAOS</small></a>
+      <nav class="primary-nav" aria-label="Navigasi utama">
+        <a href="index.html">Beranda</a>
+        <a href="index.html#cerita-aya">Cerita AYA</a>
+        <a href="products.html">Produk</a>
+        <a href="business.html" aria-current="page">Pesanan Usaha</a>
+        <a href="testimonials.html">Testimoni</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-cta" href="#wizard">Mulai Pesanan</a>
+        <a class="cart-link" href="cart.html" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-count" data-cart-count>0</span></a>
+        <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
+      <a href="index.html">Beranda</a>
+      <a href="index.html#cerita-aya">Cerita AYA</a>
+      <a href="products.html">Produk</a>
+      <a href="business.html">Pesanan Usaha</a>
+      <a href="testimonials.html">Testimoni</a>
+      <a href="information.html#cara-pesan">Cara Pesan</a>
+      <a href="cart.html">Keranjang</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="v2-business-hero">
+      <div class="container v2-business-hero-grid">
+        <div>
+          <span class="eyebrow">Pesanan Usaha &amp; Acara</span>
+          <h1>Lengkapi kebutuhan sekali, lalu AYA melanjutkan prosesnya.</h1>
+          <p>Isi produk, jumlah, tanggal kebutuhan, alamat, dan pilihan tambahan dalam satu alur. Setelah pembayaran awal berhasil, pesanan masuk antrean peninjauan AYA untuk memastikan ketersediaan dan jadwal.</p>
+          <div class="v2-actions"><a class="button button-primary" href="#wizard">Mulai Buat Pesanan</a><a class="button button-secondary" href="#proses">Pelajari Prosesnya</a></div>
+        </div>
+        <div class="v2-business-policy" aria-label="Ketentuan utama pesanan usaha">
+          <div>Pembayaran awal menjadi bagian dari total akhir.</div>
+          <div>Pembatalan oleh pelanggan tidak mendapatkan pengembalian pembayaran.</div>
+          <div>Produk dan extra charge dihitung sesuai pilihan; ongkir mengikuti tarif aktual Grab/Gojek.</div>
+          <div>Pengiriman dilakukan setelah pembayaran dinyatakan lunas, kecuali ada ketentuan tertulis dari AYA.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="v2-wizard-section" id="wizard" data-business-wizard>
+      <div class="container v2-wizard-shell">
+        <aside class="v2-wizard-sidebar" aria-label="Progres pesanan usaha">
+          <h2>Pesanan Usaha</h2>
+          <div class="v2-wizard-progress" aria-hidden="true"><span data-wizard-progress></span></div>
+          <div class="v2-wizard-nav">
+            <button type="button" class="is-active" data-step-nav="1"><span>1</span><span>Data Pemesan</span></button>
+            <button type="button" data-step-nav="2" disabled><span>2</span><span>Produk &amp; Jumlah</span></button>
+            <button type="button" data-step-nav="3" disabled><span>3</span><span>Pengiriman</span></button>
+            <button type="button" data-step-nav="4" disabled><span>4</span><span>Ringkasan</span></button>
+          </div>
+        </aside>
+
+        <form class="v2-wizard-panel" data-business-form novalidate>
+          <section class="v2-wizard-step" data-wizard-step="1">
+            <header class="v2-wizard-step-head">
+              <span class="v2-kicker">Langkah 1 dari 4</span>
+              <h2>Data pemesan</h2>
+              <p>Berikan informasi utama agar pesanan dapat ditautkan ke PIC, usaha, atau perusahaan yang benar.</p>
+            </header>
+
+            <div class="v2-choice-title">Jenis kebutuhan</div>
+            <div class="v2-choice-grid">
+              <div class="v2-choice"><input id="typeEvent" type="radio" name="businessType" value="Usaha & Acara" required checked /><label for="typeEvent"><strong>Usaha &amp; Acara</strong><small>Konsumsi kantor, komunitas, keluarga, atau acara.</small></label></div>
+              <div class="v2-choice"><input id="typeBulk" type="radio" name="businessType" value="Bulk & Custom" required /><label for="typeBulk"><strong>Bulk &amp; Custom</strong><small>Jumlah besar, hampers, label, kemasan, atau beberapa alamat.</small></label></div>
+              <div class="v2-choice"><input id="typeCompany" type="radio" name="businessType" value="Perusahaan" required /><label for="typeCompany"><strong>Perusahaan</strong><small>Kebutuhan formal, dokumen, PO, dan pengiriman terjadwal.</small></label></div>
+            </div>
+
+            <div class="v2-form-grid" style="margin-top:22px">
+              <div class="v2-field"><label for="contactName">Nama PIC</label><input id="contactName" name="contactName" type="text" autocomplete="name" required /></div>
+              <div class="v2-field"><label for="companyName">Nama usaha/perusahaan</label><input id="companyName" name="companyName" type="text" autocomplete="organization" /></div>
+              <div class="v2-field"><label for="businessWhatsapp">Nomor WhatsApp</label><input id="businessWhatsapp" name="businessWhatsapp" type="tel" autocomplete="tel" required /></div>
+              <div class="v2-field"><label for="businessEmail">Email</label><input id="businessEmail" name="businessEmail" type="email" autocomplete="email" required /></div>
+              <div class="v2-field full"><label for="documentNeed">Dokumen yang diperlukan</label><select id="documentNeed" name="documentNeed"><option value="Tidak membutuhkan dokumen">Tidak membutuhkan dokumen</option><option value="Ringkasan estimasi">Ringkasan estimasi</option><option value="Quotation">Quotation</option><option value="Invoice">Invoice</option><option value="Purchase Order akan menyusul">Purchase Order akan menyusul</option></select></div>
+            </div>
+
+            <div class="v2-wizard-actions"><span></span><button class="button button-primary" type="button" data-step-next>Lanjut ke Produk</button></div>
+          </section>
+
+          <section class="v2-wizard-step" data-wizard-step="2" hidden>
+            <header class="v2-wizard-step-head">
+              <span class="v2-kicker">Langkah 2 dari 4</span>
+              <h2>Produk dan jumlah</h2>
+              <p>Tambahkan seluruh produk dan jumlah yang dibutuhkan. Data ini menjadi baseline setelah pembayaran awal berhasil.</p>
+            </header>
+
+            <div class="v2-product-rows" data-product-rows></div>
+            <button class="button button-secondary" type="button" data-add-product style="margin-top:14px">+ Tambah Produk</button>
+            <div class="v2-field full" style="margin-top:22px"><label for="productNotes">Catatan produk</label><textarea id="productNotes" name="productNotes" placeholder="Contoh: pembagian per paket, varian tertentu, atau kebutuhan lain yang perlu diketahui AYA."></textarea></div>
+            <div class="v2-inline-note">Setelah pembayaran awal, penambahan atau pengurangan item tetap diperbolehkan. Setiap revisi dicatat dan selisihnya masuk ke perhitungan pelunasan.</div>
+
+            <div class="v2-wizard-actions"><button class="button button-secondary" type="button" data-step-previous>Kembali</button><button class="button button-primary" type="button" data-step-next>Lanjut ke Pengiriman</button></div>
+          </section>
+
+          <section class="v2-wizard-step" data-wizard-step="3" hidden>
+            <header class="v2-wizard-step-head">
+              <span class="v2-kicker">Langkah 3 dari 4</span>
+              <h2>Pengiriman dan tambahan</h2>
+              <p>Tanggal yang Anda pilih adalah tanggal kebutuhan. Jadwal final ditetapkan setelah AYA meninjau ketersediaan dan kapasitas.</p>
+            </header>
+
+            <div class="v2-form-grid">
+              <div class="v2-field"><label for="needDate">Tanggal dibutuhkan</label><input id="needDate" name="needDate" type="date" required /></div>
+              <div class="v2-field"><label for="deliveryMethod">Metode penerimaan</label><select id="deliveryMethod" name="deliveryMethod" required><option value="">Pilih metode</option><option value="Tarif terbaik Grab/Gojek">Gunakan layanan dengan tarif paling sesuai</option><option value="Grab">Grab</option><option value="Gojek">Gojek</option><option value="Ambil sendiri">Ambil sendiri</option><option value="Beberapa titik pengiriman">Beberapa titik pengiriman</option></select></div>
+              <div class="v2-field"><label for="city">Kota/wilayah</label><input id="city" name="city" type="text" autocomplete="shipping address-level2" placeholder="Contoh: Tangerang" required /></div>
+              <div class="v2-field"><label for="deliveryPoints">Jumlah titik pengiriman</label><input id="deliveryPoints" name="deliveryPoints" type="number" min="1" value="1" /></div>
+              <div class="v2-field full"><label for="deliveryAddress">Alamat lengkap</label><textarea id="deliveryAddress" name="deliveryAddress" autocomplete="shipping street-address" required></textarea></div>
+            </div>
+
+            <div class="v2-choice-title" style="margin-top:24px">Pilihan tambahan</div>
+            <div class="v2-choice-grid" style="margin-top:10px">
+              <div class="v2-choice"><input id="extraHampers" type="checkbox" name="extras" value="hampers" data-extra-charge data-label="Kemasan hampers" /><label for="extraHampers"><strong>Kemasan hampers</strong><small data-extra-price="hampers">Tarif akan dikonfigurasi</small></label></div>
+              <div class="v2-choice"><input id="extraLabel" type="checkbox" name="extras" value="custom-label" data-extra-charge data-label="Custom label" /><label for="extraLabel"><strong>Custom label</strong><small data-extra-price="custom-label">Tarif akan dikonfigurasi</small></label></div>
+              <div class="v2-choice"><input id="extraCard" type="checkbox" name="extras" value="greeting-card" data-extra-charge data-label="Kartu ucapan" /><label for="extraCard"><strong>Kartu ucapan</strong><small data-extra-price="greeting-card">Tarif akan dikonfigurasi</small></label></div>
+            </div>
+
+            <div class="v2-field full" style="margin-top:22px"><label for="deliveryNotes">Catatan pengiriman atau custom</label><textarea id="deliveryNotes" name="deliveryNotes" placeholder="Contoh: pembagian alamat, teks kartu, kebutuhan penyimpanan dingin, atau instruksi khusus."></textarea></div>
+            <div class="v2-inline-note">Harga produk dan extra charge mengikuti tarif yang telah ditetapkan AYA. Ongkir Jabodetabek mengikuti tarif aktual Grab/Gojek sebelum pelunasan.</div>
+
+            <div class="v2-wizard-actions"><button class="button button-secondary" type="button" data-step-previous>Kembali</button><button class="button button-primary" type="button" data-step-next>Lihat Ringkasan</button></div>
+          </section>
+
+          <section class="v2-wizard-step" data-wizard-step="4" hidden>
+            <header class="v2-wizard-step-head">
+              <span class="v2-kicker">Langkah 4 dari 4</span>
+              <h2>Ringkasan dan pembayaran awal</h2>
+              <p>Periksa kembali kebutuhan Anda. Pembayaran awal akan membentuk baseline order dan mengaktifkan antrean peninjauan AYA.</p>
+            </header>
+
+            <div class="v2-agreements">
+              <label class="v2-agreement"><input type="checkbox" required /><span>Saya telah memeriksa produk, jumlah, tanggal kebutuhan, alamat, dan informasi pesanan yang saya kirimkan.</span></label>
+              <label class="v2-agreement"><input type="checkbox" required /><span>Saya memahami bahwa pembayaran awal menjadi bagian dari total pesanan dan tidak dapat dikembalikan apabila saya membatalkan pesanan.</span></label>
+              <label class="v2-agreement"><input type="checkbox" required /><span>Saya memahami bahwa ongkir Jabodetabek mengikuti tarif aktual Grab/Gojek dan dimasukkan dalam pelunasan.</span></label>
+              <label class="v2-agreement"><input type="checkbox" required /><span>Saya memahami bahwa perubahan item, jumlah, alamat, atau kebutuhan tambahan setelah pembayaran awal dicatat sebagai revisi dan memengaruhi pelunasan.</span></label>
+              <label class="v2-agreement"><input type="checkbox" required /><span>Saya memahami bahwa pengiriman dilakukan setelah pembayaran lunas, kecuali AYA memberikan ketentuan lain secara tertulis.</span></label>
+            </div>
+
+            <div class="v2-payment-preview">
+              <strong>Pembayaran online belum diaktifkan pada preview frontend.</strong>
+              <span>Midtrans, perhitungan pembayaran awal, order database, audit trail revisi, dan pelunasan akan diaktifkan pada Backend &amp; Payment Sweep.</span>
+            </div>
+            <button class="button button-primary v2-disabled-button" type="button" disabled>Pembayaran online disiapkan pada tahap integrasi</button>
+
+            <div class="v2-wizard-actions"><button class="button button-secondary" type="button" data-step-previous>Kembali</button><a class="button button-secondary" href="products.html">Kembali ke Produk</a></div>
+          </section>
+        </form>
+
+        <aside class="v2-wizard-summary" aria-label="Ringkasan pesanan sementara">
+          <h2>Ringkasan sementara</h2>
+          <div class="v2-summary-group">
+            <div class="v2-summary-line"><span>Pemesan</span><strong data-summary-customer>Belum diisi</strong></div>
+            <div class="v2-summary-line"><span>Jenis kebutuhan</span><strong data-summary-type>Usaha &amp; Acara</strong></div>
+          </div>
+          <div class="v2-summary-group">
+            <div class="v2-summary-line"><span>Produk</span><strong data-summary-items>Belum ada produk</strong></div>
+            <div class="v2-summary-line"><span>Subtotal produk</span><strong data-summary-product-total>Rp0</strong></div>
+            <div class="v2-summary-line"><span>Pilihan tambahan</span><strong data-summary-extras>Tidak ada pilihan tambahan</strong></div>
+          </div>
+          <div class="v2-summary-group">
+            <div class="v2-summary-line"><span>Pengiriman</span><strong data-summary-shipping>Tarif aktual Grab/Gojek</strong></div>
+            <div class="v2-summary-line"><span>Tanggal kebutuhan</span><strong data-summary-date>Belum dipilih</strong></div>
+            <div class="v2-summary-line"><span>Lokasi</span><strong data-summary-location>Belum diisi</strong></div>
+          </div>
+          <div class="v2-summary-total"><span>Pembayaran awal</span><strong data-summary-initial>Rumus belum dikunci</strong></div>
+          <p class="summary-note" style="margin-top:14px">Pembayaran awal menjadi bagian dari total akhir. Sisa pembayaran memuat revisi yang disetujui dan ongkir aktual.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="v2-section v2-section-soft" id="proses">
+      <div class="container">
+        <header class="v2-section-head center"><span class="v2-kicker">Setelah pembayaran awal</span><h2>Apa yang dilakukan AYA?</h2><p>AYA tidak meminta pelanggan mengulang seluruh informasi. Data yang sudah dibayar menjadi baseline dan setiap perubahan dicatat.</p></header>
+        <div class="v2-steps">
+          <article class="v2-step"><span class="v2-step-number">01</span><h3>Pembayaran awal diterima</h3><p>Order masuk antrean peninjauan dan baseline kebutuhan disimpan.</p></article>
+          <article class="v2-step"><span class="v2-step-number">02</span><h3>Ketersediaan dan jadwal ditinjau</h3><p>AYA memeriksa produk, kapasitas, serta tanggal produksi dan pengiriman.</p></article>
+          <article class="v2-step"><span class="v2-step-number">03</span><h3>Revisi dicatat</h3><p>Penambahan, pengurangan, perubahan alamat, dan penyesuaian lain masuk audit trail.</p></article>
+          <article class="v2-step"><span class="v2-step-number">04</span><h3>Ongkir aktual dimasukkan</h3><p>Tarif Grab/Gojek diperiksa berdasarkan alamat, waktu, volume, dan kendaraan.</p></article>
+          <article class="v2-step"><span class="v2-step-number">05</span><h3>Sisa pembayaran diterbitkan</h3><p>Produk terkini, extra charge, revisi, ongkir, diskon, dan pembayaran awal diringkas.</p></article>
+          <article class="v2-step"><span class="v2-step-number">06</span><h3>Pesanan dikirim setelah lunas</h3><p>Pengiriman mengikuti payment gate, kecuali pelanggan terpilih memiliki ketentuan tertulis.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><p>Satu rumah bagi hasil alam, olahan rempah, camilan, dan minuman—dipertemukan oleh rasa.</p></div>
+      <div class="footer-column"><h3>Produk Kami</h3><a href="products.html?line=spice">AYA Spice Haven</a><a href="products.html?line=farm">AYA Farm</a><a href="products.html?line=snack">AYA Snack &amp; Drinks</a></div>
+      <div class="footer-column"><h3>Informasi</h3><a href="index.html#cerita-aya">Cerita AYA</a><a href="testimonials.html">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div>
+      <div class="footer-column"><h3>Bantuan</h3><a href="business.html">Pesanan Usaha &amp; Acara</a><a href="information.html#faq">FAQ</a><a href="information.html#syarat">Syarat Pemesanan</a><a href="information.html#privasi">Privasi</a><button type="button" data-direct-whatsapp>WhatsApp</button></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span data-current-year></span> AYA RAOS. Semua hak dilindungi.</span><span>Lippo Utara · Jabodetabek · Indonesia</span></div>
+    <div class="footer-accent"></div>
+  </footer>
+</body>
+</html>
