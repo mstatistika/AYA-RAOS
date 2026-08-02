@@ -72,11 +72,16 @@
       return false;
     }
 
-    const safeVariantIndex = Math.max(0, Math.min(Number(variantIndex) || 0, product.variants.length - 1));
+    const safeVariantIndex = Math.max(
+      0,
+      Math.min(Number(variantIndex) || 0, product.variants.length - 1)
+    );
     const variant = product.variants[safeVariantIndex];
     const qty = Math.max(1, Math.min(20, Number(quantity) || 1));
     const cart = getCart();
-    const existing = cart.find(item => item.productId === productId && item.variant === variant.name);
+    const existing = cart.find(
+      item => item.productId === productId && item.variant === variant.name
+    );
 
     if (existing) {
       existing.quantity = Math.min(20, Number(existing.quantity) + qty);
@@ -189,6 +194,46 @@
     return openWhatsApp(message);
   }
 
+  function currentPageKey() {
+    const path = window.location.pathname.split("/").pop() || "index.html";
+    if (path === "index.html" || path === "") return "home";
+    if (path === "products.html" || path === "product.html") return "products";
+    if (path === "business.html") return "business";
+    if (path === "testimonials.html" || path === "share.html") return "testimonials";
+    return "";
+  }
+
+  function createNavLink(item, activeKey) {
+    const link = document.createElement("a");
+    link.href = item.href;
+    link.textContent = item.label;
+    if (item.key && item.key === activeKey) link.setAttribute("aria-current", "page");
+    return link;
+  }
+
+  function normalizeNavigation() {
+    const activeKey = currentPageKey();
+    const desktopItems = [
+      { key: "home", label: "Beranda", href: "index.html" },
+      { key: "story", label: "Cerita AYA", href: "index.html#cerita-aya" },
+      { key: "products", label: "Produk", href: "products.html" },
+      { key: "business", label: "Pesanan Usaha", href: "business.html" },
+      { key: "testimonials", label: "Testimoni", href: "testimonials.html" }
+    ];
+    const mobileItems = [
+      ...desktopItems,
+      { key: "how", label: "Cara Pesan", href: "information.html#cara-pesan" },
+      { key: "cart", label: "Keranjang", href: "cart.html" }
+    ];
+
+    document.querySelectorAll(".primary-nav").forEach(nav => {
+      nav.replaceChildren(...desktopItems.map(item => createNavLink(item, activeKey)));
+    });
+    document.querySelectorAll("[data-mobile-panel]").forEach(panel => {
+      panel.replaceChildren(...mobileItems.map(item => createNavLink(item, activeKey)));
+    });
+  }
+
   function bindNavigation() {
     const toggle = document.querySelector("[data-menu-toggle]");
     const panel = document.querySelector("[data-mobile-panel]");
@@ -209,30 +254,6 @@
     panel.querySelectorAll("a").forEach(link => link.addEventListener("click", closeMenu));
     document.addEventListener("keydown", event => {
       if (event.key === "Escape") closeMenu();
-    });
-  }
-
-  function normalizeNavigation() {
-    document.querySelectorAll(".primary-nav").forEach(nav => {
-      const links = [...nav.querySelectorAll("a")];
-      if (!links.some(link => /business\.html/.test(link.getAttribute("href") || ""))) {
-        const productLink = links.find(link => /products\.html/.test(link.getAttribute("href") || ""));
-        const businessLink = document.createElement("a");
-        businessLink.href = "business.html";
-        businessLink.textContent = "Pesanan Usaha";
-        productLink?.insertAdjacentElement("afterend", businessLink);
-      }
-    });
-
-    document.querySelectorAll("[data-mobile-panel]").forEach(panel => {
-      const links = [...panel.querySelectorAll("a")];
-      if (!links.some(link => /business\.html/.test(link.getAttribute("href") || ""))) {
-        const productLink = links.find(link => /products\.html/.test(link.getAttribute("href") || ""));
-        const businessLink = document.createElement("a");
-        businessLink.href = "business.html";
-        businessLink.textContent = "Pesanan Usaha";
-        productLink?.insertAdjacentElement("afterend", businessLink);
-      }
     });
   }
 
@@ -282,7 +303,9 @@
     document.querySelectorAll(".footer-column").forEach(column => {
       const heading = column.querySelector("h3");
       if (!heading || !/bantuan/i.test(heading.textContent)) return;
-      const existing = [...column.querySelectorAll("a")].find(link => /business\.html/.test(link.getAttribute("href") || ""));
+      const existing = [...column.querySelectorAll("a")].find(
+        link => /business\.html/.test(link.getAttribute("href") || "")
+      );
       if (existing) return;
       const businessLink = document.createElement("a");
       businessLink.href = "business.html";
@@ -301,7 +324,6 @@
     if (product.image) {
       return `<img class="${className}" src="${product.image}" alt="${product.name}" loading="lazy" />`;
     }
-
     return `<div class="product-placeholder ${className}" aria-label="Foto ${product.name} sedang disiapkan">${product.name}</div>`;
   }
 
