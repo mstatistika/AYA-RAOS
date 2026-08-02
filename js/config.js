@@ -10,13 +10,13 @@ window.AYA_CONFIG = Object.freeze({
 
   /*
     Tarif extra charge disimpan sebagai konfigurasi bisnis.
-    Nilai null berarti tarif belum dimasukkan ke source preview.
-    Saat tarif resmi tersedia, cukup isi angka tanpa mengubah UI wizard.
+    Nilai "pending" berarti tarif resmi belum dimasukkan ke source preview.
+    Saat tarif tersedia, cukup ganti dengan angka tanpa mengubah UI wizard.
   */
   businessExtraCharges: Object.freeze([
-    Object.freeze({ id: "hampers", name: "Kemasan hampers", price: null }),
-    Object.freeze({ id: "custom-label", name: "Custom label", price: null }),
-    Object.freeze({ id: "greeting-card", name: "Kartu ucapan", price: null })
+    Object.freeze({ id: "hampers", name: "Kemasan hampers", price: "pending" }),
+    Object.freeze({ id: "custom-label", name: "Custom label", price: "pending" }),
+    Object.freeze({ id: "greeting-card", name: "Kartu ucapan", price: "pending" })
   ]),
 
   /*
