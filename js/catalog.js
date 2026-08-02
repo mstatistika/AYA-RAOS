@@ -1,1065 +1,254 @@
 (() => {
-  document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-      const grid =
-        document.querySelector(
-          "[data-product-grid]"
-        );
-
-      if (!grid || !window.AYA) return;
-
-      const search =
-        document.querySelector(
-          "[data-product-search]"
-        );
-
-      const resultCount =
-        document.querySelector(
-          "[data-result-count]"
-        );
-
-      const toolbar =
-        document.querySelector(
-          ".catalog-toolbar"
-        );
-
-      const drawer =
-        document.querySelector(
-          "[data-quick-drawer]"
-        );
-
-      const drawerTitle =
-        document.querySelector(
-          "#quickDrawerTitle"
-        );
-
-      const drawerContent =
-        document.querySelector(
-          "[data-drawer-content]"
-        );
-
-      const backdrop =
-        document.querySelector(
-          "[data-drawer-backdrop]"
-        );
-
-      let filter = "all";
-      let query = "";
-      let lastFocusedElement = null;
-
-      const safeImagePath = value => {
-        if (typeof value !== "string") {
-          return "";
-        }
-
-        return /^assets\/images\/[a-z0-9._/-]+$/i
-          .test(value)
-          ? value
-          : "";
-      };
-
-      const make = (
-        tag,
-        className = "",
-        text
-      ) => {
-        const node =
-          document.createElement(tag);
-
-        if (className) {
-          node.className = className;
-        }
-
-        if (text !== undefined) {
-          node.textContent = text;
-        }
-
-        return node;
-      };
-
-      const minimumPrice = product => {
-        if (!product.variants?.length) {
-          return null;
-        }
-
-        return Math.min(
-          ...product.variants.map(
-            variant =>
-              Number(variant.price) || 0
-          )
-        );
-      };
-
-      const visibleProducts = () =>
-        window.AYA.products.filter(
-          product => {
-            const matchFilter =
-              filter === "all" ||
-              product.lineKey === filter;
-
-            const haystack = [
-              product.name,
-              product.line,
-              product.category,
-              product.description
-            ]
-              .filter(Boolean)
-              .join(" ")
-              .toLowerCase();
-
-            const matchQuery =
-              !query ||
-              haystack.includes(query);
-
-            return (
-              matchFilter &&
-              matchQuery
-            );
-          }
-        );
-
-      function createProductImage(
-        product
-      ) {
-        const imagePath =
-          safeImagePath(product.image);
-
-        if (imagePath) {
-          const image =
-            document.createElement("img");
-
-          image.src = imagePath;
-          image.alt =
-            product.name ||
-            "Produk AYA";
-
-          image.loading = "lazy";
-          image.width = 900;
-          image.height = 720;
-
-          return image;
-        }
-
-        const placeholder =
-          make(
-            "div",
-            "product-placeholder",
-            product.name ||
-              "Produk AYA"
-          );
-
-        placeholder.setAttribute(
-          "role",
-          "img"
-        );
-
-        placeholder.setAttribute(
-          "aria-label",
-          `Foto ${
-            product.name ||
-            "produk AYA"
-          } sedang disiapkan`
-        );
-
-        return placeholder;
-      }
-
-      function createProductCard(
-        product
-      ) {
-        const article =
-          make(
-            "article",
-            "product-card"
-          );
-
-        const detailUrl =
-          `product.html?id=${
-            encodeURIComponent(
-              product.id
-            )
-          }`;
-
-        const imageLink =
-          make(
-            "a",
-            "product-image-link"
-          );
-
-        imageLink.href = detailUrl;
-
-        imageLink.setAttribute(
-          "aria-label",
-          `Lihat detail ${
-            product.name ||
-            "produk AYA"
-          }`
-        );
-
-        imageLink.appendChild(
-          createProductImage(product)
-        );
-
-        if (product.badge) {
-          imageLink.appendChild(
-            make(
-              "span",
-              "product-badge",
-              product.badge
-            )
-          );
-        }
-
-        const body =
-          make(
-            "div",
-            "product-card-body"
-          );
-
-        body.appendChild(
-          make(
-            "span",
-            "product-line",
-            product.line || "AYA"
-          )
-        );
-
-        const titleLink =
-          document.createElement("a");
-
-        titleLink.href = detailUrl;
-
-        titleLink.appendChild(
-          make(
-            "h3",
-            "",
-            product.name ||
-              "Produk AYA"
-          )
-        );
-
-        body.appendChild(titleLink);
-
-        body.appendChild(
-          make(
-            "p",
-            "product-card-description",
-            product.description || ""
-          )
-        );
-
-        const footer =
-          make(
-            "div",
-            "product-card-footer"
-          );
-
-        const priceBox =
-          document.createElement("div");
-
-        const price =
-          minimumPrice(product);
-
-        priceBox.appendChild(
-          make(
-            "span",
-            "product-price-label",
-            price
-              ? "Mulai dari"
-              : "Status"
-          )
-        );
-
-        priceBox.appendChild(
-          make(
-            "strong",
-            "product-price",
-            price
-              ? window.AYA.currency(
-                  price
-                )
-              : "Segera hadir"
-          )
-        );
-
-        footer.appendChild(priceBox);
-
-        const productActions =
-          make(
-            "div",
-            "product-actions"
-          );
-
-        const detailLink =
-          make(
-            "a",
-            "product-detail-link",
-            "Detail →"
-          );
-
-        detailLink.href =
-          detailUrl;
-
-        detailLink.setAttribute(
-          "aria-label",
-          `Lihat detail ${
-            product.name ||
-            "produk AYA"
-          }`
-        );
-
-        productActions.appendChild(
-          detailLink
-        );
-
-        if (
-          product.available &&
-          product.variants?.length
-        ) {
-          const quickAdd =
-            make(
-              "button",
-              "product-quick-add",
-              "+"
-            );
-
-          quickAdd.type = "button";
-
-          quickAdd.dataset.quickAdd =
-            product.id;
-
-          quickAdd.setAttribute(
-            "aria-label",
-            `Pilih varian ${
-              product.name
-            }`
-          );
-
-          quickAdd.addEventListener(
-            "click",
-            event => {
-              event.preventDefault();
-              event.stopPropagation();
-
-              try {
-                openDrawer(product.id);
-              } catch (error) {
-                console.error(
-                  "AYA quick-add error:",
-                  error
-                );
-
-                window.AYA.showToast(
-                  "Pilihan produk belum dapat dibuka. Silakan coba kembali."
-                );
-              }
-            }
-          );
-
-          productActions.appendChild(
-            quickAdd
-          );
-        }
-
-        footer.appendChild(
-          productActions
-        );
-
-        body.appendChild(footer);
-
-        article.append(
-          imageLink,
-          body
-        );
-
-        return article;
-      }
-
-      function render() {
-        const items =
-          visibleProducts();
-
-        if (resultCount) {
-          resultCount.textContent =
-            `${items.length} produk ditemukan`;
-        }
-
-        grid.replaceChildren();
-
-        if (!items.length) {
-          const empty =
-            make(
-              "div",
-              "empty-state product-grid-empty"
-            );
-
-          empty.appendChild(
-            make(
-              "h3",
-              "",
-              "Produk tidak ditemukan."
-            )
-          );
-
-          empty.appendChild(
-            make(
-              "p",
-              "",
-              "Coba kata kunci atau filter berbeda."
-            )
-          );
-
-          grid.appendChild(empty);
-          return;
-        }
-
-        const fragment =
-          document.createDocumentFragment();
-
-        items.forEach(product => {
-          fragment.appendChild(
-            createProductCard(product)
-          );
-        });
-
-        grid.appendChild(fragment);
-      }
-
-      function createDrawerProduct(
-        product
-      ) {
-        const wrapper =
-          make(
-            "div",
-            "drawer-product"
-          );
-
-        const imagePath =
-          safeImagePath(product.image);
-
-        if (imagePath) {
-          const image =
-            document.createElement("img");
-
-          image.src = imagePath;
-          image.alt = product.name;
-          image.width = 200;
-          image.height = 200;
-
-          wrapper.appendChild(image);
-        } else {
-          wrapper.appendChild(
-            make(
-              "div",
-              "drawer-product-placeholder",
-              "AYA"
-            )
-          );
-        }
-
-        const copy =
-          document.createElement("div");
-
-        copy.appendChild(
-          make(
-            "span",
-            "product-line",
-            product.line || "AYA"
-          )
-        );
-
-        copy.appendChild(
-          make(
-            "h3",
-            "",
-            product.name
-          )
-        );
-
-        copy.appendChild(
-          make(
-            "p",
-            "",
-            product.description || ""
-          )
-        );
-
-        wrapper.appendChild(copy);
-
-        return wrapper;
-      }
-
-      function openDrawer(
-        productId
-      ) {
-        const product =
-          window.AYA.getProduct(
-            productId
-          );
-
-        if (
-          !product ||
-          !product.available ||
-          !product.variants?.length
-        ) {
-          window.AYA.showToast(
-            "Produk ini belum tersedia untuk dipesan."
-          );
-
-          return;
-        }
-
-        if (
-          !drawer ||
-          !drawerContent ||
-          !backdrop
-        ) {
-          window.AYA.addCartItem(
-            product.id,
-            0,
-            1
-          );
-
-          return;
-        }
-
-        lastFocusedElement =
-          document.activeElement;
-
-        drawerContent.replaceChildren();
-
-        if (drawerTitle) {
-          drawerTitle.textContent =
-            `Pilih varian — ${product.name}`;
-        }
-
-        drawerContent.appendChild(
-          createDrawerProduct(product)
-        );
-
-        const actions =
-          make(
-            "div",
-            "drawer-actions"
-          );
-
-        const variantField =
-          make(
-            "div",
-            "form-field"
-          );
-
-        const variantLabel =
-          make(
-            "label",
-            "",
-            "Pilih varian"
-          );
-
-        variantLabel.htmlFor =
-          "quickVariant";
-
-        const variantSelect =
-          document.createElement(
-            "select"
-          );
-
-        variantSelect.id =
-          "quickVariant";
-
-        variantSelect.name =
-          "variant";
-
-        product.variants.forEach(
-          (variant, index) => {
-            const option =
-              document.createElement(
-                "option"
-              );
-
-            option.value =
-              String(index);
-
-            option.textContent =
-              `${variant.name} — ${
-                window.AYA.currency(
-                  variant.price
-                )
-              }`;
-
-            variantSelect.appendChild(
-              option
-            );
-          }
-        );
-
-        variantField.append(
-          variantLabel,
-          variantSelect
-        );
-
-        const quantityField =
-          make(
-            "div",
-            "form-field"
-          );
-
-        const quantityLabel =
-          make(
-            "label",
-            "",
-            "Jumlah"
-          );
-
-        quantityLabel.htmlFor =
-          "quickQty";
-
-        const quantityInput =
-          document.createElement(
-            "input"
-          );
-
-        quantityInput.id = "quickQty";
-        quantityInput.name = "quantity";
-        quantityInput.type = "number";
-        quantityInput.min = "1";
-        quantityInput.max = "20";
-        quantityInput.value = "1";
-        quantityInput.inputMode =
-          "numeric";
-
-        quantityField.append(
-          quantityLabel,
-          quantityInput
-        );
-
-        const addButton =
-          make(
-            "button",
-            "button button-primary button-full",
-            "Tambah ke keranjang"
-          );
-
-        addButton.type = "button";
-
-        addButton.dataset.confirmAdd =
-          product.id;
-
-        /*
-          Listener langsung untuk memastikan tombol drawer
-          selalu menambahkan produk.
-        */
-        addButton.addEventListener(
-          "click",
-          event => {
-            event.preventDefault();
-            event.stopPropagation();
-
-            const originalText =
-              addButton.textContent;
-
-            try {
-              const added =
-                window.AYA.addCartItem(
-                  product.id,
-                  Number(
-                    variantSelect.value
-                  ),
-                  Number(
-                    quantityInput.value
-                  )
-                );
-
-              if (!added) {
-                return;
-              }
-
-              addButton.disabled = true;
-
-              addButton.textContent =
-                "✓ Ditambahkan";
-
-              window.setTimeout(() => {
-                addButton.disabled = false;
-                addButton.textContent =
-                  originalText;
-
-                closeDrawer();
-              }, 700);
-            } catch (error) {
-              console.error(
-                "AYA add-to-cart error:",
-                error
-              );
-
-              addButton.disabled = false;
-
-              addButton.textContent =
-                originalText;
-
-              window.AYA.showToast(
-                "Produk belum berhasil ditambahkan. Silakan coba kembali."
-              );
-            }
-          }
-        );
-
-        const detailLink =
-          make(
-            "a",
-            "button button-secondary button-full",
-            "Lihat detail produk"
-          );
-
-        detailLink.href =
-          `product.html?id=${
-            encodeURIComponent(
-              product.id
-            )
-          }`;
-
-        actions.append(
-          variantField,
-          quantityField,
-          addButton,
-          detailLink
-        );
-
-        drawerContent.appendChild(
-          actions
-        );
-
-        drawer.classList.add("open");
-
-        drawer.setAttribute(
-          "aria-hidden",
-          "false"
-        );
-
-        backdrop.hidden = false;
-
-        document.body.classList.add(
-          "drawer-open"
-        );
-
-        const closeButton =
-          drawer.querySelector(
-            "[data-drawer-close]"
-          );
-
-        window.requestAnimationFrame(
-          () => {
-            closeButton?.focus();
-          }
-        );
-      }
-
-      function closeDrawer() {
-        if (
-          !drawer ||
-          !backdrop
-        ) {
-          return;
-        }
-
-        drawer.classList.remove(
-          "open"
-        );
-
-        drawer.setAttribute(
-          "aria-hidden",
-          "true"
-        );
-
-        backdrop.hidden = true;
-
-        document.body.classList.remove(
-          "drawer-open"
-        );
-
-        if (
-          lastFocusedElement instanceof
-            HTMLElement &&
-          lastFocusedElement.isConnected
-        ) {
-          lastFocusedElement.focus();
-        }
-
-        lastFocusedElement = null;
-      }
-
-      function trapDrawerFocus(
-        event
-      ) {
-        if (
-          event.key !== "Tab" ||
-          !drawer?.classList.contains(
-            "open"
-          )
-        ) {
-          return;
-        }
-
-        const focusable = [
-          ...drawer.querySelectorAll(
-            [
-              "a[href]",
-              "button:not([disabled])",
-              "input:not([disabled])",
-              "select:not([disabled])",
-              "textarea:not([disabled])",
-              '[tabindex]:not([tabindex="-1"])'
-            ].join(",")
-          )
-        ].filter(element => {
-          return (
-            !element.hidden &&
-            element.getAttribute(
-              "aria-hidden"
-            ) !== "true"
-          );
-        });
-
-        if (!focusable.length) {
-          event.preventDefault();
-          drawer.focus();
-          return;
-        }
-
-        const first =
-          focusable[0];
-
-        const last =
-          focusable[
-            focusable.length - 1
-          ];
-
-        if (
-          event.shiftKey &&
-          document.activeElement === first
-        ) {
-          event.preventDefault();
-          last.focus();
-          return;
-        }
-
-        if (
-          !event.shiftKey &&
-          document.activeElement === last
-        ) {
-          event.preventDefault();
-          first.focus();
-        }
-      }
-
-      document.addEventListener(
-        "click",
-        event => {
-          const filterButton =
-            event.target.closest(
-              "[data-filter]"
-            );
-
-          if (filterButton) {
-            filter =
-              filterButton.dataset.filter;
-
-            document
-              .querySelectorAll(
-                "[data-filter]"
-              )
-              .forEach(button => {
-                button.classList.toggle(
-                  "active",
-                  button === filterButton
-                );
-              });
-
-            render();
-            return;
-          }
-
-          const quickButton =
-            event.target.closest(
-              "[data-quick-add]"
-            );
-
-          if (quickButton) {
-            event.preventDefault();
-
-            openDrawer(
-              quickButton.dataset
-                .quickAdd
-            );
-
-            return;
-          }
-
-          const confirmButton =
-            event.target.closest(
-              "[data-confirm-add]"
-            );
-
-          if (confirmButton) {
-            event.preventDefault();
-
-            const variantIndex =
-              Number(
-                drawerContent
-                  ?.querySelector(
-                    "#quickVariant"
-                  )
-                  ?.value || 0
-              );
-
-            const quantity =
-              Number(
-                drawerContent
-                  ?.querySelector(
-                    "#quickQty"
-                  )
-                  ?.value || 1
-              );
-
-            const originalText =
-              confirmButton.textContent;
-
-            const added =
-              window.AYA.addCartItem(
-                confirmButton.dataset
-                  .confirmAdd,
-                variantIndex,
-                quantity
-              );
-
-            if (!added) return;
-
-            confirmButton.disabled =
-              true;
-
-            confirmButton.textContent =
-              "✓ Ditambahkan";
-
-            window.setTimeout(() => {
-              confirmButton.disabled =
-                false;
-
-              confirmButton.textContent =
-                originalText;
-
-              closeDrawer();
-            }, 650);
-
-            return;
-          }
-
-          if (
-            event.target.closest(
-              "[data-drawer-close]"
-            ) ||
-            event.target === backdrop
-          ) {
-            closeDrawer();
-          }
-        }
-      );
-
-      document.addEventListener(
-        "keydown",
-        event => {
-          trapDrawerFocus(event);
-
-          if (
-            event.key === "Escape" &&
-            drawer?.classList.contains(
-              "open"
-            )
-          ) {
-            event.preventDefault();
-            closeDrawer();
-          }
-        }
-      );
-
-      search?.addEventListener(
-        "input",
-        () => {
-          query =
-            search.value
-              .trim()
-              .toLowerCase();
-
+  "use strict";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.AYA) return;
+
+    const grid = document.querySelector("[data-product-grid]");
+    const resultCount = document.querySelector("[data-result-count]");
+    const pageStatus = document.querySelector("[data-page-status]");
+    const pagination = document.querySelector("[data-pagination]");
+    const search = document.querySelector("[data-product-search]");
+    const lineFilter = document.querySelector("[data-line-filter]");
+    const categoryFilter = document.querySelector("[data-category-filter]");
+    const priceFilter = document.querySelector("[data-price-filter]");
+    const statusFilter = document.querySelector("[data-status-filter]");
+    const sort = document.querySelector("[data-sort]");
+    const reset = document.querySelector("[data-reset-filters]");
+    const drawer = document.querySelector("[data-quick-drawer]");
+    const drawerContent = document.querySelector("[data-drawer-content]");
+    const drawerTitle = document.querySelector("#quickDrawerTitle");
+    const backdrop = document.querySelector("[data-drawer-backdrop]");
+    const closeButton = document.querySelector("[data-drawer-close]");
+
+    if (!grid) return;
+
+    const state = {
+      query: "",
+      line: new URLSearchParams(location.search).get("line") || "all",
+      category: "all",
+      price: "all",
+      status: "all",
+      sort: "recommended",
+      page: 1,
+      perPage: 8
+    };
+
+    if (lineFilter && ["spice", "farm", "snack"].includes(state.line)) lineFilter.value = state.line;
+    else state.line = "all";
+
+    const categories = [...new Set(window.AYA.products.map(product => product.category).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, "id"));
+    categories.forEach(category => {
+      const option = document.createElement("option");
+      option.value = category;
+      option.textContent = category;
+      categoryFilter?.appendChild(option);
+    });
+
+    const matchesPrice = product => {
+      if (state.price === "all") return true;
+      const price = window.AYA.minimumPrice(product);
+      if (price === null) return false;
+      if (state.price === "under-50000") return price < 50000;
+      if (state.price === "50000-79999") return price >= 50000 && price < 80000;
+      if (state.price === "80000-up") return price >= 80000;
+      return true;
+    };
+
+    const visible = () => {
+      const items = window.AYA.products.filter(product => {
+        const haystack = [
+          product.name,
+          product.line,
+          product.category,
+          product.description,
+          ...(product.variants || []).map(variant => variant.name)
+        ].join(" ").toLowerCase();
+
+        return (!state.query || haystack.includes(state.query))
+          && (state.line === "all" || product.lineKey === state.line)
+          && (state.category === "all" || product.category === state.category)
+          && (state.status === "all" || product.status === state.status)
+          && matchesPrice(product);
+      });
+
+      return items.sort((a, b) => {
+        if (state.sort === "price-asc") return (window.AYA.minimumPrice(a) ?? Infinity) - (window.AYA.minimumPrice(b) ?? Infinity);
+        if (state.sort === "price-desc") return (window.AYA.minimumPrice(b) ?? -1) - (window.AYA.minimumPrice(a) ?? -1);
+        if (state.sort === "name-asc") return a.name.localeCompare(b.name, "id");
+        return Number(a.priority || 99) - Number(b.priority || 99);
+      });
+    };
+
+    function renderPagination(totalPages) {
+      pagination?.replaceChildren();
+      if (!pagination || totalPages <= 1) return;
+      for (let page = 1; page <= totalPages; page += 1) {
+        const button = window.AYA.make("button", page === state.page ? "active" : "", String(page));
+        button.type = "button";
+        button.setAttribute("aria-label", `Buka halaman ${page}`);
+        if (page === state.page) button.setAttribute("aria-current", "page");
+        button.addEventListener("click", () => {
+          state.page = page;
           render();
-        }
-      );
+          document.querySelector(".catalog-results")?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        pagination.appendChild(button);
+      }
+    }
 
-      /* AYA CATALOG STICKY STATE */
-      const updateToolbarState = () => {
-        if (!toolbar) return;
+    function render() {
+      const items = visible();
+      const totalPages = Math.max(1, Math.ceil(items.length / state.perPage));
+      if (state.page > totalPages) state.page = 1;
+      const start = (state.page - 1) * state.perPage;
+      const pageItems = items.slice(start, start + state.perPage);
 
-        const headerHeight =
-          parseFloat(
-            getComputedStyle(
-              document.documentElement
-            ).getPropertyValue(
-              "--aya-header-height"
-            )
-          ) || 82;
+      resultCount.textContent = `${items.length} produk ditemukan`;
+      if (pageStatus) pageStatus.textContent = items.length ? `Halaman ${state.page} dari ${totalPages}` : "";
+      grid.replaceChildren();
 
-        toolbar.classList.toggle(
-          "is-stuck",
-          toolbar
-            .getBoundingClientRect()
-            .top <=
-            headerHeight + 9
+      if (!pageItems.length) {
+        const empty = window.AYA.make("div", "empty-state product-grid-empty");
+        empty.append(
+          window.AYA.make("span", "", "Tidak ditemukan"),
+          window.AYA.make("h3", "", "Belum ada produk yang sesuai."),
+          window.AYA.make("p", "", "Ubah kata kunci atau reset filter untuk melihat pilihan lain.")
         );
-      };
+        grid.appendChild(empty);
+      } else {
+        pageItems.forEach(product => grid.appendChild(window.AYA.createProductCard(product)));
+      }
+      renderPagination(totalPages);
+    }
 
-      window.addEventListener(
-        "scroll",
-        updateToolbarState,
-        { passive: true }
-      );
+    function closeDrawer() {
+      if (!drawer || !backdrop) return;
+      drawer.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      backdrop.hidden = true;
+      document.body.classList.remove("drawer-open");
+    }
 
-      window.addEventListener(
-        "resize",
-        updateToolbarState
-      );
-
-      updateToolbarState();
-
-      const params =
-        new URLSearchParams(
-          window.location.search
-        );
-
-      const requestedFilter =
-        params.get("line");
-
-      if (
-        [
-          "spice",
-          "farm",
-          "snack"
-        ].includes(requestedFilter)
-      ) {
-        filter = requestedFilter;
-
-        document
-          .querySelectorAll(
-            "[data-filter]"
-          )
-          .forEach(button => {
-            button.classList.toggle(
-              "active",
-              button.dataset.filter ===
-                filter
-            );
-          });
+    function openDrawer(productId, mode = "cart") {
+      const product = window.AYA.getProduct(productId);
+      if (!product || product.status === "soldout" || !product.variants?.length) {
+        window.AYA.showToast("Produk ini belum tersedia untuk dipesan.", "warning");
+        return;
+      }
+      if (!drawer || !drawerContent || !backdrop) {
+        if (mode === "order") window.AYA.openWhatsApp(window.AYA.buildProductMessage(product, product.variants[0], 1));
+        else window.AYA.addCartItem(product.id, 0, 1);
+        return;
       }
 
-      render();
+      drawerContent.replaceChildren();
+      drawerTitle.textContent = product.name;
+
+      const media = window.AYA.createMedia(product, "drawer-product-media");
+      const intro = window.AYA.make("div", "drawer-product-intro");
+      intro.append(
+        window.AYA.make("span", "", `${product.line} · ${product.category}`),
+        window.AYA.make("h3", "", product.name),
+        window.AYA.make("p", "", product.description)
+      );
+      const top = window.AYA.make("div", "drawer-product-top");
+      top.append(media, intro);
+
+      const form = window.AYA.make("div", "drawer-form");
+      const variantField = window.AYA.make("label", "form-field");
+      variantField.appendChild(window.AYA.make("span", "", "Varian"));
+      const select = document.createElement("select");
+      product.variants.forEach((variant, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent = `${variant.name} — ${window.AYA.currency(variant.price)}`;
+        select.appendChild(option);
+      });
+      variantField.appendChild(select);
+
+      const qtyField = window.AYA.make("label", "form-field");
+      qtyField.appendChild(window.AYA.make("span", "", "Jumlah"));
+      const qty = document.createElement("input");
+      qty.type = "number";
+      qty.min = "1";
+      qty.max = "99";
+      qty.value = "1";
+      qty.inputMode = "numeric";
+      qtyField.appendChild(qty);
+
+      const subtotal = window.AYA.make("div", "drawer-subtotal");
+      const subtotalLabel = window.AYA.make("span", "", "Subtotal");
+      const subtotalValue = window.AYA.make("strong", "", window.AYA.currency(product.variants[0].price));
+      subtotal.append(subtotalLabel, subtotalValue);
+
+      const refreshSubtotal = () => {
+        const variant = product.variants[Number(select.value) || 0];
+        subtotalValue.textContent = window.AYA.currency(variant.price * Math.max(1, Number(qty.value) || 1));
+      };
+      select.addEventListener("change", refreshSubtotal);
+      qty.addEventListener("input", refreshSubtotal);
+
+      const actions = window.AYA.make("div", "drawer-cta-grid");
+      const order = window.AYA.make("button", "button button-primary", "Pesan via WhatsApp");
+      order.type = "button";
+      order.addEventListener("click", () => {
+        const variant = product.variants[Number(select.value) || 0];
+        window.AYA.openWhatsApp(window.AYA.buildProductMessage(product, variant, qty.value));
+      });
+      const add = window.AYA.make("button", "button button-secondary", "Tambah ke Keranjang");
+      add.type = "button";
+      add.addEventListener("click", () => {
+        const added = window.AYA.addCartItem(product.id, select.value, qty.value);
+        if (added) closeDrawer();
+      });
+      actions.append(order, add);
+
+      form.append(variantField, qtyField, subtotal, actions);
+      drawerContent.append(top, form);
+      drawer.classList.add("open");
+      drawer.setAttribute("aria-hidden", "false");
+      backdrop.hidden = false;
+      document.body.classList.add("drawer-open");
+      closeButton?.focus();
     }
-  );
+
+    [search, lineFilter, categoryFilter, priceFilter, statusFilter, sort].forEach(control => {
+      control?.addEventListener(control === search ? "input" : "change", () => {
+        state.query = search.value.trim().toLowerCase();
+        state.line = lineFilter.value;
+        state.category = categoryFilter.value;
+        state.price = priceFilter.value;
+        state.status = statusFilter.value;
+        state.sort = sort.value;
+        state.page = 1;
+        render();
+      });
+    });
+
+    reset?.addEventListener("click", () => {
+      search.value = "";
+      lineFilter.value = "all";
+      categoryFilter.value = "all";
+      priceFilter.value = "all";
+      statusFilter.value = "all";
+      sort.value = "recommended";
+      Object.assign(state, { query: "", line: "all", category: "all", price: "all", status: "all", sort: "recommended", page: 1 });
+      render();
+    });
+
+    document.addEventListener("click", event => {
+      const trigger = event.target.closest("[data-quick-product]");
+      if (trigger) openDrawer(trigger.dataset.quickProduct, trigger.dataset.quickMode);
+    });
+
+    closeButton?.addEventListener("click", closeDrawer);
+    backdrop?.addEventListener("click", closeDrawer);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeDrawer();
+    });
+
+    render();
+  });
 })();

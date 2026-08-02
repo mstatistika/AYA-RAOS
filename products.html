@@ -3,140 +3,200 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Semua Produk — AYA RAOS</title>
-  <meta name="description" content="Jelajahi seluruh produk AYA Spice Haven, AYA Farm, dan AYA Snack & Drinks." />
-  <meta name="theme-color" content="#9f1f1f" />
+  <title>Katalog Produk — AYA RAOS</title>
+  <meta name="description" content="Jelajahi Sambal AYA, pendamping makanan, hasil bumi, camilan, dan minuman berdasarkan lini, harga, dan ketersediaan." />
+  <meta name="theme-color" content="#8f1d1d" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta property="og:title" content="Katalog Produk — AYA RAOS" />
+  <meta property="og:description" content="Jelajahi Sambal AYA, pendamping makanan, hasil bumi, camilan, dan minuman berdasarkan lini, harga, dan ketersediaan." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AYA RAOS" />
+  <meta property="og:locale" content="id_ID" />
+  <meta name="twitter:card" content="summary" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/site.css?v=20260801-ux-supabase-1" />
-  <script defer src="js/config.js?v=20260801-ux-supabase-1"></script>
-  <script defer src="js/data.js?v=20260801-ux-supabase-1"></script>
-  <script defer src="js/site.js?v=20260801-ux-supabase-1"></script>
-  <script defer src="js/catalog.js?v=20260801-ux-supabase-1"></script>
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="stylesheet" href="css/site.css?v=20260802-phase1-v1" />
+  <script defer src="js/config.js?v=20260802-phase1-v1"></script>
+  <script defer src="js/data.js?v=20260802-phase1-v1"></script>
+  <script defer src="js/site.js?v=20260802-phase1-v1"></script>
+  <script defer src="js/catalog.js?v=20260802-phase1-v1"></script>
 
-
-  <!-- AYA STAGING METADATA — BEGIN -->
-  <meta
-    name="robots"
-    content="noindex, nofollow, noarchive"
-  />
-  <meta
-    name="referrer"
-    content="strict-origin-when-cross-origin"
-  />
-
-  <meta
-    property="og:title"
-    content="Semua Produk — AYA RAOS"
-  />
-  <meta
-    property="og:description"
-    content="Jelajahi seluruh produk AYA Spice Haven, AYA Farm, dan AYA Snack &amp; Drinks."
-  />
-  <meta
-    property="og:type"
-    content="website"
-  />
-  <meta
-    property="og:site_name"
-    content="AYA RAOS"
-  />
-  <meta
-    property="og:locale"
-    content="id_ID"
-  />
-
-  <meta
-    name="twitter:card"
-    content="summary"
-  />
-  <meta
-    name="twitter:title"
-    content="Semua Produk — AYA RAOS"
-  />
-  <meta
-    name="twitter:description"
-    content="Jelajahi seluruh produk AYA Spice Haven, AYA Farm, dan AYA Snack &amp; Drinks."
-  />
-
-  <link
-    rel="manifest"
-    href="site.webmanifest"
-  />
-  <!-- AYA STAGING METADATA — END -->
 </head>
 <body>
   <a class="skip-link" href="#main">Lewati ke konten utama</a>
+  <div class="utility-bar">
+    <div class="container utility-inner">
+      <span>Produksi batch kecil · estimasi 2–3 hari setelah pembayaran</span>
+      <span>Jabodetabek menggunakan tarif aktual Grab/Gojek</span>
+    </div>
+  </div>
   <header class="site-header">
     <div class="container site-header-inner">
-      <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda"><strong>AYA</strong><small>RAOS</small></a>
+      <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda">
+        <strong>AYA</strong>
+        <span>RAOS</span>
+        <small>ADA RASA</small>
+      </a>
       <nav class="primary-nav" aria-label="Navigasi utama">
         <a href="index.html">Beranda</a>
-        <a href="products.html">Semua Produk</a>
-        
+        <a href="products.html" aria-current="page">Produk</a>
+        <a href="business.html">Pesanan Usaha</a>
         <a href="testimonials.html">Testimoni</a>
-        <a href="information.html#cara-pesan">Cara Pesan</a>
+        <a href="information.html">Informasi</a>
       </nav>
       <div class="header-actions">
-        <a class="header-cta" href="products.html">Mulai Pesan</a>
-        <a class="cart-link" href="cart.html" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-count" data-cart-count>0</span></a>
-        <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
+        <a class="cart-link" href="cart.html" aria-label="Buka keranjang">
+          <span>Keranjang</span>
+          <span class="cart-count" data-cart-count>0</span>
+        </a>
+        <a class="button button-primary header-order" href="products.html">Mulai Pesan</a>
+        <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle>
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </div>
     <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
       <a href="index.html">Beranda</a>
-      <a href="products.html">Semua Produk</a>
-      <a href="index.html#cerita-aya">Tentang AYA</a>
+      <a href="products.html" aria-current="page">Produk</a>
+      <a href="business.html">Pesanan Usaha</a>
       <a href="testimonials.html">Testimoni</a>
-      <a href="information.html#cara-pesan">Cara Pesan</a>
-      <a href="cart.html">Keranjang</a>
+      <a href="information.html">Informasi</a>
+      <a href="cart.html">Keranjang <span data-cart-count>0</span></a>
     </nav>
   </header>
-
   <main id="main" class="page-shell">
-    <section class="page-hero">
-      <div class="container page-hero-grid">
-        <div><div class="breadcrumb"><a href="index.html">Beranda</a><span>/</span><span>Produk</span></div><h1>Semua produk AYA dalam satu katalog.</h1><p>Pilih lini, cari produk, buka detail, lalu tambahkan beberapa pilihan ke keranjang sebelum finalisasi melalui WhatsApp.</p></div>
-        <a class="button button-secondary" href="cart.html">Lihat Keranjang <span data-cart-count>0</span></a>
+    <section class="page-intro catalog-intro">
+      <div class="container page-intro-grid">
+        <div>
+          <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Beranda</a><span>/</span><span>Produk</span></nav>
+          <span class="eyebrow">Katalog AYA</span>
+          <h1>Produk untuk rumah, momen, dan kebutuhan usaha.</h1>
+          <p>Cari produk, pilih varian, lalu pesan langsung melalui WhatsApp atau gabungkan beberapa item di keranjang.</p>
+        </div>
+        <div class="page-intro-note">
+          <strong>10 produk</strong>
+          <span>Harga mengikuti varian yang dipilih.</span>
+        </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="catalog-toolbar">
-          <label class="search-field"><span class="sr-only">Cari produk</span><input type="search" placeholder="Cari sambal, bawang, kacang…" data-product-search /></label>
-          <div class="filter-row" role="group" aria-label="Filter lini produk"><button class="filter-chip active" type="button" data-filter="all">Semua</button><button class="filter-chip" type="button" data-filter="spice">Spice Haven</button><button class="filter-chip" type="button" data-filter="farm">Farm</button><button class="filter-chip" type="button" data-filter="snack">Snack &amp; Drinks</button></div>
+    <section class="section catalog-section">
+      <div class="container catalog-layout">
+        <aside class="catalog-filters" aria-label="Filter produk">
+          <div class="filter-heading">
+            <div><span>Filter</span><strong>Temukan produk</strong></div>
+            <button type="button" data-reset-filters>Reset</button>
+          </div>
+          <label class="filter-field">
+            <span>Cari</span>
+            <input type="search" placeholder="Sambal, kacang, minuman…" data-product-search />
+          </label>
+          <label class="filter-field">
+            <span>Lini</span>
+            <select data-line-filter>
+              <option value="all">Semua lini</option>
+              <option value="spice">AYA Spice Haven</option>
+              <option value="farm">AYA Farm</option>
+              <option value="snack">AYA Snack &amp; Drinks</option>
+            </select>
+          </label>
+          <label class="filter-field">
+            <span>Kategori</span>
+            <select data-category-filter>
+              <option value="all">Semua kategori</option>
+            </select>
+          </label>
+          <label class="filter-field">
+            <span>Harga</span>
+            <select data-price-filter>
+              <option value="all">Semua harga</option>
+              <option value="under-50000">Di bawah Rp50.000</option>
+              <option value="50000-79999">Rp50.000–Rp79.999</option>
+              <option value="80000-up">Rp80.000 ke atas</option>
+            </select>
+          </label>
+          <label class="filter-field">
+            <span>Ketersediaan</span>
+            <select data-status-filter>
+              <option value="all">Semua status</option>
+              <option value="available">Tersedia</option>
+              <option value="preorder">Pre-order</option>
+              <option value="soldout">Habis</option>
+            </select>
+          </label>
+          <div class="filter-help">
+            <strong>Belum menemukan yang cocok?</strong>
+            <button type="button" data-direct-whatsapp>Tanyakan ke AYA</button>
+          </div>
+        </aside>
+
+        <div class="catalog-results">
+          <div class="catalog-toolbar">
+            <div>
+              <span data-result-count>Memuat produk…</span>
+              <small data-page-status></small>
+            </div>
+            <label class="sort-field">
+              <span>Urutkan</span>
+              <select data-sort>
+                <option value="recommended">Rekomendasi AYA</option>
+                <option value="price-asc">Harga terendah</option>
+                <option value="price-desc">Harga tertinggi</option>
+                <option value="name-asc">Nama A–Z</option>
+              </select>
+            </label>
+          </div>
+          <div class="product-grid" data-product-grid aria-live="polite">
+            <div class="loading-state">Katalog sedang dimuat.</div>
+          </div>
+          <nav class="pagination" aria-label="Pagination katalog" data-pagination></nav>
         </div>
-        <div class="catalog-meta"><span data-result-count>0 produk ditemukan</span><span>Klik kartu untuk detail · tombol + untuk pilih varian cepat</span></div>
-        <div class="product-grid" data-product-grid aria-live="polite"></div>
       </div>
     </section>
   </main>
-
   <footer class="site-footer">
     <div class="container footer-grid">
-      <div class="footer-brand"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><p>Perjalanan rasa dari Tanah Sunda melalui hasil bumi, pendamping makanan, camilan, dan minuman.</p></div>
-      <div class="footer-column"><h3>Produk Kami</h3><a href="products.html?line=spice">AYA Spice Haven</a><a href="products.html?line=farm">AYA Farm</a><a href="products.html?line=snack">AYA Snack &amp; Drinks</a></div>
-      <div class="footer-column"><h3>Informasi</h3><a href="index.html#cerita-aya">Tentang AYA</a><a href="testimonials.html">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div>
-      <div class="footer-column"><h3>Bantuan</h3><a href="information.html#faq">FAQ</a><a href="information.html#syarat">Syarat Pemesanan</a><a href="information.html#privasi">Privasi</a><button type="button" data-direct-whatsapp>WhatsApp</button></div>
+      <div class="footer-brand">
+        <a class="wordmark" href="index.html"><strong>AYA</strong><span>RAOS</span><small>ADA RASA</small></a>
+        <p>Produk rumahan AYA untuk kebutuhan pribadi, keluarga, acara, dan usaha.</p>
+        <a class="footer-instagram" href="https://www.instagram.com/aya.spice.haven/" target="_blank" rel="noopener noreferrer">@aya.spice.haven</a>
+      </div>
+      <div class="footer-column">
+        <h3>Belanja</h3>
+        <a href="products.html?line=spice">AYA Spice Haven</a>
+        <a href="products.html?line=farm">AYA Farm</a>
+        <a href="products.html?line=snack">AYA Snack &amp; Drinks</a>
+        <a href="cart.html">Keranjang</a>
+      </div>
+      <div class="footer-column">
+        <h3>Layanan</h3>
+        <a href="business.html">Pesanan Usaha</a>
+        <a href="information.html#cara-pesan">Cara Pesan</a>
+        <a href="information.html#pengiriman">Pengiriman</a>
+        <a href="information.html#pembayaran">Pembayaran</a>
+      </div>
+      <div class="footer-column">
+        <h3>Kepercayaan</h3>
+        <a href="testimonials.html">Testimoni</a>
+        <a href="share.html">Bagikan Pengalaman</a>
+        <a href="information.html#faq">FAQ</a>
+        <button type="button" data-direct-whatsapp>WhatsApp AYA</button>
+      </div>
     </div>
-    <div class="container footer-bottom"><span>© <span data-current-year></span> AYA RAOS. Semua hak dilindungi.</span><span>Lippo Utara · Jabodetabek · Indonesia</span></div>
-    <div class="footer-accent"></div>
+    <div class="container footer-bottom">
+      <span>© <span data-current-year></span> AYA RAOS.</span>
+      <span>Lippo Utara · Jabodetabek</span>
+    </div>
   </footer>
+  <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
 
-  <div class="drawer-backdrop" hidden data-drawer-backdrop></div>
-  <aside
-    class="quick-drawer"
-    role="dialog"
-    aria-modal="true"
-    aria-hidden="true"
-    aria-labelledby="quickDrawerTitle"
-    tabindex="-1"
-    data-quick-drawer
-  >
+  <div class="drawer-backdrop" data-drawer-backdrop hidden></div>
+  <aside class="quick-drawer" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="quickDrawerTitle" data-quick-drawer>
     <div class="drawer-head">
-      <h2 id="quickDrawerTitle">
-        Pilih varian
-      </h2><button class="drawer-close" type="button" aria-label="Tutup" data-drawer-close>×</button></div>
+      <div><span>Pilih produk</span><h2 id="quickDrawerTitle">Varian produk</h2></div>
+      <button class="drawer-close" type="button" aria-label="Tutup pilihan produk" data-drawer-close>×</button>
+    </div>
     <div class="drawer-content" data-drawer-content></div>
   </aside>
 </body>

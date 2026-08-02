@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Kacang Mede Jumbo</title>
+  <desc id="desc">Foto produk sedang disiapkan</desc>
+  <rect width="1200" height="900" fill="#fbf1e5"/>
+  <circle cx="1040" cy="120" r="190" fill="#b56d2a" opacity=".08"/>
+  <circle cx="160" cy="770" r="240" fill="#b56d2a" opacity=".06"/>
+  <rect x="110" y="110" width="980" height="680" rx="48" fill="#fff" opacity=".76" stroke="#b56d2a" stroke-opacity=".18" stroke-width="3"/>
+  <text x="600" y="320" text-anchor="middle" fill="#b56d2a" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" letter-spacing="4">AYA SNACK &AMP; DRINKS</text>
+  <text x="600" y="430" text-anchor="middle" fill="#b56d2a" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700">Kacang Mede Jumbo</text>
+  <text x="600" y="500" text-anchor="middle" fill="#625650" font-family="Arial, Helvetica, sans-serif" font-size="28">Camilan</text>
+  <line x1="430" y1="560" x2="770" y2="560" stroke="#b56d2a" stroke-opacity=".28" stroke-width="3"/>
+  <text x="600" y="630" text-anchor="middle" fill="#887a72" font-family="Arial, Helvetica, sans-serif" font-size="26">Foto sedang disiapkan</text>
+</svg>
