@@ -194,6 +194,68 @@
     return openWhatsApp(message);
   }
 
+  function installCompactPresentation() {
+    if (!document.body?.classList.contains("v2-page")) return;
+
+    document.documentElement.classList.add("v2-experience");
+    document.body.classList.remove("menu-open", "drawer-open");
+
+    if (!document.querySelector("link[data-v2-compact-style]")) {
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = "css/frontend-v2-compact.css?v=20260802-compact-1";
+      stylesheet.dataset.v2CompactStyle = "";
+      document.head.appendChild(stylesheet);
+    }
+
+    const testimonialGrid = document.querySelector(".v2-testimonial-grid");
+    const staticStack = testimonialGrid?.querySelector(".v2-testimonial-stack");
+
+    if (testimonialGrid && staticStack && !testimonialGrid.querySelector("[data-text-carousel]")) {
+      const panel = document.createElement("section");
+      panel.className = "testimonial-ticker-panel v2-restored-ticker";
+      panel.setAttribute("aria-labelledby", "restoredTickerTitle");
+
+      const top = document.createElement("div");
+      top.className = "ticker-panel-top";
+      const prompt = document.createElement("span");
+      prompt.textContent = "Punya pengalaman bersama AYA?";
+      const share = document.createElement("a");
+      share.className = "text-link";
+      share.href = "share.html";
+      share.textContent = "Bagikan pengalaman →";
+      top.append(prompt, share);
+
+      const head = document.createElement("div");
+      head.className = "ticker-panel-head";
+      const title = document.createElement("h3");
+      title.id = "restoredTickerTitle";
+      title.textContent = "Cerita pelanggan lainnya";
+      head.appendChild(title);
+
+      const viewport = document.createElement("div");
+      viewport.className = "testimonial-ticker-viewport";
+      viewport.tabIndex = 0;
+      viewport.dataset.textCarousel = "";
+      viewport.setAttribute("aria-label", "Testimoni pelanggan bergerak vertikal");
+      const track = document.createElement("div");
+      track.className = "testimonial-ticker-track";
+      track.dataset.testimonialTrack = "";
+      viewport.appendChild(track);
+
+      const bottom = document.createElement("div");
+      bottom.className = "ticker-panel-bottom";
+      const all = document.createElement("a");
+      all.className = "text-link";
+      all.href = "testimonials.html";
+      all.textContent = "Lihat semua testimoni →";
+      bottom.appendChild(all);
+
+      panel.append(top, head, viewport, bottom);
+      staticStack.replaceWith(panel);
+    }
+  }
+
   function currentPageKey() {
     const path = window.location.pathname.split("/").pop() || "index.html";
     if (path === "index.html" || path === "") return "home";
@@ -347,11 +409,18 @@
   };
 
   document.addEventListener("DOMContentLoaded", () => {
+    installCompactPresentation();
     normalizeNavigation();
     bindNavigation();
     bindExternalActions();
     injectFooterEnhancements();
     setCurrentYear();
     updateCartCount();
+  });
+
+  window.addEventListener("pageshow", () => {
+    if (!document.body?.classList.contains("v2-page")) return;
+    document.body.classList.remove("menu-open", "drawer-open");
+    document.documentElement.classList.add("v2-experience");
   });
 })();
