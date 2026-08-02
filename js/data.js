@@ -81,8 +81,8 @@ window.AYA_PRODUCTS = [
   {
     id: "dimsum-chili-oil",
     name: "Dimsum + Chili Oil",
-    line: "AYA Spice Haven",
-    lineKey: "spice",
+    line: "AYA Snack & Drinks",
+    lineKey: "snack",
     category: "Siap Saji",
     image: "",
     badge: "10 pcs",
