@@ -1,136 +1,115 @@
 <!doctype html>
 <html lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Keranjang Pesanan — AYA RAOS</title>
-  <meta name="description" content="Periksa produk AYA yang dipilih dan finalisasi pesanan melalui WhatsApp." />
-  <meta name="theme-color" content="#9f1f1f" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" /><link rel="stylesheet" href="css/site.css?v=20260801-ux-supabase-1" />
-  <script defer src="js/config.js?v=20260801-ux-supabase-1"></script><script defer src="js/data.js?v=20260801-ux-supabase-1"></script><script defer src="js/site.js?v=20260801-ux-supabase-1"></script><script defer src="js/cart-page.js?v=20260801-ux-supabase-1"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Keranjang & Pemesanan — AYA RAOS</title>
+    <meta name="description" content="Kelola produk dan lengkapi data pesanan pribadi atau acara/usaha dalam satu alur." />
+    <meta name="theme-color" content="#8f1d1d" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AYA RAOS" />
+    <meta property="og:locale" content="id_ID" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="site.webmanifest" />
 
-
-  <!-- AYA STAGING METADATA — BEGIN -->
-  <meta
-    name="robots"
-    content="noindex, nofollow, noarchive"
-  />
-  <meta
-    name="referrer"
-    content="strict-origin-when-cross-origin"
-  />
-
-  <meta
-    property="og:title"
-    content="Keranjang Pesanan — AYA RAOS"
-  />
-  <meta
-    property="og:description"
-    content="Periksa produk AYA yang dipilih dan finalisasi pesanan melalui WhatsApp."
-  />
-  <meta
-    property="og:type"
-    content="website"
-  />
-  <meta
-    property="og:site_name"
-    content="AYA RAOS"
-  />
-  <meta
-    property="og:locale"
-    content="id_ID"
-  />
-
-  <meta
-    name="twitter:card"
-    content="summary"
-  />
-  <meta
-    name="twitter:title"
-    content="Keranjang Pesanan — AYA RAOS"
-  />
-  <meta
-    name="twitter:description"
-    content="Periksa produk AYA yang dipilih dan finalisasi pesanan melalui WhatsApp."
-  />
-
-  <link
-    rel="manifest"
-    href="site.webmanifest"
-  />
-  <!-- AYA STAGING METADATA — END -->
-</head>
-<body>
-  <a class="skip-link" href="#main">Lewati ke konten utama</a>
-  <header class="site-header">
-    <div class="container site-header-inner">
-      <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda"><strong>AYA</strong><small>RAOS</small></a>
-      <nav class="primary-nav" aria-label="Navigasi utama">
-        <a href="index.html">Beranda</a>
-        <a href="products.html">Semua Produk</a>
-        
-        <a href="testimonials.html">Testimoni</a>
-        <a href="information.html#cara-pesan">Cara Pesan</a>
-      </nav>
-      <div class="header-actions">
-        <a class="header-cta" href="products.html">Mulai Pesan</a>
-        <a class="cart-link" href="cart.html" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-count" data-cart-count>0</span></a>
-        <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
-      </div>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/site.css?v=20260805-sweep-v1" />
+    <script defer src="js/config.js?v=20260805-sweep-v1"></script>
+    <script defer src="js/data.js?v=20260805-sweep-v1"></script>
+    <script defer src="js/site.js?v=20260805-sweep-v1"></script>
+    <script defer src="js/cart-page.js?v=20260805-sweep-v1"></script>
+  </head>
+<body data-page="cart">
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+<div class="utility-bar">
+  <div class="container utility-inner">
+    <span>Produksi batch kecil · Lead time umumnya 2–3 hari setelah pembayaran</span>
+    <span>Jabodetabek · tarif aktual Grab/Gojek sesuai alamat</span>
+  </div>
+</div>
+<header class="site-header" data-site-header>
+  <div class="container site-header-inner">
+    <a class="wordmark" href="index.html" aria-label="AYA RAOS — Beranda">
+      <strong>AYA</strong><span>RAOS</span><small>ADA RASA</small>
+    </a>
+    <nav class="primary-nav" aria-label="Navigasi utama">
+      <a href="index.html" data-nav="home">Beranda</a>
+      <a href="index.html#cerita-aya" data-nav="about">Tentang AYA</a>
+      <a href="products.html" data-nav="products">Produk</a>
+      <a href="testimonials.html" data-nav="testimonials">Testimoni</a>
+      <a href="information.html" data-nav="information">Informasi</a>
+    </nav>
+    <div class="header-actions">
+      <a class="cart-link" href="cart.html" aria-label="Buka keranjang">
+        <span>Keranjang</span><span class="cart-count" data-cart-count>0</span>
+      </a>
+      <a class="button button-primary header-order" href="cart.html">Pesan Sekarang</a>
+      <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle>
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
-      <a href="index.html">Beranda</a>
-      <a href="products.html">Semua Produk</a>
-      <a href="index.html#cerita-aya">Tentang AYA</a>
+  </div>
+  <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
+    <a href="index.html">Beranda</a>
+    <a href="index.html#cerita-aya">Tentang AYA</a>
+    <a href="products.html">Produk</a>
+    <a href="testimonials.html">Testimoni</a>
+    <a href="information.html">Informasi</a>
+    <a href="cart.html">Keranjang <span data-cart-count>0</span></a>
+    <a class="button button-primary" href="cart.html">Pesan Sekarang</a>
+  </nav>
+</header>
+<div class="global-state" data-global-state aria-live="polite" hidden></div>
+  <main id="main">
+    <section class="page-intro order-intro"><div class="container"><span class="eyebrow">Unified Order Gateway</span><h1>Keranjang dan pemesanan dalam satu alur.</h1><p>Pilih jenis pesanan, lengkapi data dan pengiriman, lalu tinjau ringkasan sebelum pembayaran.</p></div></section>
+    <section class="order-section">
+      <div class="container order-layout">
+        <section class="cart-panel" aria-labelledby="cart-title"><div class="panel-heading"><div><span class="eyebrow">Langkah 1</span><h2 id="cart-title">Keranjang</h2></div><a href="products.html">Tambah produk</a></div><div data-cart-items aria-live="polite"></div><div class="cart-subtotal"><span>Subtotal Produk</span><strong data-cart-subtotal>Rp0</strong></div></section>
+        <section class="gateway-panel" aria-labelledby="gateway-title">
+          <div class="gateway-progress" aria-label="Tahapan pemesanan"><button type="button" data-stage-button="1" class="active"><span>1</span>Data</button><button type="button" data-stage-button="2"><span>2</span>Pengiriman</button><button type="button" data-stage-button="3"><span>3</span>Ringkasan</button><button type="button" data-stage-button="4"><span>4</span>Pembayaran</button></div>
+          <div class="gateway-content">
+            <div class="form-error-summary" data-order-errors tabindex="-1" hidden></div>
+            <section class="gateway-stage active" data-stage="1"><span class="eyebrow">Langkah 2</span><h2 id="gateway-title">Data Pesanan</h2>
+              <fieldset class="order-type"><legend>Jenis pesanan</legend><label><input type="radio" name="orderType" value="personal" checked /><span><strong>Pesanan Pribadi</strong><small>Untuk kebutuhan pribadi atau keluarga.</small></span></label><label><input type="radio" name="orderType" value="business" /><span><strong>Acara / Usaha</strong><small>Untuk acara, usaha, atau perusahaan.</small></span></label></fieldset>
+              <form data-customer-form novalidate>
+                <div class="form-grid" data-personal-fields><label>Nama lengkap<input name="customerName" autocomplete="name" required /></label><label>Nomor WhatsApp<input name="whatsapp" inputmode="tel" autocomplete="tel" required /></label></div>
+                <div data-business-fields hidden><div class="form-grid"><label>Nama acara / usaha / perusahaan<input name="organization" /></label><label>Nama PIC<input name="pic" /></label><label>Nomor WhatsApp PIC<input name="businessWhatsapp" inputmode="tel" /></label><label>Email<input name="email" type="email" autocomplete="email" /></label><label>Jenis kebutuhan<select name="businessType"><option value="">Pilih kebutuhan</option><option>Acara</option><option>Usaha</option><option>Perusahaan</option></select></label><label>Tanggal kebutuhan<input name="neededDate" type="date" /></label></div></div>
+                <label>Catatan pesanan<textarea name="notes" rows="3" placeholder="Opsional"></textarea></label>
+                <button class="button button-primary" type="button" data-next-stage="2">Lanjut ke Pengiriman</button>
+              </form>
+            </section>
+            <section class="gateway-stage" data-stage="2" hidden><span class="eyebrow">Langkah 3</span><h2>Data & Pengiriman</h2><form data-shipping-form novalidate><div class="form-grid"><label>Area / kota<input name="area" required placeholder="Contoh: Lippo Utara, Tangerang" /></label><label>Tanggal dibutuhkan<input name="deliveryDate" type="date" /></label></div><label>Alamat atau detail lokasi<textarea name="address" rows="4" required></textarea></label><div class="system-state state-warning"><strong>Tarif pengiriman belum terhubung.</strong><p>Paket preview tidak mengaktifkan tarif atau payment palsu. Ongkos kirim dan Total Pembayaran baru dapat dipercaya setelah integrasi shipping disetujui.</p></div><div class="stage-actions"><button class="button button-secondary" type="button" data-prev-stage="1">Kembali</button><button class="button button-primary" type="button" data-next-stage="3">Tinjau Ringkasan</button></div></form></section>
+            <section class="gateway-stage" data-stage="3" hidden><span class="eyebrow">Langkah 4</span><h2>Ringkasan Pesanan</h2><div class="order-review" data-order-review></div><div class="financial-summary"><div><span>Subtotal Produk</span><strong data-summary-subtotal>Rp0</strong></div><div><span>Ongkos Kirim</span><strong data-summary-shipping>Belum tersedia</strong></div><div class="total-row"><span>Total Pembayaran</span><strong data-summary-total>Belum dapat dihitung</strong></div></div><div class="stage-actions"><button class="button button-secondary" type="button" data-prev-stage="2">Kembali</button><button class="button button-primary" type="button" data-next-stage="4">Lanjutkan</button></div></section>
+            <section class="gateway-stage" data-stage="4" hidden><span class="eyebrow">Langkah 5</span><h2>Pembayaran</h2><div class="system-state state-blocked"><strong>Pembayaran belum diaktifkan.</strong><p>Payment provider, trusted order creation, validasi harga server-side, ongkir, webhook, idempotency, dan audit trail masih menjadi dependency arsitektur.</p></div><button class="button button-primary" type="button" disabled>Bayar Sekarang</button><button class="button button-ghost" type="button" data-whatsapp-support>Butuh bantuan via WhatsApp</button><div class="stage-actions"><button class="button button-secondary" type="button" data-prev-stage="3">Kembali ke Ringkasan</button></div></section>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a class="wordmark wordmark-footer" href="index.html"><strong>AYA</strong><span>RAOS</span><small>ADA RASA</small></a>
+      <p>Produk rumahan untuk kebutuhan pribadi, keluarga, acara, dan usaha.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Navigasi footer">
+      <a href="products.html">Produk</a>
       <a href="testimonials.html">Testimoni</a>
       <a href="information.html#cara-pesan">Cara Pesan</a>
-      <a href="cart.html">Keranjang</a>
+      <a href="information.html#pengiriman">Pengiriman</a>
+      <a href="information.html#faq">FAQ</a>
+      <a href="share.html">Bagikan Pengalaman</a>
     </nav>
-  </header>
-
-  <main id="main" class="page-shell">
-    <section class="page-hero"><div class="container"><div class="breadcrumb"><a href="index.html">Beranda</a><span>/</span><span>Keranjang</span></div><h1>Periksa pilihan sebelum dikirim ke WhatsApp.</h1><p>Anda masih dapat mengubah jumlah atau kembali ke katalog. Ongkir dan ketersediaan dikonfirmasi oleh admin AYA.</p></div></section>
-    <section class="section"><div class="container cart-layout">
-      <div>
-        <div class="cart-list" data-cart-list></div>
-        <div class="empty-state" data-cart-empty><h2>Keranjang masih kosong.</h2><p>Pilih beberapa produk dari katalog terlebih dahulu.</p><a class="button button-primary" href="products.html" class="mt-18">Lihat Produk</a></div>
-      </div>
-      <aside class="order-summary">
-        <h2>Ringkasan pesanan</h2>
-        <form
-          class="checkout-form"
-          data-checkout-form
-          novalidate
-         id="checkoutForm">
-
-        <div class="form-field mt-20"><label for="customerName">Nama, opsional</label><input
-            id="customerName"
-            type="text"
-            name="customerName"
-            autocomplete="name"
-            placeholder="Nama Anda"
-          /></div>
-        <div class="form-field"><label for="deliveryZone">Wilayah pengiriman</label><select id="deliveryZone" name="deliveryZone" autocomplete="shipping address-level2"><option value="lippo-utara">Lippo Utara</option><option value="jabodetabek">Jabodetabek</option><option value="luar-jabodetabek-indonesia">Luar Jabodetabek / Indonesia</option><option value="akan-dikonfirmasi">Akan dikonfirmasi</option></select></div>
-        <div class="form-field"><label for="orderNotes">Catatan, opsional</label><textarea id="orderNotes" placeholder="Contoh: mohon kirim Sabtu jika memungkinkan" name="orderNotes" autocomplete="off"></textarea></div>
-        <div class="summary-line"><span>Estimasi subtotal</span><strong data-cart-subtotal>Rp0</strong></div>
-        <p class="summary-note">Belum termasuk ongkir. Harga dan ketersediaan akhir dikonfirmasi melalui WhatsApp.</p>
-        <button class="button button-primary button-full" type="button" data-checkout>Kirim ke WhatsApp</button>
-        <a class="button button-secondary button-full" href="products.html">Tambah Produk Lain</a>
-      
-        </form>
-</aside>
-    </div></section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div class="footer-brand"><a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a><p>Perjalanan rasa dari Tanah Sunda melalui hasil bumi, pendamping makanan, camilan, dan minuman.</p></div>
-      <div class="footer-column"><h3>Produk Kami</h3><a href="products.html?line=spice">AYA Spice Haven</a><a href="products.html?line=farm">AYA Farm</a><a href="products.html?line=snack">AYA Snack &amp; Drinks</a></div>
-      <div class="footer-column"><h3>Informasi</h3><a href="index.html#cerita-aya">Tentang AYA</a><a href="testimonials.html">Testimoni</a><a href="information.html#cara-pesan">Cara Pesan</a><a href="information.html#pengiriman">Pengiriman</a></div>
-      <div class="footer-column"><h3>Bantuan</h3><a href="information.html#faq">FAQ</a><a href="information.html#syarat">Syarat Pemesanan</a><a href="information.html#privasi">Privasi</a><button type="button" data-direct-whatsapp>WhatsApp</button></div>
+    <div class="footer-contact">
+      <a href="https://www.instagram.com/aya.spice.haven/" target="_blank" rel="noopener noreferrer">@aya.spice.haven</a>
+      <span>Jam respons WhatsApp: Senin–Jumat, 09.00–21.00 WIB</span>
     </div>
-    <div class="container footer-bottom"><span>© <span data-current-year></span> AYA RAOS. Semua hak dilindungi.</span><span>Lippo Utara · Jabodetabek · Indonesia</span></div>
-    <div class="footer-accent"></div>
-  </footer>
+  </div>
+</footer>
+<div class="toast-region" aria-live="polite" aria-atomic="true" data-toast-region></div>
 </body>
 </html>

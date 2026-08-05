@@ -1,216 +1,379 @@
-window.AYA_PRODUCTS = [
+window.AYA_PRODUCTS = Object.freeze([
   {
-    id: "sambal-bawang",
-    name: "Sambal Bawang",
-    line: "AYA Spice Haven",
-    lineKey: "spice",
-    category: "Sambal",
-    image: "assets/images/sambal.webp",
-    badge: "Best Seller",
-    available: true,
-    description: "Sambal pendamping makanan dengan pilihan rasa untuk membuat sajian sederhana terasa lebih berkarakter.",
-    details: "Sambal AYA menjadi hero product dan pintu masuk utama untuk mengenal karakter rasa AYA Spice Haven.",
-    shipping: "Lippo Utara, Jabodetabek, dan nasional sesuai metode pengiriman.",
-    storage: "Informasi penyimpanan dikonfirmasi sesuai batch.",
-    shelfLife: "Dikonfirmasi saat pemesanan.",
-    variants: [
-      { name: "Original", price: 40000 },
-      { name: "Cumi/Pete", price: 50000 },
-      { name: "Jengkol", price: 55000 },
-      { name: "Teri Nasi", price: 60000 }
+    "id": "sambal-bawang",
+    "name": "Sambal Bawang",
+    "line": "AYA Spice Haven",
+    "lineKey": "spice",
+    "category": "Sambal",
+    "description": "Sambal pendamping makanan dengan empat pilihan varian untuk sajian sehari-hari.",
+    "status": "available",
+    "publicStatus": "Tersedia",
+    "visible": true,
+    "orderable": true,
+    "image": "assets/images/sambal.webp",
+    "placeholder": "assets/placeholders/sambal-bawang.svg",
+    "images": [
+      "assets/images/sambal.webp",
+      "assets/images/hero-sambal.webp"
+    ],
+    "featured": true,
+    "priority": 1,
+    "composition": "Komposisi rinci dikonfirmasi sesuai varian dan batch.",
+    "storage": "Informasi penyimpanan dikonfirmasi saat pemesanan.",
+    "suitableUse": "Nasi hangat, lauk rumahan, mi, dan pendamping berbagai hidangan.",
+    "leadTime": "Umumnya 2–3 hari setelah pembayaran diterima.",
+    "shipping": "Lippo Utara dan Jabodetabek. Area lain mengikuti kesesuaian produk dan metode kirim.",
+    "badges": [
+      "Hero Product"
+    ],
+    "minQuantity": 1,
+    "variants": [
+      {
+        "name": "Original",
+        "price": 40000
+      },
+      {
+        "name": "Cumi/Pete",
+        "price": 50000
+      },
+      {
+        "name": "Jengkol",
+        "price": 55000
+      },
+      {
+        "name": "Teri Nasi",
+        "price": 60000
+      }
     ]
   },
   {
-    id: "bawang-goreng-sumenep",
-    name: "Bawang Goreng Sumenep",
-    line: "AYA Spice Haven",
-    lineKey: "spice",
-    category: "Pendamping",
-    image: "assets/images/bawang-goreng.webp",
-    badge: "Pendamping Favorit",
-    available: true,
-    description: "Bawang goreng renyah untuk nasi, bubur, mi, dan berbagai hidangan rumahan.",
-    details: "Dikemas dalam pilihan pouch dan toples agar mudah disesuaikan dengan kebutuhan di rumah.",
-    shipping: "Lippo Utara, Jabodetabek, dan seluruh Indonesia.",
-    storage: "Simpan tertutup rapat dan hindari tempat lembap.",
-    shelfLife: "Dikonfirmasi saat pemesanan.",
-    variants: [
-      { name: "Pouch", price: 60000 },
-      { name: "Toples", price: 70000 }
+    "id": "bawang-goreng-sumenep",
+    "name": "Bawang Goreng Sumenep",
+    "line": "AYA Spice Haven",
+    "lineKey": "spice",
+    "category": "Pendamping",
+    "description": "Bawang goreng untuk nasi, bubur, mi, dan berbagai sajian rumahan.",
+    "status": "available",
+    "publicStatus": "Tersedia",
+    "visible": true,
+    "orderable": true,
+    "image": "assets/images/bawang-goreng.webp",
+    "placeholder": "assets/placeholders/bawang-goreng-sumenep.svg",
+    "images": [
+      "assets/images/bawang-goreng.webp"
+    ],
+    "featured": false,
+    "priority": 2,
+    "composition": "Informasi komposisi rinci sedang disiapkan.",
+    "storage": "Simpan tertutup rapat dan hindari tempat lembap.",
+    "suitableUse": "Pendamping nasi, bubur, mi, sup, dan hidangan rumahan.",
+    "leadTime": "Umumnya 2–3 hari setelah pembayaran diterima.",
+    "shipping": "Lippo Utara, Jabodetabek, dan area lain sesuai metode kirim.",
+    "badges": [],
+    "minQuantity": 1,
+    "variants": [
+      {
+        "name": "Pouch",
+        "price": 60000
+      },
+      {
+        "name": "Toples",
+        "price": 70000
+      }
     ]
   },
   {
-    id: "rendang-daging-sapi",
-    name: "Rendang Daging Sapi",
-    line: "AYA Spice Haven",
-    lineKey: "spice",
-    category: "Lauk",
-    image: "",
-    badge: "Pre-order",
-    available: true,
-    description: "Lauk rumahan berbumbu untuk stok sajian praktis bersama keluarga.",
-    details: "Diproduksi berdasarkan pesanan dengan jumlah minimum sesuai ketentuan yang berlaku.",
-    shipping: "Pengiriman disesuaikan dengan wilayah dan metode yang aman untuk produk.",
-    storage: "Petunjuk penyimpanan diberikan saat produk diterima.",
-    shelfLife: "Dikonfirmasi sesuai batch.",
-    variants: [
-      { name: "300 g — minimum 3 porsi", price: 105000 }
+    "id": "rendang-daging-sapi",
+    "name": "Rendang Daging Sapi",
+    "line": "AYA Spice Haven",
+    "lineKey": "spice",
+    "category": "Lauk Berbumbu",
+    "description": "Lauk berbumbu untuk kebutuhan rumah, acara, atau pesanan dalam jumlah lebih besar.",
+    "status": "preorder",
+    "publicStatus": "Pre-order",
+    "visible": true,
+    "orderable": true,
+    "image": "assets/placeholders/rendang-daging-sapi.svg",
+    "placeholder": "assets/placeholders/rendang-daging-sapi.svg",
+    "images": [],
+    "featured": false,
+    "priority": 3,
+    "composition": "Informasi komposisi rinci dikonfirmasi saat pemesanan.",
+    "storage": "Petunjuk penyimpanan diberikan saat produk diterima.",
+    "suitableUse": "Lauk keluarga, acara, dan kebutuhan usaha.",
+    "leadTime": "Dikonfirmasi berdasarkan jumlah dan jadwal produksi.",
+    "shipping": "Metode pengiriman disesuaikan dengan area dan keamanan produk.",
+    "badges": [],
+    "minQuantity": 3,
+    "variants": [
+      {
+        "name": "300 g",
+        "price": 105000
+      }
     ]
   },
   {
-    id: "ayam-goreng-kuning",
-    name: "Ayam Goreng Kuning",
-    line: "AYA Spice Haven",
-    lineKey: "spice",
-    category: "Siap Goreng",
-    image: "assets/images/ayam.webp",
-    badge: "Siap Goreng",
-    available: true,
-    description: "Ayam berbumbu yang praktis disiapkan sebagai lauk keluarga.",
-    details: "Tersedia dalam paket maupun satuan, dengan pilihan tambahan kulit dan ceker.",
-    shipping: "Utama untuk Lippo Utara dan Jabodetabek dengan metode pengiriman sesuai.",
-    storage: "Simpan sesuai petunjuk yang diberikan saat produk diterima.",
-    shelfLife: "Dikonfirmasi saat pemesanan.",
-    variants: [
-      { name: "Paket 4 pcs", price: 50000 },
-      { name: "Satuan 1 pcs", price: 15000 },
-      { name: "Kulit 500 g", price: 30000 },
-      { name: "Ceker 500 g", price: 30000 }
+    "id": "ayam-goreng-kuning",
+    "name": "Ayam Goreng Kuning",
+    "line": "AYA Spice Haven",
+    "lineKey": "spice",
+    "category": "Lauk Berbumbu",
+    "description": "Ayam berbumbu yang praktis disiapkan sebagai lauk keluarga.",
+    "status": "preorder",
+    "publicStatus": "Pre-order",
+    "visible": true,
+    "orderable": true,
+    "image": "assets/images/ayam.webp",
+    "placeholder": "assets/placeholders/ayam-goreng-kuning.svg",
+    "images": [
+      "assets/images/ayam.webp"
+    ],
+    "featured": false,
+    "priority": 4,
+    "composition": "Informasi komposisi rinci dikonfirmasi sesuai pilihan produk.",
+    "storage": "Simpan sesuai petunjuk yang diberikan saat produk diterima.",
+    "suitableUse": "Stok lauk rumah, acara kecil, dan kebutuhan makan bersama.",
+    "leadTime": "Umumnya 2–3 hari setelah pembayaran diterima.",
+    "shipping": "Utama untuk Lippo Utara dan Jabodetabek.",
+    "badges": [],
+    "minQuantity": 1,
+    "variants": [
+      {
+        "name": "Paket 4 pcs",
+        "price": 50000
+      },
+      {
+        "name": "Satuan 1 pcs",
+        "price": 15000
+      },
+      {
+        "name": "Kulit 500 g",
+        "price": 30000
+      },
+      {
+        "name": "Ceker 500 g",
+        "price": 30000
+      }
     ]
   },
   {
-    id: "dimsum-chili-oil",
-    name: "Dimsum + Chili Oil",
-    line: "AYA Spice Haven",
-    lineKey: "spice",
-    category: "Siap Saji",
-    image: "",
-    badge: "10 pcs",
-    available: true,
-    description: "Dimsum dengan chili oil sebagai camilan atau pelengkap waktu makan.",
-    details: "Satu paket berisi 10 pcs dimsum dengan chili oil.",
-    shipping: "Utama untuk Lippo Utara dan Jabodetabek dengan pengiriman yang sesuai.",
-    storage: "Petunjuk penyimpanan diberikan saat pemesanan.",
-    shelfLife: "Dikonfirmasi sesuai batch.",
-    variants: [
-      { name: "10 pcs + chili oil", price: 40000 }
+    "id": "dimsum-chili-oil",
+    "name": "Dimsum + Chili Oil",
+    "line": "AYA Snack & Drinks",
+    "lineKey": "snack",
+    "category": "Frozen Snack",
+    "description": "Dimsum dengan chili oil untuk camilan atau sajian praktis.",
+    "status": "preorder",
+    "publicStatus": "Pre-order",
+    "visible": true,
+    "orderable": true,
+    "image": "assets/placeholders/dimsum-chili-oil.svg",
+    "placeholder": "assets/placeholders/dimsum-chili-oil.svg",
+    "images": [],
+    "featured": false,
+    "priority": 5,
+    "composition": "Informasi komposisi rinci sedang disiapkan.",
+    "storage": "Petunjuk penyimpanan diberikan saat pemesanan.",
+    "suitableUse": "Camilan keluarga, acara kecil, dan sajian praktis.",
+    "leadTime": "Umumnya 2–3 hari setelah pembayaran diterima.",
+    "shipping": "Utama untuk Lippo Utara dan Jabodetabek.",
+    "badges": [],
+    "minQuantity": 1,
+    "variants": [
+      {
+        "name": "10 pcs + chili oil",
+        "price": 40000
+      }
     ]
   },
   {
-    id: "beras-pilihan",
-    name: "Beras Pilihan",
-    line: "AYA Farm",
-    lineKey: "farm",
-    category: "Beras",
-    image: "assets/images/beras.webp",
-    badge: "AYA Farm",
-    available: false,
-    description: "Hasil pertanian pilihan yang sedang dipersiapkan sebagai bagian dari lini AYA Farm.",
-    details: "Informasi varietas, ukuran, dan harga akan diperbarui setelah produk siap diluncurkan.",
-    shipping: "Cakupan akan diperbarui.",
-    storage: "Simpan di tempat kering dan tertutup.",
-    shelfLife: "Akan diperbarui.",
-    variants: []
-  },
-  {
-    id: "kacang-tanah-jumbo",
-    name: "Kacang Tanah Jumbo",
-    line: "AYA Snack & Drinks",
-    lineKey: "snack",
-    category: "Kacang",
-    image: "assets/images/kacang.webp",
-    badge: "Camilan",
-    available: true,
-    description: "Kacang goreng gurih untuk stok camilan di rumah atau dinikmati bersama.",
-    details: "Tersedia dalam pilihan kemasan toples dan pouch.",
-    shipping: "Lippo Utara, Jabodetabek, dan seluruh Indonesia.",
-    storage: "Simpan tertutup rapat dan hindari tempat lembap.",
-    shelfLife: "Dikonfirmasi saat pemesanan.",
-    variants: [
-      { name: "Toples", price: 45000 },
-      { name: "Pouch", price: 50000 }
+    "id": "kacang-tanah-jumbo",
+    "name": "Kacang Tanah Jumbo",
+    "line": "AYA Snack & Drinks",
+    "lineKey": "snack",
+    "category": "Camilan",
+    "description": "Kacang goreng untuk stok camilan di rumah atau dinikmati bersama.",
+    "status": "available",
+    "publicStatus": "Tersedia",
+    "visible": true,
+    "orderable": true,
+    "image": "assets/images/kacang.webp",
+    "placeholder": "assets/placeholders/kacang-tanah-jumbo.svg",
+    "images": [
+      "assets/images/kacang.webp"
+    ],
+    "featured": false,
+    "priority": 6,
+    "composition": "Informasi komposisi rinci sedang disiapkan.",
+    "storage": "Simpan tertutup rapat dan hindari tempat lembap.",
+    "suitableUse": "Camilan rumah, suguhan, dan bingkisan sederhana.",
+    "leadTime": "Umumnya 2–3 hari setelah pembayaran diterima.",
+    "shipping": "Lippo Utara, Jabodetabek, dan area lain sesuai metode kirim.",
+    "badges": [],
+    "minQuantity": 1,
+    "variants": [
+      {
+        "name": "Toples",
+        "price": 45000
+      },
+      {
+        "name": "Pouch",
+        "price": 50000
+      }
     ]
   },
   {
-    id: "kacang-mede-jumbo",
-    name: "Kacang Mede Jumbo",
-    line: "AYA Snack & Drinks",
-    lineKey: "snack",
-    category: "Kacang",
-    image: "assets/images/mede.webp",
-    badge: "Pilihan Premium",
-    available: true,
-    description: "Kacang mede jumbo untuk camilan dan sajian berbagai momen.",
-    details: "Dikemas dalam ukuran 250 gram.",
-    shipping: "Lippo Utara, Jabodetabek, dan seluruh Indonesia.",
-    storage: "Simpan tertutup rapat dan hindari tempat lembap.",
-    shelfLife: "Dikonfirmasi saat pemesanan.",
-    variants: [
-      { name: "250 g", price: 80000 }
+    "id": "kacang-mede-jumbo",
+    "name": "Kacang Mede Jumbo",
+    "line": "AYA Snack & Drinks",
+    "lineKey": "snack",
+    "category": "Camilan",
+    "description": "Kacang mede jumbo untuk camilan dan berbagai momen.",
+    "status": "available",
+    "publicStatus": "Tersedia",
+    "visible": true,
+    "orderable": true,
+    "image": "assets/images/mede.webp",
+    "placeholder": "assets/placeholders/kacang-mede-jumbo.svg",
+    "images": [
+      "assets/images/mede.webp"
+    ],
+    "featured": false,
+    "priority": 7,
+    "composition": "Informasi komposisi rinci sedang disiapkan.",
+    "storage": "Simpan tertutup rapat dan hindari tempat lembap.",
+    "suitableUse": "Camilan, suguhan, dan pendamping waktu santai.",
+    "leadTime": "Umumnya 2–3 hari setelah pembayaran diterima.",
+    "shipping": "Lippo Utara, Jabodetabek, dan area lain sesuai metode kirim.",
+    "badges": [],
+    "minQuantity": 1,
+    "variants": [
+      {
+        "name": "250 g",
+        "price": 80000
+      }
     ]
   },
   {
-    id: "cireng",
-    name: "Cireng",
-    line: "AYA Snack & Drinks",
-    lineKey: "snack",
-    category: "Frozen Snack",
-    image: "assets/images/cireng.webp",
-    badge: "Segera Diperbarui",
-    available: false,
-    description: "Camilan praktis dengan sambal pendamping untuk berbagai momen.",
-    details: "Harga dan pilihan paket sedang diperbarui sebelum dibuka kembali untuk pemesanan.",
-    shipping: "Utama untuk Lippo Utara dan Jabodetabek.",
-    storage: "Simpan sesuai petunjuk produk frozen.",
-    shelfLife: "Akan diperbarui.",
-    variants: []
+    "id": "es-buah",
+    "name": "Es Buah AYA",
+    "line": "AYA Snack & Drinks",
+    "lineKey": "snack",
+    "category": "Minuman",
+    "description": "Minuman untuk pesanan pribadi, acara, atau kebutuhan dalam jumlah lebih besar.",
+    "status": "preorder",
+    "publicStatus": "Pre-order",
+    "visible": true,
+    "orderable": true,
+    "image": "assets/placeholders/es-buah.svg",
+    "placeholder": "assets/placeholders/es-buah.svg",
+    "images": [],
+    "featured": false,
+    "priority": 8,
+    "composition": "Informasi komposisi rinci dikonfirmasi saat pemesanan.",
+    "storage": "Simpan dingin dan konsumsi sesuai arahan saat produk diterima.",
+    "suitableUse": "Konsumsi pribadi, acara, dan kebutuhan kelompok.",
+    "leadTime": "Dikonfirmasi berdasarkan jumlah dan jadwal kebutuhan.",
+    "shipping": "Area lokal dan Jabodetabek sesuai metode pengiriman.",
+    "badges": [],
+    "minQuantity": 1,
+    "variants": [
+      {
+        "name": "250 ml",
+        "price": 15000
+      }
+    ]
   },
   {
-    id: "es-buah",
-    name: "Es Buah AYA",
-    line: "AYA Snack & Drinks",
-    lineKey: "snack",
-    category: "Minuman",
-    image: "",
-    badge: "AYA Drinks",
-    available: true,
-    description: "Minuman segar untuk pesanan pribadi maupun kebutuhan dalam jumlah lebih besar.",
-    details: "Pilihan pesanan volume besar dikonfirmasi langsung melalui WhatsApp.",
-    shipping: "Area lokal dan Jabodetabek sesuai metode pengiriman.",
-    storage: "Simpan dingin dan konsumsi sesuai arahan saat produk diterima.",
-    shelfLife: "Dikonfirmasi saat pemesanan.",
-    variants: [
-      { name: "250 ml", price: 15000 }
-    ]
+    "id": "beras-pilihan",
+    "name": "Beras Pilihan",
+    "line": "AYA Farm",
+    "lineKey": "farm",
+    "category": "Beras",
+    "description": "Produk AYA Farm yang sedang dipersiapkan untuk peluncuran berikutnya.",
+    "status": "soldout",
+    "publicStatus": "Habis",
+    "visible": true,
+    "orderable": false,
+    "image": "assets/images/beras.webp",
+    "placeholder": "assets/placeholders/beras-pilihan.svg",
+    "images": [
+      "assets/images/beras.webp"
+    ],
+    "featured": false,
+    "priority": 9,
+    "composition": "Informasi produk sedang disiapkan.",
+    "storage": "Simpan di tempat kering dan tertutup.",
+    "suitableUse": "Kebutuhan rumah dan usaha setelah produk resmi tersedia.",
+    "leadTime": "Belum tersedia untuk dipesan.",
+    "shipping": "Informasi pengiriman akan diperbarui.",
+    "badges": [],
+    "minQuantity": 1,
+    "variants": []
+  },
+  {
+    "id": "cireng",
+    "name": "Cireng",
+    "line": "AYA Snack & Drinks",
+    "lineKey": "snack",
+    "category": "Frozen Snack",
+    "description": "Frozen snack AYA yang harga dan paketnya sedang diperbarui.",
+    "status": "soldout",
+    "publicStatus": "Habis",
+    "visible": true,
+    "orderable": false,
+    "image": "assets/images/cireng.webp",
+    "placeholder": "assets/placeholders/cireng.svg",
+    "images": [
+      "assets/images/cireng.webp"
+    ],
+    "featured": false,
+    "priority": 10,
+    "composition": "Informasi produk sedang disiapkan.",
+    "storage": "Simpan sesuai petunjuk produk frozen.",
+    "suitableUse": "Camilan rumah dan acara setelah produk kembali tersedia.",
+    "leadTime": "Belum tersedia untuk dipesan.",
+    "shipping": "Utama untuk Lippo Utara dan Jabodetabek setelah tersedia.",
+    "badges": [],
+    "minQuantity": 1,
+    "variants": []
   }
-];
+]);
 
-window.AYA_TESTIMONIALS = {
-  videos: [],
-  bigPictures: [
+window.AYA_TESTIMONIALS = Object.freeze({
+  "videos": [],
+  "featured": [
     {
-      id: "big-bawang-01",
-      quote: "Enak bangettt.",
-      name: "Pelanggan AYA",
-      meta: "Bawang Goreng · testimoni arsip",
-      image: "assets/images/testimonial-bawang.webp"
+      "id": "big-bawang-01",
+      "quote": "Enak bangettt.",
+      "name": "Pelanggan AYA",
+      "meta": "Bawang Goreng · testimoni arsip",
+      "image": "assets/images/testimonial-bawang.webp",
+      "type": "photo"
     }
   ],
-  texts: [
+  "texts": [
     {
-      quote: "Apapun makanannya, wajib pakai Sambal AYA.",
-      name: "Edgar",
-      meta: "Sambal AYA"
+      "id": "text-edgar",
+      "quote": "Apapun makanannya, wajib pakai Sambal AYA.",
+      "name": "Edgar",
+      "meta": "Sambal AYA",
+      "type": "text"
     },
     {
-      quote: "Makan di CFC pun tetap pakai Sambal Bawang AYA.",
-      name: "@Rafaelers",
-      meta: "Sambal Bawang"
+      "id": "text-rafaelers",
+      "quote": "Makan di CFC pun tetap pakai Sambal Bawang AYA.",
+      "name": "@Rafaelers",
+      "meta": "Sambal Bawang",
+      "type": "text"
     },
     {
-      quote: "Enak bangettt—jadi stok pendamping makan di rumah.",
-      name: "Pelanggan AYA",
-      meta: "Bawang Goreng"
+      "id": "text-bawang",
+      "quote": "Enak bangettt.",
+      "name": "Pelanggan AYA",
+      "meta": "Bawang Goreng",
+      "image": "assets/images/testimonial-bawang.webp",
+      "type": "photo"
     }
   ]
-};
+});
