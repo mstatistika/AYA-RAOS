@@ -1,22 +1,30 @@
 name: Apply AYA RAOS Package 1
 
 on:
-  push:
+  pull_request:
     branches:
-      - release/blueprint-v1-5-frontend-sweep
+      - main
 
 permissions:
   contents: write
 
 jobs:
   apply:
-    if: github.actor != 'github-actions[bot]'
+    if: github.head_ref == 'release/blueprint-v1-5-frontend-sweep' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout release branch
         uses: actions/checkout@v4
         with:
+          ref: release/blueprint-v1-5-frontend-sweep
           fetch-depth: 0
+
+      - name: Align release ancestry with current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git merge --no-edit origin/main
 
       - name: Verify protected testimonial baseline
         shell: bash
