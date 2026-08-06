@@ -1,108 +1,101 @@
-# AYA RAOS Website — Package 02
+# AYA RAOS Website
 
-Paket ini memperbaiki starter sebelumnya agar sesuai dengan guideline yang sudah disepakati:
+Premium storefront dan fondasi order AYA RAOS — kuliner Sunda dari Lippo Utara.
 
-- Homepage tetap ringkas dan premium.
-- Produk lengkap dipindahkan ke halaman katalog terpisah.
-- Setiap produk dapat dibuka ke halaman detail.
-- Pelanggan dapat memilih beberapa produk ke keranjang sebelum finalisasi.
-- Finalisasi pesanan dilakukan melalui WhatsApp.
-- Testimoni dibagi menjadi video, big picture, dan text-only auto-scroll.
-- Form testimoni memakai status `pending` dan tidak langsung dipublikasikan.
-- Footer terang/off-white agar tidak terasa berat.
-- Seluruh project memakai HTML, CSS, dan JavaScript statis tanpa build process.
+## Status
 
-## Struktur file
+- Blueprint: `AYA-WMB-001 v1.5`
+- Implementasi: Package 1 — Frontend Corrective & Positioning Sweep
+- Environment: staging
+- Indexing: `noindex, nofollow, noarchive`
+- Production branch: `main`
+- Recommended preview branch: `preview/blueprint-v1-5-frontend-corrective-v1`
+- Verified baseline: `e6f891786655c7c8c44d7769d263a45bf1b8ef12`
 
-```text
-index.html            Homepage
-products.html         Katalog seluruh produk
-product.html          Detail produk berbasis query ?id=
-cart.html             Keranjang dan finalisasi WhatsApp
-testimonials.html     Tiga format testimoni + form submit
-about.html            Cerita dan arsitektur brand
-information.html      Cara pesan, pengiriman, FAQ, syarat, privasi
-404.html              Halaman error
-css/site.css          Seluruh design system dan responsive layout
-js/config.js          Nomor WhatsApp dan endpoint testimoni
-js/data.js            Data produk dan testimoni approved
-js/site.js            Navigasi, cart storage, WhatsApp helper
-js/catalog.js         Search, filter, dan quick add
-js/product.js         Render halaman detail produk
-js/cart-page.js       Pengelolaan keranjang
-js/home.js            Auto-scroll testimoni tulisan
-js/testimonials.js    Pengiriman form testimoni
-assets/images/        Foto produk dan aset testimonial
-```
+Package 1 memperbaiki UI/UX, positioning, segmentasi, routing, product interactions, dan dokumentasi. Package ini belum mengaktifkan order persistence, payment, shipping quote, inventory, atau recurring B2B persistence.
 
-## 1. Konfigurasi WhatsApp
+## Posisi bisnis
 
-Buka `js/config.js` dan isi nomor WhatsApp:
+- Hero product: **Sambal AYA**
+- Positioning: **Rasa Sunda. Pedas yang tegas.**
+- Pedas tidak memakai level angka.
+- Semua transaksi satu kali adalah **B2C**.
+- B2C memiliki konteks **Untuk Rumah** dan **Untuk Acara**.
+- B2B hanya untuk **pasokan komersial berulang**.
+- Restoran dan pusat kuliner Sunda di Lippo Utara adalah visi masa depan, bukan fasilitas yang sudah tersedia.
+
+## Route
+
+| Route | Fungsi |
+|---|---|
+| `index.html` | Homepage dan cerita AYA |
+| `products.html` | Katalog retail |
+| `product.html?id=...` | Detail produk |
+| `cart.html?context=personal` | B2C Untuk Rumah |
+| `cart.html?context=event` | B2C Untuk Acara dan seluruh kebutuhan satu kali lainnya |
+| `business.html` | Informasi dan draft Pasokan Berkala untuk Usaha |
+| `testimonials.html` | Testimoni approved |
+| `share.html` | Protected testimonial submission |
+| `information.html` | Cara pesan, acara, pengiriman, pembayaran, pasokan usaha, FAQ, syarat, privasi |
+| `404.html` | Recovery page |
+
+## Konfigurasi
+
+Source of truth berada di `js/config.js`.
 
 ```js
 window.AYA_CONFIG = {
-  whatsappNumber: "6281234567890",
-  instagramUrl: "https://instagram.com/aya.spice.haven",
-  businessName: "AYA RAOS",
-  leadTime: "2–3 hari setelah pembayaran dikonfirmasi",
-  testimonialEndpoint: ""
+  whatsappNumber: "628562646444",
+  environment: "staging",
+  checkout: {
+    mode: "inquiry",
+    orderPersistence: false
+  },
+  businessSupply: {
+    enabled: false
+  },
+  shipping: {
+    enabled: false
+  },
+  payment: {
+    enabled: false
+  }
 };
 ```
 
-Nomor memakai format internasional tanpa `+`, spasi, atau strip.
+Capability yang belum aktif tidak boleh dipresentasikan sebagai layanan yang sudah berjalan.
 
-## 2. Mengubah produk
+## Protected testimonial scope
 
-Edit `js/data.js`. Produk memiliki field:
+Package 1 tidak boleh mengubah:
 
-- `id`
-- `name`
-- `line`
-- `lineKey`: `spice`, `farm`, atau `snack`
-- `category`
-- `image`
-- `badge`
-- `available`
-- `description`
-- `details`
-- `shipping`
-- `storage`
-- `shelfLife`
-- `variants`
+- `share.html`
+- `css/share.css`
+- `js/supabase-client.js`
+- `js/testimonial-wizard.js`
+- testimonial Supabase migrations
 
-Jika foto belum tersedia, isi `image: ""`. Website akan menampilkan placeholder tanpa membuat klaim visual palsu.
+Visual parity Share Testimonial dikerjakan pada package terpisah.
 
-## 3. Sistem testimoni
-
-Saat `testimonialEndpoint` masih kosong, form menyimpan metadata kiriman sebagai `pending` di `localStorage` browser untuk kebutuhan preview. File media tidak disimpan lokal.
-
-Agar testimoni benar-benar masuk ke sistem admin, isi `testimonialEndpoint` dengan endpoint yang menerima `multipart/form-data`. Endpoint kemudian harus:
-
-1. Menyimpan kiriman sebagai `pending`.
-2. Menyediakan approval/reject di MStatistika Admin.
-3. Mengembalikan hanya testimoni `approved` ke website publik.
-
-## 4. Menjalankan lokal
+## Menjalankan preview
 
 ```bash
-python3 -m http.server 8080
+python3 -m http.server 4173
 ```
 
-Buka `http://localhost:8080`.
+Buka `http://localhost:4173`.
 
-## 5. Upload ke GitHub dan Vercel
+Target viewport:
 
-Upload **seluruh isi folder ini**, bukan folder pembungkusnya, ke root repository branch `main`.
+- 1366 × 768
+- 1440 × 900
+- 1024 × 768
+- 390 × 844
 
-Pengaturan Vercel:
+## Governance
 
-- Framework Preset: `Other`
-- Build Command: kosong
-- Output Directory: `.`
+- `docs/AYA-RAOS-WEBSITE-MASTER-BLUEPRINT-v1.5.md`
+- `DECISION_LOG.md`
+- `docs/AYA-RAOS-PACKAGE-1-IMPLEMENTATION-MAP.md`
 
-## Catatan penting
-
-- Nomor WhatsApp sengaja belum diisi.
-- Foto yang belum tersedia menggunakan placeholder.
-- Informasi masa simpan dan penyimpanan yang belum terverifikasi tidak dibuat-buat; website menampilkan bahwa detail dikonfirmasi saat pemesanan.
-- Nama domain dan canonical URL belum dimasukkan karena domain final belum diputuskan.
+Tidak boleh commit atau merge ke `main` sebelum preview, validation report, dan approval selesai.

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Informasi Pemesanan — AYA RAOS</title>
-    <meta name="description" content="Cara pesan, pengiriman, pembayaran, FAQ, syarat, dan privasi AYA RAOS." />
+    <meta name="description" content="Cara pesan, acara, pengiriman, pembayaran, dan pasokan berkala AYA RAOS." />
     <meta name="theme-color" content="#8f1d1d" />
     <meta name="robots" content="noindex, nofollow, noarchive" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -13,22 +13,21 @@
     <meta property="og:locale" content="id_ID" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="site.webmanifest" />
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/site.css?v=20260805-sweep-v1" />
-    <script defer src="js/config.js?v=20260805-sweep-v1"></script>
-    <script defer src="js/data.js?v=20260805-sweep-v1"></script>
-    <script defer src="js/site.js?v=20260805-sweep-v1"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/site.css?v=20260806-blueprint-v15-p1" />
+    <script defer src="js/config.js?v=20260806-blueprint-v15-p1"></script>
+    <script defer src="js/data.js?v=20260806-blueprint-v15-p1"></script>
+    <script defer src="js/site.js?v=20260806-blueprint-v15-p1"></script>
+    <script defer src="js/info-page.js?v=20260806-blueprint-v15-p1"></script>
   </head>
 <body data-page="information">
 <a class="skip-link" href="#main">Lewati ke konten utama</a>
 <div class="utility-bar">
   <div class="container utility-inner">
-    <span>Produksi batch kecil · Lead time umumnya 2–3 hari setelah pembayaran</span>
-    <span>Jabodetabek · tarif aktual Grab/Gojek sesuai alamat</span>
+    <span>Kuliner Sunda dari Lippo Utara · Produksi batch kecil</span>
+    <span>Lead time umumnya 2–3 hari setelah pembayaran · Ongkir aktual sesuai alamat</span>
   </div>
 </div>
 <header class="site-header" data-site-header>
@@ -42,12 +41,13 @@
       <a href="products.html" data-nav="products">Produk</a>
       <a href="testimonials.html" data-nav="testimonials">Testimoni</a>
       <a href="information.html" data-nav="information">Informasi</a>
+      <a href="business.html" data-nav="business">Pasokan Usaha</a>
     </nav>
     <div class="header-actions">
-      <a class="cart-link" href="cart.html" aria-label="Buka keranjang">
+      <a class="cart-link" href="cart.html?context=personal" aria-label="Buka keranjang">
         <span>Keranjang</span><span class="cart-count" data-cart-count>0</span>
       </a>
-      <a class="button button-primary header-order" href="cart.html">Pesan Sekarang</a>
+      <a class="button button-primary header-order" href="cart.html?context=personal">Pesan Sekarang</a>
       <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle>
         <span></span><span></span><span></span>
       </button>
@@ -59,49 +59,50 @@
     <a href="products.html">Produk</a>
     <a href="testimonials.html">Testimoni</a>
     <a href="information.html">Informasi</a>
-    <a href="cart.html">Keranjang <span data-cart-count>0</span></a>
-    <a class="button button-primary" href="cart.html">Pesan Sekarang</a>
+    <a href="business.html">Pasokan Usaha</a>
+    <a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a>
+    <a class="button button-primary" href="cart.html?context=personal">Pesan Sekarang</a>
   </nav>
 </header>
 <div class="global-state" data-global-state aria-live="polite" hidden></div>
-  <main id="main">
-    <section class="page-intro information-intro"><div class="container"><span class="eyebrow">Informasi</span><h1>Semua yang perlu Anda ketahui sebelum memesan di AYA RAOS.</h1></div></section>
-    <section class="quick-info"><div class="container quick-info-grid">
-      <a href="#cara-pesan"><span>01</span><strong>Cara Pesan</strong><small>Pilih produk hingga pembayaran.</small></a><a href="#pengiriman"><span>02</span><strong>Pengiriman</strong><small>Area, metode, dan ongkir.</small></a><a href="#pembayaran"><span>03</span><strong>Pembayaran</strong><small>Status aktivasi dan keamanan.</small></a><a href="#syarat"><span>04</span><strong>Syarat & Ketentuan</strong><small>Batas informasi yang sudah disetujui.</small></a><a href="#privasi"><span>05</span><strong>Privasi</strong><small>Data order dan testimoni.</small></a>
-    </div></section>
-    <section class="information-section"><div class="container information-layout">
-      <aside class="information-nav"><nav aria-label="Daftar bagian informasi"><a href="#cara-pesan">Cara Pesan</a><a href="#pengiriman">Pengiriman</a><a href="#pembayaran">Pembayaran</a><a href="#usaha">Acara / Usaha</a><a href="#faq">FAQ</a><a href="#syarat">Syarat</a><a href="#privasi">Privasi</a></nav><div class="info-support"><strong>Perlu bantuan?</strong><p>WhatsApp digunakan untuk bantuan dan penanganan pengecualian.</p><button type="button" class="button button-secondary" data-whatsapp-help>Hubungi AYA</button></div></aside>
-      <div class="information-content">
-        <section id="cara-pesan"><span class="eyebrow">Cara Pesan</span><h2>Dari produk sampai pembayaran.</h2><ol class="info-steps"><li><span>1</span><div><strong>Pilih produk dan varian.</strong><p>Lihat harga, status, dan informasi produk.</p></div></li><li><span>2</span><div><strong>Tambah ke keranjang.</strong><p>Atur varian dan jumlah dalam satu keranjang.</p></div></li><li><span>3</span><div><strong>Pilih jenis pesanan.</strong><p>Pesanan Pribadi atau Acara / Usaha.</p></div></li><li><span>4</span><div><strong>Lengkapi data dan pengiriman.</strong><p>Alamat dan ongkir harus tervalidasi.</p></div></li><li><span>5</span><div><strong>Tinjau Total Pembayaran.</strong><p>Pembayaran hanya aktif setelah integrasi nyata tersedia.</p></div></li></ol><a class="button button-primary" href="cart.html">Mulai Pesan</a></section>
-        <section id="pengiriman"><span class="eyebrow">Pengiriman</span><h2>Disesuaikan dengan produk dan lokasi.</h2><ul class="check-list"><li>Area utama: Lippo Utara dan Jabodetabek.</li><li>Grab/Gojek menggunakan tarif aktual saat metode tersebut sesuai.</li><li>Produk kering, frozen, siap makan, dan minuman dapat memerlukan metode berbeda.</li><li>Jumlah ongkir final harus muncul sebelum payment diterima.</li><li>Area lain dikonfirmasi sesuai kesesuaian produk dan metode kirim yang disetujui.</li></ul></section>
-        <section id="pembayaran"><span class="eyebrow">Pembayaran</span><h2>Pembayaran mendahului proses produksi.</h2><div class="system-state state-info"><strong>Order valid → Total Pembayaran → Payment → Dibayar → Diproses.</strong><p>Metode payment belum ditampilkan karena provider dan backend belum disetujui. Tidak ada kontrol pembayaran palsu pada preview.</p></div></section>
-        <section id="usaha"><span class="eyebrow">Acara / Usaha</span><h2>Satu gateway, konteks yang berbeda.</h2><p>Pesanan acara, usaha, dan perusahaan memakai keranjang serta harga produk yang sama. Form menambahkan data organisasi, PIC, tanggal, lokasi, dan catatan tanpa membuat transaction wizard kedua.</p><a class="button button-secondary" href="cart.html?type=business">Buka Pesanan Acara / Usaha</a></section>
-        <section id="faq"><span class="eyebrow">FAQ</span><h2>Pertanyaan yang sering muncul.</h2><div class="faq-list"><details><summary>Berapa lama pesanan disiapkan?</summary><p>Umumnya 2–3 hari setelah pembayaran diterima. Waktu dapat berbeda menurut produk, jumlah, tanggal kebutuhan, dan kapasitas produksi.</p></details><details><summary>Apakah semua produk selalu tersedia?</summary><p>Tidak. Status publik adalah Tersedia, Pre-order, atau Habis. Periksa status produk sebelum menambahkannya ke keranjang.</p></details><details><summary>Apakah AYA melayani di luar Jabodetabek?</summary><p>Hanya sesuai kesesuaian produk dan metode kirim yang disetujui. Website tidak mengklaim seluruh produk tersedia secara nasional.</p></details><details><summary>Apakah bisa memesan untuk acara atau usaha?</summary><p>Bisa. Pilih Acara / Usaha di Unified Order Gateway dan lengkapi data PIC, tanggal, serta lokasi.</p></details><details><summary>Apakah pembayaran sudah aktif di website?</summary><p>Belum pada paket preview ini. Payment baru diaktifkan setelah provider, backend, webhook, validasi harga, ongkir, dan audit trail tersedia.</p></details></div></section>
-        <section id="syarat"><span class="eyebrow">Syarat</span><h2>Ketentuan yang sudah dapat dinyatakan.</h2><p>Harga, status, varian, lead time, dan metode pengiriman mengikuti informasi yang sedang aktif dan tervalidasi. Kebijakan refund, cancellation setelah pembayaran, dan payment expiry belum disimpulkan karena masih memerlukan keputusan bisnis dan arsitektur.</p></section>
-        <section id="privasi"><span class="eyebrow">Privasi</span><h2>Data digunakan sesuai konteksnya.</h2><p>Data pemesanan digunakan untuk memproses kebutuhan pelanggan. Data payment hanya boleh diproses melalui integrasi yang disetujui. Testimoni dan media mengikuti consent, private upload, moderation, serta environment staging/production pada flow `share.html`.</p></section>
-      </div>
-    </div></section>
-  </main>
+<main id="main">
+  <section class="page-intro information-intro"><div class="container page-intro-grid"><div><span class="eyebrow">INFORMASI</span><h1>Sebelum memesan di AYA RAOS.</h1></div><p>Cara pesan, acara, pengiriman, pembayaran, dan pasokan usaha dijelaskan sebagai alur yang berbeda agar tidak membingungkan.</p></div></section>
+  <section class="quick-info"><div class="container quick-info-grid"><a href="#cara-pesan"><span>01</span><strong>Cara Pesan</strong><small>Alur B2C satu kali.</small></a><a href="#untuk-acara"><span>02</span><strong>Untuk Acara</strong><small>Event tetap B2C.</small></a><a href="#pengiriman"><span>03</span><strong>Pengiriman</strong><small>Area dan ongkir.</small></a><a href="#pembayaran"><span>04</span><strong>Pembayaran</strong><small>Status integrasi.</small></a><a href="#pasokan-usaha"><span>05</span><strong>Pasokan Usaha</strong><small>Hanya kebutuhan berulang.</small></a></div></section>
+  <section class="information-section"><div class="container information-layout">
+    <aside class="information-nav"><nav aria-label="Daftar bagian informasi"><a href="#cara-pesan">Cara Pesan</a><a href="#untuk-acara">Untuk Acara</a><a href="#pengiriman">Pengiriman</a><a href="#pembayaran">Pembayaran</a><a href="#pasokan-usaha">Pasokan Usaha</a><a href="#faq">FAQ</a><a href="#syarat">Syarat</a><a href="#privasi">Privasi</a></nav><div class="info-support"><strong>Perlu bantuan?</strong><p>WhatsApp digunakan untuk bantuan dan penanganan pengecualian, bukan sumber order utama.</p><button type="button" class="button button-secondary" data-whatsapp-help>Hubungi AYA</button></div></aside>
+    <div class="information-content">
+      <section id="cara-pesan"><span class="eyebrow">CARA PESAN</span><h2>Dari produk sampai konfirmasi.</h2><ol class="info-steps"><li><span>1</span><div><strong>Pilih produk dan varian</strong><p>Periksa harga dan status aktif.</p></div></li><li><span>2</span><div><strong>Tambah ke keranjang</strong><p>Atur varian dan jumlah.</p></div></li><li><span>3</span><div><strong>Pilih konteks</strong><p>Untuk Rumah atau Untuk Acara.</p></div></li><li><span>4</span><div><strong>Lengkapi pengiriman</strong><p>Alamat dan tanggal kebutuhan.</p></div></li><li><span>5</span><div><strong>Tinjau ringkasan</strong><p>Konfirmasi digital aktif setelah Package 2.</p></div></li></ol><a class="button button-primary" href="cart.html?context=personal">Mulai Pesan</a></section>
+      <section id="untuk-acara"><span class="eyebrow">UNTUK ACARA</span><h2>Semua kebutuhan satu kali tetap B2C.</h2><p>Gunakan jalur Untuk Acara untuk pernikahan, arisan, komunitas, acara kantor, pembelian institusi, atau uji coba produk oleh restoran, toko, dan distributor.</p><div class="definition-pair"><div><strong>100 botol untuk satu pernikahan</strong><span>B2C Event</span></div><div><strong>Uji coba restoran satu kali</strong><span>B2C Event</span></div></div><a class="button button-secondary" href="cart.html?context=event">Buka Pesanan Acara</a></section>
+      <section id="pengiriman"><span class="eyebrow">PENGIRIMAN</span><h2>Disesuaikan dengan produk dan lokasi.</h2><ul class="check-list"><li>Area utama: Lippo Utara dan Jabodetabek.</li><li>Grab/Gojek menggunakan tarif aktual ketika metode tersebut sesuai.</li><li>Produk kering, frozen, siap makan, dan minuman dapat memerlukan metode berbeda.</li><li>Ongkir final harus tersedia sebelum payment diterima.</li><li>Area lain dikonfirmasi menurut kesesuaian produk dan metode kirim.</li></ul></section>
+      <section id="pembayaran"><span class="eyebrow">PEMBAYARAN</span><h2>Pembayaran mendahului proses produksi.</h2><div class="system-state state-info"><strong>Order valid → Total Pembayaran → Payment → Dibayar → Diproses.</strong><p>Metode payment belum ditampilkan karena provider dan backend belum disetujui. Tidak ada kontrol pembayaran palsu pada staging.</p></div></section>
+      <section id="pasokan-usaha"><span class="eyebrow">PASOKAN USAHA</span><h2>B2B hanya untuk hubungan pasokan berulang.</h2><p>Contohnya Sambal AYA yang dipasok rutin ke restoran atau beras yang dipasok berkala ke distributor. Harga, volume, frekuensi, kapasitas, pengiriman, dan ketentuan dievaluasi sebelum menjadi kesepakatan.</p><div class="definition-pair"><div><strong>10 botol setiap minggu untuk restoran</strong><span>B2B recurring supply</span></div><div><strong>20 kg beras satu kali</strong><span>Tetap B2C</span></div></div><a class="button button-secondary" href="business.html">Pelajari Pasokan Usaha</a></section>
+      <section id="faq"><span class="eyebrow">FAQ</span><h2>Pertanyaan yang sering muncul.</h2><div class="faq-list"><details><summary>Berapa lama pesanan disiapkan?</summary><p>Umumnya 2–3 hari setelah pembayaran diterima. Waktu dapat berbeda menurut produk, jumlah, tanggal kebutuhan, dan kapasitas produksi.</p></details><details><summary>Apakah semua produk selalu tersedia?</summary><p>Tidak. Status publik adalah Tersedia, Pre-order, atau Habis.</p></details><details><summary>Apakah AYA melayani di luar Jabodetabek?</summary><p>Hanya sesuai kesesuaian produk dan metode kirim yang disetujui.</p></details><details><summary>Apakah pesanan besar otomatis B2B?</summary><p>Tidak. Semua pembelian satu kali tetap B2C. B2B hanya untuk pasokan komersial yang berulang.</p></details><details><summary>Apakah Sambal AYA memiliki level pedas?</summary><p>Tidak. Pedas adalah karakter dasar Sambal AYA. Informasi produk menjelaskan profil rasa, bukan level angka.</p></details><details><summary>Apakah pembayaran sudah aktif di website?</summary><p>Belum pada Package 1. Payment diaktifkan setelah backend, ongkir, provider, webhook, dan audit trail tersedia.</p></details></div></section>
+      <section id="syarat"><span class="eyebrow">SYARAT</span><h2>Ketentuan yang sudah dapat dinyatakan.</h2><p>Harga, status, varian, lead time, dan metode pengiriman mengikuti informasi aktif dan tervalidasi. Kebijakan refund, pembatalan setelah pembayaran, dan expiry belum ditampilkan karena masih memerlukan keputusan bisnis.</p></section>
+      <section id="privasi"><span class="eyebrow">PRIVASI</span><h2>Data digunakan sesuai konteksnya.</h2><p>Data pemesanan digunakan untuk memproses kebutuhan pelanggan setelah sistem persistence aktif. Testimoni dan media tetap mengikuti consent, private upload, moderation, dan environment pada flow `share.html`.</p></section>
+    </div>
+  </div></section>
+</main>
 <footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
       <a class="wordmark wordmark-footer" href="index.html"><strong>AYA</strong><span>RAOS</span><small>ADA RASA</small></a>
-      <p>Produk rumahan untuk kebutuhan pribadi, keluarga, acara, dan usaha.</p>
+      <p>Kuliner Sunda dari Lippo Utara untuk rumah, acara, dan pasokan berkala.</p>
     </div>
     <nav class="footer-nav" aria-label="Navigasi footer">
       <a href="products.html">Produk</a>
       <a href="testimonials.html">Testimoni</a>
       <a href="information.html#cara-pesan">Cara Pesan</a>
-      <a href="information.html#pengiriman">Pengiriman</a>
-      <a href="information.html#faq">FAQ</a>
+      <a href="information.html#untuk-acara">Untuk Acara</a>
+      <a href="business.html">Pasokan Usaha</a>
       <a href="share.html">Bagikan Pengalaman</a>
     </nav>
     <div class="footer-contact">
       <a href="https://www.instagram.com/aya.spice.haven/" target="_blank" rel="noopener noreferrer">@aya.spice.haven</a>
-      <span>Jam respons WhatsApp: Senin–Jumat, 09.00–21.00 WIB</span>
+      <span>Respons WhatsApp: Senin–Jumat, 09.00–21.00 WIB</span>
     </div>
   </div>
 </footer>
 <div class="toast-region" aria-live="polite" aria-atomic="true" data-toast-region></div>
+
 </body>
 </html>

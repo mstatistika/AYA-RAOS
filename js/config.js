@@ -5,10 +5,21 @@ window.AYA_CONFIG = Object.freeze({
   businessName: "AYA RAOS",
   leadTime: "2–3 hari setelah pembayaran diterima",
   serviceArea: "Lippo Utara dan Jabodetabek",
-  responseHours: "Senin–Jumat, 09.00–21.00 WIB",
+  responseHours: Object.freeze({
+    label: "Senin–Jumat, 09.00–21.00 WIB",
+    weekdays: "09.00–21.00",
+    saturday: "closed",
+    sunday: "closed"
+  }),
   environment: "staging",
+  checkout: Object.freeze({ mode: "inquiry", orderPersistence: false }),
+  businessSupply: Object.freeze({ enabled: false, persistence: false }),
   shipping: Object.freeze({ enabled: false, provider: "", source: "" }),
   payment: Object.freeze({ enabled: false, provider: "" }),
+  readyStock: Object.freeze({ enabled: false }),
+  bulkPricing: Object.freeze({ enabled: false }),
+  promotion: Object.freeze({ enabled: false }),
+  damagePolicy: Object.freeze({ enabled: false }),
   supabase: Object.freeze({
     url: "https://zysxhtlbfgqaymgwbjaq.supabase.co",
     publishableKey: "sb_publishable_WyTnT4aUSaYybXpo1a0gNQ_PPbTcRQb",
