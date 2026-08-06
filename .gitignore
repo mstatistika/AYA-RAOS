@@ -7,3 +7,12 @@ node_modules/
 .env.*
 
 .vercel
+
+# AYA RAOS local packages and backups
+.aya-raos-backup*
+AYA-RAOS-*.zip
+AYA-RAOS-FRONTEND-CORRECTIVE-SWEEP*/
+AYA-RAOS-GOVERNANCE-PACKAGE*/
+AYA-RAOS-PACKAGE-1*/
+AYA-RAOS-FULL-SITE-SWEEP*/
+AYA-RAOS-v5-*/

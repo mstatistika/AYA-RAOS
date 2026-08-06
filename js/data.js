@@ -5,7 +5,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "line": "AYA Spice Haven",
     "lineKey": "spice",
     "category": "Sambal",
-    "description": "Sambal pendamping makanan dengan empat pilihan varian untuk sajian sehari-hari.",
+    "description": "Sambal pendamping makanan dengan empat pilihan varian dan karakter pedas yang tegas.",
     "status": "available",
     "publicStatus": "Tersedia",
     "visible": true,
@@ -17,7 +17,6 @@ window.AYA_PRODUCTS = Object.freeze([
       "assets/images/hero-sambal.webp"
     ],
     "featured": true,
-    "priority": 1,
     "composition": "Komposisi rinci dikonfirmasi sesuai varian dan batch.",
     "storage": "Informasi penyimpanan dikonfirmasi saat pemesanan.",
     "suitableUse": "Nasi hangat, lauk rumahan, mi, dan pendamping berbagai hidangan.",
@@ -44,7 +43,22 @@ window.AYA_PRODUCTS = Object.freeze([
         "name": "Teri Nasi",
         "price": 60000
       }
-    ]
+    ],
+    "catalogOrder": 1,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Pedas yang tegas; karakter bahan mengikuti varian yang dipilih.",
+    "spiceCharacter": "Pedas",
+    "supplyEligible": true,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "bawang-goreng-sumenep",
@@ -52,18 +66,15 @@ window.AYA_PRODUCTS = Object.freeze([
     "line": "AYA Spice Haven",
     "lineKey": "spice",
     "category": "Pendamping",
-    "description": "Bawang goreng untuk nasi, bubur, mi, dan berbagai sajian rumahan.",
+    "description": "Bawang goreng untuk melengkapi nasi, bubur, mi, dan sajian rumahan.",
     "status": "available",
     "publicStatus": "Tersedia",
     "visible": true,
     "orderable": true,
-    "image": "assets/images/bawang-goreng.webp",
+    "image": "assets/placeholders/bawang-goreng-sumenep.svg",
     "placeholder": "assets/placeholders/bawang-goreng-sumenep.svg",
-    "images": [
-      "assets/images/bawang-goreng.webp"
-    ],
+    "images": [],
     "featured": false,
-    "priority": 2,
     "composition": "Informasi komposisi rinci sedang disiapkan.",
     "storage": "Simpan tertutup rapat dan hindari tempat lembap.",
     "suitableUse": "Pendamping nasi, bubur, mi, sup, dan hidangan rumahan.",
@@ -80,7 +91,22 @@ window.AYA_PRODUCTS = Object.freeze([
         "name": "Toples",
         "price": 70000
       }
-    ]
+    ],
+    "catalogOrder": 2,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": false,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "rendang-daging-sapi",
@@ -88,7 +114,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "line": "AYA Spice Haven",
     "lineKey": "spice",
     "category": "Lauk Berbumbu",
-    "description": "Lauk berbumbu untuk kebutuhan rumah, acara, atau pesanan dalam jumlah lebih besar.",
+    "description": "Lauk berbumbu untuk kebutuhan rumah dan acara satu kali.",
     "status": "preorder",
     "publicStatus": "Pre-order",
     "visible": true,
@@ -97,10 +123,9 @@ window.AYA_PRODUCTS = Object.freeze([
     "placeholder": "assets/placeholders/rendang-daging-sapi.svg",
     "images": [],
     "featured": false,
-    "priority": 3,
     "composition": "Informasi komposisi rinci dikonfirmasi saat pemesanan.",
     "storage": "Petunjuk penyimpanan diberikan saat produk diterima.",
-    "suitableUse": "Lauk keluarga, acara, dan kebutuhan usaha.",
+    "suitableUse": "Lauk keluarga, acara, dan makan bersama.",
     "leadTime": "Dikonfirmasi berdasarkan jumlah dan jadwal produksi.",
     "shipping": "Metode pengiriman disesuaikan dengan area dan keamanan produk.",
     "badges": [],
@@ -110,7 +135,22 @@ window.AYA_PRODUCTS = Object.freeze([
         "name": "300 g",
         "price": 105000
       }
-    ]
+    ],
+    "catalogOrder": 3,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": false,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "ayam-goreng-kuning",
@@ -129,7 +169,6 @@ window.AYA_PRODUCTS = Object.freeze([
       "assets/images/ayam.webp"
     ],
     "featured": false,
-    "priority": 4,
     "composition": "Informasi komposisi rinci dikonfirmasi sesuai pilihan produk.",
     "storage": "Simpan sesuai petunjuk yang diberikan saat produk diterima.",
     "suitableUse": "Stok lauk rumah, acara kecil, dan kebutuhan makan bersama.",
@@ -154,7 +193,22 @@ window.AYA_PRODUCTS = Object.freeze([
         "name": "Ceker 500 g",
         "price": 30000
       }
-    ]
+    ],
+    "catalogOrder": 4,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": false,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "dimsum-chili-oil",
@@ -171,7 +225,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "placeholder": "assets/placeholders/dimsum-chili-oil.svg",
     "images": [],
     "featured": false,
-    "priority": 5,
     "composition": "Informasi komposisi rinci sedang disiapkan.",
     "storage": "Petunjuk penyimpanan diberikan saat pemesanan.",
     "suitableUse": "Camilan keluarga, acara kecil, dan sajian praktis.",
@@ -184,7 +237,22 @@ window.AYA_PRODUCTS = Object.freeze([
         "name": "10 pcs + chili oil",
         "price": 40000
       }
-    ]
+    ],
+    "catalogOrder": 5,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": false,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "kacang-tanah-jumbo",
@@ -203,7 +271,6 @@ window.AYA_PRODUCTS = Object.freeze([
       "assets/images/kacang.webp"
     ],
     "featured": false,
-    "priority": 6,
     "composition": "Informasi komposisi rinci sedang disiapkan.",
     "storage": "Simpan tertutup rapat dan hindari tempat lembap.",
     "suitableUse": "Camilan rumah, suguhan, dan bingkisan sederhana.",
@@ -220,7 +287,22 @@ window.AYA_PRODUCTS = Object.freeze([
         "name": "Pouch",
         "price": 50000
       }
-    ]
+    ],
+    "catalogOrder": 6,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": false,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "kacang-mede-jumbo",
@@ -239,7 +321,6 @@ window.AYA_PRODUCTS = Object.freeze([
       "assets/images/mede.webp"
     ],
     "featured": false,
-    "priority": 7,
     "composition": "Informasi komposisi rinci sedang disiapkan.",
     "storage": "Simpan tertutup rapat dan hindari tempat lembap.",
     "suitableUse": "Camilan, suguhan, dan pendamping waktu santai.",
@@ -252,7 +333,22 @@ window.AYA_PRODUCTS = Object.freeze([
         "name": "250 g",
         "price": 80000
       }
-    ]
+    ],
+    "catalogOrder": 7,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": false,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "es-buah",
@@ -260,7 +356,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "line": "AYA Snack & Drinks",
     "lineKey": "snack",
     "category": "Minuman",
-    "description": "Minuman untuk pesanan pribadi, acara, atau kebutuhan dalam jumlah lebih besar.",
+    "description": "Minuman untuk kebutuhan rumah, acara, atau pesanan kelompok satu kali.",
     "status": "preorder",
     "publicStatus": "Pre-order",
     "visible": true,
@@ -269,10 +365,9 @@ window.AYA_PRODUCTS = Object.freeze([
     "placeholder": "assets/placeholders/es-buah.svg",
     "images": [],
     "featured": false,
-    "priority": 8,
     "composition": "Informasi komposisi rinci dikonfirmasi saat pemesanan.",
     "storage": "Simpan dingin dan konsumsi sesuai arahan saat produk diterima.",
-    "suitableUse": "Konsumsi pribadi, acara, dan kebutuhan kelompok.",
+    "suitableUse": "Konsumsi pribadi, acara, dan kebutuhan kelompok satu kali.",
     "leadTime": "Dikonfirmasi berdasarkan jumlah dan jadwal kebutuhan.",
     "shipping": "Area lokal dan Jabodetabek sesuai metode pengiriman.",
     "badges": [],
@@ -282,7 +377,22 @@ window.AYA_PRODUCTS = Object.freeze([
         "name": "250 ml",
         "price": 15000
       }
-    ]
+    ],
+    "catalogOrder": 8,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": false,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "beras-pilihan",
@@ -301,15 +411,29 @@ window.AYA_PRODUCTS = Object.freeze([
       "assets/images/beras.webp"
     ],
     "featured": false,
-    "priority": 9,
     "composition": "Informasi produk sedang disiapkan.",
     "storage": "Simpan di tempat kering dan tertutup.",
-    "suitableUse": "Kebutuhan rumah dan usaha setelah produk resmi tersedia.",
+    "suitableUse": "Kebutuhan rumah setelah produk resmi tersedia; pasokan berkala dievaluasi terpisah.",
     "leadTime": "Belum tersedia untuk dipesan.",
     "shipping": "Informasi pengiriman akan diperbarui.",
     "badges": [],
     "minQuantity": 1,
-    "variants": []
+    "variants": [],
+    "catalogOrder": 9,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": true,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   },
   {
     "id": "cireng",
@@ -328,7 +452,6 @@ window.AYA_PRODUCTS = Object.freeze([
       "assets/images/cireng.webp"
     ],
     "featured": false,
-    "priority": 10,
     "composition": "Informasi produk sedang disiapkan.",
     "storage": "Simpan sesuai petunjuk produk frozen.",
     "suitableUse": "Camilan rumah dan acara setelah produk kembali tersedia.",
@@ -336,7 +459,22 @@ window.AYA_PRODUCTS = Object.freeze([
     "shipping": "Utama untuk Lippo Utara dan Jabodetabek setelah tersedia.",
     "badges": [],
     "minQuantity": 1,
-    "variants": []
+    "variants": [],
+    "catalogOrder": 10,
+    "maxQuantity": null,
+    "quantityStep": 1,
+    "netWeight": null,
+    "shelfLife": null,
+    "storageAfterOpening": null,
+    "flavorProfile": "Informasi profil rasa sedang disiapkan.",
+    "spiceCharacter": null,
+    "supplyEligible": false,
+    "verifiedInformation": {
+      "composition": false,
+      "storage": true,
+      "netWeight": false,
+      "shelfLife": false
+    }
   }
 ]);
 
@@ -366,14 +504,6 @@ window.AYA_TESTIMONIALS = Object.freeze({
       "name": "@Rafaelers",
       "meta": "Sambal Bawang",
       "type": "text"
-    },
-    {
-      "id": "text-bawang",
-      "quote": "Enak bangettt.",
-      "name": "Pelanggan AYA",
-      "meta": "Bawang Goreng",
-      "image": "assets/images/testimonial-bawang.webp",
-      "type": "photo"
     }
   ]
 });

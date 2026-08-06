@@ -1,9 +1,9 @@
 # AYA RAOS — Central Decision Log
 
-**Document ID:** AYA-DL-001
+**Document ID:** AYA-DL-001  
 **Version:** 0.7 — Blueprint v1.5 Governance Lock
 **Updated:** 5 Agustus 2026
-**Repository:** `mstatistika/AYA-RAOS`
+**Repository:** `mstatistika/AYA-RAOS`  
 **Canonical parent:** `AYA-RAOS-WEBSITE-MASTER-BLUEPRINT-v1.5.md`
 **Decision coverage:** Recovered and approved decisions through **DL-578**
 **Current source status:** Verified baseline `main @ e6f891786655c7c8c44d7769d263a45bf1b8ef12`
