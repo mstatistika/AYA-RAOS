@@ -98,7 +98,9 @@ set
   file_size_limit = excluded.file_size_limit,
   allowed_mime_types = excluded.allowed_mime_types;
 
-alter table storage.objects enable row level security;
+-- `storage.objects` is a Supabase-managed table owned by
+-- `supabase_storage_admin`. RLS is already enabled by Supabase.
+-- Do not ALTER the managed table from an application migration.
 
 drop policy if exists "aya_testimonial_media_insert" on storage.objects;
 create policy "aya_testimonial_media_insert"

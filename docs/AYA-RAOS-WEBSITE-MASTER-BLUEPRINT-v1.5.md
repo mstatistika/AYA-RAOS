@@ -1,14 +1,14 @@
 # AYA RAOS — Website Master Blueprint
 
-**Document ID:** AYA-WMB-001  
-**Version:** 1.5 — Hyperlocal Sunda, B2C/B2B Segmentation & Capability Gates  
-**Date:** 5 Agustus 2026  
-**Repository:** `mstatistika/AYA-RAOS`  
-**Production branch:** `main`  
-**Verified repository baseline:** `e6f891786655c7c8c44d7769d263a45bf1b8ef12`  
-**Website status:** Staging / `noindex`  
-**Document status:** Canonical governance and implementation reference  
-**Decision Log coverage:** Through DL-578  
+**Document ID:** AYA-WMB-001
+**Version:** 1.5 — Hyperlocal Sunda, B2C/B2B Segmentation & Capability Gates
+**Date:** 5 Agustus 2026
+**Repository:** `mstatistika/AYA-RAOS`
+**Production branch:** `main`
+**Verified repository baseline:** `84e92031007af2341e29d1eb6109681db999925c`
+**Website status:** Staging / `noindex`
+**Document status:** Canonical governance and implementation reference
+**Decision Log coverage:** Through DL-587
 **Implementation authority:** Governance locked. Frontend corrective sweep, order persistence, B2B inquiry, protected Share parity, shipping, payment, SEO launch, and Production Launch require their respective approval gates.
 
 ---
@@ -408,7 +408,7 @@ AYA RAOS is developed as a Premium Brand Store and local-market growth platform 
 Verified repository baseline:
 
 ```text
-main @ e6f891786655c7c8c44d7769d263a45bf1b8ef12
+main @ 84e92031007af2341e29d1eb6109681db999925c
 ```
 
 Status:
@@ -416,8 +416,8 @@ Status:
 ```text
 Blueprint v1.5 governance      : Locked
 Frontend v1.5 correction       : Pending
-B2C inquiry persistence        : Pending
-B2B recurring-supply inquiry   : Pending
+B2C inquiry persistence        : Implemented in Phase 2 foundation
+B2B recurring-supply inquiry   : Implemented in Phase 2 foundation
 Protected Share parity         : Pending
 Shipping integration           : Inactive
 Payment integration            : Inactive
@@ -1495,7 +1495,7 @@ preview/blueprint-v1-5-frontend-corrective-v1
 Baseline:
 
 ```text
-main @ e6f891786655c7c8c44d7769d263a45bf1b8ef12
+main @ 84e92031007af2341e29d1eb6109681db999925c
 ```
 
 Scope:
@@ -1591,7 +1591,7 @@ Reference:
 - Master Blueprint: AYA-WMB-001 v1.5
 - Decision Log: through DL-578
 - Repository: mstatistika/AYA-RAOS
-- Baseline SHA: e6f891786655c7c8c44d7769d263a45bf1b8ef12
+- Baseline SHA: 84e92031007af2341e29d1eb6109681db999925c
 - Scope: [governance / frontend / order / B2B / protected share / launch]
 - Package: [0 / 1 / 2 / 3 / 4]
 - Protected files: [list]

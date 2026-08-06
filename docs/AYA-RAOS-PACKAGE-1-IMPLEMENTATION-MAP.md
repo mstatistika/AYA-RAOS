@@ -1,16 +1,16 @@
 # AYA RAOS — Package 1 Source Inspection & Implementation Map
 
-**Document ID:** AYA-P1-INSPECTION-001  
-**Version:** 1.0  
-**Date:** 6 Agustus 2026  
-**Repository:** `mstatistika/AYA-RAOS`  
-**Verified repository baseline:** `main @ e6f891786655c7c8c44d7769d263a45bf1b8ef12`  
-**Uploaded source inspected:** `AYA-RAOS-main(1).zip`  
-**Blueprint target:** AYA-WMB-001 v1.5  
-**Decision Log target:** Through DL-578  
-**Status:** Source inspection and implementation mapping only  
-**Source modification:** None  
-**Branch creation:** None  
+**Document ID:** AYA-P1-INSPECTION-001
+**Version:** 1.0
+**Date:** 6 Agustus 2026
+**Repository:** `mstatistika/AYA-RAOS`
+**Verified repository baseline:** `main @ 84e92031007af2341e29d1eb6109681db999925c`
+**Uploaded source inspected:** `AYA-RAOS-main(1).zip`
+**Blueprint target:** AYA-WMB-001 v1.5
+**Decision Log target:** Through DL-578
+**Status:** Package 1 implemented and merged to main; retained as historical implementation map
+**Source modification:** None
+**Branch creation:** None
 **Commit/push:** None
 
 ---
@@ -36,7 +36,7 @@ The source is technically compact, but several files are highly compressed. This
 Latest `main`:
 
 ```text
-e6f891786655c7c8c44d7769d263a45bf1b8ef12
+84e92031007af2341e29d1eb6109681db999925c
 chore: trigger Vercel production deployment
 ```
 
@@ -51,7 +51,7 @@ preview/blueprint-v1-5-frontend-corrective-v1
 Branch must be created from:
 
 ```text
-e6f891786655c7c8c44d7769d263a45bf1b8ef12
+84e92031007af2341e29d1eb6109681db999925c
 ```
 
 ---

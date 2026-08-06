@@ -31,6 +31,13 @@
     const contextInputs = [...document.querySelectorAll('[name="orderContext"]')];
     const personalFields = document.querySelector("[data-personal-fields]");
     const eventFields = document.querySelector("[data-event-fields]");
+    const submitButton = document.querySelector("[data-submit-order]");
+    const submitState = document.querySelector("[data-order-submit-state]");
+    const successPanel = document.querySelector("[data-order-success]");
+    const orderNumberNode = document.querySelector("[data-order-number]");
+    const orderWhatsApp = document.querySelector("[data-order-whatsapp]");
+    const copyOrderId = document.querySelector("[data-copy-order-id]");
+    let submittedOrder = draft.submittedOrder || null;
 
     const fillForm = (form, values = {}) => {
       Object.entries(values).forEach(([name, value]) => {
@@ -45,6 +52,11 @@
     const invalidateTotal = () => {
       draft.shipping = { ...(draft.shipping || {}), amount: null, status: "integration-pending" };
       draft.total = null;
+      draft.idempotencyKey = null;
+      draft.submittedOrder = null;
+      submittedOrder = null;
+      if (successPanel) successPanel.hidden = true;
+      if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Simpan Pesanan & Dapatkan Order ID"; }
       window.AYA.saveDraft(draft);
       document.querySelector("[data-summary-shipping]").textContent = "Belum tersedia";
       document.querySelector("[data-summary-total]").textContent = "Belum dapat dihitung";
@@ -201,6 +213,92 @@
     document.querySelectorAll("[data-stage-button]").forEach((button) => button.addEventListener("click", () => {
       const target = Number(button.dataset.stageButton); if (target < stage) go(target);
     }));
+
+    const orderPayload = () => ({
+      schemaVersion: 1,
+      context: draft.context,
+      customer: draft.customer || {},
+      shipping: draft.shipping || {},
+      notes: draft.notes || "",
+      items: window.AYA.cartDetails().map((item) => ({
+        productId: item.product.id,
+        variantName: item.variant.name,
+        quantity: item.quantity
+      }))
+    });
+
+    const orderMessage = (result) => {
+      const customer = draft.customer || {};
+      const shipping = draft.shipping || {};
+      const identity = draft.context === "event" ? customer.eventPic : customer.customerName;
+      const whatsapp = draft.context === "event" ? customer.eventWhatsapp : customer.whatsapp;
+      const lines = [
+        "Halo AYA RAOS, saya sudah menyimpan pesanan melalui website.",
+        "",
+        `Order ID: ${result.orderNumber}`,
+        `Konteks: ${draft.context === "event" ? "Untuk Acara" : "Untuk Rumah"}`,
+        `Nama/PIC: ${identity || "-"}`,
+        `WhatsApp: ${whatsapp || "-"}`,
+        "",
+        "Produk:"
+      ];
+      window.AYA.cartDetails().forEach((item) => lines.push(`- ${item.product.name} · ${item.variant.name} × ${item.quantity} = ${window.AYA.formatPrice(item.subtotal)}`));
+      lines.push("", `Subtotal produk: ${window.AYA.formatPrice(result.subtotalAmount)}`, "Ongkir dan total final: menunggu konfirmasi admin", `Area: ${shipping.area || "-"}`, `Alamat: ${shipping.address || "-"}`);
+      if (shipping.deliveryDate) lines.push(`Tanggal kebutuhan/pengiriman: ${shipping.deliveryDate}`);
+      if (draft.notes) lines.push(`Catatan: ${draft.notes}`);
+      return lines.join("\n");
+    };
+
+    const showOrderSuccess = (result) => {
+      submittedOrder = result;
+      draft.submittedOrder = result;
+      window.AYA.saveDraft(draft);
+      orderNumberNode.textContent = result.orderNumber;
+      orderWhatsApp.href = window.AYA.buildWhatsAppUrl(orderMessage(result));
+      successPanel.hidden = false;
+      submitState.className = "system-state state-success";
+      submitState.innerHTML = "<strong>Order berhasil disimpan.</strong><p>Order ID sudah dibuat. Ongkir dan total final tetap menunggu konfirmasi admin.</p>";
+      submitButton.disabled = true;
+      submitButton.textContent = "Order Sudah Tersimpan";
+      successPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    };
+
+    if (submittedOrder?.orderNumber) showOrderSuccess(submittedOrder);
+
+    submitButton?.addEventListener("click", async () => {
+      if (!window.AYA_ORDER_API?.isConfigured || !window.AYA_CONFIG?.checkout?.orderPersistence) {
+        showErrors(["Layanan penyimpanan order belum tersedia. Silakan coba kembali nanti."]);
+        return;
+      }
+      if (!validateCustomer() || !validateShipping()) return;
+      const items = window.AYA.cartDetails();
+      if (!items.length) { showErrors(["Keranjang masih kosong."]); return; }
+      draft.idempotencyKey = draft.idempotencyKey || window.AYA_ORDER_API.idempotencyKey();
+      window.AYA.saveDraft(draft);
+      submitButton.disabled = true;
+      submitButton.textContent = "Menyimpan pesanan…";
+      submitState.className = "system-state state-info";
+      submitState.innerHTML = "<strong>Sedang memvalidasi harga dan menyimpan order.</strong><p>Jangan tutup halaman ini sampai Order ID tampil.</p>";
+      showErrors([]);
+      try {
+        const result = await window.AYA_ORDER_API.createOrder(orderPayload(), draft.idempotencyKey);
+        if (!result?.orderNumber) throw new Error("Server tidak mengembalikan Order ID.");
+        showOrderSuccess(result);
+      } catch (error) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Coba Simpan Pesanan Lagi";
+        submitState.className = "system-state state-error";
+        submitState.innerHTML = `<strong>Pesanan belum tersimpan.</strong><p>${window.AYA.escapeHTML(error?.message || "Terjadi kesalahan. Silakan coba kembali.")}</p>`;
+      }
+    });
+
+    copyOrderId?.addEventListener("click", async () => {
+      if (!submittedOrder?.orderNumber) return;
+      try {
+        await navigator.clipboard.writeText(submittedOrder.orderNumber);
+        window.AYA.toast("Order ID disalin.", "success");
+      } catch { window.AYA.toast("Order ID belum dapat disalin otomatis.", "error"); }
+    });
 
     document.querySelector("[data-whatsapp-support]")?.addEventListener("click", () => {
       window.AYA.openWhatsApp("Halo AYA RAOS, saya sedang mengisi pesanan di website dan membutuhkan bantuan mengenai prosedur pemesanan.");

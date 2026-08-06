@@ -1,9 +1,9 @@
 # AYA RAOS — Central Decision Log
 
-**Document ID:** AYA-DL-001  
+**Document ID:** AYA-DL-001
 **Version:** 0.7 — Blueprint v1.5 Governance Lock
 **Updated:** 5 Agustus 2026
-**Repository:** `mstatistika/AYA-RAOS`  
+**Repository:** `mstatistika/AYA-RAOS`
 **Canonical parent:** `AYA-RAOS-WEBSITE-MASTER-BLUEPRINT-v1.5.md`
 **Decision coverage:** Recovered and approved decisions through **DL-578**
 **Current source status:** Verified baseline `main @ e6f891786655c7c8c44d7769d263a45bf1b8ef12`
@@ -649,3 +649,19 @@ Production Launch            : Not approved
 | OD-025 | Public bulk-pricing or MOQ policy for approved recurring supply relationships |
 | OD-026 | 404 global-shell decision |
 | OD-027 | Default-variant policy for multi-variant Product Detail |
+
+---
+
+## 29. Phase 2 Order Foundation Decisions
+
+| ID | Decision | Status |
+|---|---|---|
+| DL-579 | Phase 2 is implemented directly on `main` through a guarded one-command installer at the owner's explicit direction. | Approved |
+| DL-580 | B2C inquiry mode persists a server-validated order and returns an Order ID before WhatsApp continuation. | Approved |
+| DL-581 | Order IDs use `AYA-STG-ORD-YYYYMMDD-NNNNNN` in staging and `AYA-ORD-YYYYMMDD-NNNNNN` in production. | Approved |
+| DL-582 | Approved product and variant prices are mirrored in Supabase as the server-side validation source for order creation. | Approved |
+| DL-583 | Shipping amount and total payment remain null until an approved shipping integration or admin confirmation exists. | Approved |
+| DL-584 | Recurring B2B submissions persist as Business Inquiries and return a Business Inquiry ID; they remain non-order and non-quotation records. | Approved |
+| DL-585 | Business Inquiry IDs use `AYA-STG-BIZ-YYYYMMDD-NNNNNN` in staging and `AYA-BIZ-YYYYMMDD-NNNNNN` in production. | Approved |
+| DL-586 | Payment, inventory, quotation automation, public order tracking, and customer accounts remain outside Phase 2 Order Foundation. | Approved |
+| DL-587 | Public clients cannot insert trusted totals directly; RPC functions validate products, variants, quantities, prices, recurring intent, rate limits, and idempotency. | Approved |

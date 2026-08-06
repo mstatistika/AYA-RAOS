@@ -16,11 +16,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/site.css?v=20260806-blueprint-v15-p1" />
-    <script defer src="js/config.js?v=20260806-blueprint-v15-p1"></script>
-    <script defer src="js/data.js?v=20260806-blueprint-v15-p1"></script>
-    <script defer src="js/site.js?v=20260806-blueprint-v15-p1"></script>
-    <script defer src="js/cart-page.js?v=20260806-blueprint-v15-p1"></script>
+    <link rel="stylesheet" href="css/site.css?v=20260806-blueprint-v15-p2" />
+    <script defer src="js/config.js?v=20260806-blueprint-v15-p2"></script>
+    <script defer src="js/data.js?v=20260806-blueprint-v15-p2"></script>
+    <script defer src="js/site.js?v=20260806-blueprint-v15-p2"></script>
+    <script defer src="js/order-api.js?v=20260806-blueprint-v15-p2"></script>
+    <script defer src="js/cart-page.js?v=20260806-blueprint-v15-p2"></script>
   </head>
 <body data-page="cart">
 <a class="skip-link" href="#main">Lewati ke konten utama</a>
@@ -86,7 +87,7 @@
           </section>
           <section class="gateway-stage" data-stage="2" hidden><span class="eyebrow">LANGKAH 2 DARI 4</span><h2>Data & Pengiriman</h2><form data-shipping-form novalidate><div class="form-grid"><label>Area / kota<input name="area" required placeholder="Contoh: Lippo Utara, Tangerang" /></label><label>Tanggal dibutuhkan<input name="deliveryDate" type="date" /></label></div><label>Alamat atau detail lokasi<textarea name="address" rows="4" required></textarea></label><div class="system-state state-warning"><strong>Tarif pengiriman belum terhubung.</strong><p>Ongkir dan Total Pembayaran baru dapat dipercaya setelah integrasi shipping disetujui. Tidak ada nilai nol atau tarif perkiraan yang dipaksakan.</p></div><div class="stage-actions"><button class="button button-secondary" type="button" data-prev-stage="1">Kembali</button><button class="button button-primary" type="button" data-next-stage="3">Tinjau Ringkasan</button></div></form></section>
           <section class="gateway-stage" data-stage="3" hidden><span class="eyebrow">LANGKAH 3 DARI 4</span><h2>Ringkasan Pesanan</h2><div class="order-review" data-order-review></div><div class="financial-summary"><div><span>Subtotal Produk</span><strong data-summary-subtotal>Rp0</strong></div><div><span>Ongkos Kirim</span><strong data-summary-shipping>Belum tersedia</strong></div><div class="total-row"><span>Total Pembayaran</span><strong data-summary-total>Belum dapat dihitung</strong></div></div><div class="stage-actions"><button class="button button-secondary" type="button" data-prev-stage="2">Kembali</button><button class="button button-primary" type="button" data-next-stage="4">Lanjut ke Konfirmasi</button></div></section>
-          <section class="gateway-stage" data-stage="4" hidden><span class="eyebrow">LANGKAH 4 DARI 4</span><h2>Konfirmasi Pesanan</h2><div class="system-state state-blocked"><strong>Konfirmasi digital belum diaktifkan.</strong><p>Package ini menyelesaikan frontend dan segmentasi. Penyimpanan order, Order ID, validasi server, ongkir, dan kelanjutan WhatsApp yang otoritatif akan diaktifkan pada Package 2.</p></div><button class="button button-primary button-wide" type="button" disabled>Simpan Pesanan &amp; Dapatkan Order ID</button><button class="button button-ghost button-wide" type="button" data-whatsapp-support>Tanya prosedur melalui WhatsApp</button><div class="stage-actions"><button class="button button-secondary" type="button" data-prev-stage="3">Kembali ke Ringkasan</button></div></section>
+          <section class="gateway-stage" data-stage="4" hidden><span class="eyebrow">LANGKAH 4 DARI 4</span><h2>Konfirmasi Pesanan</h2><div class="system-state state-info" data-order-submit-state><strong>Order akan disimpan sebelum percakapan WhatsApp.</strong><p>Harga produk divalidasi kembali oleh server. Ongkir dan total final tetap dikonfirmasi admin karena integrasi pengiriman belum aktif.</p></div><button class="button button-primary button-wide" type="button" data-submit-order>Simpan Pesanan &amp; Dapatkan Order ID</button><div class="order-success-panel" data-order-success hidden><span class="eyebrow">ORDER TERSIMPAN</span><h3>Pesanan Anda sudah tercatat.</h3><p>Gunakan Order ID berikut saat melanjutkan komunikasi dengan AYA.</p><div class="order-id-row"><strong data-order-number></strong><button type="button" class="button button-secondary" data-copy-order-id>Salin ID</button></div><a class="button button-primary button-wide" href="#" target="_blank" rel="noopener noreferrer" data-order-whatsapp>Lanjutkan melalui WhatsApp</a></div><button class="button button-ghost button-wide" type="button" data-whatsapp-support>Tanya prosedur melalui WhatsApp</button><div class="stage-actions"><button class="button button-secondary" type="button" data-prev-stage="3">Kembali ke Ringkasan</button></div></section>
         </div>
       </section>
     </div>

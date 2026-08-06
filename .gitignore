@@ -16,3 +16,8 @@ AYA-RAOS-GOVERNANCE-PACKAGE*/
 AYA-RAOS-PACKAGE-1*/
 AYA-RAOS-FULL-SITE-SWEEP*/
 AYA-RAOS-v5-*/
+# AYA RAOS release packages and local backups
+.aya-raos-backup*/
+AYA-RAOS-PHASE-2-ORDER-FOUNDATION*/
+AYA-RAOS-PHASE-2-ORDER-FOUNDATION*.zip
+supabase/.temp/

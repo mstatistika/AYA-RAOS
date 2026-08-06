@@ -99,3 +99,15 @@ Target viewport:
 - `docs/AYA-RAOS-PACKAGE-1-IMPLEMENTATION-MAP.md`
 
 Tidak boleh commit atau merge ke `main` sebelum preview, validation report, dan approval selesai.
+## Phase 2 order foundation
+
+Implemented through `supabase/migrations/20260806153000_aya_phase2_order_foundation.sql`:
+
+- server-validated B2C order persistence;
+- Order ID before WhatsApp continuation;
+- recurring B2B Business Inquiry persistence;
+- Business Inquiry ID;
+- idempotency and basic rate limits;
+- private operational views for service-role access.
+
+Still inactive: payment, automatic shipping quotation, inventory, quotation automation, customer accounts, public order tracking, SEO launch, and Production Launch.

@@ -12,8 +12,8 @@ window.AYA_CONFIG = Object.freeze({
     sunday: "closed"
   }),
   environment: "staging",
-  checkout: Object.freeze({ mode: "inquiry", orderPersistence: false }),
-  businessSupply: Object.freeze({ enabled: false, persistence: false }),
+  checkout: Object.freeze({ mode: "inquiry", orderPersistence: true }),
+  businessSupply: Object.freeze({ enabled: true, persistence: true }),
   shipping: Object.freeze({ enabled: false, provider: "", source: "" }),
   payment: Object.freeze({ enabled: false, provider: "" }),
   readyStock: Object.freeze({ enabled: false }),
