@@ -9,43 +9,58 @@
   <meta name="robots" content="noindex, nofollow, noarchive" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/site.css?v=20260802-testimonial-media-v2" />
-  <link rel="stylesheet" href="css/share.css?v=20260802-testimonial-media-v2" />
-  <script defer src="js/config.js?v=20260802-testimonial-media-v2"></script>
-  <script defer src="js/data.js?v=20260802-testimonial-media-v2"></script>
-  <script defer src="js/supabase-client.js?v=20260802-testimonial-media-v2"></script>
-  <script defer src="js/site.js?v=20260802-testimonial-media-v2"></script>
-  <script defer src="js/testimonial-wizard.js?v=20260802-testimonial-media-v2"></script>
+  <link rel="stylesheet" href="css/site.css?v=20260807-sunda-v130" />
+  <link rel="stylesheet" href="css/share.css?v=20260807-sunda-v130" />
+  <script defer src="js/config.js?v=20260807-sunda-v130"></script>
+  <script defer src="js/data.js?v=20260807-sunda-v130"></script>
+  <script defer src="js/supabase-client.js?v=20260807-sunda-v130"></script>
+  <script defer src="js/site.js?v=20260807-sunda-v130"></script>
+  <script defer src="js/testimonial-wizard.js?v=20260807-sunda-v130"></script>
 </head>
-<body>
+<body data-page="share">
   <a class="skip-link" href="#main">Lewati ke konten utama</a>
 
-  <header class="site-header">
-    <div class="container site-header-inner">
-      <a class="wordmark" href="index.html" aria-label="AYA RAOS beranda"><strong>AYA</strong><small>RAOS</small></a>
-      <nav class="primary-nav" aria-label="Navigasi utama">
-        <a href="index.html">Beranda</a>
-        <a href="products.html">Semua Produk</a>
-        <a href="testimonials.html">Testimoni</a>
-        <a href="information.html#cara-pesan">Cara Pesan</a>
-      </nav>
-      <div class="header-actions">
-        <a class="header-cta" href="products.html">Mulai Pesan</a>
-        <a class="cart-link" href="cart.html" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-count" data-cart-count>0</span></a>
-        <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
-      </div>
-    </div>
-    <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
-      <a href="index.html">Beranda</a>
-      <a href="products.html">Semua Produk</a>
-      <a href="index.html#cerita-aya">Tentang AYA</a>
-      <a href="testimonials.html">Testimoni</a>
-      <a href="information.html#cara-pesan">Cara Pesan</a>
-      <a href="cart.html">Keranjang</a>
+  <div class="utility-bar">
+  <div class="container utility-inner">
+    <span>Kuliner Sunda dari Lippo Utara · Produksi batch kecil</span>
+    <span>Lead time umumnya 2–3 hari setelah pembayaran · Ongkir aktual sesuai alamat</span>
+  </div>
+</div>
+<header class="site-header" data-site-header>
+  <div class="container site-header-inner">
+    <a class="wordmark" href="index.html" aria-label="AYA RAOS — Beranda">
+      <strong>AYA</strong><span>RAOS</span><small>RASA SUNDA · WARISAN ASLI</small>
+    </a>
+    <nav class="primary-nav" aria-label="Navigasi utama">
+      <a href="index.html" data-nav="home">Beranda</a>
+      <a href="index.html#cerita-aya" data-nav="about">Tentang AYA</a>
+      <a href="products.html" data-nav="products">Produk</a>
+      <a href="testimonials.html" data-nav="testimonials">Testimoni</a>
+      <a href="information.html" data-nav="information">Informasi</a>
+      <a href="business.html" data-nav="business">Pasokan Usaha</a>
     </nav>
-  </header>
-
-  <main id="main" class="aya-wizard-page">
+    <div class="header-actions">
+      <a class="cart-link" href="cart.html?context=personal" aria-label="Buka keranjang">
+        <span>Keranjang</span><span class="cart-count" data-cart-count>0</span>
+      </a>
+      <a class="button button-primary header-order" href="cart.html?context=personal">Pesan Sekarang</a>
+      <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
+    <a href="index.html">Beranda</a>
+    <a href="index.html#cerita-aya">Tentang AYA</a>
+    <a href="products.html">Produk</a>
+    <a href="testimonials.html">Testimoni</a>
+    <a href="information.html">Informasi</a>
+    <a href="business.html">Pasokan Usaha</a>
+    <a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a>
+    <a class="button button-primary" href="cart.html?context=personal">Pesan Sekarang</a>
+  </nav>
+</header>
+<main id="main" class="aya-wizard-page">
     <section class="aya-wizard-section">
       <div class="container">
         <nav class="breadcrumb aya-wizard-breadcrumb" aria-label="Breadcrumb">
@@ -310,8 +325,8 @@
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <a class="wordmark" href="index.html"><strong>AYA</strong><small>RAOS</small></a>
-        <p>Perjalanan rasa dari Tanah Sunda melalui hasil bumi, pendamping makanan, camilan, dan minuman.</p>
+        <a class="wordmark wordmark-footer" href="index.html"><strong>AYA</strong><span>RAOS</span><small>RASA SUNDA · WARISAN ASLI</small></a>
+        <p>Kuliner Sunda dari Lippo Utara untuk rumah, acara, dan pasokan berkala.</p>
       </div>
       <div class="footer-column">
         <h3>Produk Kami</h3>
