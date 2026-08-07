@@ -15,7 +15,8 @@
     document.title = `${product.name} — AYA RAOS`;
     document.querySelector("[data-breadcrumb-product]").textContent = product.name;
 
-    const images = (product.images?.length ? product.images : [product.image || product.placeholder]).filter(Boolean);
+    const baseImages = (product.images?.length ? product.images : [product.image || product.placeholder]).filter(Boolean);
+    const images = product.id === "sambal-bawang" ? ["assets/visual/product-gallery-scene.webp", ...baseImages] : baseImages;
     const initial = images[0] || product.placeholder;
     const rules = window.AYA.quantityRules(product);
     const sold = !product.orderable;

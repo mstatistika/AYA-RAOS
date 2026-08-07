@@ -10,7 +10,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "publicStatus": "Tersedia",
     "visible": true,
     "orderable": true,
-    "image": "assets/images/sambal.webp",
+    "image": "assets/visual/catalog-sambal.webp",
     "placeholder": "assets/placeholders/sambal-bawang.svg",
     "images": [
       "assets/images/sambal.webp",
@@ -71,7 +71,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "publicStatus": "Tersedia",
     "visible": true,
     "orderable": true,
-    "image": "assets/placeholders/bawang-goreng-sumenep.svg",
+    "image": "assets/visual/catalog-bawang.webp",
     "placeholder": "assets/placeholders/bawang-goreng-sumenep.svg",
     "images": [],
     "featured": false,
@@ -119,7 +119,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "publicStatus": "Pre-order",
     "visible": true,
     "orderable": true,
-    "image": "assets/placeholders/rendang-daging-sapi.svg",
+    "image": "assets/visual/catalog-rendang.webp",
     "placeholder": "assets/placeholders/rendang-daging-sapi.svg",
     "images": [],
     "featured": false,
@@ -163,7 +163,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "publicStatus": "Pre-order",
     "visible": true,
     "orderable": true,
-    "image": "assets/images/ayam.webp",
+    "image": "assets/visual/catalog-ayam.webp",
     "placeholder": "assets/placeholders/ayam-goreng-kuning.svg",
     "images": [
       "assets/images/ayam.webp"
@@ -221,7 +221,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "publicStatus": "Pre-order",
     "visible": true,
     "orderable": true,
-    "image": "assets/placeholders/dimsum-chili-oil.svg",
+    "image": "assets/visual/catalog-dimsum.webp",
     "placeholder": "assets/placeholders/dimsum-chili-oil.svg",
     "images": [],
     "featured": false,
@@ -265,7 +265,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "publicStatus": "Tersedia",
     "visible": true,
     "orderable": true,
-    "image": "assets/images/kacang.webp",
+    "image": "assets/visual/catalog-kacang-tanah.webp",
     "placeholder": "assets/placeholders/kacang-tanah-jumbo.svg",
     "images": [
       "assets/images/kacang.webp"
@@ -315,7 +315,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "publicStatus": "Tersedia",
     "visible": true,
     "orderable": true,
-    "image": "assets/images/mede.webp",
+    "image": "assets/visual/catalog-kacang-mede.webp",
     "placeholder": "assets/placeholders/kacang-mede-jumbo.svg",
     "images": [
       "assets/images/mede.webp"

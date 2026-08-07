@@ -5,11 +5,10 @@
 
 .aya-wizard-page {
   min-height: calc(100svh - var(--aya-header-height));
-  color: var(--aya-ink, #241b18);
+  color: var(--aya-ink, #311612);
   background:
-    radial-gradient(circle at 92% 7%, rgba(159, 31, 31, 0.035), transparent 31%),
-    radial-gradient(circle at 7% 88%, rgba(185, 138, 58, 0.05), transparent 27%),
-    var(--aya-ivory, #fffdf8);
+    linear-gradient(rgba(82,9,13,.9), rgba(82,9,13,.9)),
+    url("../assets/visual/maroon-texture.webp") center / cover;
 }
 
 .aya-wizard-page [hidden],
@@ -32,10 +31,10 @@
   display: grid;
   grid-template-columns: minmax(270px, 31%) minmax(0, 69%);
   overflow: hidden;
-  border: 1px solid var(--aya-line, rgba(77, 52, 42, 0.13));
-  border-radius: 24px;
-  background: #fff;
-  box-shadow: 0 24px 66px rgba(86, 47, 33, 0.09);
+  border: 1px solid #c8914b;
+  border-radius: 18px;
+  background: #f7ead4;
+  box-shadow: 0 28px 70px rgba(28, 4, 6, 0.34);
 }
 
 .aya-wizard-shell.is-success {
@@ -49,8 +48,12 @@
   padding: 27px 28px 22px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--aya-line, rgba(77, 52, 42, 0.13));
-  background: linear-gradient(145deg, #fffdf8 0%, #f8f1e7 100%);
+  --aya-red-dark: #fff0d6;
+  --aya-muted: #d7b88e;
+  --aya-line: rgba(227, 187, 114, 0.28);
+  border-right: 1px solid #b77d3c;
+  color: #fff0d6;
+  background: linear-gradient(145deg, #741519 0%, #4c090d 100%);
 }
 
 .aya-wizard-sidebar-top {
@@ -195,6 +198,7 @@
   padding: 24px 30px 18px;
   display: flex;
   flex-direction: column;
+  background: #f7ead4;
 }
 
 .aya-wizard-shell.is-success .aya-wizard-panel {
