@@ -1,0 +1,243 @@
+{
+  "package": "AYA-RAOS-BRAND-JOURNEY-CULTURAL-DEPTH-v1.5.1",
+  "version": "1.5.1",
+  "source_baseline_main": "1acbad056680e32ef655412be6ee85990494a76b",
+  "scope": "Brand Journey & Cultural Depth refinement; knowledge/culture first, commerce second.",
+  "payload_files": [
+    {
+      "path": "DECISION_LOG.md",
+      "sha256": "acc9d252217fda416bc0f2a9dd223167e0c80f579e305449aa11cda9f7f739ab",
+      "size": 174,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "564eef7b210d14bf937c07fe6ebb2b4c0bd5f224f507bd9b1ed430c51a7e12ab"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "README.md",
+      "sha256": "e273ec3f9796c9d570ae6c3382ff14808aae199ab17fbb8c8e71fa75d231f9e6",
+      "size": 5194,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "da5dc6530c0bc26ccbfd4af43e84457a8a29116b7ec0f75a4c87a51312570f61"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "about.html",
+      "sha256": "74e623aea743ead24a4a97eed62fe239b950199d44f039b91de10ef7875ebe8a",
+      "size": 862,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "4eef49c0bee8f9909b3ece252d712b5ec808132341176ac4659363456e1cc98b"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "business.html",
+      "sha256": "9c6f93486fc774f5c4fb9b3d6c5bb8252fa8289b76fa795c2ac53290a927cc95",
+      "size": 11595,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "6ca804a1ae2b2c8929e24762e297ea63e8d74be86b77347a7a61d5b6f5afe685"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "cart.html",
+      "sha256": "38109b1376e41b19663fd123c570736c6b5cae6d7dedd26a4c1d8add0ab356a4",
+      "size": 11905,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "d607620d326a210428fe14d6e6f96e812bed209605216841e6a7ef60ee0c5817"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "css/site.css",
+      "sha256": "ed6be217669eb936cb8b9d8e173b518c2e733e8fba027b87dded38156247d08a",
+      "size": 61689,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "0719f0a035cefbc0177cde63750d7b255a9c5498c46e794ebb742899457b980c"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "docs/AYA-RAOS-BRAND-JOURNEY-CULTURAL-DEPTH-v1.5.1.md",
+      "sha256": "168aac350cb74b61e534a5bd010b94b4b94aee900051b83e7161a09ea0cd0f94",
+      "size": 2084,
+      "allowed_existing": [],
+      "allowed_missing_baselines": [
+        "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b"
+      ]
+    },
+    {
+      "path": "docs/AYA-RAOS-DECISION-LOG-v1.5.md",
+      "sha256": "0e74fc718e37a0059f97ac666c9982b0776aee7d43e421a80f29a7c730d59d5e",
+      "size": 53137,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "9eadf70aef33d64473ec695a1054c06cef58f7265374d3223bb90d0feaad533d"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "docs/AYA-RAOS-WEBSITE-MASTER-BLUEPRINT-v1.5.md",
+      "sha256": "7d4878fce5a4bd1149bf3dc6583efe1db933172944b94bccaf455d292f57080c",
+      "size": 35864,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "01f0dd9a861c8ed987f9e74115c1055606257ab7efaa0b9c108af6921373f920"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "farm.html",
+      "sha256": "f12fb246dd71f33dcd5868bb548c333aaec7fa3293645c0fa311eac598ad8491",
+      "size": 8107,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "678a72da67bac8f5ff4fe217ffab4721565cb6b17766e01351c9037ce6a61a16"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "index.html",
+      "sha256": "0341e93808abb151a59236582bb7ebc208966ebe9e391c67702c5b02919642af",
+      "size": 17364,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "25c85b211df2af34424d225a02cb0178a4be67ab8a5623b85e13026f4d0d4219"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "information.html",
+      "sha256": "f46054bd9355637a63fc473fd1049f89e16e5cbf5b5c094a13ada73355eed33c",
+      "size": 11476,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "3a1ab07245079994b6625021b4aeff942333d7d42c4cc299a19da9b90d97da8f"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "js/product.js",
+      "sha256": "9f67a246efda4d19e45c312899750e84e9ee8756036be5daacc2ea35a64632a0",
+      "size": 7787,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "e0da256101237e2a799ba2bd0fe82587fe7ee5dc0e82a762de06f315dfa21894"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "product.html",
+      "sha256": "ab631a519a3de0dbdb9ca633065ffde7a9103c2ca8064cab9cf821b32ca5ca5c",
+      "size": 6183,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "0b70a9f378e6a79f9ff2da617fef5b6d7f8fa025ce14ba0597b39c6ad1191994"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "products.html",
+      "sha256": "4646d7907cdd1cd19e07239e20b14681c1475be4cc46e99bbae1d6a8ca0d1ef3",
+      "size": 9060,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "ece635cc2ed0bebfb3b697224293f78d46ac1a1439c69c1d4cf976c82cea9f09"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "share.html",
+      "sha256": "5c8186095c4090e9cacb1ccc83c781b6f508912628499026c619cfe83486c2f3",
+      "size": 21025,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "d30f5dceba477bc0a54da21a8a36106af4108db5a02dff08e26b88c9f9e89cb5"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "snacks.html",
+      "sha256": "6c606a27dde2ab8669fbd1cc7d7f72bb7f4f358f9b8ef4df35ded0879f819932",
+      "size": 8221,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "ff1006801c247da2c95b6cb23803624460591c75ab2a4900d92051c20b50abb4"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "spice.html",
+      "sha256": "e8147897b7dec7c3cab1a1a2a33be74495d9602851bf7ad27f15c4e72213e5dc",
+      "size": 8155,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "3a7e059e595ac1673f912270466ae16d27f47e4332bdd0c32deafe582883a7b8"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "testimonials.html",
+      "sha256": "b6645718260823214d7b638662736bec50720e5071bcfd8a6ab133f98682b524",
+      "size": 6690,
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.5.0@1acbad056680e32ef655412be6ee85990494a76b",
+          "sha256": "945f76e01881e5feccad9861216f8c91e6dfdd16f848d32e93c60e2af5688471"
+        }
+      ],
+      "allowed_missing_baselines": []
+    }
+  ],
+  "protected_files": {
+    "js/supabase-client.js": "aa66a63842b80d612d50b79d892b4b014efc7ae125fb640083329e4e55a9be9e",
+    "js/testimonial-wizard.js": "6816e038468e97840dc37a69610e3f8340a31d33dd034ee5bdaaa86838f93e59",
+    "js/order-api.js": "d862e767ab231bff76e3e6b610f7a8e234005477ce38dae56d552f6892c133bf",
+    "js/cart-page.js": "18fb808a6ef37eebf3911413e37a6c145ac7686f48e8aca8bdb91fe2381e754d",
+    "js/business-inquiry.js": "2bcffd8e74a761b732ec39cf603ad4f26643fecb4cefa4a7178bb0f4f180e086",
+    "supabase/migrations/20260806153000_aya_phase2_order_foundation.sql": "e02d96171e1feb4020d986fff171b054c8fc4b0da357ed61c977324620672514"
+  },
+  "production_launch": false,
+  "database_execution": false
+}
