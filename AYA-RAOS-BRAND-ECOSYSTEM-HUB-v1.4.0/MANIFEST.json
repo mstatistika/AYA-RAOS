@@ -1,0 +1,137 @@
+{
+  "package": "AYA-RAOS-BRAND-ECOSYSTEM-HUB-v1.4.0",
+  "baseline": "0893aeaacc874694a3a24b4eb292d4e887f4ac5c",
+  "payloadFiles": [
+    {
+      "path": "404.html",
+      "sha256": "efbfe358e263f14a4e94650fea342c35a259bb015da0750803da26e46c44892c",
+      "size": 5307
+    },
+    {
+      "path": "DECISION_LOG.md",
+      "sha256": "17f4e2bd9db4f78a2db678a6e7d13a0de1670a57c9df9faf6fb5f27ab658c2c2",
+      "size": 174
+    },
+    {
+      "path": "README.md",
+      "sha256": "0350c3c4bc06f23ae1638d73130547596704a1516d858bc4abfc259588de06dc",
+      "size": 3520
+    },
+    {
+      "path": "about.html",
+      "sha256": "6c51f743002aff5553d3022a2d6d397933f299201af564b502910ff3b78e9668",
+      "size": 866
+    },
+    {
+      "path": "business.html",
+      "sha256": "6862fdb4c59d3f7deeb9376c53e93103038def23e28d43a75c8040e5088855a1",
+      "size": 11304
+    },
+    {
+      "path": "cart.html",
+      "sha256": "fd70d951f0c7112af729e89d600f198b6b084f5ec5b3eaca742cca5236e0ec21",
+      "size": 11609
+    },
+    {
+      "path": "css/share.css",
+      "sha256": "450c630fefb293f296568a4f983ad0d0fa26d8964d7dbc4911f31980c1bf24a8",
+      "size": 23887
+    },
+    {
+      "path": "css/site.css",
+      "sha256": "31f9f08c8fda9d4e9f13ef1f8eaa6da2b14c30fd2f39d07eb9e6542f10fb33df",
+      "size": 53881
+    },
+    {
+      "path": "docs/AYA-RAOS-BRAND-ECOSYSTEM-HUB-v1.0.md",
+      "sha256": "d97ff97ba33156da9c64c61a10453ced0dbcbd424158225571f314224a31ba92",
+      "size": 2305
+    },
+    {
+      "path": "docs/AYA-RAOS-DECISION-LOG-v1.5.md",
+      "sha256": "57685ae35330ed6e1d59963f35868a7f2e89badfd44e5cf87b7da229156e55f4",
+      "size": 47696
+    },
+    {
+      "path": "docs/AYA-RAOS-WEBSITE-MASTER-BLUEPRINT-v1.5.md",
+      "sha256": "c16d5560864549f9a4f673d1762bbc72199a2411bd32a729cc7c649d8a7913f5",
+      "size": 32382
+    },
+    {
+      "path": "farm.html",
+      "sha256": "bd397b1c264c9617f15f1d83b89c606009a6d346a92609cd6d657f10d47755f6",
+      "size": 7375
+    },
+    {
+      "path": "index.html",
+      "sha256": "dc2d481d083239a37361212e748a6d3ca58a3a76c7a35c553198c45db44ead38",
+      "size": 11645
+    },
+    {
+      "path": "information.html",
+      "sha256": "f84ee991b4e6f2a35a9771005001a23f0723ffb9fa564730005f971191c34b86",
+      "size": 11185
+    },
+    {
+      "path": "js/catalog.js",
+      "sha256": "723d5ef3e7592f5f4b643ea406c752d6188c8959a82c813c1578303206383ab4",
+      "size": 11914
+    },
+    {
+      "path": "js/data.js",
+      "sha256": "cf591eb562ccc9d5b895302b8bac414d689014bcbea5709450533bf203d4cf16",
+      "size": 15370
+    },
+    {
+      "path": "js/line-page.js",
+      "sha256": "045835104c66fef9b079ceff33f490f4b6326bbe469b91a8e4ff8f296f8d072a",
+      "size": 3161
+    },
+    {
+      "path": "js/product.js",
+      "sha256": "f7a66adde6d6f2c6b1c6dedbc33c68f87c2ae7ca0d0085deb1a3eb59ed379fdd",
+      "size": 6925
+    },
+    {
+      "path": "js/site.js",
+      "sha256": "d8bca461dc7bbb52c0124e8b962bd4cf9c9176f04e0528d9a5a53b9a6682fa50",
+      "size": 10172
+    },
+    {
+      "path": "product.html",
+      "sha256": "82024cdda661881d43148c4ab3789af11762a9cff2a6e50172a572f4ec57563e",
+      "size": 5842
+    },
+    {
+      "path": "products.html",
+      "sha256": "3fcc601f9e173ddaad62c448181043fe4258d3ca41674bd3b033f1033ebc1f82",
+      "size": 8740
+    },
+    {
+      "path": "share.html",
+      "sha256": "04409df4521b5c6ff7ec9502b3fb4d2249c52f7c00b2b6a89b6fb7b671e5a589",
+      "size": 20586
+    },
+    {
+      "path": "snacks.html",
+      "sha256": "f80bf46fa3b2895c3571221c20e5de1e47d7473a297c79f3907b7b8e5ba9cfec",
+      "size": 7433
+    },
+    {
+      "path": "spice.html",
+      "sha256": "34c14ce99ada75a792c6888d6130d9ef4da56240c208aa9a9f44397cf94e3f1a",
+      "size": 7380
+    },
+    {
+      "path": "supabase/migrations/20260808061500_aya_snacks_line_name_normalization.sql",
+      "sha256": "f468955b416bd5226dbe60f1d1c8cd10fd2770685671f1fa886344d19ab978eb",
+      "size": 318
+    },
+    {
+      "path": "testimonials.html",
+      "sha256": "7331d08fa4fff607023ac400cf6be5d7d0e24e5ac21ce9ee5a2a4b34ecedfd6d",
+      "size": 6405
+    }
+  ],
+  "deletions": []
+}

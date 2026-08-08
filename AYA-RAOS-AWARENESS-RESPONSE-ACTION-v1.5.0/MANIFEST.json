@@ -1,0 +1,501 @@
+{
+  "package": "AYA-RAOS-AWARENESS-RESPONSE-ACTION-v1.5.0",
+  "source_baseline_main": "0893aeaacc874694a3a24b4eb292d4e887f4ac5c",
+  "supported_input_states": [
+    "main-v1.3",
+    "ecosystem-v1.4.0",
+    "ecosystem-v1.4.1"
+  ],
+  "payload_files": [
+    {
+      "path": "404.html",
+      "sha256": "c9d0da172f1c4ca9b5a301f1e64116727c6281a069319e0381bd4b385b05f5f6",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "83aa1758207fa9874195e583c15f5062f9864f7a749735b5cfcc3a5436626f02"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "efbfe358e263f14a4e94650fea342c35a259bb015da0750803da26e46c44892c"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "8f02c2464649203b984863e84a2d349aafc9ed3e9c98729f9835f28d9921cb13"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "DECISION_LOG.md",
+      "sha256": "564eef7b210d14bf937c07fe6ebb2b4c0bd5f224f507bd9b1ed430c51a7e12ab",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "e079dbde45b8569bc0535f0b8fd8fc48af3155e8dc67f2727856d9d4813f0fc5"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "17f4e2bd9db4f78a2db678a6e7d13a0de1670a57c9df9faf6fb5f27ab658c2c2"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "675c07c48e77819436aa306f67133efa7268146337cf35d7fa4d168a337aa91f"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "README.md",
+      "sha256": "da5dc6530c0bc26ccbfd4af43e84457a8a29116b7ec0f75a4c87a51312570f61",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "c5b9c3964588022695e3fdc64c289388909e1f589757ecff4525a4d5722b6ebf"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "0350c3c4bc06f23ae1638d73130547596704a1516d858bc4abfc259588de06dc"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "0350c3c4bc06f23ae1638d73130547596704a1516d858bc4abfc259588de06dc"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "about.html",
+      "sha256": "4eef49c0bee8f9909b3ece252d712b5ec808132341176ac4659363456e1cc98b",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "938a5cba928cf32d95cf9e055c723979a183bbc9590ce9e5818af4df6245073e"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "6c51f743002aff5553d3022a2d6d397933f299201af564b502910ff3b78e9668"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "b1a27c28e2892b84e5d705458401d674c4219e44ccf479ea221decf308c1835e"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "business.html",
+      "sha256": "6ca804a1ae2b2c8929e24762e297ea63e8d74be86b77347a7a61d5b6f5afe685",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "9263fa3747dcb3553803a2f7d12338300ec6e7e53bb5264e0c3f4209f26be5bb"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "6862fdb4c59d3f7deeb9376c53e93103038def23e28d43a75c8040e5088855a1"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "84835c315322bcd2b17014be30c6c6b68c9b06b4abd489316238f2b618574d2c"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "cart.html",
+      "sha256": "d607620d326a210428fe14d6e6f96e812bed209605216841e6a7ef60ee0c5817",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "dd0acf683c820d696e566c726b1744b1f06e9b7a282023f8a7283b9db7f389f4"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "fd70d951f0c7112af729e89d600f198b6b084f5ec5b3eaca742cca5236e0ec21"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "df9fd3585b95f5fc2b0730c33d9d000b372a316475f8b5fe746062ae6764e7dd"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "css/share.css",
+      "sha256": "450c630fefb293f296568a4f983ad0d0fa26d8964d7dbc4911f31980c1bf24a8",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "b9913f12332e690cfa2fba99e02d9d4c5fba9e0a1dc09b45516619b698a78469"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "450c630fefb293f296568a4f983ad0d0fa26d8964d7dbc4911f31980c1bf24a8"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "450c630fefb293f296568a4f983ad0d0fa26d8964d7dbc4911f31980c1bf24a8"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "css/site.css",
+      "sha256": "0719f0a035cefbc0177cde63750d7b255a9c5498c46e794ebb742899457b980c",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "dfb45955c194b50d07431824dbca7db1e4e6f15d52266541198d3f7efb19e096"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "31f9f08c8fda9d4e9f13ef1f8eaa6da2b14c30fd2f39d07eb9e6542f10fb33df"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "4af550cbc756950aa58699bcd0c7aa841ecb1fab842e9ff69d63817ae1000945"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "docs/AYA-RAOS-BRAND-ECOSYSTEM-HUB-v1.0.md",
+      "sha256": "5a3e65c7d0a86cfdd44d25851a21333561c904d387c0cd2eed8b578636a14672",
+      "allowed_existing": [
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "d97ff97ba33156da9c64c61a10453ced0dbcbd424158225571f314224a31ba92"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "27e7f15de51b16c4e33652de59411980e13da3dc2de60c7b0e67d9192c2a1f9f"
+        }
+      ],
+      "allowed_missing_baselines": [
+        "main-v1.3"
+      ]
+    },
+    {
+      "path": "docs/AYA-RAOS-DECISION-LOG-v1.5.md",
+      "sha256": "9eadf70aef33d64473ec695a1054c06cef58f7265374d3223bb90d0feaad533d",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "1a8d53299ce673cd3d98492ac8ac1912dec68dc4601b1e240ce308375341f88c"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "57685ae35330ed6e1d59963f35868a7f2e89badfd44e5cf87b7da229156e55f4"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "dd9e84e2e83b2ed0c107e4c811a1f41a74be4d2b1557cb34d6f831f1031044be"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "docs/AYA-RAOS-WEBSITE-MASTER-BLUEPRINT-v1.5.md",
+      "sha256": "01f0dd9a861c8ed987f9e74115c1055606257ab7efaa0b9c108af6921373f920",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "bb8ddb715760c1286051243ca0058be768a5f2830805b5c4d3dc3b1c5fab0a92"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "c16d5560864549f9a4f673d1762bbc72199a2411bd32a729cc7c649d8a7913f5"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "d27859fffea022461d975325fac8b60cc4c92546fc56ce077aefe522ba4f6627"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "farm.html",
+      "sha256": "678a72da67bac8f5ff4fe217ffab4721565cb6b17766e01351c9037ce6a61a16",
+      "allowed_existing": [
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "bd397b1c264c9617f15f1d83b89c606009a6d346a92609cd6d657f10d47755f6"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "d90e382edcdf05f0422ab22b12b332020d8c91102a0d06fb048ff8b38d594c3e"
+        }
+      ],
+      "allowed_missing_baselines": [
+        "main-v1.3"
+      ]
+    },
+    {
+      "path": "index.html",
+      "sha256": "25c85b211df2af34424d225a02cb0178a4be67ab8a5623b85e13026f4d0d4219",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "1967b57b2b195457f77b01df7450073894caf892bfbc6694274c845a3fb8ed4e"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "dc2d481d083239a37361212e748a6d3ca58a3a76c7a35c553198c45db44ead38"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "fb963aaed28cb59f2a415da2ac41f67dfcb6ce1f9385c34b6ef7a9007bd92887"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "information.html",
+      "sha256": "3a1ab07245079994b6625021b4aeff942333d7d42c4cc299a19da9b90d97da8f",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "2fea1d01ed07741b165abcb4c8639a90fc7a85dc6baa571c7287c69ef182de21"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "f84ee991b4e6f2a35a9771005001a23f0723ffb9fa564730005f971191c34b86"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "46c8c0d2ce38928419397105be38658b1d8cba2bcf4465766a3ac9a89c3d9b48"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "js/catalog.js",
+      "sha256": "723d5ef3e7592f5f4b643ea406c752d6188c8959a82c813c1578303206383ab4",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "54e38e6a1608c053708f9b923a99e5a865b581df3cfb772b570fc001f45a5882"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "723d5ef3e7592f5f4b643ea406c752d6188c8959a82c813c1578303206383ab4"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "723d5ef3e7592f5f4b643ea406c752d6188c8959a82c813c1578303206383ab4"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "js/data.js",
+      "sha256": "cf591eb562ccc9d5b895302b8bac414d689014bcbea5709450533bf203d4cf16",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "afe536c7a993b57897d6d5915db2e871ff12b0fcb90a1029ba403a2a51e58c89"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "cf591eb562ccc9d5b895302b8bac414d689014bcbea5709450533bf203d4cf16"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "cf591eb562ccc9d5b895302b8bac414d689014bcbea5709450533bf203d4cf16"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "js/line-page.js",
+      "sha256": "9679dc8af9ac73f3187064877c8d6376668c262b34ae982d3f82e709a58c2f04",
+      "allowed_existing": [
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "045835104c66fef9b079ceff33f490f4b6326bbe469b91a8e4ff8f296f8d072a"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "2cc6d0d74c43324d120bf820826ad8c736dc0102b573c74711107637ad120b51"
+        }
+      ],
+      "allowed_missing_baselines": [
+        "main-v1.3"
+      ]
+    },
+    {
+      "path": "js/product.js",
+      "sha256": "e0da256101237e2a799ba2bd0fe82587fe7ee5dc0e82a762de06f315dfa21894",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "15ebf3de25375ddac1d463eecb8d1ab2a9a8c38f109da720b8e07f77dde62fcf"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "f7a66adde6d6f2c6b1c6dedbc33c68f87c2ae7ca0d0085deb1a3eb59ed379fdd"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "e0da256101237e2a799ba2bd0fe82587fe7ee5dc0e82a762de06f315dfa21894"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "js/site.js",
+      "sha256": "d8bca461dc7bbb52c0124e8b962bd4cf9c9176f04e0528d9a5a53b9a6682fa50",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "00fc733b92a654472cab922ac636dae817dddfbb86b4d229579568e7d052449c"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "d8bca461dc7bbb52c0124e8b962bd4cf9c9176f04e0528d9a5a53b9a6682fa50"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "d8bca461dc7bbb52c0124e8b962bd4cf9c9176f04e0528d9a5a53b9a6682fa50"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "product.html",
+      "sha256": "0b70a9f378e6a79f9ff2da617fef5b6d7f8fa025ce14ba0597b39c6ad1191994",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "069918a7e693ab230414c0f2beb5bac2e61bf8af68092cb18e23a66eb6d5fd1a"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "82024cdda661881d43148c4ab3789af11762a9cff2a6e50172a572f4ec57563e"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "7680e602ce68378ae2153313feb267f649ef44228d4c42604342f8b3beab3c00"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "products.html",
+      "sha256": "ece635cc2ed0bebfb3b697224293f78d46ac1a1439c69c1d4cf976c82cea9f09",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "5b90ede88b2d634ae173d5329838ef200a9a0b9b8ddc7e47f2748238ebb2c057"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "3fcc601f9e173ddaad62c448181043fe4258d3ca41674bd3b033f1033ebc1f82"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "fe1ac3ba4b22f18f2e1a004a409dbf84a80f95b75446e0aebfa9bd7d3f843324"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "share.html",
+      "sha256": "d30f5dceba477bc0a54da21a8a36106af4108db5a02dff08e26b88c9f9e89cb5",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "0f2a818bb3c189fbf8242708524edf36ab1a8acb2ed963281b76cba378e93267"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "04409df4521b5c6ff7ec9502b3fb4d2249c52f7c00b2b6a89b6fb7b671e5a589"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "d30f5dceba477bc0a54da21a8a36106af4108db5a02dff08e26b88c9f9e89cb5"
+        }
+      ],
+      "allowed_missing_baselines": []
+    },
+    {
+      "path": "snacks.html",
+      "sha256": "ff1006801c247da2c95b6cb23803624460591c75ab2a4900d92051c20b50abb4",
+      "allowed_existing": [
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "f80bf46fa3b2895c3571221c20e5de1e47d7473a297c79f3907b7b8e5ba9cfec"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "ec5b21424ac9558872245b79c109a4147a9df5bb2a636bc157b5eca347ff263d"
+        }
+      ],
+      "allowed_missing_baselines": [
+        "main-v1.3"
+      ]
+    },
+    {
+      "path": "spice.html",
+      "sha256": "3a7e059e595ac1673f912270466ae16d27f47e4332bdd0c32deafe582883a7b8",
+      "allowed_existing": [
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "34c14ce99ada75a792c6888d6130d9ef4da56240c208aa9a9f44397cf94e3f1a"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "17c9190cd28f99d927fa9f03924889c06f9d5f84394a075738db2414f335631f"
+        }
+      ],
+      "allowed_missing_baselines": [
+        "main-v1.3"
+      ]
+    },
+    {
+      "path": "supabase/migrations/20260808061500_aya_snacks_line_name_normalization.sql",
+      "sha256": "f468955b416bd5226dbe60f1d1c8cd10fd2770685671f1fa886344d19ab978eb",
+      "allowed_existing": [
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "f468955b416bd5226dbe60f1d1c8cd10fd2770685671f1fa886344d19ab978eb"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "f468955b416bd5226dbe60f1d1c8cd10fd2770685671f1fa886344d19ab978eb"
+        }
+      ],
+      "allowed_missing_baselines": [
+        "main-v1.3"
+      ]
+    },
+    {
+      "path": "testimonials.html",
+      "sha256": "945f76e01881e5feccad9861216f8c91e6dfdd16f848d32e93c60e2af5688471",
+      "allowed_existing": [
+        {
+          "baseline": "main-v1.3",
+          "sha256": "c7845751430261d6612086351a311a530cb743a49108891e387324ee21d0b3cc"
+        },
+        {
+          "baseline": "ecosystem-v1.4.0",
+          "sha256": "7331d08fa4fff607023ac400cf6be5d7d0e24e5ac21ce9ee5a2a4b34ecedfd6d"
+        },
+        {
+          "baseline": "ecosystem-v1.4.1",
+          "sha256": "da9327441f6052128c45ff84cd4cb16b23f667273628639eeb5226c6c56e9839"
+        }
+      ],
+      "allowed_missing_baselines": []
+    }
+  ],
+  "protected_files": {
+    "js/supabase-client.js": "aa66a63842b80d612d50b79d892b4b014efc7ae125fb640083329e4e55a9be9e",
+    "js/testimonial-wizard.js": "6816e038468e97840dc37a69610e3f8340a31d33dd034ee5bdaaa86838f93e59",
+    "js/order-api.js": "d862e767ab231bff76e3e6b610f7a8e234005477ce38dae56d552f6892c133bf",
+    "js/cart-page.js": "18fb808a6ef37eebf3911413e37a6c145ac7686f48e8aca8bdb91fe2381e754d",
+    "js/business-inquiry.js": "2bcffd8e74a761b732ec39cf603ad4f26643fecb4cefa4a7178bb0f4f180e086",
+    "supabase/migrations/20260806153000_aya_phase2_order_foundation.sql": "e02d96171e1feb4020d986fff171b054c8fc4b0da357ed61c977324620672514"
+  }
+}
