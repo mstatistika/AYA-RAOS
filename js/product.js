@@ -5,15 +5,31 @@
     const info = document.querySelector("[data-product-information]");
     if (!root || !window.AYA) return;
 
-    const id = new URLSearchParams(location.search).get("id");
+    const params = new URLSearchParams(location.search);
+    const id = params.get("id");
+    const entrySource = String(params.get("src") || "").trim().slice(0, 120);
     const product = window.AYA.getProduct(id);
     if (!product || !product.visible) {
       root.innerHTML = '<div class="empty-state"><strong>Produk tidak ditemukan.</strong><p>Produk mungkin belum dipublikasikan atau tautannya tidak valid.</p><a class="button button-primary" href="products.html">Kembali ke Katalog</a></div>';
       return;
     }
 
-    document.title = `${product.name} — AYA RAOS`;
+    const linePages = Object.freeze({ spice: "spice.html", farm: "farm.html", snack: "snacks.html" });
+    const linePage = linePages[product.lineKey] || "index.html#lini-aya";
+    const linePageUrl = (() => {
+      if (!entrySource || linePage.includes("#")) return linePage;
+      const url = new URL(linePage, location.href);
+      url.searchParams.set("src", entrySource);
+      return `${url.pathname.split("/").pop()}${url.search}`;
+    })();
+
+    document.title = `${product.name} — ${product.line} · AYA RAOS`;
     document.querySelector("[data-breadcrumb-product]").textContent = product.name;
+    const breadcrumbLine = document.querySelector("[data-breadcrumb-line]");
+    if (breadcrumbLine) {
+      breadcrumbLine.textContent = product.line;
+      breadcrumbLine.setAttribute("href", linePageUrl);
+    }
 
     const baseImages = (product.images?.length ? product.images : [product.image || product.placeholder]).filter(Boolean);
     const images = product.id === "sambal-bawang" ? ["assets/visual/product-gallery-scene.webp", ...baseImages] : baseImages;
@@ -30,12 +46,13 @@
         ${images.length > 1 ? `<div class="product-thumbnails">${images.map((src, index) => `<button type="button" data-thumb="${window.AYA.escapeHTML(src)}" ${index === 0 ? 'aria-current="true"' : ""}><img src="${window.AYA.escapeHTML(src)}" alt="Tampilan ${index + 1} ${window.AYA.escapeHTML(product.name)}" width="120" height="120" data-image-fallback="${window.AYA.escapeHTML(product.id)}"/></button>`).join("")}</div>` : ""}
       </div>
       <div class="purchase-panel">
-        <div class="product-heading-meta"><span class="line-label line-${product.lineKey}">${window.AYA.escapeHTML(product.line)}</span><small>${window.AYA.escapeHTML(product.category)}</small></div>
+        <div class="product-heading-meta"><a class="line-label line-${product.lineKey}" href="${window.AYA.escapeHTML(linePageUrl)}">${window.AYA.escapeHTML(product.line)} →</a><small>${window.AYA.escapeHTML(product.category)}</small></div>
+        <p class="product-ecosystem-context">Bagian dari <a href="${window.AYA.escapeHTML(linePageUrl)}">${window.AYA.escapeHTML(product.line)}</a> dalam ekosistem AYA RAOS.</p>
         <h1>${window.AYA.escapeHTML(product.name)}</h1>
         <p class="product-promise">${window.AYA.escapeHTML(product.description)}</p>
         ${product.spiceCharacter ? `<div class="spice-character"><span>Karakter sambal</span><strong>${window.AYA.escapeHTML(product.spiceCharacter)}</strong><small>Bukan pilihan level.</small></div>` : ""}
         ${product.badges?.length ? `<div class="badge-row">${product.badges.map((badge) => `<span>${window.AYA.escapeHTML(badge)}</span>`).join("")}</div>` : ""}
-        <form data-purchase-form novalidate>
+        <form id="pesan" data-purchase-form novalidate>
           <fieldset class="variant-fieldset" ${sold ? "disabled" : ""}><legend>${singleVariant ? "Varian" : "Pilih varian"}</legend>${variantMarkup}</fieldset>
           <div class="form-error-summary compact-error" data-product-error tabindex="-1" hidden></div>
           <div class="purchase-row">

@@ -5,11 +5,11 @@
 **Date:** 5 Agustus 2026
 **Repository:** `mstatistika/AYA-RAOS`
 **Production branch:** `main`
-**Verified repository baseline:** `84e92031007af2341e29d1eb6109681db999925c`
+**Verified repository baseline:** `0893aeaacc874694a3a24b4eb292d4e887f4ac5c`
 **Website status:** Staging / `noindex`
 **Document status:** Canonical governance and implementation reference
-**Decision Log coverage:** Through DL-587
-**Implementation authority:** Governance locked. Frontend corrective sweep, order persistence, B2B inquiry, protected Share parity, shipping, payment, SEO launch, and Production Launch require their respective approval gates.
+**Decision Log coverage:** Through DL-599
+**Implementation authority:** Sunda visual baseline v1.3 and Phase 2 order/B2B persistence are approved on staging. Awareness → Response → Action Brand Ecosystem refinement v1.5 is the active preview scope. Shipping, payment, analytics, SEO launch, and Production Launch remain gated.
 
 ---
 
@@ -122,7 +122,22 @@ The benchmark is internal only and may not become public comparative copy withou
 - conversion-oriented;
 - tidak memakai klaim berlebihan.
 
-### 3.6 Product lines
+### 3.6 Brand ecosystem architecture
+
+AYA RAOS functions as the master-brand and public ecosystem hub. Direct visitors follow an awareness-first journey: understand who AYA RAOS is and why `Ada Rasa` matters, then understand why the ecosystem is divided into three lines, then learn the lines, and only after that enter response and action paths.
+
+```text
+AYA RAOS — Ada Rasa
+├── AYA Spice Haven      · Spice Red
+├── AYA Farm             · Farm Green
+└── AYA Snacks & Drinks  · Warm Amber
+```
+
+Line landing pages may use distinct marketing emphasis, but they remain visually and navigationally connected to AYA RAOS. Product QR entry is expected to route to the relevant line landing page, while preserving access back to the master hub.
+
+Sambal AYA remains the hero product under AYA Spice Haven. It is not the definition of the entire AYA RAOS master brand.
+
+### 3.7 Product lines
 
 #### AYA Spice Haven
 
@@ -138,7 +153,7 @@ The benchmark is internal only and may not become public comparative copy withou
 - hasil peternakan;
 - produk primer.
 
-#### AYA Snack & Drinks
+#### AYA Snacks & Drinks
 
 - camilan;
 - frozen snack;
@@ -148,7 +163,7 @@ The benchmark is internal only and may not become public comparative copy withou
 Taxonomy follows primary function:
 
 - Sambal, Rendang, Ayam Kuning → Spice;
-- Dimsum, kacang, cireng, es buah → Snack & Drinks;
+- Dimsum, kacang, cireng, es buah → Snacks & Drinks;
 - beras → Farm.
 
 The three lines support one master brand. They are not three competing brands or three separate global-navigation systems.
@@ -433,7 +448,7 @@ The current source remains a valid baseline but does not yet comply fully with v
 
 | Route | Role |
 |---|---|
-| `index.html` | B2C-first Homepage and brand story |
+| `index.html` | Awareness-first AYA RAOS Brand Ecosystem Hub |
 | `products.html` | Public retail Catalog |
 | `product.html?id=...` | Product Detail |
 | `cart.html?context=personal` | B2C Personal one-time order |
@@ -704,103 +719,108 @@ A correct placeholder is more trustworthy than a wrong real image.
 
 ## 14. Homepage Blueprint
 
-### 14.1 Conversion objective
+### 14.1 Journey objective
 
-Within approximately ten seconds, the Homepage must explain:
+The Homepage is **awareness-first**, not product-first and not line-selector-first.
 
-- AYA RAOS is Sundanese culinary from Lippo Utara;
-- Sambal AYA is the hero product;
-- starting price;
-- product purpose;
-- how to order;
-- lead time;
-- primary service area;
-- product lines.
-
-### 14.2 Desktop composition
+The required sequence is:
 
 ```text
-COMPOSITION 1
-Utility bar
-Header
-Hero
-One primary CTA
-Supporting facts
-Trust bar
-
-COMPOSITION 2
-Product lines
-Brand story
-Real testimonials
-Minimal footer
+AYA RAOS
+→ why AYA RAOS / Ada Rasa
+→ why the ecosystem is split into three lines
+→ what the three lines are
+→ understand each line
+→ choose a relevant response
+→ take action
 ```
 
-These are composition targets, not forced `100vh` sections.
+The commercial objective remains conversion, but conversion begins only after the master brand and ecosystem are understandable.
 
-### 14.3 Hero
+### 14.2 First viewport — master-brand awareness
 
-Direction:
+The first viewport must establish:
 
-> **Sambal AYA. Rasa Sunda, pedas yang tegas.**
+- `AYA RAOS`;
+- `Ada Rasa`;
+- AYA RAOS as the master brand / home of AYA;
+- Lippo Utara as the current local context.
 
-Supporting line:
+The first viewport must **not** behave as a three-line selector and must not make Sambal AYA the definition of AYA RAOS. Master-brand colors remain Heritage Maroon, Cream, and Gold. Line accent colors are introduced later.
 
-> **Tumbuh dari rumah ke rumah di Lippo Utara.**
+Primary first-viewport action: continue the brand journey (`Kenali AYA RAOS` / scroll).
 
-Required:
+### 14.3 Why RAOS
 
-- starting price from Rp40.000;
-- concise value explanation;
-- one primary CTA: `Pesan Sekarang`;
-- one low-emphasis Catalog link;
-- lead-time and area facts;
-- authentic image or correct placeholder.
+Explain `AYA RAOS = Ada Rasa` in concise brand language. The purpose is to give the master name meaning before product architecture is introduced. Do not invent an unsupported founder story or linguistic claim beyond the approved `Raos = rasa` framing.
 
-Do not expose Personal and Event as competing hero buttons.
+### 14.4 Why three lines
 
-### 14.4 Trust bar
+Explain that the ecosystem is divided because product function, customer context, and communication needs differ. The three functional groups are:
 
-Use verified facts only, such as:
+1. products that accompany or build a meal;
+2. agricultural / primary goods;
+3. snacks, frozen items, ready-to-enjoy food, and drinks.
 
-- Kuliner Sunda dari Lippo Utara;
-- Sambal AYA mulai Rp40.000;
-- disiapkan 2–3 hari after approved payment state;
-- for home and event one-time needs.
+This section explains the business logic before exposing the line names.
 
-### 14.5 Product lines
+### 14.5 Three-line reveal
 
-Three cards remain:
+Reveal the approved line names:
 
-1. Sambal & Bumbu — AYA Spice Haven;
-2. Hasil Bumi — AYA Farm;
-3. Camilan & Minuman — AYA Snack & Drinks.
+1. `AYA Spice Haven`;
+2. `AYA Farm`;
+3. `AYA Snacks & Drinks`.
 
-AYA RAOS and Sambal AYA retain the strongest hierarchy.
+Line accents:
 
-### 14.6 Brand story
+- Spice Haven → Spice Red;
+- Farm → Farm Green;
+- Snacks & Drinks → Warm Amber.
 
-Narrative sequence:
+These are internal design-system names; do not expose color names as public copy.
+
+### 14.6 Line detail
+
+After the names are understood, show each line with enough context to answer what belongs there and why a visitor might enter it. Each line card / editorial block may link to its dedicated line landing page.
+
+### 14.7 Response gateway
+
+After awareness is complete, the Homepage may explicitly ask the visitor to choose intent:
+
+- explore / buy products;
+- recurring business supply;
+- share an existing customer experience.
+
+This is the transition from **Awareness** to **Response**.
+
+### 14.8 Hero product placement
+
+Sambal AYA remains the current hero product under AYA Spice Haven, with approved starting price from Rp40.000. It appears **after** the ecosystem is understood as a strong conversion entry, not as the master-brand definition.
+
+Required facts around the product response path may include:
+
+- active price / variant;
+- lead time 2–3 days after payment is received;
+- product status;
+- shipping context without unsupported promise.
+
+### 14.9 Trust and advocacy
+
+Trust uses verified specificity rather than generic luxury claims. Testimonials are both evidence for new visitors and an advocacy action for returning customers.
+
+The Homepage should support two clear customer states near the close:
 
 ```text
-Dapur rumahan
-→ rumah ke rumah
-→ komplek ke komplek
-→ rasa Sunda di Lippo Utara
+Belum pernah mencoba AYA → Jelajahi Produk
+Sudah pernah menikmati AYA → Bagikan Pengalaman
 ```
 
-Restaurant and culinary-hub goals remain future vision.
+Recurring-supply users retain a separate Business path.
 
-### 14.7 Testimonials
+### 14.10 Composition and responsive behavior
 
-- three-card horizontal carousel on laptop;
-- one-card advance;
-- slow auto-advance;
-- pause on interaction;
-- reduced-motion support;
-- no duplicate featured testimonial;
-- no mobile continuous vertical ticker.
-
----
+Sections follow content height; do not force every section to `100vh` / `100svh`. Desktop composition should preserve editorial rhythm and clear transitions. Mobile prioritizes comprehension and reachable actions, with the Awareness → Response → Action sequence unchanged.
 
 ## 15. Catalog Blueprint
 

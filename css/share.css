@@ -4,7 +4,7 @@
 */
 
 .aya-wizard-page {
-  min-height: calc(100svh - var(--aya-header-height));
+  min-height: calc(100svh - var(--header-h));
   color: var(--aya-ink, #311612);
   background:
     linear-gradient(rgba(82,9,13,.9), rgba(82,9,13,.9)),
@@ -26,7 +26,7 @@
 }
 
 .aya-wizard-shell {
-  height: clamp(500px, calc(100svh - var(--aya-header-height) - 74px), 610px);
+  height: clamp(500px, calc(100svh - var(--header-h) - 74px), 610px);
   min-height: 500px;
   display: grid;
   grid-template-columns: minmax(270px, 31%) minmax(0, 69%);

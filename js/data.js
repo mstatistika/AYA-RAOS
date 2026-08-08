@@ -213,7 +213,7 @@ window.AYA_PRODUCTS = Object.freeze([
   {
     "id": "dimsum-chili-oil",
     "name": "Dimsum + Chili Oil",
-    "line": "AYA Snack & Drinks",
+    "line": "AYA Snacks & Drinks",
     "lineKey": "snack",
     "category": "Frozen Snack",
     "description": "Dimsum dengan chili oil untuk camilan atau sajian praktis.",
@@ -257,7 +257,7 @@ window.AYA_PRODUCTS = Object.freeze([
   {
     "id": "kacang-tanah-jumbo",
     "name": "Kacang Tanah Jumbo",
-    "line": "AYA Snack & Drinks",
+    "line": "AYA Snacks & Drinks",
     "lineKey": "snack",
     "category": "Camilan",
     "description": "Kacang goreng untuk stok camilan di rumah atau dinikmati bersama.",
@@ -307,7 +307,7 @@ window.AYA_PRODUCTS = Object.freeze([
   {
     "id": "kacang-mede-jumbo",
     "name": "Kacang Mede Jumbo",
-    "line": "AYA Snack & Drinks",
+    "line": "AYA Snacks & Drinks",
     "lineKey": "snack",
     "category": "Camilan",
     "description": "Kacang mede jumbo untuk camilan dan berbagai momen.",
@@ -353,7 +353,7 @@ window.AYA_PRODUCTS = Object.freeze([
   {
     "id": "es-buah",
     "name": "Es Buah AYA",
-    "line": "AYA Snack & Drinks",
+    "line": "AYA Snacks & Drinks",
     "lineKey": "snack",
     "category": "Minuman",
     "description": "Minuman untuk kebutuhan rumah, acara, atau pesanan kelompok satu kali.",
@@ -438,7 +438,7 @@ window.AYA_PRODUCTS = Object.freeze([
   {
     "id": "cireng",
     "name": "Cireng",
-    "line": "AYA Snack & Drinks",
+    "line": "AYA Snacks & Drinks",
     "lineKey": "snack",
     "category": "Frozen Snack",
     "description": "Frozen snack AYA yang harga dan paketnya sedang diperbarui.",

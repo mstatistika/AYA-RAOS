@@ -84,6 +84,7 @@
 
     const card = (product) => {
       const price = minPrice(product);
+      const linePage = { spice: "spice.html", farm: "farm.html", snack: "snacks.html" }[product.lineKey] || "index.html#lini-aya";
       const disabled = !product.orderable;
       return `<article class="product-card">
         <a class="product-card-image" href="product.html?id=${encodeURIComponent(product.id)}">
@@ -91,7 +92,7 @@
           <span class="status-badge status-${product.status}">${window.AYA.escapeHTML(product.publicStatus)}</span>
         </a>
         <div class="product-card-body">
-          <div class="product-card-kicker"><span class="line-label line-${product.lineKey}">${window.AYA.escapeHTML(product.line)}</span><small>${window.AYA.escapeHTML(product.category)}</small></div>
+          <div class="product-card-kicker"><a class="line-label line-${product.lineKey}" href="${linePage}">${window.AYA.escapeHTML(product.line)}</a><small>${window.AYA.escapeHTML(product.category)}</small></div>
           <h2><a href="product.html?id=${encodeURIComponent(product.id)}">${window.AYA.escapeHTML(product.name)}</a></h2>
           <p>${window.AYA.escapeHTML(product.description)}</p>
           <div class="product-card-price"><span>${Number.isFinite(price) ? "Mulai" : "Harga"}</span><strong>${Number.isFinite(price) ? window.AYA.formatPrice(price) : "Belum tersedia"}</strong></div>
@@ -103,7 +104,7 @@
     const renderSummary = () => {
       const labels = [];
       if (state.query) labels.push(`Pencarian: ${state.query}`);
-      if (state.line) labels.push({ spice: "Spice Haven", farm: "AYA Farm", snack: "Snack & Drinks" }[state.line] || state.line);
+      if (state.line) labels.push({ spice: "AYA Spice Haven", farm: "AYA Farm", snack: "AYA Snacks & Drinks" }[state.line] || state.line);
       if (state.category) labels.push(state.category);
       if (state.price) labels.push({ under50000: "< Rp50.000", "50000-80000": "Rp50.000–Rp80.000", over80000: "> Rp80.000" }[state.price]);
       if (state.statuses.length) labels.push(...state.statuses.map((s) => ({ available: "Tersedia", preorder: "Pre-order", soldout: "Habis" }[s])));

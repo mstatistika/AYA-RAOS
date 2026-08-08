@@ -220,7 +220,7 @@
   const initActiveNav = () => {
     const page = document.body.dataset.page;
     const map = {
-      home: "home", products: "products", product: "products",
+      home: "home", line: "lines", products: "products", product: "products",
       testimonials: "testimonials", information: "information", business: "business"
     };
     const key = map[page];

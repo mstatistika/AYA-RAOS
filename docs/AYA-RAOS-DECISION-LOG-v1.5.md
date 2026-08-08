@@ -436,7 +436,7 @@ Explicitly superseded:
 | ID | Decision | Status |
 |---|---|---|
 | DL-538 | The global navigation order is Beranda, Tentang AYA, Produk, Testimoni, and Informasi, followed by Keranjang and Pesan Sekarang actions. | Approved |
-| DL-539 | AYA Spice Haven, AYA Farm, and AYA Snack & Drinks are explained within Tentang AYA and remain available as Catalog taxonomy/filters rather than separate global-navigation items. | Approved |
+| DL-539 | AYA Spice Haven, AYA Farm, and AYA Snacks & Drinks are explained within Tentang AYA and remain available as Catalog taxonomy/filters rather than separate global-navigation items. | Approved |
 
 ---
 
@@ -615,11 +615,12 @@ The following earlier decisions remain historically valid but are superseded or 
 
 ```text
 Master Blueprint v1.5        : Locked
-Decision Log through DL-578  : Locked
-Frontend corrective sweep    : Not started
-Order persistence            : Not started
-B2B inquiry persistence      : Not started
-Protected Share parity       : Not started
+Decision Log through DL-608  : Locked
+Sunda visual baseline v1.3   : Approved on main
+Awareness/Response/Action v1.5: Active refinement preview
+Order persistence            : Active in staging
+B2B inquiry persistence      : Active in staging
+Protected Share parity       : Active
 Shipping                     : Inactive
 Payment                      : Inactive
 Indexing                     : Disabled
@@ -634,8 +635,6 @@ Production Launch            : Not approved
 |---|---|
 | OD-007 | Shipping tariff source and integration |
 | OD-008 | Payment provider and active methods |
-| OD-009 | Backend/serverless architecture |
-| OD-010 | Order database, persistence, audit trail, and approved operational view |
 | OD-011 | Refund and post-payment cancellation policy |
 | OD-012 | Payment expiry and retry policy |
 | OD-013 | Production domain, canonical, sitemap, indexing, and SEO launch |
@@ -665,3 +664,39 @@ Production Launch            : Not approved
 | DL-585 | Business Inquiry IDs use `AYA-STG-BIZ-YYYYMMDD-NNNNNN` in staging and `AYA-BIZ-YYYYMMDD-NNNNNN` in production. | Approved |
 | DL-586 | Payment, inventory, quotation automation, public order tracking, and customer accounts remain outside Phase 2 Order Foundation. | Approved |
 | DL-587 | Public clients cannot insert trusted totals directly; RPC functions validate products, variants, quantities, prices, recurring intent, rate limits, and idempotency. | Approved |
+
+---
+
+## 30. Brand Ecosystem Hub Decisions
+
+| ID | Decision | Status |
+|---|---|---|
+| DL-588 | AYA RAOS is the master brand and public Brand Ecosystem Hub; direct website entry must explain `AYA RAOS = Ada Rasa` and the relationship to its three lines. | Approved |
+| DL-589 | The public line names are standardized as `AYA Spice Haven`, `AYA Farm`, and `AYA Snacks & Drinks`. | Approved |
+| DL-590 | Master-brand colors remain Heritage Maroon, Cream, and Gold; line accents are Spice Red, Farm Green, and Warm Amber respectively. | Approved |
+| DL-591 | Each line may use a distinct marketing emphasis while retaining one AYA RAOS design system, typography, Sunda framing language, and navigation back to the master brand. | Approved |
+| DL-592 | Product QR codes should enter the relevant line landing page with a source parameter rather than defaulting every scan to the master homepage. | Approved |
+| DL-593 | Every line landing page must visibly identify itself as part of AYA RAOS and provide access back to the master hub and the other lines. | Approved |
+| DL-594 | Sambal AYA remains the current hero product under AYA Spice Haven and may be featured on the AYA RAOS homepage without redefining AYA RAOS as a sambal-only brand. | Approved |
+
+| DL-595 | Brand Ecosystem Hub v1.4 direction is visually approved as the active refinement direction; subsequent work refines hierarchy and cross-navigation rather than redesigning the approved Sunda system. | Approved |
+| DL-596 | The AYA RAOS first viewport must visually represent all three lines, while Sambal AYA remains the current hero product and conversion entry under AYA Spice Haven. | Approved |
+| DL-597 | Line palette names such as `Spice Red`, `Farm Green`, and `Warm Amber` are internal design-system terminology and are not exposed as customer-facing marketing copy. | Approved |
+| DL-598 | QR-ready source parameters may be preserved from a line landing page into product navigation without activating an analytics provider; source attribution remains non-authoritative until analytics is approved. | Approved |
+| DL-599 | Brand Ecosystem Hub refinement remains on a feature/preview branch until browser QA passes at 1366×768, 1440×900, 1024×768, and 390×844; approval does not authorize Production Launch. | Approved |
+
+---
+
+## 31. Awareness → Response → Action Decisions
+
+| ID | Decision | Status |
+|---|---|---|
+| DL-600 | The AYA RAOS Homepage follows the governing journey `Awareness → Response → Action`; direct commercial conversion does not replace master-brand comprehension. | Approved |
+| DL-601 | Homepage Awareness order is locked as: who AYA RAOS is → why `AYA RAOS / Ada Rasa` → why the ecosystem is divided into three lines → what the three line names are → understand each line in more detail. | Approved |
+| DL-602 | DL-596 is superseded. The first viewport no longer needs to visually represent all three lines; it must establish AYA RAOS / Ada Rasa as the master brand first. Line colors and line selection appear later in the Awareness journey. | Approved — supersedes DL-596 |
+| DL-603 | Dedicated line landing pages are Response-first entry points. A visitor arriving from an approved product QR may be shown concise QR-entry context while retaining a clear route back to AYA RAOS; this does not activate an analytics provider. | Approved |
+| DL-604 | After line awareness, the Homepage Response gateway supports three relevant intents: explore/buy products, recurring business supply, or share an existing customer experience. | Approved |
+| DL-605 | Sambal AYA remains the current hero product under AYA Spice Haven but is placed after ecosystem awareness as a conversion entry, not as the definition of AYA RAOS. | Approved |
+| DL-606 | Testimonials serve two roles: verified trust evidence for prospective customers and an advocacy action for customers who have already enjoyed AYA. | Approved |
+| DL-607 | The v1.5 holistic refinement does not activate payment, shipping automation, analytics, production indexing, or Production Launch. | Approved |
+| DL-608 | The v1.5 technical quality gate includes source validation, local-reference integrity, JS syntax checks, protected integration hashes, accessible focus/reduced-motion behavior, and responsive QA targets; production performance metrics must be measured before launch rather than claimed by this preview. | Approved |

@@ -1,113 +1,116 @@
 # AYA RAOS Website
 
-Premium storefront dan fondasi order AYA RAOS — kuliner Sunda dari Lippo Utara.
+AYA RAOS adalah **brand ecosystem hub** untuk tiga lini: **AYA Spice Haven, AYA Farm, dan AYA Snacks & Drinks**. Website menggunakan static HTML/CSS/JS di Vercel dengan Supabase untuk fondasi order, Business Inquiry, dan testimonial submission.
 
-## Status
+## Current status
 
-- Blueprint: `AYA-WMB-001 v1.5`
-- Implementasi: Package 1 — Frontend Corrective & Positioning Sweep
-- Environment: staging
-- Indexing: `noindex, nofollow, noarchive`
+- Master brand: **AYA RAOS = Ada Rasa**
+- Visual baseline: **Sunda Visual System v1.3 approved**
+- Active implementation scope: **Awareness → Response → Action refinement v1.5 preview**
+- Environment: **staging**
+- Indexing: **disabled** (`noindex, nofollow, noarchive`)
 - Production branch: `main`
-- Recommended preview branch: `preview/blueprint-v1-5-frontend-corrective-v1`
-- Verified baseline: `e6f891786655c7c8c44d7769d263a45bf1b8ef12`
+- Verified main baseline before this preview: `0893aeaacc874694a3a24b4eb292d4e887f4ac5c`
+- WhatsApp source of truth: `AYA_CONFIG.whatsappNumber = 628562646444`
 
-Package 1 memperbaiki UI/UX, positioning, segmentasi, routing, product interactions, dan dokumentasi. Package ini belum mengaktifkan order persistence, payment, shipping quote, inventory, atau recurring B2B persistence.
+## Brand architecture
 
-## Posisi bisnis
+```text
+AYA RAOS — Ada Rasa
+├── AYA Spice Haven      · Spice Red
+├── AYA Farm             · Farm Green
+└── AYA Snacks & Drinks  · Warm Amber
+```
 
-- Hero product: **Sambal AYA**
-- Positioning: **Rasa Sunda. Pedas yang tegas.**
-- Pedas tidak memakai level angka.
-- Semua transaksi satu kali adalah **B2C**.
+`index.html` berfungsi sebagai pintu masuk master brand dengan urutan **Awareness → Response → Action**. Visitor langsung mengenal AYA RAOS dan alasan tiga lini sebelum diarahkan ke conversion. Landing page lini berfungsi sebagai response-first marketing gateway yang dapat menjadi tujuan QR produk:
+
+- `spice.html` — AYA Spice Haven
+- `farm.html` — AYA Farm
+- `snacks.html` — AYA Snacks & Drinks
+
+Sambal AYA tetap menjadi hero product saat ini dan berada di bawah AYA Spice Haven.
+
+## Homepage journey
+
+```text
+AYA RAOS / Ada Rasa
+→ Kenapa RAOS
+→ Kenapa dibagi tiga lini
+→ Apa tiga lini AYA
+→ Kenali detail tiap lini
+→ Response gateway
+→ Product / Business / Testimonial action
+```
+
+Direct visitor mendapat awareness lengkap. Visitor dari QR masuk ke landing page lini yang relevan, melihat konteks lini tersebut, dan tetap dapat kembali mengenal AYA RAOS sebagai master brand.
+
+## Commerce architecture
+
+- Seluruh transaksi satu kali adalah B2C.
 - B2C memiliki konteks **Untuk Rumah** dan **Untuk Acara**.
 - B2B hanya untuk **pasokan komersial berulang**.
-- Restoran dan pusat kuliner Sunda di Lippo Utara adalah visi masa depan, bukan fasilitas yang sudah tersedia.
+- B2C order persistence aktif di staging dan menghasilkan Order ID sebelum WhatsApp continuation.
+- B2B recurring-supply persistence aktif di staging dan menghasilkan Business Inquiry ID.
+- Payment, automatic shipping quotation, inventory, quotation automation, customer account, dan public order tracking masih inactive.
 
-## Route
+## Routes
 
 | Route | Fungsi |
 |---|---|
-| `index.html` | Homepage dan cerita AYA |
-| `products.html` | Katalog retail |
+| `index.html` | AYA RAOS Brand Ecosystem Hub |
+| `spice.html` | AYA Spice Haven landing page / QR gateway |
+| `farm.html` | AYA Farm landing page / QR gateway |
+| `snacks.html` | AYA Snacks & Drinks landing page / QR gateway |
+| `products.html` | Katalog seluruh lini |
 | `product.html?id=...` | Detail produk |
 | `cart.html?context=personal` | B2C Untuk Rumah |
-| `cart.html?context=event` | B2C Untuk Acara dan seluruh kebutuhan satu kali lainnya |
-| `business.html` | Informasi dan draft Pasokan Berkala untuk Usaha |
+| `cart.html?context=event` | B2C Untuk Acara / seluruh one-time purchase lainnya |
+| `business.html` | Recurring-supply Business Inquiry |
 | `testimonials.html` | Testimoni approved |
-| `share.html` | Protected testimonial submission |
-| `information.html` | Cara pesan, acara, pengiriman, pembayaran, pasokan usaha, FAQ, syarat, privasi |
+| `share.html` | Testimonial submission + moderation flow |
+| `information.html` | Cara pesan, pengiriman, payment status, FAQ, syarat, privasi |
 | `404.html` | Recovery page |
 
-## Konfigurasi
+## Config capability state
 
-Source of truth berada di `js/config.js`.
+Source of truth: `js/config.js`.
 
-```js
-window.AYA_CONFIG = {
-  whatsappNumber: "628562646444",
-  environment: "staging",
-  checkout: {
-    mode: "inquiry",
-    orderPersistence: false
-  },
-  businessSupply: {
-    enabled: false
-  },
-  shipping: {
-    enabled: false
-  },
-  payment: {
-    enabled: false
-  }
-};
+```text
+order persistence     : active (staging)
+business persistence  : active (staging)
+shipping integration  : inactive
+payment                : inactive
+ready stock automation : inactive
+SEO indexing           : disabled
+Production Launch      : not approved
 ```
 
-Capability yang belum aktif tidak boleh dipresentasikan sebagai layanan yang sudah berjalan.
+## Design system
 
-## Protected testimonial scope
+- General design system: `css/site.css`
+- Share-specific UI: `css/share.css`
+- Master palette: Heritage Maroon + Cream + Gold
+- Line accents: Spice Red / Farm Green / Warm Amber
+- No parallel frontend CSS system or `!important` patches.
 
-Package 1 tidak boleh mengubah:
-
-- `share.html`
-- `css/share.css`
-- `js/supabase-client.js`
-- `js/testimonial-wizard.js`
-- testimonial Supabase migrations
-
-Visual parity Share Testimonial dikerjakan pada package terpisah.
-
-## Menjalankan preview
+## Preview
 
 ```bash
 python3 -m http.server 4173
 ```
 
-Buka `http://localhost:4173`.
-
-Target viewport:
+Validation targets:
 
 - 1366 × 768
 - 1440 × 900
 - 1024 × 768
 - 390 × 844
 
+Do not commit or merge a new sweep to `main` before preview and validation approval.
+
 ## Governance
 
 - `docs/AYA-RAOS-WEBSITE-MASTER-BLUEPRINT-v1.5.md`
-- `DECISION_LOG.md`
-- `docs/AYA-RAOS-PACKAGE-1-IMPLEMENTATION-MAP.md`
-
-Tidak boleh commit atau merge ke `main` sebelum preview, validation report, dan approval selesai.
-## Phase 2 order foundation
-
-Implemented through `supabase/migrations/20260806153000_aya_phase2_order_foundation.sql`:
-
-- server-validated B2C order persistence;
-- Order ID before WhatsApp continuation;
-- recurring B2B Business Inquiry persistence;
-- Business Inquiry ID;
-- idempotency and basic rate limits;
-- private operational views for service-role access.
-
-Still inactive: payment, automatic shipping quotation, inventory, quotation automation, customer accounts, public order tracking, SEO launch, and Production Launch.
+- `docs/AYA-RAOS-DECISION-LOG-v1.5.md`
+- `docs/AYA-RAOS-BRAND-ECOSYSTEM-HUB-v1.0.md`
+- `docs/AYA-RAOS-PHASE-2-ORDER-FOUNDATION.md`
