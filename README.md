@@ -5,13 +5,14 @@ AYA RAOS adalah **brand ecosystem hub** untuk tiga lini: **AYA Spice Haven, AYA 
 ## Current status
 
 - Master brand: **AYA RAOS = Ada Rasa**
-- Visual baseline: **Sunda Visual System v1.3 approved**
-- Active implementation scope: **Brand Journey & Cultural Depth v1.5.1 preview**
+- Active visual direction: **Holistic Heritage Design Sweep v1.5.2 — preview**
+- Experience model: **Awareness → Understanding → Feeling → Response → Action**
 - Environment: **staging**
 - Indexing: **disabled** (`noindex, nofollow, noarchive`)
 - Production branch: `main`
-- Verified main baseline before this preview: `1acbad056680e32ef655412be6ee85990494a76b`
+- Verified remote `main` baseline before this preview: `31036ee93bfe2fa255c7c40ca914c95d2da76c06`
 - WhatsApp source of truth: `AYA_CONFIG.whatsappNumber = 628562646444`
+- Commit/push/merge status: **not performed — waiting for preview approval**
 
 ## Brand architecture
 
@@ -22,37 +23,63 @@ AYA RAOS — Ada Rasa
 └── AYA Snacks & Drinks  · Warm Amber
 ```
 
-`index.html` berfungsi sebagai pintu masuk master brand dengan urutan **Awareness → Response → Action**. Visitor langsung mengenal AYA RAOS dan alasan tiga lini sebelum diarahkan ke conversion. Landing page lini berfungsi sebagai response-first marketing gateway yang dapat menjadi tujuan QR produk:
+`index.html` adalah master-brand gateway. Dedicated line pages tetap menjadi response-first entry point dan tujuan QR produk:
 
 - `spice.html` — AYA Spice Haven
 - `farm.html` — AYA Farm
 - `snacks.html` — AYA Snacks & Drinks
 
-Sambal AYA tetap menjadi hero product saat ini dan berada di bawah AYA Spice Haven.
+Sambal AYA tetap menjadi hero product saat ini di bawah AYA Spice Haven.
 
-## Homepage journey
+## v1.5.2 holistic experience
+
+### Homepage
 
 ```text
-AYA RAOS / Ada Rasa
-→ Kenapa RAOS
-→ Cerita & budaya: rasa · bahan · meja
-→ Kenapa dibagi tiga lini
-→ Apa tiga lini AYA + kenali detailnya
-→ Response gateway
-→ Product / Business / Testimonial action
+Hero master brand
+→ Makna RAOS
+→ RAOS dalam keseharian
+→ Tiga fungsi + tiga lini
+→ Response gateway + Sambal AYA
+→ Closing discovery gateway
+→ Minimal footer
 ```
 
-Direct visitor mendapat awareness lengkap. Visitor dari QR masuk ke landing page lini yang relevan, melihat konteks lini tersebut, dan tetap dapat kembali mengenal AYA RAOS sebagai master brand.
+Homepage tidak lagi memakai testimonial showcase. Testimoni menjadi destination tersendiri.
 
-## v1.5.1 refinement principles
+### Unified heritage visual language
 
-- **Knowledge & culture first, commerce second.** Budaya Sunda diperdalam melalui makna, konteks makanan, cara menikmati, dan bukti nyata; bukan dengan menambah ornamen tanpa fungsi.
-- Homepage menambahkan layer **FEEL** di antara awareness dan response melalui `#cerita-aya`.
-- Section ecosystem menggabungkan reveal nama tiga lini dan penjelasan detail agar pacing tidak terasa seperti presentation deck berulang.
-- Readability dinaikkan secara sistematis; body utama menjadi 16px dan label/button kritikal tidak lagi bergantung pada ukuran 8–10px.
-- Product Detail memakai label **Cara Menikmati** untuk `suitableUse` yang sudah ada; tidak menambah klaim budaya atau komposisi baru.
-- OpenGraph title/description/image ditambahkan pada halaman shareable utama. Staging tetap `noindex`; ini bukan Production SEO Launch.
-- Foto perjalanan, founder, dapur, proses, sumber bahan, client B2B, capacity, dan cerita asal hanya boleh ditambahkan setelah ada bukti/approval.
+- Heritage Maroon + Cream/Ivory + Warm Gold sebagai master palette.
+- Green hanya aksen AYA Farm; Warm Amber hanya aksen AYA Snacks & Drinks.
+- Ornamen Sunda dipakai sebagai `frame`, `divider`, atau `accent`; bukan dekorasi acak.
+- Editorial serif untuk headline; functional sans untuk navigation, forms, metadata, dan buttons.
+- Transition antar chapter dibuat halus dan konsisten.
+- Product/media surfaces memakai rasio dan safe crop yang stabil sehingga foto final dapat diganti tanpa membongkar layout.
+- Satu design system umum tetap berada di `css/site.css`; tidak ada parallel CSS system atau `!important` patch.
+
+### Card grammar
+
+- **Signature / Heritage** → identity / focal brand moment.
+- **Gateway** → navigation; seluruh kartu clickable.
+- **Information** → explanation; tidak diberi affordance seolah-olah navigation.
+
+## Route treatment v1.5.2
+
+| Route | Treatment |
+|---|---|
+| `index.html` | Master-brand awareness hub; locked heritage journey |
+| `products.html` | Compact heritage Catalog; right filter; 5-card first-view rhythm on 1366 desktop |
+| `product.html?id=...` | Exactly two desktop compositions: Product Decision + Product Understanding |
+| `cart.html?context=personal` | One-viewport desktop B2C order gateway |
+| `cart.html?context=event` | One-viewport event gateway; PIC + WhatsApp only once |
+| `business.html` | Three desktop compositions: positioning, examples/evaluation, 3-step inquiry wizard |
+| `testimonials.html` | Two desktop compositions: featured media + moving story strip |
+| `share.html` | Protected testimonial submission flow; unchanged in this sweep |
+| `information.html` | Information hub; every selected topic packed into one desktop viewport |
+| `spice.html` | Two desktop compositions; identity + Detail-only product discovery |
+| `farm.html` | Two desktop compositions; identity + Detail-only product discovery |
+| `snacks.html` | Two desktop compositions; identity + Detail-only product discovery |
+| `404.html` | Heritage-aligned recovery page |
 
 ## Commerce architecture
 
@@ -63,45 +90,32 @@ Direct visitor mendapat awareness lengkap. Visitor dari QR masuk ke landing page
 - B2B recurring-supply persistence aktif di staging dan menghasilkan Business Inquiry ID.
 - Payment, automatic shipping quotation, inventory, quotation automation, customer account, dan public order tracking masih inactive.
 
-## Routes
-
-| Route | Fungsi |
-|---|---|
-| `index.html` | AYA RAOS Brand Ecosystem Hub |
-| `spice.html` | AYA Spice Haven landing page / QR gateway |
-| `farm.html` | AYA Farm landing page / QR gateway |
-| `snacks.html` | AYA Snacks & Drinks landing page / QR gateway |
-| `products.html` | Katalog seluruh lini |
-| `product.html?id=...` | Detail produk |
-| `cart.html?context=personal` | B2C Untuk Rumah |
-| `cart.html?context=event` | B2C Untuk Acara / seluruh one-time purchase lainnya |
-| `business.html` | Recurring-supply Business Inquiry |
-| `testimonials.html` | Testimoni approved |
-| `share.html` | Testimonial submission + moderation flow |
-| `information.html` | Cara pesan, pengiriman, payment status, FAQ, syarat, privasi |
-| `404.html` | Recovery page |
+Lead time tetap merupakan informasi bisnis valid, tetapi v1.5.2 menampilkannya hanya ketika relevan terhadap keputusan customer; bukan sebagai trust badge yang diulang di seluruh halaman.
 
 ## Config capability state
 
 Source of truth: `js/config.js`.
 
 ```text
-order persistence     : active (staging)
-business persistence  : active (staging)
-shipping integration  : inactive
+order persistence      : active (staging)
+business persistence   : active (staging)
+shipping integration   : inactive
 payment                : inactive
 ready stock automation : inactive
 SEO indexing           : disabled
 Production Launch      : not approved
 ```
 
-## Design system
+## Protected scope
 
-- General design system: `css/site.css`
-- Share-specific UI: `css/share.css`
-- Master palette: Heritage Maroon + Cream + Gold
-- Line accents: Spice Red / Farm Green / Warm Amber
-- No parallel frontend CSS system or `!important` patches.
+This sweep does **not** modify the protected testimonial submission implementation:
+
+- `share.html`
+- `css/share.css`
+- `js/supabase-client.js`
+- `js/testimonial-wizard.js`
+
+It also does not activate payment, shipping-rate integration, auth, inventory, analytics, or Production Launch.
 
 ## Preview
 
@@ -116,12 +130,16 @@ Validation targets:
 - 1024 × 768
 - 390 × 844
 
-Do not commit or merge a new sweep to `main` before preview and validation approval.
+Desktop viewport composition is a design target, not a blanket `100vh/100svh` rule. Mobile stacks naturally according to content.
+
+Do not commit, push, or merge this sweep before complete preview validation and explicit approval.
 
 ## Governance
 
 - `docs/AYA-RAOS-WEBSITE-MASTER-BLUEPRINT-v1.5.md`
 - `docs/AYA-RAOS-DECISION-LOG-v1.5.md`
+- `docs/AYA-RAOS-DESIGN-CORRECTION-MAP-v1.5.2.md`
+- `docs/AYA-RAOS-HOLISTIC-DESIGN-SWEEP-v1.5.2.md`
 - `docs/AYA-RAOS-BRAND-ECOSYSTEM-HUB-v1.0.md`
 - `docs/AYA-RAOS-BRAND-JOURNEY-CULTURAL-DEPTH-v1.5.1.md`
 - `docs/AYA-RAOS-PHASE-2-ORDER-FOUNDATION.md`

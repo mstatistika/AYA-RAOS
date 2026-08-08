@@ -1,15 +1,15 @@
 # AYA RAOS — Website Master Blueprint
 
 **Document ID:** AYA-WMB-001
-**Version:** 1.5 — Hyperlocal Sunda, B2C/B2B Segmentation & Capability Gates
-**Date:** 5 Agustus 2026
+**Version:** 1.5.2 — Holistic Heritage Design Sweep Preview
+**Date:** 8 Agustus 2026
 **Repository:** `mstatistika/AYA-RAOS`
 **Production branch:** `main`
-**Verified repository baseline:** `0893aeaacc874694a3a24b4eb292d4e887f4ac5c`
+**Verified remote repository baseline:** `31036ee93bfe2fa255c7c40ca914c95d2da76c06`
 **Website status:** Staging / `noindex`
 **Document status:** Canonical governance and implementation reference
-**Decision Log coverage:** Through DL-599
-**Implementation authority:** Sunda visual baseline v1.3 and Phase 2 order/B2B persistence are approved on staging. Awareness → Response → Action Brand Ecosystem refinement v1.5 is the active preview scope. Shipping, payment, analytics, SEO launch, and Production Launch remain gated.
+**Decision Log coverage:** Through DL-638
+**Implementation authority:** Sunda visual baseline, Brand Ecosystem architecture, Phase 2 order/B2B persistence, and the locked v1.5.2 Holistic Heritage Design decisions govern this preview. Shipping, payment, analytics, SEO launch, and Production Launch remain gated. No commit/push/merge of v1.5.2 is approved before preview acceptance.
 
 ---
 
@@ -1643,3 +1643,74 @@ The added `Cerita & budaya` layer exists to make Sunda identity understandable t
 ### Shareability
 
 OpenGraph title, description, and image metadata may be present during staging to improve WhatsApp/chat preview behavior. Staging remains noindex. Canonical URLs, structured data, sitemap/indexing, and Production SEO Launch stay inactive until OD-013 is approved.
+
+
+---
+
+## Addendum — Holistic Heritage Design Sweep v1.5.2
+
+This addendum supersedes earlier Blueprint **visual/layout specifics** where they conflict with locked DL-619–DL-638. Business rules, pricing, capability gates, protected integrations, evidence requirements, and transaction boundaries remain in force unless separately superseded.
+
+### Master visual language
+
+- One active Heritage system: deep maroon, cream/ivory, warm gold; line colors are restrained accents.
+- Sunda ornament is structural (`frame`, `divider`, `accent`) rather than decorative noise.
+- Homepage utility bar is removed in the v1.5.2 public shell.
+- Footer is minimal and does not repeat the site's sitemap, CTAs, or operational facts.
+- Lead time is contextual operational information, not a repeated brand/trust motif.
+- Media frames are replacement-safe for future approved photography.
+
+### Homepage composition
+
+`Hero master brand → Makna RAOS → RAOS dalam keseharian → Tiga fungsi/tiga lini → Response + Sambal AYA → Closing discovery gateway → Minimal footer`.
+
+The Homepage does **not** carry a testimonial showcase in v1.5.2; `testimonials.html` is the dedicated proof destination.
+
+### Catalog
+
+- Compact Hero headline: `Pilihan rasa untuk meja Anda.`
+- Right desktop filter.
+- Search/sort/display controls remain readable and untruncated.
+- Five product cards are the first-view desktop rhythm at 1366×768; pagination can still offer approved page-size options.
+- Product card provides Detail plus context-appropriate quick-add.
+
+### Testimonials
+
+Two desktop compositions:
+1. featured real video/photo evidence;
+2. right-moving approved text stories with internal product assets.
+
+No fabricated video, profile thumbnail requirement, fake rating, or public approval-language is introduced.
+
+### Information
+
+The Information hub uses persistent left navigation. Each topic is designed as one focused desktop viewport composition: Cara Pesan, Untuk Acara, Pengiriman, Pembayaran, Pasokan Usaha, FAQ, Syarat, Privasi.
+
+### Pasokan Usaha
+
+Three desktop compositions:
+1. recurring-supply positioning and B2C/B2B definition;
+2. examples and evaluation flow;
+3. three-step Business Inquiry wizard (`Profil Usaha → Kebutuhan Pasokan → Tinjau & Kirim`).
+
+The wizard does not become checkout, public quotation, or public wholesale pricing.
+
+### Cart / one-time order
+
+The B2C Order Gateway is packed into one desktop composition with Data → Pengiriman → Ringkasan → Konfirmasi. Event context stores PIC/WhatsApp once and does not duplicate equivalent identity fields.
+
+### Line landing pages
+
+Each public line page uses exactly two desktop compositions: identity and product discovery. Line cards omit price and route through Detail to `product.html?id=...`. Closing returns to the Homepage `#lini-aya` master ecosystem section.
+
+### Product Detail
+
+Exactly two desktop compositions:
+1. Product Decision;
+2. Product Understanding.
+
+Approved variant price, quantity, subtotal, and cart behavior remain transactional source-of-truth. Product information must use verified data or an honest unavailable state.
+
+### Responsive and protected scope
+
+Desktop viewport composition is a design target, not a blanket `100vh/100svh` implementation rule. Tablet/mobile stack naturally. `share.html`, `css/share.css`, `js/supabase-client.js`, and `js/testimonial-wizard.js` are unchanged in this sweep.

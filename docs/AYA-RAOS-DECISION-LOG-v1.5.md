@@ -717,3 +717,47 @@ Production Launch            : Not approved
 | DL-616 | Key shareable staging pages receive OpenGraph title, description, and image metadata using the current Vercel staging domain; canonical/indexing/structured-data Production Launch remains governed by OD-013. | Approved |
 | DL-617 | Protected testimonial, order, cart, business-inquiry, and Supabase logic remain unchanged in v1.5.1. The Share page may receive non-functional copy/metadata consistency fixes only. | Approved |
 | DL-618 | Human/process/source photography is a future evidence-content track. The website must not simulate production scale, origin, founder history, or client proof through misleading imagery while real documentation is unavailable. | Approved |
+
+---
+
+## 33. Holistic Heritage Design Sweep v1.5.2 Decisions
+
+| ID | Decision | Status |
+|---|---|---|
+| DL-619 | v1.5.2 establishes one unified Heritage visual language across approved public pages: deep maroon, cream/ivory, warm gold, restrained line accents, editorial serif, functional sans, and Sundanese ornament used only as frame, divider, or accent. The sweep is a holistic refinement of the approved ecosystem architecture, not a parallel redesign system. | Approved |
+| DL-620 | Homepage utility bar is removed. The master Hero keeps the large `AYA RAOS. Ada Rasa.` statement on the left with `Wilujeng Sumping`; the right side is reduced to the AYA mark, `SATU NAMA · TIGA DUNIA`, `RAOS`, prominent `RASA`, and the Hero CTAs. Header-to-Hero ornaments must read as one continuous heritage system. | Approved |
+| DL-621 | `Makna RAOS` and `RAOS dalam keseharian` are one narrative chapter split into two desktop compositions. The first explains meaning; the second develops everyday cultural context. They must transition smoothly rather than appear as unrelated stacked sections. | Approved |
+| DL-622 | The three-line ecosystem chapter combines function and line identity. Function is primary and line name secondary: `Menemani hidangan → AYA Spice Haven`, `Berasal dari hasil bumi → AYA Farm`, `Siap dinikmati → AYA Snacks & Drinks`. Each gateway card is clickable over its full surface and routes to its line landing page. | Approved |
+| DL-623 | Homepage Response and Sambal AYA action are consolidated into one desktop composition. Response gateway cards are fully clickable. Sambal AYA remains the primary product action; its secondary action is `Lihat produk lainnya` to the cross-line Catalog rather than a redundant Spice-only destination. | Approved |
+| DL-624 | Homepage testimonial showcase is removed. Testimonial proof has its own route. The Homepage closing becomes a discovery gateway to Product, Information, Pasokan Usaha, and Testimoni without duplicating the full content of those destinations. | Approved |
+| DL-625 | The global footer is reduced to a minimal utility ending. Existing navigation, CTA, operational facts, and page information must not be repeated as a large sitemap footer merely because they exist elsewhere. | Approved |
+| DL-626 | Lead time remains an approved operational fact but is de-emphasized. It appears where transaction decisions require it—such as Product, Order, or Information—not repeatedly as a trust badge across Hero, utility bar, closing strips, and footer. | Approved |
+| DL-627 | Card grammar is standardized: `Signature/Heritage` surfaces express identity; `Gateway` cards express navigation and are fully clickable; `Information` cards explain content and must not imitate navigation behavior. | Approved |
+| DL-628 | Catalog uses a compact heritage Hero with headline `Pilihan rasa untuk meja Anda.`, right-side desktop filter, untruncated search/sort/display controls, and a five-card first-view rhythm at 1366×768. Product cards support a quick-add control at the image/body seam and a clear Detail action. The grid must remain photo-ready through stable aspect ratio and crop behavior. | Approved |
+| DL-629 | Testimonials use two desktop compositions. The first is featured evidence: real video and/or real photo only. Video metadata appears as an integrated lower-third with name and location; no profile thumbnail or separate testimonial text panel is required. Quality-controlled photo artwork may integrate testimonial copy inside the image itself. The second composition uses horizontally moving approved text stories with product images sourced from internal product assets based on the selected product. No fake star rating or fabricated proof is allowed. | Approved |
+| DL-630 | `information.html` remains one information hub, but every topic—Cara Pesan, Untuk Acara, Pengiriman, Pembayaran, Pasokan Usaha, FAQ, Syarat, and Privasi—is packed as one focused desktop viewport composition with persistent left navigation. Operational information appears only in the topic where it is relevant. | Approved |
+| DL-631 | `business.html` uses three desktop compositions: recurring-supply positioning; examples plus evaluation flow; and the recurring-supply inquiry form. The first view retains `Bangun hubungan pasokan, bukan sekadar pesanan besar.` and the defining distinction `Sekali beli = B2C / Pasokan berulang = B2B`. | Approved |
+| DL-632 | The recurring-supply form becomes a three-step wizard contained in one desktop composition: `Profil Usaha → Kebutuhan Pasokan → Tinjau & Kirim`. The final action creates a Business Inquiry, not an order or automated quotation, and preserves the existing persistence/API contract. | Approved |
+| DL-633 | The B2C Cart/Order Gateway is packed into one desktop composition at 1366×768 with four states: Data, Pengiriman, Ringkasan, Konfirmasi. Event context uses one PIC name and one WhatsApp field only; duplicated name/WhatsApp inputs are removed. The stage-one action is `Lanjut Pengiriman`. | Approved |
+| DL-634 | Each line landing page (`spice.html`, `farm.html`, `snacks.html`) uses exactly two desktop compositions: identity and product discovery. Line product cards do not show prices or quick-variant actions; they show image/status/name/context and `Detail`, which routes directly to Product Detail. Closing navigation returns to the master Homepage `#lini-aya` ecosystem section rather than a redundant line catalog CTA. | Approved |
+| DL-635 | Product Detail uses exactly two desktop compositions: `Product Decision` and `Product Understanding`. The first contains gallery, identity/status, variant prices, quantity/subtotal, and Add to Cart. The second contains verified Profile Rasa, Composition, Storage, and Cara Menikmati plus relevant one-time event and ecosystem navigation. | Approved |
+| DL-636 | Product and editorial image slots are designed to be replacement-safe: aspect ratio, object fit, object position, and safe crop are controlled by the layout so future proper photography can replace current assets without breaking composition. | Approved |
+| DL-637 | Desktop composition targets are validated at 1366×768 and 1440×900, but ordinary sections must not be globally forced to `100vh/100svh`. Tablet/mobile adapt by natural stacking and must pass 1024×768 and 390×844 without horizontal overflow or hidden primary actions. | Approved |
+| DL-638 | v1.5.2 does not redesign or alter the protected testimonial submission route and integration. `share.html`, `css/share.css`, `js/supabase-client.js`, and `js/testimonial-wizard.js` remain unchanged. Payment, shipping-rate integration, inventory, auth, analytics, indexing, and Production Launch remain gated. | Approved |
+
+### v1.5.2 status
+
+```text
+Holistic Heritage design direction : Locked
+Homepage composition               : Locked
+Catalog                             : Locked
+Testimonials                        : Locked
+Information                         : Locked
+Pasokan Usaha                       : Locked
+B2B wizard                          : Locked
+B2C Cart/Event gateway              : Locked
+Line landing pages                  : Locked
+Product Detail                      : Locked
+Protected Share                     : Unchanged
+Commit / push / merge               : Pending preview approval
+```

@@ -221,7 +221,7 @@
     const page = document.body.dataset.page;
     const map = {
       home: "home", line: "lines", products: "products", product: "products",
-      testimonials: "testimonials", information: "information", business: "business"
+      testimonials: "testimonials", information: "information", business: "business", cart: ""
     };
     const key = map[page];
     if (key) document.querySelector(`[data-nav="${key}"]`)?.setAttribute("aria-current", "page");

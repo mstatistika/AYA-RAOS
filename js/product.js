@@ -63,7 +63,7 @@
           <button class="button button-primary button-wide" type="submit" ${sold ? "disabled" : ""}>${sold ? "Belum Tersedia" : "Tambah ke Keranjang"}</button>
           <a class="button button-secondary button-wide" href="cart.html?context=personal">Buka Keranjang</a>
         </form>
-        <div class="purchase-facts"><div><strong>Lead time</strong><span>${window.AYA.escapeHTML(product.leadTime)}</span></div><div><strong>Pengiriman</strong><span>${window.AYA.escapeHTML(product.shipping)}</span></div></div>
+        <div class="purchase-facts"><div><strong>Persiapan</strong><span>${window.AYA.escapeHTML(product.leadTime)}</span></div><div><strong>Pengiriman</strong><span>${window.AYA.escapeHTML(product.shipping)}</span></div></div>
       </div>
     </div>`;
 
@@ -75,6 +75,9 @@
       ["Cara Menikmati", product.suitableUse]
     ];
     document.querySelector("[data-product-info-grid]").innerHTML = infoItems.map(([title, value]) => `<article><span>${window.AYA.escapeHTML(title)}</span><p>${window.AYA.escapeHTML(value || "Informasi belum tersedia.")}</p></article>`).join("");
+    const lineReturn = document.querySelector("[data-product-line-return]");
+    if (lineReturn) { lineReturn.href = linePageUrl; lineReturn.textContent = `Kembali ke ${product.line}`; }
+
 
     root.querySelectorAll("[data-thumb]").forEach((button) => button.addEventListener("click", () => {
       root.querySelector("[data-main-image]").src = button.dataset.thumb;

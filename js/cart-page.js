@@ -47,7 +47,7 @@
     };
 
     fillForm(customerForm, draft.customer);
-    fillForm(shippingForm, draft.shipping);
+    fillForm(shippingForm, { ...(draft.shipping || {}), notes: draft.notes || "" });
 
     const invalidateTotal = () => {
       draft.shipping = { ...(draft.shipping || {}), amount: null, status: "integration-pending" };
@@ -161,7 +161,7 @@
       if (!window.AYA.cartDetails().length) messages.push("Keranjang masih kosong.");
       showErrors(messages);
       if (!messages.length) {
-        draft.customer = data; draft.notes = data.notes || ""; window.AYA.saveDraft(draft);
+        draft.customer = data; window.AYA.saveDraft(draft);
       }
       return !messages.length;
     };
@@ -173,7 +173,9 @@
       if (!data.address?.trim()) messages.push("Alamat atau detail lokasi wajib diisi.");
       showErrors(messages);
       if (!messages.length) {
-        draft.shipping = { ...data, amount: null, status: "integration-pending" };
+        draft.notes = data.notes || "";
+        const { notes, ...shippingFields } = data;
+        draft.shipping = { ...shippingFields, amount: null, status: "integration-pending" };
         window.AYA.saveDraft(draft);
       }
       return !messages.length;

@@ -91,12 +91,13 @@
           <img src="${window.AYA.escapeHTML(product.image || product.placeholder)}" alt="${window.AYA.escapeHTML(product.name)}" loading="lazy" width="700" height="700" data-image-fallback="${window.AYA.escapeHTML(product.id)}"/>
           <span class="status-badge status-${product.status}">${window.AYA.escapeHTML(product.publicStatus)}</span>
         </a>
+        <button class="product-quick-add" type="button" data-quick-add="${window.AYA.escapeHTML(product.id)}" ${disabled ? "disabled" : ""} aria-label="${disabled ? "Produk belum dapat ditambahkan" : `Tambahkan ${window.AYA.escapeHTML(product.name)} ke keranjang`}">${disabled ? "×" : "🛒"}</button>
         <div class="product-card-body">
           <div class="product-card-kicker"><a class="line-label line-${product.lineKey}" href="${linePage}">${window.AYA.escapeHTML(product.line)}</a><small>${window.AYA.escapeHTML(product.category)}</small></div>
           <h2><a href="product.html?id=${encodeURIComponent(product.id)}">${window.AYA.escapeHTML(product.name)}</a></h2>
           <p>${window.AYA.escapeHTML(product.description)}</p>
           <div class="product-card-price"><span>${Number.isFinite(price) ? "Mulai" : "Harga"}</span><strong>${Number.isFinite(price) ? window.AYA.formatPrice(price) : "Belum tersedia"}</strong></div>
-          <div class="product-card-actions"><a class="button button-secondary" href="product.html?id=${encodeURIComponent(product.id)}">Detail</a><button class="button button-primary" type="button" data-quick-add="${window.AYA.escapeHTML(product.id)}" ${disabled ? "disabled" : ""}>${disabled ? "Belum Tersedia" : "Tambah"}</button></div>
+          <div class="product-card-actions"><a class="button button-secondary" href="product.html?id=${encodeURIComponent(product.id)}">Lihat Detail</a></div>
         </div>
       </article>`;
     };
