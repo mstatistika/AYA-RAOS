@@ -93,9 +93,7 @@
     if (existingIndex >= 0 && existingIndex !== oldIndex) {
       cart[existingIndex].quantity = normalizeProductQuantity(product, cart[existingIndex].quantity + cart[oldIndex].quantity);
       cart.splice(oldIndex, 1);
-    } else {
-      cart[oldIndex].variantName = newVariantName;
-    }
+    } else cart[oldIndex].variantName = newVariantName;
     return saveCart(cart);
   };
 
@@ -168,12 +166,45 @@
     const img = event.target;
     if (img instanceof HTMLImageElement && img.matches("[data-image-fallback]")) renderImageFallback(img);
   };
-
   document.addEventListener("error", handleImageError, true);
 
   const initImages = () => document.querySelectorAll("img[data-image-fallback]").forEach((img) => {
     if (img.complete && img.naturalWidth === 0) renderImageFallback(img);
   });
+
+  const navHref = (page, hash) => page === "home" ? hash : `index.html${hash}`;
+
+  const renderGlobalHeader = () => {
+    const host = document.querySelector("[data-global-header]");
+    if (!host) return;
+    const page = document.body.dataset.page || "";
+    host.innerHTML = `<header class="site-header site-header-dark" data-site-header>
+      <div class="site-header-inner">
+        <a class="wordmark" href="${escapeHTML(navHref(page, "#beranda"))}" aria-label="AYA RAOS — Beranda"><span class="wordmark-lockup-wrap"><img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" width="190" height="70" alt="AYA RAOS · Ada Rasa"></span></a>
+        <nav class="primary-nav" aria-label="Navigasi utama">
+          <a href="${escapeHTML(navHref(page, "#beranda"))}" data-nav="home">Beranda</a>
+          <a href="${escapeHTML(navHref(page, "#tentang-aya"))}" data-nav="about">Tentang AYA</a>
+          <a href="${escapeHTML(navHref(page, "#lini-aya"))}" data-nav="lines">Lini AYA</a>
+          <a href="products.html" data-nav="products">Produk</a>
+          <a href="testimonials.html" data-nav="testimonials">Testimoni</a>
+          <a href="information.html" data-nav="information">Informasi</a>
+          <a href="business.html" data-nav="business">Pasokan Usaha</a>
+        </nav>
+        <div class="header-actions"><a class="cart-link cart-icon-link" href="cart.html?context=personal" aria-label="Buka keranjang"><svg aria-hidden="true" viewBox="0 0 32 32"><path d="M9 11h14l1 16H8l1-16Z"/><path d="M12 12V9a4 4 0 0 1 8 0v3"/></svg><span class="sr-only">Keranjang</span><span class="cart-count" data-cart-count>0</span></a><button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button></div>
+      </div>
+      <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
+        <a href="${escapeHTML(navHref(page, "#beranda"))}" data-mobile-nav="home">Beranda</a><a href="${escapeHTML(navHref(page, "#tentang-aya"))}" data-mobile-nav="about">Tentang AYA</a><a href="${escapeHTML(navHref(page, "#lini-aya"))}" data-mobile-nav="lines">Lini AYA</a><a href="products.html" data-mobile-nav="products">Produk</a><a href="testimonials.html" data-mobile-nav="testimonials">Testimoni</a><a href="information.html" data-mobile-nav="information">Informasi</a><a href="business.html" data-mobile-nav="business">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a>
+      </nav></header>`;
+  };
+
+  const renderSiteSignature = () => {
+    const main = document.querySelector("main#main");
+    if (!main || main.querySelector(":scope > .site-signature")) return;
+    const signature = document.createElement("div");
+    signature.className = "site-signature";
+    signature.textContent = "© 2026 AYA RAOS";
+    main.append(signature);
+  };
 
   const initMenu = () => {
     const button = document.querySelector("[data-menu-toggle]");
@@ -192,14 +223,40 @@
     });
   };
 
+  const setActiveNav = (key) => {
+    document.querySelectorAll("[data-nav],[data-mobile-nav]").forEach((link) => {
+      const active = link.dataset.nav === key || link.dataset.mobileNav === key;
+      if (active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+  };
+
   const initActiveNav = () => {
     const page = document.body.dataset.page;
     const map = {
-      home: "home", line: "lines", products: "products", product: "products",
-      testimonials: "testimonials", information: "information", business: "business", cart: ""
+      home: "home", about: "about", line: "lines", products: "products", product: "products",
+      testimonials: "testimonials", share: "testimonials", information: "information", business: "business", cart: ""
     };
-    const key = map[page];
-    if (key) document.querySelector(`[data-nav="${key}"]`)?.setAttribute("aria-current", "page");
+    if (page !== "home") { setActiveNav(map[page] || ""); return; }
+
+    const hashMap = { "#tentang-aya": "about", "#lini-aya": "lines", "#mulai-dari-aya": "home", "#beranda": "home" };
+    const syncHash = () => setActiveNav(hashMap[location.hash] || "home");
+    syncHash();
+    addEventListener("hashchange", syncHash);
+    if (!("IntersectionObserver" in window)) return;
+    const sections = [
+      [document.querySelector("#beranda"), "home"],
+      [document.querySelector("#tentang-aya"), "about"],
+      [document.querySelector("#lini-aya"), "lines"],
+      [document.querySelector("#mulai-dari-aya"), "home"]
+    ].filter(([node]) => node);
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries.filter((entry) => entry.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0];
+      if (!visible) return;
+      const found = sections.find(([node]) => node === visible.target);
+      if (found) setActiveNav(found[1]);
+    }, { rootMargin: "-20% 0px -55% 0px", threshold: [0.08,.2,.4,.6] });
+    sections.forEach(([node]) => observer.observe(node));
   };
 
   const validateRuntime = () => {
@@ -211,6 +268,10 @@
     button.addEventListener("click", () => openWhatsApp("Halo AYA RAOS, saya membutuhkan bantuan mengenai informasi pemesanan."));
   });
 
+  const initBusinessWhatsApp = () => document.querySelectorAll("[data-business-whatsapp]").forEach((button) => {
+    button.addEventListener("click", () => openWhatsApp("Halo AYA RAOS, saya ingin mendiskusikan kebutuhan pasokan usaha."));
+  });
+
   window.AYA = Object.freeze({
     escapeHTML, formatPrice, products, getProduct, getVariant,
     getCart, saveCart, addToCart, updateCartItem, changeCartVariant,
@@ -220,6 +281,14 @@
   });
 
   document.addEventListener("DOMContentLoaded", () => {
-    validateRuntime(); updateCartCount(); initImages(); initMenu(); initActiveNav(); initInformationHelp();
+    renderGlobalHeader();
+    renderSiteSignature();
+    validateRuntime();
+    updateCartCount();
+    initImages();
+    initMenu();
+    initActiveNav();
+    initInformationHelp();
+    initBusinessWhatsApp();
   });
 })();
