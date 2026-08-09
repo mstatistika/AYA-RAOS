@@ -35,8 +35,8 @@
       sort: params.get("sort") || "recommended",
       page: Math.max(1, Number(params.get("page")) || 1),
       pageSize: [8, 12].includes(Number(params.get("size"))) ? Number(params.get("size")) : 12,
-      min: Number.isFinite(Number(params.get("min"))) ? Number(params.get("min")) : priceFloor,
-      max: Number.isFinite(Number(params.get("max"))) ? Number(params.get("max")) : priceCeil
+      min: (() => { const raw = params.get("min"); if (raw === null || raw === "") return priceFloor; const value = Number(raw); return Number.isFinite(value) ? value : priceFloor; })(),
+      max: (() => { const raw = params.get("max"); if (raw === null || raw === "") return priceCeil; const value = Number(raw); return Number.isFinite(value) ? value : priceCeil; })()
     };
     state.min = Math.max(priceFloor, Math.min(state.min, priceCeil));
     state.max = Math.max(state.min, Math.min(state.max, priceCeil));
@@ -111,17 +111,9 @@
       return list;
     };
 
-    const mockupImage = Object.freeze({
-      "sambal-bawang": "assets/visual/catalog/catalog-sambal.webp",
-      "bawang-goreng-sumenep": "assets/visual/catalog/catalog-bawang.webp",
-      "rendang-daging-sapi": "assets/visual/catalog/catalog-rendang.webp",
-      "ayam-goreng-kuning": "assets/visual/catalog/catalog-ayam.webp",
-      "dimsum-chili-oil": "assets/visual/catalog/catalog-dimsum.webp"
-    });
-
     const card = (product) => {
       const price = minPrice(product);
-      const image = mockupImage[product.id] || product.image || product.placeholder;
+      const image = product.image || product.placeholder;
       const disabled = !product.orderable;
       return `<article class="product-card">
         <a class="product-card-image" href="product.html?id=${encodeURIComponent(product.id)}">

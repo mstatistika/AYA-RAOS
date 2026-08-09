@@ -52,7 +52,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Pedas yang tegas; karakter bahan mengikuti varian yang dipilih.",
     "spiceCharacter": "Pedas",
-    "supplyEligible": true,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -100,7 +99,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": false,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -144,7 +142,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": false,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -202,7 +199,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": false,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -246,7 +242,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": false,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -296,7 +291,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": false,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -342,7 +336,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": false,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -386,7 +379,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": false,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -413,7 +405,7 @@ window.AYA_PRODUCTS = Object.freeze([
     "featured": false,
     "composition": "Informasi produk sedang disiapkan.",
     "storage": "Simpan di tempat kering dan tertutup.",
-    "suitableUse": "Kebutuhan rumah setelah produk resmi tersedia; pasokan berkala dievaluasi terpisah.",
+    "suitableUse": "Kebutuhan rumah atau usaha setelah produk resmi tersedia.",
     "leadTime": "Belum tersedia untuk dipesan.",
     "shipping": "Informasi pengiriman akan diperbarui.",
     "badges": [],
@@ -427,7 +419,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": true,
     "verifiedInformation": {
       "composition": false,
       "storage": true,
@@ -468,7 +459,6 @@ window.AYA_PRODUCTS = Object.freeze([
     "storageAfterOpening": null,
     "flavorProfile": "Informasi profil rasa sedang disiapkan.",
     "spiceCharacter": null,
-    "supplyEligible": false,
     "verifiedInformation": {
       "composition": false,
       "storage": true,

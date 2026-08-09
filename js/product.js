@@ -27,20 +27,8 @@
     const breadcrumbLine = document.querySelector("[data-breadcrumb-line]");
     if (breadcrumbLine) { breadcrumbLine.textContent = product.line; breadcrumbLine.setAttribute("href", linePageUrl); }
 
-    const mockupSambal = product.id === "sambal-bawang";
-    const approvedHero = Object.freeze({
-      "bawang-goreng-sumenep": "assets/visual/catalog/catalog-bawang.webp",
-      "rendang-daging-sapi": "assets/visual/catalog/catalog-rendang.webp",
-      "ayam-goreng-kuning": "assets/visual/catalog/catalog-ayam.webp",
-      "dimsum-chili-oil": "assets/visual/catalog/catalog-dimsum.webp"
-    });
     const baseImages = (product.images?.length ? product.images : [product.image || product.placeholder]).filter(Boolean);
-    const images = mockupSambal ? [
-      "assets/visual/product/product-sambal-hero.webp",
-      "assets/visual/product/product-thumb-2.webp",
-      "assets/visual/product/product-thumb-3.webp",
-      "assets/visual/product/product-thumb-4.webp"
-    ] : [approvedHero[product.id] || baseImages[0] || product.placeholder, ...baseImages.slice(1)];
+    const images = [...new Set(baseImages.length ? baseImages : [product.placeholder].filter(Boolean))];
     const initial = images[0] || product.placeholder;
     const rules = window.AYA.quantityRules(product);
     const sold = !product.orderable;
@@ -56,8 +44,8 @@
 
     root.innerHTML = `<div class="product-detail-grid ${images.length === 1 ? "product-detail-single" : ""}">
       <div class="product-gallery ${images.length === 1 ? "product-gallery-single" : ""}">
-        <div class="product-main-image ${mockupSambal ? "product-main-image-mockup" : "product-main-image-generic"}"><img src="${window.AYA.escapeHTML(initial)}" alt="${window.AYA.escapeHTML(product.name)}" width="900" height="900" data-main-image data-image-fallback="${window.AYA.escapeHTML(product.id)}"/></div>
-        ${images.length > 1 ? `<div class="product-thumbnails">${images.map((src, index) => `<button type="button" data-thumb="${window.AYA.escapeHTML(src)}" ${index === 0 ? 'aria-current="true"' : ""}><img src="${window.AYA.escapeHTML(index === 0 && mockupSambal ? "assets/visual/product/product-thumb-1.webp" : src)}" alt="Tampilan ${index + 1} ${window.AYA.escapeHTML(product.name)}" width="120" height="90" data-image-fallback="${window.AYA.escapeHTML(product.id)}"/></button>`).join("")}</div>` : ""}
+        <div class="product-main-image"><img src="${window.AYA.escapeHTML(initial)}" alt="${window.AYA.escapeHTML(product.name)}" width="900" height="900" data-main-image data-image-fallback="${window.AYA.escapeHTML(product.id)}"/></div>
+        ${images.length > 1 ? `<div class="product-thumbnails">${images.map((src, index) => `<button type="button" data-thumb="${window.AYA.escapeHTML(src)}" ${index === 0 ? 'aria-current="true"' : ""}><img src="${window.AYA.escapeHTML(src)}" alt="Tampilan ${index + 1} ${window.AYA.escapeHTML(product.name)}" width="120" height="90" data-image-fallback="${window.AYA.escapeHTML(product.id)}"/></button>`).join("")}</div>` : ""}
       </div>
       <div class="purchase-panel">
         <div class="product-heading-meta"><a class="product-line-label line-${product.lineKey}" href="${window.AYA.escapeHTML(linePageUrl)}">${window.AYA.escapeHTML(product.line)}</a><span>${window.AYA.escapeHTML(product.category)}</span></div>
@@ -87,8 +75,14 @@
       "Penyimpanan": `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M23 13h18M25 18h14l4 7v28H21V25l4-7Z"/><path d="M27 34h10M27 39h10"/></svg>`,
       "Cara Menikmati": `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 33h36c0 13-7 20-18 20S14 46 14 33Z"/><path d="M23 16c-4 5 2 7-1 12M33 12c-4 5 2 7-1 12M43 16c-4 5 2 7-1 12"/></svg>`
     };
-    const infoItems = [["Profil Rasa", product.flavorProfile],["Komposisi", product.composition],["Penyimpanan", product.storage],["Cara Menikmati", product.suitableUse]];
-    document.querySelector("[data-product-info-grid]").innerHTML = infoItems.map(([title, value]) => `<article><span class="product-info-icon">${infoIcons[title]}</span><h3>${window.AYA.escapeHTML(title)}</h3><p>${window.AYA.escapeHTML(value || "Informasi belum tersedia.")}</p></article>`).join("");
+    const verified = product.verifiedInformation || {};
+    const infoItems = [
+      ["Profil Rasa", product.flavorProfile || "Informasi profil rasa belum tersedia."],
+      ["Komposisi", verified.composition ? product.composition : "Informasi komposisi belum terverifikasi. Konfirmasi saat pemesanan."],
+      ["Penyimpanan", verified.storage ? product.storage : "Informasi penyimpanan belum terverifikasi. Konfirmasi saat pemesanan."],
+      ["Cara Menikmati", product.suitableUse || "Informasi cara menikmati belum tersedia."]
+    ];
+    document.querySelector("[data-product-info-grid]").innerHTML = infoItems.map(([title, value]) => `<article><span class="product-info-icon">${infoIcons[title]}</span><h3>${window.AYA.escapeHTML(title)}</h3><p>${window.AYA.escapeHTML(value)}</p></article>`).join("");
 
     root.querySelectorAll("[data-thumb]").forEach((button) => button.addEventListener("click", () => {
       root.querySelector("[data-main-image]").src = button.dataset.thumb;

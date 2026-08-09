@@ -1,23 +1,16 @@
-
-# Local archive files
-*.zip
+# Local system files
 .DS_Store
+
+# Local environment / dependencies
 node_modules/
 .env
 .env.*
+.vercel/
 
-.vercel
-
-# AYA RAOS local packages and backups
-.aya-raos-backup*
-AYA-RAOS-*.zip
-AYA-RAOS-FRONTEND-CORRECTIVE-SWEEP*/
-AYA-RAOS-GOVERNANCE-PACKAGE*/
-AYA-RAOS-PACKAGE-1*/
-AYA-RAOS-FULL-SITE-SWEEP*/
-AYA-RAOS-v5-*/
-# AYA RAOS release packages and local backups
+# Generated packages, backups, and temporary workspaces
+*.zip
 .aya-raos-backup*/
-AYA-RAOS-PHASE-2-ORDER-FOUNDATION*/
-AYA-RAOS-PHASE-2-ORDER-FOUNDATION*.zip
+AYA-RAOS-*/
+
+# Supabase local state
 supabase/.temp/

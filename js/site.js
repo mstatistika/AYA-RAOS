@@ -2,9 +2,7 @@
   "use strict";
 
   const CART_KEY = "ayaRaos.cart.v2";
-  const DRAFT_KEY = "ayaRaos.orderDraft.v3";
-  const LEGACY_DRAFT_KEY = "ayaRaos.orderDraft.v2";
-  const MIGRATION_NOTICE_KEY = "ayaRaos.orderDraftMigrationNotice";
+  const DRAFT_KEY = "ayaRaos.orderDraft.phase1";
 
   const escapeHTML = (value = "") => String(value).replace(/[&<>'"]/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;"
@@ -152,34 +150,11 @@
     if (url) window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  const migrateDraft = () => {
-    const current = readJSON(DRAFT_KEY, null);
-    if (current && typeof current === "object") return current;
-    const legacy = readJSON(LEGACY_DRAFT_KEY, null);
-    if (!legacy || typeof legacy !== "object") return {};
-    const context = legacy.orderType === "business" ? "event" : "personal";
-    const migrated = {
-      schemaVersion: 3,
-      context,
-      customer: legacy.customer || {},
-      shipping: legacy.shipping || {},
-      notes: legacy.notes || ""
-    };
-    if (writeJSON(DRAFT_KEY, migrated) && legacy.orderType === "business") {
-      try { sessionStorage.setItem(MIGRATION_NOTICE_KEY, "1"); } catch { /* no-op */ }
-    }
-    return migrated;
+  const readDraft = () => {
+    const current = readJSON(DRAFT_KEY, {});
+    return current && typeof current === "object" ? current : {};
   };
-
-  const readDraft = () => migrateDraft();
-  const saveDraft = (value) => writeJSON(DRAFT_KEY, { ...value, schemaVersion: 3 });
-  const consumeDraftMigrationNotice = () => {
-    try {
-      const exists = sessionStorage.getItem(MIGRATION_NOTICE_KEY) === "1";
-      if (exists) sessionStorage.removeItem(MIGRATION_NOTICE_KEY);
-      return exists;
-    } catch { return false; }
-  };
+  const saveDraft = (value) => writeJSON(DRAFT_KEY, { ...value, schemaVersion: 1 });
 
   const renderImageFallback = (img) => {
     const product = getProduct(img.dataset.imageFallback);
@@ -241,8 +216,7 @@
     getCart, saveCart, addToCart, updateCartItem, changeCartVariant,
     removeCartItem, cartDetails, cartSubtotal, updateCartCount,
     quantityRules, normalizeProductQuantity, toast, showGlobalState,
-    buildWhatsAppUrl, openWhatsApp, readDraft, saveDraft,
-    consumeDraftMigrationNotice
+    buildWhatsAppUrl, openWhatsApp, readDraft, saveDraft
   });
 
   document.addEventListener("DOMContentLoaded", () => {

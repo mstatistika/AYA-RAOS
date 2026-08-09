@@ -18,48 +18,46 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/site.css?v=20260809-catalog-product-v31" />
-  <script defer src="js/config.js?v=20260808-v152"></script>
-  <script defer src="js/data.js?v=20260808-v152"></script>
-  <script defer src="js/site.js?v=20260808-v152"></script>
-  <script defer src="js/catalog.js?v=20260809-v31"></script>
+  <link rel="stylesheet" href="css/site.css?v=20260809-clean-baseline" />
+  <script defer src="js/config.js?v=20260809-clean-baseline"></script>
+  <script defer src="js/data.js?v=20260809-clean-baseline"></script>
+  <script defer src="js/site.js?v=20260809-clean-baseline"></script>
+  <script defer src="js/catalog.js?v=20260809-clean-baseline"></script>
 </head>
 <body data-page="products">
 <a class="skip-link" href="#main">Lewati ke konten utama</a>
-<header class="site-header" data-site-header>
-  <div class="site-header-inner">
+<header class="site-header site-header-dark" data-site-header>
+  <div class="container site-header-inner">
     <a class="wordmark" href="index.html" aria-label="AYA RAOS — Beranda">
-      <img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" alt="AYA RAOS — Ada Rasa" width="210" height="62" />
+      <span class="wordmark-lockup-wrap"><img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" width="190" height="70" alt="" aria-hidden="true" /></span>
     </a>
     <nav class="primary-nav" aria-label="Navigasi utama">
       <a href="index.html" data-nav="home">Beranda</a>
       <a href="index.html#tentang-aya">Tentang AYA</a>
+      <a href="index.html#lini-aya" data-nav="lines">Lini AYA</a>
       <a href="products.html" data-nav="products">Produk</a>
       <a href="testimonials.html" data-nav="testimonials">Testimoni</a>
       <a href="information.html" data-nav="information">Informasi</a>
       <a href="business.html" data-nav="business">Pasokan Usaha</a>
     </nav>
     <div class="header-actions">
-      <a class="cart-link" href="cart.html?context=personal" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-pictogram" aria-hidden="true">🛒</span><span class="cart-count" data-cart-count>0</span></a>
-      <a class="button header-order" href="cart.html?context=personal"><span aria-hidden="true">◉</span> Pesan Sekarang</a>
+      <a class="cart-link cart-icon-link" href="cart.html?context=personal" aria-label="Buka keranjang">
+        <svg aria-hidden="true" viewBox="0 0 32 32"><path d="M9 11h14l1 16H8l1-16Z"/><path d="M12 12V9a4 4 0 0 1 8 0v3"/></svg>
+        <span class="sr-only">Keranjang</span><span class="cart-count" data-cart-count>0</span>
+      </a>
       <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
     </div>
   </div>
   <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
-    <a href="index.html">Beranda</a><a href="index.html#tentang-aya">Tentang AYA</a><a href="products.html">Produk</a><a href="testimonials.html">Testimoni</a><a href="information.html">Informasi</a><a href="business.html">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a>
+    <a href="index.html">Beranda</a><a href="index.html#tentang-aya">Tentang AYA</a><a href="index.html#lini-aya">Lini AYA</a><a href="products.html">Produk</a><a href="testimonials.html">Testimoni</a><a href="information.html">Informasi</a><a href="business.html">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a>
   </nav>
 </header>
 <div class="global-state" data-global-state aria-live="polite" hidden></div>
 <main id="main">
-  <section class="catalog-hero" aria-labelledby="catalog-title">
-    <div class="catalog-ornament catalog-ornament-left" aria-hidden="true"></div>
-    <div class="catalog-ornament catalog-ornament-right" aria-hidden="true"></div>
-    <div class="catalog-landscape" aria-hidden="true"></div>
-    <div class="catalog-hero-inner">
-      <span class="catalog-kicker">KATALOG PRODUK <i aria-hidden="true"></i></span>
-      <h1 id="catalog-title">Pilihan rasa untuk meja Anda.</h1>
-      <div class="catalog-title-rule" aria-hidden="true"><span></span></div>
-      <p>Jelajahi produk dari AYA Spice Haven, AYA Farm,<br />dan AYA Snacks &amp; Drinks dalam satu katalog.</p>
+  <section class="catalog-hero heritage-stage-soft" aria-labelledby="catalog-title">
+    <div class="container page-intro-grid">
+      <div><span class="eyebrow">KATALOG PRODUK</span><h1 id="catalog-title">Pilihan rasa untuk meja Anda.</h1></div>
+      <p>Jelajahi produk dari AYA Spice Haven, AYA Farm, dan AYA Snacks &amp; Drinks dalam satu katalog.</p>
     </div>
   </section>
   <section class="catalog-section">

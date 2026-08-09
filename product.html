@@ -18,37 +18,53 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/site.css?v=20260809-catalog-product-v31" />
-  <script defer src="js/config.js?v=20260808-v152"></script>
-  <script defer src="js/data.js?v=20260808-v152"></script>
-  <script defer src="js/site.js?v=20260808-v152"></script>
-  <script defer src="js/product.js?v=20260809-v31"></script>
+  <link rel="stylesheet" href="css/site.css?v=20260809-clean-baseline" />
+  <script defer src="js/config.js?v=20260809-clean-baseline"></script>
+  <script defer src="js/data.js?v=20260809-clean-baseline"></script>
+  <script defer src="js/site.js?v=20260809-clean-baseline"></script>
+  <script defer src="js/product.js?v=20260809-clean-baseline"></script>
 </head>
 <body data-page="product">
 <a class="skip-link" href="#main">Lewati ke konten utama</a>
-<header class="site-header" data-site-header>
-  <div class="site-header-inner">
-    <a class="wordmark" href="index.html" aria-label="AYA RAOS — Beranda"><img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" alt="AYA RAOS — Ada Rasa" width="210" height="62" /></a>
-    <nav class="primary-nav" aria-label="Navigasi utama"><a href="index.html" data-nav="home">Beranda</a><a href="index.html#tentang-aya">Tentang AYA</a><a href="products.html" data-nav="products">Produk</a><a href="testimonials.html" data-nav="testimonials">Testimoni</a><a href="information.html" data-nav="information">Informasi</a><a href="business.html" data-nav="business">Pasokan Usaha</a></nav>
-    <div class="header-actions"><a class="cart-link" href="cart.html?context=personal" aria-label="Buka keranjang"><span>Keranjang</span><span class="cart-pictogram" aria-hidden="true">🛒</span><span class="cart-count" data-cart-count>0</span></a><a class="button header-order" href="cart.html?context=personal"><span aria-hidden="true">◉</span> Pesan Sekarang</a><button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button></div>
+<header class="site-header site-header-dark" data-site-header>
+  <div class="container site-header-inner">
+    <a class="wordmark" href="index.html" aria-label="AYA RAOS — Beranda">
+      <span class="wordmark-lockup-wrap"><img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" width="190" height="70" alt="" aria-hidden="true" /></span>
+    </a>
+    <nav class="primary-nav" aria-label="Navigasi utama">
+      <a href="index.html" data-nav="home">Beranda</a>
+      <a href="index.html#tentang-aya">Tentang AYA</a>
+      <a href="index.html#lini-aya" data-nav="lines">Lini AYA</a>
+      <a href="products.html" data-nav="products">Produk</a>
+      <a href="testimonials.html" data-nav="testimonials">Testimoni</a>
+      <a href="information.html" data-nav="information">Informasi</a>
+      <a href="business.html" data-nav="business">Pasokan Usaha</a>
+    </nav>
+    <div class="header-actions">
+      <a class="cart-link cart-icon-link" href="cart.html?context=personal" aria-label="Buka keranjang">
+        <svg aria-hidden="true" viewBox="0 0 32 32"><path d="M9 11h14l1 16H8l1-16Z"/><path d="M12 12V9a4 4 0 0 1 8 0v3"/></svg>
+        <span class="sr-only">Keranjang</span><span class="cart-count" data-cart-count>0</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
+    </div>
   </div>
-  <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel><a href="index.html">Beranda</a><a href="index.html#tentang-aya">Tentang AYA</a><a href="products.html">Produk</a><a href="testimonials.html">Testimoni</a><a href="information.html">Informasi</a><a href="business.html">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a></nav>
+  <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
+    <a href="index.html">Beranda</a><a href="index.html#tentang-aya">Tentang AYA</a><a href="index.html#lini-aya">Lini AYA</a><a href="products.html">Produk</a><a href="testimonials.html">Testimoni</a><a href="information.html">Informasi</a><a href="business.html">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a>
+  </nav>
 </header>
 <div class="global-state" data-global-state aria-live="polite" hidden></div>
 <main id="main">
   <section class="product-decision">
-    <div class="product-rail product-rail-left" aria-hidden="true"></div><div class="product-rail product-rail-right" aria-hidden="true"></div>
     <div class="product-decision-inner">
       <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">AYA RAOS</a><span>/</span><a href="index.html#lini-aya" data-breadcrumb-line>Lini AYA</a><span>/</span><span data-breadcrumb-product>Detail</span></nav>
       <div data-product-root><div class="loading-state">Detail produk sedang dimuat.</div></div>
     </div>
   </section>
   <section class="product-understanding" data-product-information hidden>
-    <div class="product-paper-ornament product-paper-ornament-left" aria-hidden="true"></div><div class="product-paper-ornament product-paper-ornament-right" aria-hidden="true"></div>
     <div class="product-understanding-inner">
-      <div class="understanding-heading"><span>AYA RAOS</span><h2>Pahami produk, lalu<br />pilih dengan lebih yakin.</h2><p>Informasi produk ditampilkan sesuai data yang sudah tersedia dan terverifikasi.</p></div>
+      <div class="understanding-heading"><span>AYA RAOS</span><h2>Pahami produk, lalu<br />pilih dengan lebih yakin.</h2><p>Informasi ditampilkan sesuai data yang tersedia. Data yang belum terverifikasi ditandai dengan jelas.</p></div>
       <div class="product-info-grid" data-product-info-grid></div>
-      <div class="product-next"><div class="product-next-art" aria-hidden="true"></div><div class="product-next-copy"><h3>Pesanan satu kali tetap mudah.</h3><p>Untuk acara keluarga, kantor, atau komunitas, gunakan jalur pemesanan acara.</p></div><a class="button product-event-button" href="cart.html?context=event">Pesan untuk Acara <span aria-hidden="true">›</span></a></div>
+      <div class="product-next"><div class="product-next-copy"><h3>Pesanan satu kali tetap mudah.</h3><p>Untuk acara keluarga, kantor, atau komunitas, gunakan jalur pemesanan acara.</p></div><a class="button product-event-button" href="cart.html?context=event">Pesan untuk Acara <span aria-hidden="true">›</span></a></div>
     </div>
   </section>
 </main>
