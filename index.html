@@ -1,113 +1,201 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AYA RAOS — Ada Rasa</title>
-  <meta name="description" content="AYA RAOS adalah rumah besar AYA Spice Haven, AYA Farm, dan AYA Snacks & Drinks." />
-  <meta name="theme-color" content="#651116" />
-  <meta name="robots" content="noindex, nofollow, noarchive" />
-  <meta name="referrer" content="strict-origin-when-cross-origin" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="AYA RAOS" />
-  <meta property="og:locale" content="id_ID" />
-  <meta property="og:title" content="AYA RAOS — Ada Rasa" />
-  <meta property="og:description" content="AYA RAOS adalah rumah besar AYA Spice Haven, AYA Farm, dan AYA Snacks & Drinks." />
-  <meta property="og:image" content="https://aya-raos.vercel.app/assets/visual/home-hero-scene.webp" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="manifest" href="site.webmanifest" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/site.css?v=20260808-v152" />
-    <script defer src="js/config.js?v=20260808-v152"></script>
-    <script defer src="js/data.js?v=20260808-v152"></script>
-    <script defer src="js/site.js?v=20260808-v152"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>AYA RAOS — Ada Rasa</title>
+<meta content="AYA RAOS adalah rumah besar AYA Spice Haven, AYA Farm, dan AYA Snacks &amp; Drinks." name="description"/>
+<meta content="#651116" name="theme-color"/>
+<meta content="noindex, nofollow, noarchive" name="robots"/>
+<meta content="strict-origin-when-cross-origin" name="referrer"/>
+<meta content="website" property="og:type"/>
+<meta content="AYA RAOS" property="og:site_name"/>
+<meta content="id_ID" property="og:locale"/>
+<meta content="AYA RAOS — Ada Rasa" property="og:title"/>
+<meta content="AYA RAOS adalah rumah besar AYA Spice Haven, AYA Farm, dan AYA Snacks &amp; Drinks." property="og:description"/>
+<meta content="https://aya-raos.vercel.app/assets/visual/home-hero-scene.webp" property="og:image"/>
+<link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="site.webmanifest" rel="manifest"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="css/site.css?v=20260809-v381-parity-fix" rel="stylesheet"/>
+<script defer="" src="js/config.js?v=20260808-v152"></script>
+<script defer="" src="js/data.js?v=20260808-v152"></script>
+<script defer="" src="js/site.js?v=20260808-v152"></script>
 </head>
 <body data-page="home">
 <a class="skip-link" href="#main">Lewati ke konten utama</a>
-<header class="site-header" data-site-header>
+<header class="site-header site-header-dark" data-site-header>
   <div class="container site-header-inner">
-    <a class="wordmark" href="index.html" aria-label="AYA RAOS — Beranda">
-      <img src="assets/visual/aya-mark.svg" width="56" height="56" alt="" aria-hidden="true" />
-      <strong>AYA RAOS</strong>
+    <a class="wordmark" href="#beranda" aria-label="AYA RAOS — Beranda">
+      <span class="wordmark-lockup-wrap"><img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" width="190" height="70" alt="" aria-hidden="true" /></span>
     </a>
     <nav class="primary-nav" aria-label="Navigasi utama">
-      <a href="index.html" data-nav="home">Beranda</a>
-      <a href="index.html#tentang-aya">Tentang AYA</a>
-      <a href="index.html#lini-aya" data-nav="lines">Lini AYA</a>
+      <a href="#beranda" data-nav="home">Beranda</a>
+      <a href="#tentang-aya">Tentang AYA</a>
+      <a href="#lini-aya" data-nav="lines">Lini AYA</a>
       <a href="products.html" data-nav="products">Produk</a>
       <a href="testimonials.html" data-nav="testimonials">Testimoni</a>
       <a href="information.html" data-nav="information">Informasi</a>
       <a href="business.html" data-nav="business">Pasokan Usaha</a>
     </nav>
     <div class="header-actions">
-      <a class="cart-link" href="cart.html?context=personal" aria-label="Buka keranjang">Keranjang <span class="cart-count" data-cart-count>0</span></a>
-      <a class="button button-primary header-order" href="cart.html?context=personal">Pesan Sekarang</a>
+      <a class="cart-link cart-icon-link" href="cart.html?context=personal" aria-label="Buka keranjang">
+        <svg aria-hidden="true" viewBox="0 0 32 32"><path d="M9 11h14l1 16H8l1-16Z"/><path d="M12 12V9a4 4 0 0 1 8 0v3"/></svg>
+        <span class="sr-only">Keranjang</span><span class="cart-count" data-cart-count>0</span>
+      </a>
       <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
     </div>
   </div>
   <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
-    <a href="index.html">Beranda</a><a href="index.html#tentang-aya">Tentang AYA</a><a href="index.html#lini-aya">Lini AYA</a><a href="products.html">Produk</a><a href="testimonials.html">Testimoni</a><a href="information.html">Informasi</a><a href="business.html">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a><a class="button button-primary" href="cart.html?context=personal">Pesan Sekarang</a>
+    <a href="#beranda">Beranda</a><a href="#tentang-aya">Tentang AYA</a><a href="#lini-aya">Lini AYA</a><a href="products.html">Produk</a><a href="testimonials.html">Testimoni</a><a href="information.html">Informasi</a><a href="business.html">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a>
   </nav>
 </header>
-<div class="global-state" data-global-state aria-live="polite" hidden></div>
+<div aria-live="polite" class="global-state" data-global-state="" hidden></div>
 <main id="main">
-  <section class="home-hero heritage-stage viewport-home-hero" aria-labelledby="hero-title">
-    <div class="heritage-rail heritage-rail-left" aria-hidden="true"></div><div class="heritage-rail heritage-rail-right" aria-hidden="true"></div>
-    <div class="container home-hero-grid">
-      <div class="home-hero-copy">
-        <span class="eyebrow">WILUJENG SUMPING</span>
-        <h1 id="hero-title">AYA RAOS.<br><em>Ada Rasa.</em></h1>
-        <p>Rumah besar tiga lini AYA. Sebelum memilih produk, kenali dulu makna, fungsi, dan dunia yang menyatukan semuanya. Rumah bagi AYA Spice Haven, AYA Farm, dan AYA Snacks &amp; Drinks.</p>
+  <section aria-labelledby="hero-title" class="live-home-hero home-viewport" id="beranda">
+    <div class="live-home-left">
+      <div class="home-copy-stage">
+        <span class="home-kicker">WILUJENG SUMPING</span>
+        <div aria-hidden="true" class="ornament-rule"></div>
+        <h1 id="hero-title">AYA RAOS.<br/><em>Ada Rasa.</em></h1>
+        <div aria-hidden="true" class="ornament-rule short"></div>
+        <p>Rumah besar tiga lini AYA. Sebelum memilih produk, kenali dulu makna, fungsi, dan dunia yang menyatukan semuanya.</p>
+        <div aria-hidden="true" class="ornament-rule short"></div>
+        <p class="home-lines-copy">Rumah bagi AYA Spice Haven, AYA Farm, dan AYA Snacks &amp; Drinks.</p>
+        <img alt="AYA Spice Haven, AYA Farm, dan AYA Snacks &amp; Drinks" class="home-line-lockups" height="205" src="assets/visual/home-lock/line-lockups-aligned.png" width="620"/>
       </div>
-      <aside class="home-hero-seal" aria-label="Satu nama, tiga dunia">
-        <img src="assets/visual/aya-mark.svg" alt="" width="94" height="94" aria-hidden="true" />
-        <span>SATU NAMA · TIGA DUNIA</span>
-        <strong>RAOS</strong>
-        <em>RASA</em>
-        <div class="home-hero-ctas"><a class="button button-gold" href="products.html">Lihat Produk</a><a class="button button-outline-light" href="cart.html?context=personal">Pesan Sekarang</a></div>
-      </aside>
     </div>
-  </section>
-
-  <section class="meaning-chapter meaning-one viewport-pack" id="tentang-aya" aria-labelledby="meaning-title">
-    <div class="container meaning-grid">
-      <div class="meaning-copy"><span class="eyebrow">MAKNA &amp; BUDAYA</span><h2 id="meaning-title">Makna RAOS, jiwa dari AYA RAOS.</h2><p>“Raos” berarti rasa. Bagi AYA RAOS, rasa menjadi benang merah yang menghubungkan produk dengan fungsi yang berbeda dalam satu keluarga.</p><div class="brand-equation"><span>AYA RAOS</span><b>=</b><strong>ADA RASA</strong></div></div>
-      <figure class="meaning-media"><img src="assets/visual/home-hero-scene.webp" alt="Suasana meja dan produk AYA RAOS" width="855" height="580" loading="lazy" /></figure>
+    <div class="live-home-right">
+      <svg aria-hidden="true" class="home-arch-outline" preserveAspectRatio="none" viewBox="0 0 760 936">
+        <path class="arch-outer" d="M58 936V382C58 324 106 299 168 294C185 238 248 208 315 171C348 152 370 117 380 72C390 117 412 152 445 171C512 208 575 238 592 294C654 299 702 324 702 382V936"></path>
+        <path class="arch-inner" d="M76 936V394C76 340 119 317 181 312C198 259 257 231 326 193C354 177 372 149 380 115C388 149 406 177 434 193C503 231 562 259 579 312C641 317 684 340 684 394V936"></path>
+      </svg>
+      <div class="home-seal-stage">
+        <img alt="Lambang AYA RAOS" class="home-crest" height="298" src="assets/visual/home-lock/crest.png" width="302"/>
+        <p class="seal-kicker">SATU NAMA · TIGA DUNIA</p>
+        <h2>RAOS</h2>
+        <div aria-hidden="true" class="seal-rule"></div>
+        <p class="seal-meaning">RASA</p>
+      </div>
     </div>
+    <a class="home-scroll-cue" href="#tentang-aya" aria-label="Lanjut ke Tentang AYA"><span>Scroll</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
   </section>
 
-  <section class="meaning-chapter meaning-two viewport-pack" aria-labelledby="culture-title">
-    <div class="container culture-grid">
-      <div><span class="eyebrow">RAOS DALAM KESEHARIAN</span><h2 id="culture-title">Rasa hidup dari apa yang kita kenali, siapkan, dan nikmati bersama.</h2><p>Identitas AYA dibawa melalui konteks makanan, cara menikmati, dan informasi produk yang disampaikan dengan jelas.</p></div>
-      <div class="culture-pillars"><article><span>01</span><h3>Rasa yang jujur</h3><p>Kenali karakter produk sebelum memilih.</p></article><article><span>02</span><h3>Bahan yang dikenali</h3><p>Informasi yang sudah terverifikasi ditampilkan apa adanya.</p></article><article><span>03</span><h3>Kehangatan di meja</h3><p>Produk ditempatkan sesuai fungsi dan momen menikmatinya.</p></article></div>
+  <section class="home-about home-viewport home-paper-stage" id="tentang-aya" aria-labelledby="about-title">
+    <div class="home-section-inner about-grid">
+      <div class="about-copy">
+        <span class="home-light-kicker">TENTANG AYA</span>
+        <div class="light-rule" aria-hidden="true"></div>
+        <h2 id="about-title">Rasa yang dekat<br/>dengan <em>keseharian.</em></h2>
+        <div class="light-rule long" aria-hidden="true"></div>
+        <p>Bagi AYA, rasa bukan hanya yang terasa di lidah. Rasa hadir dari perhatian pada setiap detail—dari bahan yang dipilih dengan saksama, proses yang dijaga, hingga kehangatan yang tercipta di setiap momen kebersamaan.</p>
+        <p>AYA hadir dengan pendekatan yang sederhana: produk yang jelas fungsinya, mudah dipahami, dan relevan dengan kehidupan sehari-hari. Kami percaya, hal-hal kecil yang dikerjakan dengan tulus dapat membawa rasa yang berarti.</p>
+        <p>Dari dapur hingga meja makan, AYA hadir untuk menemani keseharian Anda dengan produk yang jelas dan pengalaman yang mudah dinikmati.</p>
+        <div class="about-equation">AYA RAOS <span>=</span> Ada Rasa</div>
+      </div>
+      <div class="about-values" aria-label="Karakter AYA RAOS">
+        <div class="about-value-rail" aria-hidden="true"><span></span><span></span><span></span></div>
+        <article class="about-value">
+          <div class="about-value-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M12 20h24l-2 16H14l-2-16Z"/><path d="M16 16h16M19 11c0-3 2-5 2-7M25 11c0-3 2-5 2-7M31 11c0-3 2-5 2-7"/></svg></div>
+          <div><h3>SEDERHANA</h3><div class="value-rule"></div><p>Tidak dibuat rumit.</p></div>
+        </article>
+        <article class="about-value">
+          <div class="about-value-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 39S8 29 8 17a9 9 0 0 1 16-6 9 9 0 0 1 16 6c0 12-16 22-16 22Z"/><path d="M18 25v9h12v-9l-6-5-6 5Z"/></svg></div>
+          <div><h3>HANGAT</h3><div class="value-rule"></div><p>Dekat dengan momen sehari-hari.</p></div>
+        </article>
+        <article class="about-value">
+          <div class="about-value-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 39V21"/><path d="M23 25C13 25 9 18 9 10c9 0 16 4 16 13"/><path d="M25 25c10 0 14-7 14-15-9 0-16 4-16 13"/></svg></div>
+          <div><h3>JELAS</h3><div class="value-rule"></div><p>Mudah dipahami, mudah dinikmati.</p></div>
+        </article>
+      </div>
     </div>
+    <a class="home-scroll-cue light" href="#lini-aya" aria-label="Lanjut ke Lini AYA"><span>Scroll</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
   </section>
 
-  <section class="lines-gateway viewport-pack" id="lini-aya" aria-labelledby="lines-title">
-    <div class="lines-intro heritage-stage-soft"><div class="container"><span class="eyebrow">SATU KELUARGA · TIGA CARA AYA HADIR</span><h2 id="lines-title">Tiga fungsi utama, tiga lini AYA.</h2><p>Fungsi menjadi pintu masuk utama; nama lini membantu Anda masuk lebih dalam.</p></div></div>
-    <div class="container line-function-grid">
-      <a class="line-function-card line-spice" href="spice.html"><span>01</span><div><h3>Menemani hidangan</h3><strong>AYA Spice Haven</strong><p>Sambal, rempah, pendamping, bumbu, dan lauk berbumbu.</p></div></a>
-      <a class="line-function-card line-farm" href="farm.html"><span>02</span><div><h3>Berasal dari hasil bumi</h3><strong>AYA Farm</strong><p>Hasil pertanian, peternakan, dan produk primer sesuai kesiapan produk.</p></div></a>
-      <a class="line-function-card line-snack" href="snacks.html"><span>03</span><div><h3>Siap dinikmati</h3><strong>AYA Snacks &amp; Drinks</strong><p>Camilan, frozen snack, makanan siap dinikmati, dan minuman.</p></div></a>
+  <section class="home-lines home-viewport home-paper-stage" id="lini-aya" aria-labelledby="lines-title">
+    <div class="home-section-inner lines-inner">
+      <div class="lines-heading">
+        <span class="home-light-kicker">LINI AYA</span>
+        <div class="light-rule centered" aria-hidden="true"></div>
+        <h2 id="lines-title">Satu keluarga, ada <em>tiga rasa</em> yang hadir.</h2>
+        <p>Setiap lini AYA memiliki peran dan fungsi berbeda, namun saling melengkapi untuk menghadirkan pengalaman rasa yang utuh dan bermakna. Dari hasil bumi dan produk primer, menuju olahan berbumbu, hingga camilan dan minuman yang siap dinikmati dalam keseharian.</p>
+      </div>
+      <div class="line-worlds">
+        <a class="line-world farm" href="products.html?line=farm" aria-label="Telusuri produk AYA Farm">
+          <span class="line-number">01</span>
+          <img class="line-mark" src="assets/visual/home-lock/mark-farm.png" alt="AYA Farm"/>
+          <strong class="line-function">TUMBUH</strong>
+          <p>Hasil pertanian, peternakan, dan produk primer pilihan.</p>
+          <div class="line-photo"><img src="assets/visual/home-lock/line-farm.webp" alt="Ilustrasi hasil bumi AYA Farm"/></div>
+          <div class="line-tags"><span>Beras &amp;<br/>Biji-bijian</span><span>Telur &amp;<br/>Unggas</span><span>Sayur &amp;<br/>Hasil Bumi</span></div>
+        </a>
+        <a class="line-world spice" href="products.html?line=spice" aria-label="Telusuri produk AYA Spice Haven">
+          <span class="line-number">02</span>
+          <img class="line-mark" src="assets/visual/home-lock/mark-spice.png" alt="AYA Spice Haven"/>
+          <strong class="line-function">DIOLAH</strong>
+          <p>Sambal, rempah, bumbu, pendamping, dan lauk berbumbu untuk membuat setiap hidangan lebih istimewa.</p>
+          <div class="line-photo"><img src="assets/visual/home-lock/line-spice.webp" alt="Ilustrasi sambal dan rempah AYA Spice Haven"/></div>
+          <div class="line-tags four"><span>Sambal</span><span>Rempah</span><span>Bumbu &amp;<br/>Pendamping</span><span>Lauk<br/>Berbumbu</span></div>
+        </a>
+        <a class="line-world snack" href="products.html?line=snack" aria-label="Telusuri produk AYA Snacks &amp; Drinks">
+          <span class="line-number">03</span>
+          <img class="line-mark" src="assets/visual/home-lock/mark-snack.png" alt="AYA Snacks &amp; Drinks"/>
+          <strong class="line-function">DINIKMATI</strong>
+          <p>Camilan, frozen snack, makanan siap dinikmati, dan minuman untuk setiap momen.</p>
+          <div class="line-photo"><img src="assets/visual/home-lock/line-snack.webp" alt="Ilustrasi camilan dan minuman AYA Snacks &amp; Drinks"/></div>
+          <div class="line-tags"><span>Camilan</span><span>Frozen Snack &amp;<br/>Siap Saji</span><span>Minuman</span></div>
+        </a>
+      </div>
     </div>
-  </section>
-
-  <section class="response-action viewport-pack" aria-labelledby="response-title">
-    <div class="response-layer"><div class="container response-grid"><div><span class="eyebrow">PILIH JALUR</span><h2 id="response-title">Apa yang membawa Anda ke AYA hari ini?</h2></div><div class="response-cards"><a href="products.html"><span>01</span><strong>Saya ingin mencoba AYA</strong><small>Jelajahi produk dari tiga lini.</small></a><a href="business.html"><span>02</span><strong>Saya membutuhkan pasokan rutin</strong><small>Masuk ke jalur kebutuhan berulang.</small></a><a href="share.html"><span>03</span><strong>Saya sudah pernah menikmati AYA</strong><small>Bagikan pengalaman Anda.</small></a></div></div></div>
-    <div class="hero-product-layer"><div class="container hero-product-grid"><figure><img src="assets/visual/catalog-sambal.webp" alt="Sambal Bawang AYA" width="700" height="700" data-image-fallback="sambal-bawang" /></figure><div><span class="eyebrow">MULAI MENIKMATI AYA</span><h2>Mulai dari Sambal AYA.</h2><p>Sambal AYA menjadi pintu rasa utama ke AYA Spice Haven saat ini.</p><div class="hero-product-actions"><a class="button button-primary" href="product.html?id=sambal-bawang">Lihat Sambal AYA</a><a class="button button-secondary" href="products.html">Lihat produk lainnya</a></div></div></div></div>
-  </section>
-
-  <section class="closing-gateway" aria-labelledby="closing-title">
-    <div class="container closing-grid"><div><span class="eyebrow">LANGKAH BERIKUTNYA</span><h2 id="closing-title">Masih ingin mengenal AYA lebih jauh?</h2><p>Pilih informasi yang paling relevan sebelum melanjutkan.</p></div><div class="closing-cards"><a href="products.html"><span>01</span><strong>Jelajahi Produk</strong><small>Lihat seluruh pilihan dari tiga lini AYA.</small></a><a href="information.html"><span>02</span><strong>Cara Pesan &amp; Informasi</strong><small>Pengiriman, pembayaran, FAQ, dan ketentuan.</small></a><a href="business.html"><span>03</span><strong>Pasokan Usaha</strong><small>Untuk kebutuhan komersial yang berulang.</small></a><a href="testimonials.html"><span>04</span><strong>Lihat Testimoni</strong><small>Baca pengalaman pelanggan AYA.</small></a></div></div>
+    <a class="home-scroll-cue light" href="#mulai-dari-aya" aria-label="Lanjut ke Mulai dari AYA"><span>Scroll</span><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></a>
   </section>
 </main>
-<footer class="site-footer">
-  <div class="container footer-minimal">
-    <div><strong>AYA RAOS</strong><span> · Ada Rasa</span></div>
-    <div class="footer-legal"><span>© 2026 AYA RAOS</span><a href="information.html#syarat">Syarat &amp; Ketentuan</a><a href="information.html#privasi">Kebijakan Privasi</a></div>
-  </div>
-</footer>
-<div class="toast-region" aria-live="polite" aria-atomic="true" data-toast-region></div>
-</body></html>
+
+<div class="home-closing-shell" id="mulai-dari-aya">
+  <section class="home-closing home-paper-stage" aria-labelledby="closing-title">
+    <div class="home-section-inner closing-grid">
+      <div class="closing-lead">
+        <span class="home-light-kicker">MULAI DARI AYA</span>
+        <div class="light-rule" aria-hidden="true"></div>
+        <h2 id="closing-title">Mulai dari AYA.</h2>
+        <p>Temukan produk yang dekat dengan kebutuhan Anda, lalu dengarkan bagaimana AYA hadir di meja dan momen keseharian mereka.</p>
+        <div class="closing-main-image"><img src="assets/visual/home-lock/closing-sambal.webp" alt="Sambal dan bahan pendamping AYA"/></div>
+      </div>
+      <div class="closing-card-grid">
+        <a class="closing-card product" href="products.html">
+          <div class="closing-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 39V21"/><path d="M23 25C13 25 9 18 9 10c9 0 16 4 16 13"/><path d="M25 25c10 0 14-7 14-15-9 0-16 4-16 13"/></svg></div>
+          <h3>Telusuri<br/>produk lain</h3>
+          <div class="value-rule"></div>
+          <p>Beragam pilihan produk AYA untuk kebutuhan dan momen keseharian Anda.</p>
+          <div class="closing-card-image"><img src="assets/visual/home-lock/closing-product.webp" alt="Pilihan produk AYA"/></div>
+          <span class="closing-cta">Telusuri produk lain <b aria-hidden="true">→</b></span>
+        </a>
+        <a class="closing-card testimonial" href="testimonials.html">
+          <div class="closing-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="17" cy="18" r="6"/><circle cx="31" cy="18" r="6"/><path d="M6 37c1-8 6-12 11-12s10 4 11 12"/><path d="M20 37c1-8 6-12 11-12s10 4 11 12"/></svg></div>
+          <h3>Dengar<br/>perjalanan rasa<br/>mereka</h3>
+          <div class="value-rule"></div>
+          <p>Cerita nyata dari mereka yang telah menjadikan AYA bagian dari meja dan momen berharga.</p>
+          <div class="closing-card-image"><img src="assets/visual/home-lock/closing-testimonial.webp" alt="Media testimoni pelanggan AYA"/></div>
+          <span class="closing-cta">Dengar perjalanan rasa mereka <b aria-hidden="true">→</b></span>
+        </a>
+      </div>
+      <div class="closing-brand-note">
+        <strong>AYA RAOS</strong>
+        <p><b>Rasa yang dekat dengan keseharian.</b> Jelajahi tiga lini AYA, temukan produk yang sesuai kebutuhan, dan dengarkan cerita rasa dari mereka yang telah menikmatinya.</p>
+      </div>
+    </div>
+  </section>
+  <footer class="site-footer home-complete-footer">
+    <div class="home-footer-facts">
+      <div class="footer-fact"><span class="fact-icon" aria-hidden="true">◌</span><div><strong>Produksi Batch Kecil</strong><small>Dibuat dalam jumlah terbatas.</small></div></div>
+      <div class="footer-fact"><span class="fact-icon" aria-hidden="true">⌖</span><div><strong>Area Layanan</strong><small>Lippo Utara, Jabodetabek, lalu Indonesia sesuai produk.</small></div></div>
+      <div class="footer-fact"><span class="fact-icon" aria-hidden="true">◍</span><div><strong>Jam Respons WhatsApp</strong><small>Senin–Jumat, 09.00–21.00 WIB</small></div></div>
+    </div>
+    <div class="home-footer-legal">© 2026 AYA RAOS</div>
+  </footer>
+</div>
+<div aria-atomic="true" aria-live="polite" class="toast-region" data-toast-region></div>
+</body>
+</html>
