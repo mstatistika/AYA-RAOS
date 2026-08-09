@@ -21,9 +21,10 @@
     if (videoRegion) {
       const item = videos[0];
       if (item?.url) {
-        videoRegion.innerHTML = `<div class="video-frame"><video controls preload="metadata" ${item.poster ? `poster="${window.AYA.escapeHTML(item.poster)}"` : ""}><source src="${window.AYA.escapeHTML(item.url)}"></video><div class="media-lower-third"><strong>${window.AYA.escapeHTML(item.name || "Pelanggan AYA")}</strong></div></div>`;
+        const place = item.city || item.location || item.meta || "";
+        videoRegion.innerHTML = `<div class="video-frame"><video controls preload="metadata" ${item.poster ? `poster="${window.AYA.escapeHTML(item.poster)}"` : ""}><source src="${window.AYA.escapeHTML(item.url)}"></video><div class="media-lower-third"><strong>${window.AYA.escapeHTML(item.name || "Pelanggan AYA")}</strong>${place ? `<span>${window.AYA.escapeHTML(place)}</span>` : ""}</div></div>`;
       } else {
-        videoRegion.innerHTML = `<div class="testimonial-media-empty" aria-label="Video testimoni belum tersedia"><span class="play-mark">▶</span><strong>Cerita pelanggan AYA</strong><small>Video belum tersedia</small></div>`;
+        videoRegion.innerHTML = `<div class="testimonial-media-empty" aria-label="Video pelanggan belum tersedia"><span class="play-mark">▶</span><strong>Video segera hadir</strong><small>Video hanya tampil setelah melalui review AYA.</small></div>`;
       }
     }
 
@@ -35,14 +36,15 @@
 
     if (track) {
       const source = [...texts, ...(featuredItem ? [featuredItem] : [])];
-      const records = source.slice(0, 3);
-      const cards = records.map((item) => {
+      const records = source.length ? source : [{ quote: "Cerita berikutnya akan tampil setelah disetujui.", name: "AYA RAOS", meta: "" }];
+      const card = (item) => {
         const product = productFor(item);
         const image = product?.image || product?.placeholder || "assets/visual/aya-mark.svg";
         return `<article class="story-card"><img src="${window.AYA.escapeHTML(image)}" alt="${window.AYA.escapeHTML(product?.name || "Produk AYA")}" ${product?.id ? `data-image-fallback="${window.AYA.escapeHTML(product.id)}"` : ""}><div class="story-copy"><blockquote>“${window.AYA.escapeHTML(item.quote || "") }”</blockquote><strong>${window.AYA.escapeHTML(item.name || "Pelanggan AYA")}</strong><small>${window.AYA.escapeHTML(item.meta || product?.name || "")}</small></div></article>`;
-      });
-      cards.push('<article class="story-card story-placeholder"><div class="story-copy"><strong>AYA</strong><p>Cerita berikutnya akan tampil setelah disetujui.</p></div></article>');
-      track.innerHTML = cards.join("");
+      };
+      const originals = records.map(card);
+      track.innerHTML = [...originals, ...originals].join("");
+      if (records.length > 1) track.classList.add("is-moving");
     }
 
     const dialog = document.querySelector("[data-media-dialog]");

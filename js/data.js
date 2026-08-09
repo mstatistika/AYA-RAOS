@@ -476,6 +476,7 @@ window.AYA_TESTIMONIALS = Object.freeze({
       "quote": "Enak bangettt.",
       "name": "Pelanggan AYA",
       "meta": "Bawang Goreng · testimoni arsip",
+      "productId": "bawang-goreng-sumenep",
       "image": "assets/images/testimonial-bawang.webp",
       "type": "photo"
     }
@@ -486,6 +487,7 @@ window.AYA_TESTIMONIALS = Object.freeze({
       "quote": "Apapun makanannya, wajib pakai Sambal AYA.",
       "name": "Edgar",
       "meta": "Sambal AYA",
+      "productId": "sambal-bawang",
       "type": "text"
     },
     {
@@ -493,6 +495,7 @@ window.AYA_TESTIMONIALS = Object.freeze({
       "quote": "Makan di CFC pun tetap pakai Sambal Bawang AYA.",
       "name": "@Rafaelers",
       "meta": "Sambal Bawang",
+      "productId": "sambal-bawang",
       "type": "text"
     }
   ]

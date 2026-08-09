@@ -28,6 +28,7 @@
     const storyLayout = form.querySelector("[data-story-layout]");
     const storyInput = form.elements.testimonial;
     const characterCount = form.querySelector("[data-character-count]");
+    const storyAudioHelp = form.querySelector("[data-story-audio-help]");
 
     const mediaWorkspace = form.querySelector("[data-media-workspace]");
     const mediaTitle = form.querySelector("[data-media-title]");
@@ -78,7 +79,8 @@
       externalUrl: "",
       objectUrl: null,
       uploadedPath: null,
-      previousFocus: null
+      previousFocus: null,
+      audioStatus: "unknown"
     };
 
     const contexts = {
@@ -217,6 +219,8 @@
       mediaStatus.textContent = "Belum dipilih";
       mediaStatus.classList.remove("is-ready");
 
+      if (state.format === "video") state.audioStatus = "unknown";
+      updateStoryRequirement();
       if (!keepMethod) {
         state.mediaMethod = null;
         mediaLinkField.hidden = true;
@@ -270,12 +274,86 @@
       }
     }
 
+    function updateStoryRequirement() {
+      const videoOptional = state.format === "video" && state.audioStatus === "audible";
+      storyInput.required = !videoOptional;
+      if (!storyAudioHelp) return;
+      if (state.format === "text") storyAudioHelp.textContent = "Tulisan wajib untuk testimoni tulisan.";
+      else if (state.format === "photo") storyAudioHelp.textContent = "Tulisan wajib untuk testimoni foto agar admin dapat menyusun photo + cerita dalam satu frame final.";
+      else if (state.audioStatus === "checking") storyAudioHelp.textContent = "Menganalisis audio video… Cerita pendamping tetap wajib sampai suara berhasil terdeteksi.";
+      else if (state.audioStatus === "audible") storyAudioHelp.textContent = "Suara terdeteksi. Cerita pendamping opsional; Anda tetap boleh menambah caption untuk membantu proses review.";
+      else if (state.audioStatus === "silent") storyAudioHelp.textContent = "Video terdeteksi tanpa suara yang berarti. Cerita pendamping wajib agar pengalaman Anda tetap dapat dipahami.";
+      else storyAudioHelp.textContent = "Audio belum dapat dipastikan. Cerita pendamping wajib sebagai fallback aman.";
+    }
+
+    async function detectVideoSound(file) {
+      if (!file || !file.type.startsWith("video/")) return "unknown";
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return "unknown";
+      const url = URL.createObjectURL(file);
+      const video = document.createElement("video");
+      video.src = url;
+      video.preload = "auto";
+      video.playsInline = true;
+      video.crossOrigin = "anonymous";
+      video.style.position = "fixed";
+      video.style.width = "1px";
+      video.style.height = "1px";
+      video.style.opacity = "0";
+      video.style.pointerEvents = "none";
+      document.body.append(video);
+      const ctx = new AudioCtx();
+      let source, analyser, gain, timer;
+      try {
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error("metadata-timeout")), 4500);
+          video.addEventListener("loadeddata", () => { clearTimeout(timeout); resolve(); }, { once: true });
+          video.addEventListener("error", () => { clearTimeout(timeout); reject(new Error("video-error")); }, { once: true });
+        });
+        source = ctx.createMediaElementSource(video);
+        analyser = ctx.createAnalyser();
+        analyser.fftSize = 1024;
+        gain = ctx.createGain();
+        gain.gain.value = 0;
+        source.connect(analyser);
+        analyser.connect(gain);
+        gain.connect(ctx.destination);
+        await ctx.resume();
+        if (Number.isFinite(video.duration) && video.duration > 2) video.currentTime = Math.min(1, video.duration * .15);
+        await video.play();
+        const samples = new Uint8Array(analyser.fftSize);
+        let peak = 0;
+        const started = performance.now();
+        await new Promise((resolve) => {
+          const sample = () => {
+            analyser.getByteTimeDomainData(samples);
+            for (const value of samples) peak = Math.max(peak, Math.abs(value - 128));
+            if (performance.now() - started >= 1600 || video.ended) { resolve(); return; }
+            timer = requestAnimationFrame(sample);
+          };
+          sample();
+        });
+        video.pause();
+        return peak >= 3 ? "audible" : "silent";
+      } catch {
+        return "unknown";
+      } finally {
+        if (timer) cancelAnimationFrame(timer);
+        try { video.pause(); } catch {}
+        try { source?.disconnect(); analyser?.disconnect(); gain?.disconnect(); } catch {}
+        try { await ctx.close(); } catch {}
+        video.remove();
+        URL.revokeObjectURL(url);
+      }
+    }
+
     function setFormat(nextFormat, options = {}) {
       const initial = Boolean(options.initial);
       const normalized = ["text", "photo", "video"].includes(nextFormat) ? nextFormat : "text";
 
       if (!initial && normalized !== state.format) clearMediaSelection();
       state.format = normalized;
+      state.audioStatus = normalized === "video" ? "unknown" : "not-applicable";
 
       formatRadios.forEach(radio => {
         radio.checked = radio.value === normalized;
@@ -287,6 +365,7 @@
 
       if (isText) {
         clearMediaSelection();
+        updateStoryRequirement();
         return;
       }
 
@@ -300,6 +379,7 @@
       mediaLinkHelp.textContent = rules.linkHelp;
       mediaUrlInput.placeholder = rules.placeholder;
       renderMediaSelection();
+      updateStoryRequirement();
     }
 
     function validateFile(file) {
@@ -379,13 +459,14 @@
       const formatLabels = {
         text: "Tulisan",
         photo: "Foto + tulisan",
-        video: "Video + tulisan"
+        video: "Video"
       };
 
       form.querySelector("[data-review-name]").textContent = form.elements.customerName.value.trim() || "—";
+      form.querySelector("[data-review-city]") && (form.querySelector("[data-review-city]").textContent = form.elements.city.value.trim() || "—");
       form.querySelector("[data-review-product]").textContent = getProductName(form.elements.product.value);
       form.querySelector("[data-review-format]").textContent = formatLabels[state.format];
-      form.querySelector("[data-review-story]").textContent = `“${storyInput.value.trim()}”`;
+      form.querySelector("[data-review-story]").textContent = storyInput.value.trim() ? `“${storyInput.value.trim()}”` : "Tidak ada cerita pendamping.";
 
       resetReviewMedia();
       const isText = state.format === "text";
@@ -568,12 +649,23 @@
       mediaLinkToggle.setAttribute("aria-expanded", "false");
       state.objectUrl = URL.createObjectURL(file);
       renderMediaSelection();
+      if (state.format === "video") {
+        state.audioStatus = "checking";
+        updateStoryRequirement();
+        detectVideoSound(file).then((result) => {
+          if (state.mediaFile !== file || state.format !== "video") return;
+          state.audioStatus = result;
+          updateStoryRequirement();
+        });
+      }
     });
 
     mediaUrlInput.addEventListener("input", () => {
       state.mediaMethod = "link";
       state.externalUrl = mediaUrlInput.value.trim();
       state.uploadedPath = null;
+      if (state.format === "video") state.audioStatus = "unknown";
+      updateStoryRequirement();
       renderMediaSelection();
     });
 
