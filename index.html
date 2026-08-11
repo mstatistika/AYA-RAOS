@@ -20,17 +20,17 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/site.css?v=20260809-locked-global-v1" rel="stylesheet"/>
-<script defer="" src="js/config.js?v=20260809-locked-global-v1"></script>
-<script defer="" src="js/data.js?v=20260809-locked-global-v1"></script>
-<script defer="" src="js/site.js?v=20260809-locked-global-v1"></script>
+<link href="css/site.css?v=20260811-homepage-text-align-v20" rel="stylesheet"/>
+<script defer="" src="js/config.js?v=20260810-final-matrix-v3"></script>
+<script defer="" src="js/data.js?v=20260810-final-matrix-v3"></script>
+<script defer="" src="js/site.js?v=20260810-final-matrix-v3"></script>
 </head>
 <body data-page="home">
 <a class="skip-link" href="#main">Lewati ke konten utama</a><div data-global-header=""></div>
 <div aria-live="polite" class="global-state" data-global-state="" hidden=""></div>
 <main id="main">
 <section aria-labelledby="hero-title" class="live-home-hero home-viewport" id="beranda">
-<div class="live-home-left">
+<div class="live-home-left" id="mobile-hero-copy">
 <div class="home-copy-stage">
 <span class="home-kicker">WILUJENG SUMPING</span>
 <div aria-hidden="true" class="ornament-rule"></div>
@@ -41,6 +41,7 @@
 <p class="home-lines-copy">Rumah bagi AYA Spice Haven, AYA Farm, dan AYA Snacks &amp; Drinks.</p>
 <img alt="AYA Spice Haven, AYA Farm, dan AYA Snacks &amp; Drinks" class="home-line-lockups" height="205" src="assets/visual/home-lock/line-lockups-aligned.png" width="620"/>
 </div>
+<a aria-label="Lanjut ke Tentang AYA" class="home-scroll-cue mobile-only-cue mobile-copy-cue" href="#tentang-aya"><span>Scroll</span><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></a>
 </div>
 <div class="live-home-right">
 <svg aria-hidden="true" class="home-arch-outline" preserveaspectratio="none" viewbox="0 0 760 936">
@@ -54,8 +55,9 @@
 <div aria-hidden="true" class="seal-rule"></div>
 <p class="seal-meaning">RASA</p>
 </div>
+<a aria-label="Lanjut ke pengantar AYA RAOS" class="home-scroll-cue mobile-only-cue mobile-brand-cue" href="#mobile-hero-copy"><span>Scroll</span><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></a>
 </div>
-<a aria-label="Lanjut ke Tentang AYA" class="home-scroll-cue" href="#tentang-aya"><span>Scroll</span><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></a>
+<a aria-label="Lanjut ke Tentang AYA" class="home-scroll-cue desktop-only-cue" href="#tentang-aya"><span>Scroll</span><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></a>
 </section>
 <section aria-labelledby="about-title" class="home-about home-viewport home-paper-stage" id="tentang-aya">
 <div class="home-section-inner about-grid">
@@ -97,66 +99,119 @@
 </div>
 <div class="line-worlds">
 <a aria-label="Kenali AYA Farm" class="line-world farm" href="farm.html">
+<div class="line-world-copy">
 <span class="line-number">01</span>
 <img alt="AYA Farm" class="line-mark" src="assets/visual/home-lock/mark-farm.png"/>
 <strong class="line-function">TUMBUH</strong>
+<div aria-hidden="true" class="line-world-rule"></div>
 <p>Hasil pertanian, peternakan, dan produk primer pilihan.</p>
-<div class="line-photo"><img alt="Ilustrasi hasil bumi AYA Farm" src="assets/visual/home-lock/line-farm.webp"/></div>
-<div class="line-tags"><span>Beras &amp;<br/>Biji-bijian</span><span>Telur &amp;<br/>Unggas</span><span>Sayur &amp;<br/>Hasil Bumi</span></div>
+<span class="line-world-cta">Pelajari lebih lanjut <b aria-hidden="true">→</b></span>
+</div>
+<div class="line-photo"><img alt="Hasil bumi dan produk primer AYA Farm" src="assets/visual/home-lock/line-farm-locked.webp"/></div>
+<div class="line-tags four" aria-label="Kategori AYA Farm">
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M16 27V7"></path><path d="M16 11c-5 0-8-3-8-7 5 0 8 2 8 7Z"></path><path d="M16 16c5 0 8-3 8-7-5 0-8 2-8 7Z"></path><path d="M16 21c-4 0-6-2-6-5 4 0 6 2 6 5Z"></path></svg></span><span>Beras &amp;<br/>Biji-bijian</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M16 5c5 6 8 11 8 15a8 8 0 0 1-16 0c0-4 3-9 8-15Z"></path><path d="M12 22c2 2 6 2 8 0"></path></svg></span><span>Telur &amp;<br/>Unggas</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M16 27V14"></path><path d="M15 18C8 18 5 13 5 7c7 0 11 3 11 10"></path><path d="M17 18c7 0 10-5 10-11-7 0-11 3-11 10"></path></svg></span><span>Sayur &amp;<br/>Hasil Bumi</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M16 27V12"></path><path d="M16 14c-6 0-9-4-9-9 6 0 10 3 10 9"></path><path d="M17 19c6 0 9-4 9-9-6 0-10 3-10 9"></path><path d="M12 24c2-2 6-2 8 0"></path></svg></span><span>Rempah<br/>Segar</span></span>
+</div>
 </a>
 <a aria-label="Kenali AYA Spice Haven" class="line-world spice" href="spice.html">
+<div class="line-world-copy">
 <span class="line-number">02</span>
 <img alt="AYA Spice Haven" class="line-mark" src="assets/visual/home-lock/mark-spice.png"/>
 <strong class="line-function">DIOLAH</strong>
-<p>Sambal, rempah, bumbu, pendamping, dan lauk berbumbu untuk membuat setiap hidangan lebih istimewa.</p>
-<div class="line-photo"><img alt="Ilustrasi sambal dan rempah AYA Spice Haven" src="assets/visual/home-lock/line-spice.webp"/></div>
-<div class="line-tags four"><span>Sambal</span><span>Rempah</span><span>Bumbu &amp;<br/>Pendamping</span><span>Lauk<br/>Berbumbu</span></div>
+<div aria-hidden="true" class="line-world-rule"></div>
+<p>Sambal, rempah, bumbu, pendamping, dan lauk berbumbu untuk menemani hidangan sehari-hari.</p>
+<span class="line-world-cta">Pelajari lebih lanjut <b aria-hidden="true">→</b></span>
+</div>
+<div class="line-photo"><img alt="Sambal dan rempah AYA Spice Haven" src="assets/visual/home-lock/line-spice-locked.webp"/></div>
+<div class="line-tags four" aria-label="Kategori AYA Spice Haven">
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M25 7c-4 1-6 3-7 6"></path><path d="M19 12c4 3 5 7 2 10-4 5-11 4-15 2 4-1 7-4 9-8 1-2 2-3 4-4Z"></path></svg></span><span>Sambal</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="m16 5 2.5 6 6.5-1.5-3.5 5.5 4.5 4.5-6.5.5L16 26l-3.5-6-6.5-.5 4.5-4.5L7 9.5l6.5 1.5L16 5Z"></path></svg></span><span>Rempah</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M7 16h18l-2 10H9L7 16Z"></path><path d="M11 12h10"></path><path d="M20 5 12 17"></path></svg></span><span>Bumbu &amp;<br/>Pendamping</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M6 22h20"></path><path d="M9 22c0-6 3-10 7-10s7 4 7 10"></path><path d="M16 8v4"></path><path d="M13 8h6"></path></svg></span><span>Lauk<br/>Berbumbu</span></span>
+</div>
 </a>
 <a aria-label="Kenali AYA Snacks &amp; Drinks" class="line-world snack" href="snacks.html">
+<div class="line-world-copy">
 <span class="line-number">03</span>
 <img alt="AYA Snacks &amp; Drinks" class="line-mark" src="assets/visual/home-lock/mark-snack.png"/>
 <strong class="line-function">DINIKMATI</strong>
+<div aria-hidden="true" class="line-world-rule"></div>
 <p>Camilan, frozen snack, makanan siap dinikmati, dan minuman untuk setiap momen.</p>
-<div class="line-photo"><img alt="Ilustrasi camilan dan minuman AYA Snacks &amp; Drinks" src="assets/visual/home-lock/line-snack.webp"/></div>
-<div class="line-tags"><span>Camilan</span><span>Frozen Snack &amp;<br/>Siap Saji</span><span>Minuman</span></div>
+<span class="line-world-cta">Pelajari lebih lanjut <b aria-hidden="true">→</b></span>
+</div>
+<div class="line-photo"><img alt="Camilan dan minuman AYA Snacks &amp; Drinks" src="assets/visual/home-lock/line-snack-locked.webp"/></div>
+<div class="line-tags four" aria-label="Kategori AYA Snacks &amp; Drinks">
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M8 11h16l-2 15H10L8 11Z"></path><path d="M11 11c0-3 2-5 5-5s5 2 5 5"></path><path d="M12 17h8"></path></svg></span><span>Camilan</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M16 5v22M6.5 10.5l19 11M6.5 21.5l19-11"></path><path d="m16 5-3 3M16 5l3 3M16 27l-3-3M16 27l3-3"></path></svg></span><span>Frozen Snack &amp;<br/>Siap Saji</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M10 9h12l-1 17H11L10 9Z"></path><path d="M13 9 19 5"></path><path d="M20 5h4"></path></svg></span><span>Minuman</span></span>
+<span class="line-category"><span aria-hidden="true" class="line-category-icon"><svg viewBox="0 0 32 32"><path d="M6 24h20"></path><path d="M9 24c0-7 3-11 7-11s7 4 7 11"></path><path d="M16 8v5"></path><path d="M12 8h8"></path></svg></span><span>Hidangan<br/>Praktis</span></span>
+</div>
 </a>
 </div>
 </div>
-<a aria-label="Lanjut ke Mulai dari AYA" class="home-scroll-cue light" href="#mulai-dari-aya"><span>Scroll</span><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg></a>
 </section>
 <div class="home-closing-shell" id="mulai-dari-aya">
 <section aria-labelledby="closing-title" class="home-closing home-paper-stage">
 <div class="home-section-inner closing-grid">
 <div class="closing-lead">
+<div class="closing-lead-copy">
 <span class="home-light-kicker">MULAI DARI AYA</span>
 <div aria-hidden="true" class="light-rule"></div>
 <h2 id="closing-title">Mulai dari AYA.</h2>
 <p>Temukan produk yang dekat dengan kebutuhan Anda, lalu dengarkan bagaimana AYA hadir di meja dan momen keseharian mereka.</p>
-<div class="closing-main-image"><img alt="Sambal dan bahan pendamping AYA" src="assets/visual/home-lock/closing-sambal.webp"/></div>
+<div class="closing-brand-note">
+<strong>AYA RAOS</strong>
+<p><b>Rasa yang dekat dengan keseharian.</b><br/>Jelajahi tiga lini AYA, temukan produk yang sesuai kebutuhan Anda, dan rasakan ceritanya.</p>
+</div>
+</div>
+<div class="closing-main-image"><img alt="Sambal AYA dan pendamping hidangan" src="assets/visual/home-lock/closing-main-approved-v2.webp"/></div>
 </div>
 <div class="closing-card-grid">
 <a class="closing-card product" href="products.html">
-<div aria-hidden="true" class="closing-card-icon"><svg viewbox="0 0 48 48"><path d="M24 39V21"></path><path d="M23 25C13 25 9 18 9 10c9 0 16 4 16 13"></path><path d="M25 25c10 0 14-7 14-15-9 0-16 4-16 13"></path></svg></div>
+<div aria-hidden="true" class="closing-card-icon product-discovery-icon"><svg viewBox="0 0 72 72">
+<path d="M12 43h35"></path>
+<path d="M15 43c2 10 8 15 15 15s13-5 15-15"></path>
+<path d="M20 38c3-6 8-10 14-11"></path>
+<circle cx="45" cy="24" r="12"></circle>
+<path d="m54 33 10 10"></path>
+<path d="M27 26c3-4 7-6 12-6"></path>
+<path d="m13 13 2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5Z"></path>
+</svg></div>
+<span class="closing-card-kicker">PILIHAN PRODUK</span>
 <h3>Telusuri<br/>produk lain</h3>
 <div class="value-rule"></div>
 <p>Beragam pilihan produk AYA untuk kebutuhan dan momen keseharian Anda.</p>
-<span class="closing-cta">Telusuri produk lain <b aria-hidden="true">→</b></span><div class="closing-card-image"><img alt="Pilihan produk AYA" src="assets/visual/home-lock/closing-product.webp"/></div>
-
+<div class="closing-card-image"><img alt="Pilihan produk AYA" src="assets/visual/home-lock/closing-product-locked.webp"/></div>
+<span class="closing-cta">Lihat semua produk <b aria-hidden="true">→</b></span>
 </a>
 <a class="closing-card testimonial" href="testimonials.html">
-<div aria-hidden="true" class="closing-card-icon"><svg viewbox="0 0 48 48"><circle cx="17" cy="18" r="6"></circle><circle cx="31" cy="18" r="6"></circle><path d="M6 37c1-8 6-12 11-12s10 4 11 12"></path><path d="M20 37c1-8 6-12 11-12s10 4 11 12"></path></svg></div>
-<h3>Dengar<br/>perjalanan rasa<br/>mereka</h3>
+<div aria-hidden="true" class="closing-card-icon testimony-community-icon"><svg viewBox="0 0 72 72">
+<circle cx="36" cy="18" r="7"></circle>
+<circle cx="18" cy="25" r="5.5"></circle>
+<circle cx="54" cy="25" r="5.5"></circle>
+<path d="M25 44c1-11 5-17 11-17s10 6 11 17"></path>
+<path d="M7 43c1-8 5-13 11-13 4 0 7 2 10 6"></path>
+<path d="M65 43c-1-8-5-13-11-13-4 0-7 2-10 6"></path>
+<path d="M36 51v12"></path>
+<path d="M35 58c-8 0-15-3-21-8"></path>
+<path d="M37 58c8 0 15-3 21-8"></path>
+<path d="M25 57c-5 2-9 1-13-2"></path>
+<path d="M47 57c5 2 9 1 13-2"></path>
+</svg></div>
+<span class="closing-card-kicker">CERITA RASA</span>
+<h3>Dengar<br/>perjalanan<br/>rasa mereka</h3>
 <div class="value-rule"></div>
 <p>Cerita nyata dari mereka yang telah menjadikan AYA bagian dari meja dan momen berharga.</p>
-<span class="closing-cta">Dengar perjalanan rasa mereka <b aria-hidden="true">→</b></span><div class="closing-card-image"><img alt="Media testimoni pelanggan AYA" src="assets/visual/home-lock/closing-testimonial.webp"/></div>
-
+<div class="closing-card-image"><img alt="Kebersamaan pelanggan AYA" src="assets/visual/home-lock/closing-testimonial-locked.webp"/></div>
+<span class="closing-cta">Baca cerita mereka <b aria-hidden="true">→</b></span>
 </a>
 </div>
-<div class="closing-brand-note"><strong>AYA RAOS</strong><p><b>Rasa yang dekat dengan keseharian.</b> Produksi batch kecil · Area utama Lippo Utara &amp; Jabodetabek · Lead time 2–3 hari setelah pembayaran diterima.</p></div>
 </div>
 </section>
-</div></main>
-
-<div aria-atomic="true" aria-live="polite" class="toast-region" data-toast-region=""></div>
+</div>
+</main>
+<div class="site-signature" data-site-signature=""></div><div aria-atomic="true" aria-live="polite" class="toast-region" data-toast-region=""></div>
 </body>
 </html>
