@@ -1,15 +1,16 @@
 # AYA RAOS — Current Development Baseline
 
-**Status:** Canonical development baseline  
-**Date:** 9 Agustus 2026  
-**Repository:** `mstatistika/AYA-RAOS`  
-**Production branch:** `main`  
-**Website state:** staging / `noindex`  
-**Sanitized from:** `6978c05ba33ad3100f65b6a67ee0287fa9a759b4`
+**Status:** Canonical development baseline
+**Date:** 14 Agustus 2026
+**Repository:** `mstatistika/AYA-RAOS`
+**Production branch:** `main`
+**Website state:** staging / `noindex`
+**Last verified implementation checkpoint:** `0e6f125` — `feat: lock AYA dedicated line pages`
+**Repository sanitation:** completed after the FINAL LOCK checkpoint; obsolete packages, backups, orphan line assets, and obsolete preview/feature branches were removed.
 
 ## 1. Authority
 
-This document describes the active repository boundary after the 9 August 2026 sanitation sweep.
+This document describes the active repository boundary after the 14 August 2026 Dedicated Line Pages FINAL LOCK and repository sanitation.
 
 When repository history, old screenshots, old packages, old docs, or previous implementation experiments conflict with this baseline, this baseline and the latest approved business/project instructions take precedence.
 
@@ -19,6 +20,10 @@ Old package/version labels are historical only. They are not implementation auth
 
 - Homepage v3.8 is the locked homepage visual baseline.
 - Homepage assets are canonical under `assets/visual/home-lock/`.
+- The three Dedicated Line Pages are FINAL LOCKED: AYA Farm / `TUMBUH`, AYA Spice Haven / `DIOLAH`, and AYA Snacks & Drinks / `DINIKMATI`.
+- The approved Dedicated Line Pages include VP1, VP2, VP3, contextual header treatment, supporting typography, CTA treatment, responsive behavior, dedicated photography, and the `@aya.raos 2026` signature.
+- Farm is the shared geometry/typography reference; each line keeps its own approved visual world.
+- Dedicated line-page assets under `assets/visual/line-pages/` that are referenced by the FINAL LOCK implementation are canonical.
 - Testimonial submission remains protected: `share.html`, `css/share.css`, `js/supabase-client.js`, and `js/testimonial-wizard.js` must not be redesigned or functionally changed without explicit scope.
 - Supabase testimonial upload/moderation remains active and separate from future order persistence.
 - `css/site.css` is the only public-site design system.
@@ -79,13 +84,25 @@ Payment, order database, audit trail, admin, role matrix, inventory, quotation, 
 
 ## 8. Visual implementation boundary
 
-- Homepage v3.8 remains locked.
-- Catalog and Product Detail visual references may be locked separately, but implementation must start from the current clean source and `js/data.js`; do not reuse obsolete renderer overrides or deleted mockup-specific asset directories.
-- Shared header/navigation uses the Homepage-aligned shell.
-- No parallel CSS system, no stacked patch layer, and no `!important`.
+- Homepage v3.8 remains LOCKED / PROTECTED.
+- All three Dedicated Line Pages are FINAL LOCKED at implementation checkpoint `0e6f125`.
+- AYA Farm uses the `TUMBUH` world: green, natural, agricultural, warm, earthy.
+- AYA Spice Haven uses the `DIOLAH` world: maroon, rich culinary, rempah-led, warm.
+- AYA Snacks & Drinks uses the `DINIKMATI` world: toasted brown, terracotta, amber, warm/social.
+- Farm is the geometry and typography master for the three Dedicated Line Pages.
+- VP1–VP3 geometry, contextual header, supporting typography, VP2 decision alignment, CTA treatment, dedicated photography, responsive behavior, and site signature are protected.
+- Do not harmonize, restyle, refactor, or replace assets in these locked scopes unless the user explicitly reopens that scope.
+- Catalog and Product Detail remain separate scopes and must start from the current clean source and `js/data.js`.
+- Shared/global changes must prove zero visual regression to Homepage and all three Dedicated Line Pages.
+- No parallel CSS system, stacked patch layer, or `!important`.
 - Desktop locked compositions may use explicit viewport discipline only where specifically approved. Responsive tablet/mobile pages use normal document flow.
-
 ## 9. Repository hygiene
+
+As of 14 August 2026 sanitation:
+- `main` is the only retained canonical branch.
+- Obsolete preview/feature branches from superseded implementations were removed.
+- Future implementation work must create a fresh `preview/*` or `feature/*` branch from the current `main`.
+- Old packages, backups, screenshots, orphan assets, and discarded branch states remain historical only and must not be restored as implementation authority.
 
 Do not commit:
 
@@ -114,3 +131,17 @@ Before commit/merge of future feature work:
 8. obtain preview approval before pushing production-facing changes.
 
 Production remains `noindex` until explicit Production Launch approval.
+
+## 11. Current approved checkpoint
+
+Implementation checkpoint:
+
+`0e6f125` — `feat: lock AYA dedicated line pages`
+
+Approved protected visual scopes at this checkpoint:
+- Homepage v3.8;
+- AYA Farm — `TUMBUH`;
+- AYA Spice Haven — `DIOLAH`;
+- AYA Snacks & Drinks — `DINIKMATI`.
+
+Repository sanitation was completed after this implementation checkpoint without changing website source. Future work starts from the sanitized canonical `main` and a newly created preview/feature branch.

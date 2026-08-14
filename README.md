@@ -8,6 +8,7 @@ Canonical website repository for **AYA RAOS — Ada Rasa**.
 - Environment: staging
 - Search indexing: disabled until Production Launch
 - Homepage: v3.8 locked baseline
+- Dedicated Line Pages: FINAL LOCK at `0e6f125` — AYA Farm (`TUMBUH`), AYA Spice Haven (`DIOLAH`), AYA Snacks & Drinks (`DINIKMATI`)
 - Design system: `css/site.css`
 - Product data: `js/data.js`
 - WhatsApp: `AYA_CONFIG.whatsappNumber`
@@ -24,6 +25,9 @@ Old packages, old version labels, screenshots, and historical Git states are not
 ## Main routes
 
 - `index.html` — Homepage
+- `farm.html` — AYA Farm / TUMBUH
+- `spice.html` — AYA Spice Haven / DIOLAH
+- `snacks.html` — AYA Snacks & Drinks / DINIKMATI
 - `products.html` — Catalog
 - `product.html?id=<product-id>` — Product detail
 - `cart.html` — B2C cart / WhatsApp confirmation
