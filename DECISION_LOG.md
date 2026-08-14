@@ -18,3 +18,13 @@ Historical decisions remain available in Git history. This file contains only de
 | AD-012 | Old package/version directories, screenshots, rollback archives, and obsolete governance docs are not repository authority. |
 
 See [`docs/AYA-RAOS-CURRENT-BASELINE.md`](docs/AYA-RAOS-CURRENT-BASELINE.md) for the full active boundary.
+
+
+## 2026-08-14 — Dedicated Line Pages FINAL LOCK
+
+User approved the final desktop visual state of all three Dedicated Line Pages:
+- AYA Farm — TUMBUH
+- AYA Spice Haven — DIOLAH
+- AYA Snacks & Drinks — DINIKMATI
+
+Farm is the shared geometry/typography reference. Each line keeps a distinct visual world: Farm green/natural, Spice maroon/rich culinary, Snacks toasted-brown/terracotta/amber. Contextual header, supporting typography, VP2 alignment, CTA treatment, dedicated photography, and `@aya.raos 2026` signature are part of the approved system.

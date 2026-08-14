@@ -23,7 +23,7 @@
     document.querySelectorAll("[data-featured-detail],[data-line-catalog]").forEach(appendSource);
 
     if (/^qr-[a-z0-9-]+$/i.test(source)) {
-      const hero = document.querySelector(".line-story-hero .line-story-copy");
+      const hero = document.querySelector(".line-story-hero .line-story-copy, .farm-master-hero-copy, .spice-master-hero-copy, .snacks-master-hero-copy");
       if (hero && !hero.querySelector(".line-entry-note")) {
         const note = document.createElement("p");
         note.className = "line-entry-note";

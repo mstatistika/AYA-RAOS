@@ -47,24 +47,35 @@
   const initImages = () => document.querySelectorAll("img[data-image-fallback]").forEach((img) => { if (img.complete && img.naturalWidth === 0) renderImageFallback(img); });
 
   const homeHref = (hash = "beranda") => document.body.dataset.page === "home" ? `#${hash}` : `index.html#${hash}`;
-  const headerMarkup = () => `<header class="site-header site-header-dark" data-site-header>
-    <div class="site-header-inner">
-      <a class="wordmark" href="${homeHref("beranda")}" aria-label="AYA RAOS — Beranda"><span class="wordmark-lockup-wrap"><img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" width="190" height="70" alt="" aria-hidden="true"></span></a>
-      <nav class="primary-nav" aria-label="Navigasi utama">
-        <a href="${homeHref("beranda")}" data-nav="home">Beranda</a>
-        <a href="${homeHref("tentang-aya")}" data-nav="about">Tentang AYA</a>
-        <a href="${homeHref("lini-aya")}" data-nav="lines">Lini AYA</a>
-        <a href="products.html" data-nav="products">Produk</a>
-        <a href="testimonials.html" data-nav="testimonials">Testimoni</a>
-        <a href="information.html" data-nav="information">Informasi</a>
-        <a href="business.html" data-nav="business">Pasokan Usaha</a>
-      </nav>
-      <div class="header-actions"><a class="cart-icon-link" href="cart.html?context=personal" aria-label="Buka keranjang"><svg aria-hidden="true" viewBox="0 0 32 32"><path d="M9 11h14l1 16H8l1-16Z"></path><path d="M12 12V9a4 4 0 0 1 8 0v3"></path></svg><span class="sr-only">Keranjang</span><span class="cart-count" data-cart-count>0</span></a><button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button></div>
-    </div>
-    <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>
-      <a href="${homeHref("beranda")}" data-mobile-nav="home">Beranda</a><a href="${homeHref("tentang-aya")}" data-mobile-nav="about">Tentang AYA</a><a href="${homeHref("lini-aya")}" data-mobile-nav="lines">Lini AYA</a><a href="products.html" data-mobile-nav="products">Produk</a><a href="testimonials.html" data-mobile-nav="testimonials">Testimoni</a><a href="information.html" data-mobile-nav="information">Informasi</a><a href="business.html" data-mobile-nav="business">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a>
-    </nav>
-  </header>`;
+  const headerMarkup = () => {
+    const lineKey = document.body.dataset.page === "line" ? document.body.dataset.lineKey : "";
+    const lineLinks = {
+      farm: [["spice.html", "AYA Spice Haven"], ["snacks.html", "AYA Snacks & Drinks"]],
+      spice: [["farm.html", "AYA Farm"], ["snacks.html", "AYA Snacks & Drinks"]],
+      snack: [["farm.html", "AYA Farm"], ["spice.html", "AYA Spice Haven"]]
+    };
+    if (lineLinks[lineKey]) {
+      const cross = lineLinks[lineKey].map(([href,label]) => `<a href="${href}" data-line-cross>${label}</a>`).join("");
+      return `<header class="site-header site-header-context" data-site-header>
+        <div class="site-header-inner">
+          <a class="wordmark" href="index.html#beranda" aria-label="AYA RAOS — Kembali ke Beranda"><span class="wordmark-lockup-wrap"><img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" width="190" height="70" alt="" aria-hidden="true"></span></a>
+          <nav class="primary-nav" aria-label="Navigasi lini AYA">${cross}<a href="products.html" data-nav="products">Produk</a><a href="testimonials.html" data-nav="testimonials">Testimoni</a><a href="information.html" data-nav="information">Informasi</a><a href="business.html" data-nav="business">Pasokan Usaha</a></nav>
+          <div class="header-actions"><a class="cart-icon-link" href="cart.html?context=personal" aria-label="Buka keranjang"><svg aria-hidden="true" viewBox="0 0 32 32"><path d="M9 11h14l1 16H8l1-16Z"></path><path d="M12 12V9a4 4 0 0 1 8 0v3"></path></svg><span class="sr-only">Keranjang</span><span class="cart-count" data-cart-count>0</span></a><button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button></div>
+        </div>
+        <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel>${cross}<a href="products.html">Produk</a><a href="testimonials.html">Testimoni</a><a href="information.html">Informasi</a><a href="business.html">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a></nav>
+      </header>`;
+    }
+    return `<header class="site-header site-header-dark" data-site-header>
+      <div class="site-header-inner">
+        <a class="wordmark" href="${homeHref("beranda")}" aria-label="AYA RAOS — Beranda"><span class="wordmark-lockup-wrap"><img class="wordmark-lockup" src="assets/visual/home-lock/header-logo-tight.png" width="190" height="70" alt="" aria-hidden="true"></span></a>
+        <nav class="primary-nav" aria-label="Navigasi utama">
+          <a href="${homeHref("beranda")}" data-nav="home">Beranda</a><a href="${homeHref("tentang-aya")}" data-nav="about">Tentang AYA</a><a href="${homeHref("lini-aya")}" data-nav="lines">Lini AYA</a><a href="products.html" data-nav="products">Produk</a><a href="testimonials.html" data-nav="testimonials">Testimoni</a><a href="information.html" data-nav="information">Informasi</a><a href="business.html" data-nav="business">Pasokan Usaha</a>
+        </nav>
+        <div class="header-actions"><a class="cart-icon-link" href="cart.html?context=personal" aria-label="Buka keranjang"><svg aria-hidden="true" viewBox="0 0 32 32"><path d="M9 11h14l1 16H8l1-16Z"></path><path d="M12 12V9a4 4 0 0 1 8 0v3"></path></svg><span class="sr-only">Keranjang</span><span class="cart-count" data-cart-count>0</span></a><button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button></div>
+      </div>
+      <nav class="mobile-panel" aria-label="Navigasi seluler" data-mobile-panel><a href="${homeHref("beranda")}" data-mobile-nav="home">Beranda</a><a href="${homeHref("tentang-aya")}" data-mobile-nav="about">Tentang AYA</a><a href="${homeHref("lini-aya")}" data-mobile-nav="lines">Lini AYA</a><a href="products.html" data-mobile-nav="products">Produk</a><a href="testimonials.html" data-mobile-nav="testimonials">Testimoni</a><a href="information.html" data-mobile-nav="information">Informasi</a><a href="business.html" data-mobile-nav="business">Pasokan Usaha</a><a href="cart.html?context=personal">Keranjang <span data-cart-count>0</span></a></nav>
+    </header>`;
+  };
 
   const renderGlobalShell = () => {
     const host = document.querySelector("[data-global-header]"); if (host) host.innerHTML = headerMarkup();
