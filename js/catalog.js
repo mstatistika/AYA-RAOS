@@ -1,83 +1,93 @@
 (() => {
   "use strict";
+
   document.addEventListener("DOMContentLoaded", () => {
     if (!window.AYA || !Array.isArray(window.AYA_PRODUCTS)) return;
 
-    const products = window.AYA_PRODUCTS.filter((product) => product.visible);
     const grid = document.querySelector("[data-product-grid]");
-    const count = document.querySelector("[data-result-count]");
-    const pagination = document.querySelector("[data-pagination]");
     const search = document.querySelector("[data-catalog-search]");
     const sort = document.querySelector("[data-catalog-sort]");
-    const pageSize = document.querySelector("[data-page-size]");
     const form = document.querySelector("[data-filter-form]");
-    const summary = document.querySelector("[data-active-filter-summary]");
     const panel = document.querySelector("[data-filter-panel]");
+    const stateNode = document.querySelector("[data-catalog-state]");
     const minRange = document.querySelector("[data-price-min]");
     const maxRange = document.querySelector("[data-price-max]");
     const minLabel = document.querySelector("[data-price-min-label]");
     const maxLabel = document.querySelector("[data-price-max-label]");
+    const groupNav = document.querySelector("[data-group-nav]");
+    const prevButton = document.querySelector("[data-group-prev]");
+    const nextButton = document.querySelector("[data-group-next]");
+    const groupSize = 3;
 
-    const minPrice = (product) => {
-      const values = (product.variants || []).map((variant) => Number(variant.price)).filter(Number.isFinite);
-      return values.length ? Math.min(...values) : Infinity;
+    if (!grid || !search || !sort || !form || !minRange || !maxRange) return;
+
+    const validVariants = (product) =>
+      Array.isArray(product?.variants)
+        ? product.variants.filter((variant) =>
+            variant &&
+            typeof variant.name === "string" &&
+            variant.name.trim() &&
+            Number.isFinite(Number(variant.price)) &&
+            Number(variant.price) > 0
+          )
+        : [];
+
+    const isPublicEligible = (product) => {
+      if (!product || product.visible !== true) return false;
+      const requiredText = [product.id, product.name, product.line, product.lineKey, product.category, product.description, product.publicStatus];
+      if (requiredText.some((value) => typeof value !== "string" || !value.trim())) return false;
+      if (!(product.image || product.placeholder)) return false;
+      return validVariants(product).length > 0;
     };
-    const publicPrices = products.map(minPrice).filter(Number.isFinite);
-    const priceFloor = Math.floor(Math.min(...publicPrices) / 5000) * 5000;
-    const priceCeil = Math.ceil(Math.max(...publicPrices) / 5000) * 5000;
+
+    const products = window.AYA_PRODUCTS.filter(isPublicEligible);
+
+    if (!products.length) {
+      grid.innerHTML = '<div class="empty-state catalog-empty"><strong>Produk belum dapat ditampilkan.</strong><p>Data produk publik belum lengkap. Silakan coba kembali nanti.</p></div>';
+      return;
+    }
+
+    const variantPrices = (product) => validVariants(product).map((variant) => Number(variant.price));
+    const minPrice = (product) => Math.min(...variantPrices(product));
+    const allPrices = products.flatMap(variantPrices);
+    const priceFloor = Math.floor(Math.min(...allPrices) / 5000) * 5000;
+    const priceCeil = Math.ceil(Math.max(...allPrices) / 5000) * 5000;
 
     const params = new URLSearchParams(location.search);
+    const urlLines = params.getAll("line").filter((line) => ["farm", "spice", "snack"].includes(line));
     const state = {
       query: params.get("q") || "",
-      line: params.get("line") || "",
-      category: params.get("category") || "",
-      statuses: params.getAll("status"),
+      lines: new Set(urlLines.length ? urlLines : ["farm", "spice", "snack"]),
       sort: params.get("sort") || "recommended",
-      page: Math.max(1, Number(params.get("page")) || 1),
-      pageSize: [8, 12].includes(Number(params.get("size"))) ? Number(params.get("size")) : 12,
-      min: (() => { const raw = params.get("min"); if (raw === null || raw === "") return priceFloor; const value = Number(raw); return Number.isFinite(value) ? value : priceFloor; })(),
-      max: (() => { const raw = params.get("max"); if (raw === null || raw === "") return priceCeil; const value = Number(raw); return Number.isFinite(value) ? value : priceCeil; })()
+      min: Number(params.get("min")),
+      max: Number(params.get("max")),
+      group: Math.max(0, Number(params.get("group")) || 0)
     };
-    state.min = Math.max(priceFloor, Math.min(state.min, priceCeil));
-    state.max = Math.max(state.min, Math.min(state.max, priceCeil));
+
+    if (!Number.isFinite(state.min) || state.min < priceFloor) state.min = priceFloor;
+    if (!Number.isFinite(state.max) || state.max > priceCeil || state.max < state.min) state.max = priceCeil;
 
     search.value = state.query;
-    sort.value = state.sort;
-    pageSize.value = String(state.pageSize);
-    [minRange, maxRange].forEach((node) => { node.min = String(priceFloor); node.max = String(priceCeil); node.step = "5000"; });
-    minRange.value = String(state.min); maxRange.value = String(state.max);
+    sort.value = ["recommended", "name-asc", "price-asc", "price-desc"].includes(state.sort) ? state.sort : "recommended";
+    state.sort = sort.value;
 
-    const categoryGroups = [
-      ["Sambal", ["Sambal"]],
-      ["Lauk & Olahan", ["Lauk Berbumbu", "Frozen Food", "Olahan"]],
-      ["Pendamping", ["Pendamping"]],
-      ["Camilan", ["Camilan", "Frozen Snack"]],
-      ["Minuman", ["Minuman"]],
-      ["Bahan Pokok", ["Bahan Pokok", "Beras"]]
-    ];
-    const availableCategories = new Set(products.map((product) => product.category));
-    const options = categoryGroups.filter(([, values]) => values.some((value) => availableCategories.has(value)));
-    document.querySelector("[data-category-options]").innerHTML = `<label><input type="radio" name="category" value="" ${!state.category ? "checked" : ""}/> Semua kategori</label>` + options.map(([label]) => `<label><input type="radio" name="category" value="${window.AYA.escapeHTML(label)}" ${state.category === label ? "checked" : ""}/> ${window.AYA.escapeHTML(label)}</label>`).join("");
+    [minRange, maxRange].forEach((node) => {
+      node.min = String(priceFloor);
+      node.max = String(priceCeil);
+      node.step = "5000";
+    });
+    minRange.value = String(state.min);
+    maxRange.value = String(state.max);
 
-    const setFormState = () => {
-      const line = form.querySelector(`[name="line"][value="${CSS.escape(state.line)}"]`);
-      const category = form.querySelector(`[name="category"][value="${CSS.escape(state.category)}"]`);
-      if (line) line.checked = true;
-      if (category) category.checked = true;
-      form.querySelectorAll('[name="status"]').forEach((node) => { node.checked = state.statuses.includes(node.value); });
-      minRange.value = String(state.min); maxRange.value = String(state.max);
-    };
-    setFormState();
+    form.querySelectorAll('[name="line"]').forEach((node) => {
+      node.checked = state.lines.has(node.value);
+    });
 
-    const groupMatch = (product, group) => {
-      if (!group) return true;
-      const entry = categoryGroups.find(([label]) => label === group);
-      return entry ? entry[1].includes(product.category) : product.category === group;
-    };
+    const format = (value) => window.AYA.formatPrice(Number(value));
 
-    const syncRangeLabels = () => {
-      minLabel.textContent = window.AYA.formatPrice(state.min);
-      maxLabel.textContent = window.AYA.formatPrice(state.max);
+    const syncRange = () => {
+      minLabel.textContent = format(state.min);
+      maxLabel.textContent = format(state.max);
       const span = Math.max(1, priceCeil - priceFloor);
       const left = ((state.min - priceFloor) / span) * 100;
       const right = 100 - ((state.max - priceFloor) / span) * 100;
@@ -85,138 +95,256 @@
       document.documentElement.style.setProperty("--catalog-range-right", `${right}%`);
     };
 
-    const readForm = () => {
-      const data = new FormData(form);
-      state.line = data.get("line") || "";
-      state.category = data.get("category") || "";
-      state.statuses = data.getAll("status");
-      state.page = 1;
-    };
+    const searchableText = (product) =>
+      [product.name, product.line, product.category, product.description, product.suitableUse, product.flavorProfile]
+        .filter(Boolean)
+        .join(" ")
+        .toLocaleLowerCase("id");
+
+    const matchesPrice = (product) =>
+      variantPrices(product).some((price) => price >= state.min && price <= state.max);
 
     const filtered = () => {
       const query = state.query.trim().toLocaleLowerCase("id");
-      const list = products.filter((product) => {
-        const searchable = [product.name, product.line, product.category, product.description, product.suitableUse, product.flavorProfile].join(" ").toLocaleLowerCase("id");
-        const price = minPrice(product);
-        return (!query || searchable.includes(query)) &&
-          (!state.line || product.lineKey === state.line) &&
-          groupMatch(product, state.category) &&
-          price >= state.min && price <= state.max &&
-          (!state.statuses.length || state.statuses.includes(product.status));
+      const list = products.filter((product) =>
+        state.lines.has(product.lineKey) &&
+        matchesPrice(product) &&
+        (!query || searchableText(product).includes(query))
+      );
+
+      list.sort((a, b) => {
+        if (state.sort === "name-asc") return a.name.localeCompare(b.name, "id");
+        if (state.sort === "price-asc") return minPrice(a) - minPrice(b);
+        if (state.sort === "price-desc") return minPrice(b) - minPrice(a);
+        return (a.catalogOrder || 999) - (b.catalogOrder || 999);
       });
-      list.sort((a, b) => state.sort === "name-asc" ? a.name.localeCompare(b.name, "id") :
-        state.sort === "price-asc" ? minPrice(a) - minPrice(b) :
-        state.sort === "price-desc" ? minPrice(b) - minPrice(a) :
-        (a.catalogOrder || 999) - (b.catalogOrder || 999));
       return list;
     };
 
+    const quickAddIcon = `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7.5 8.5h9l1 11h-11l1-11Z"></path>
+        <path d="M9.5 9V6.8a2.5 2.5 0 0 1 5 0V9"></path>
+        <path d="M12 12v4M10 14h4"></path>
+      </svg>`;
+
     const card = (product) => {
+      const variants = validVariants(product);
       const price = minPrice(product);
-      const image = product.image || product.placeholder;
+      const multi = variants.length > 1;
       const disabled = !product.orderable;
+      const image = product.image || product.placeholder;
+      const detailUrl = `product.html?id=${encodeURIComponent(product.id)}`;
+
       return `<article class="product-card">
-        <a class="product-card-image" href="product.html?id=${encodeURIComponent(product.id)}">
-          <img src="${window.AYA.escapeHTML(image)}" alt="${window.AYA.escapeHTML(product.name)}" loading="lazy" width="700" height="520" data-image-fallback="${window.AYA.escapeHTML(product.id)}"/>
-          <span class="status-badge status-${product.status}">${window.AYA.escapeHTML(product.publicStatus)}</span>
+        <a class="product-card-image" href="${detailUrl}" aria-label="Lihat detail ${window.AYA.escapeHTML(product.name)}">
+          <img src="${window.AYA.escapeHTML(image)}" alt="${window.AYA.escapeHTML(product.name)}" loading="lazy" width="760" height="560" data-image-fallback="${window.AYA.escapeHTML(product.id)}"/>
         </a>
-        <button class="product-quick-add" type="button" data-quick-add="${window.AYA.escapeHTML(product.id)}" ${disabled ? "disabled" : ""} aria-label="${disabled ? "Produk belum dapat ditambahkan" : `Tambahkan ${window.AYA.escapeHTML(product.name)} ke keranjang`}"><span aria-hidden="true">🛒</span></button>
+        <button class="product-quick-add" type="button" data-quick-add="${window.AYA.escapeHTML(product.id)}" ${disabled ? "disabled" : ""} aria-label="${disabled ? "Produk belum dapat ditambahkan" : `Tambahkan ${window.AYA.escapeHTML(product.name)} ke keranjang`}">
+          ${quickAddIcon}
+        </button>
         <div class="product-card-body">
-          <div class="product-card-kicker"><span class="line-label line-${product.lineKey}">${window.AYA.escapeHTML(product.line)}</span></div>
-          <h2><a href="product.html?id=${encodeURIComponent(product.id)}">${window.AYA.escapeHTML(product.name)}</a></h2>
-          <p>${window.AYA.escapeHTML(product.description)}</p>
-          <div class="product-card-price"><strong>${Number.isFinite(price) ? window.AYA.formatPrice(price) : "Belum tersedia"}</strong>${product.variants?.length > 1 ? "<span>mulai</span>" : ""}</div>
-          <div class="product-card-actions"><a class="button product-detail-button" href="product.html?id=${encodeURIComponent(product.id)}">Lihat Detail</a></div>
+          <div class="product-card-kicker">
+            <span class="line-label line-${window.AYA.escapeHTML(product.lineKey)}">${window.AYA.escapeHTML(product.line)}</span>
+            <span aria-hidden="true">·</span>
+            <span>${window.AYA.escapeHTML(product.category)}</span>
+          </div>
+          <h2><a href="${detailUrl}">${window.AYA.escapeHTML(product.name)}</a></h2>
+          <p class="product-card-description">${window.AYA.escapeHTML(product.description)}</p>
+          <div class="product-card-commerce">
+            <div class="product-card-price">
+              ${multi ? "<span>Mulai dari</span>" : ""}
+              <strong>${format(price)}</strong>
+            </div>
+            ${multi ? `<span class="product-variant-count">${variants.length} pilihan varian</span>` : ""}
+          </div>
+          <a class="product-detail-link" href="${detailUrl}">Lihat Detail Produk <span aria-hidden="true">→</span></a>
         </div>
       </article>`;
     };
 
-    const renderSummary = () => {
-      const labels = [];
-      if (state.query) labels.push(`Pencarian: ${state.query}`);
-      if (state.line) labels.push({ spice: "AYA Spice Haven", farm: "AYA Farm", snack: "AYA Snacks & Drinks" }[state.line] || state.line);
-      if (state.category) labels.push(state.category);
-      if (state.statuses.length) labels.push(...state.statuses.map((s) => ({ available: "Tersedia", preorder: "Pre-order", soldout: "Habis" }[s] || s)));
-      if (state.min !== priceFloor || state.max !== priceCeil) labels.push(`${window.AYA.formatPrice(state.min)}–${window.AYA.formatPrice(state.max)}`);
-      summary.innerHTML = labels.map((label) => `<span>${window.AYA.escapeHTML(label)}</span>`).join("");
+    const render = () => {
+      const list = filtered();
+      const maxGroup = Math.max(0, Math.ceil(list.length / groupSize) - 1);
+      state.group = Math.min(state.group, maxGroup);
+      const start = state.group * groupSize;
+      const current = list.slice(start, start + groupSize);
+
+      if (current.length) {
+        grid.innerHTML = current.map(card).join("");
+        stateNode.hidden = true;
+        stateNode.textContent = "";
+      } else {
+        grid.innerHTML = '<div class="empty-state catalog-empty"><strong>Belum ada pilihan yang cocok.</strong><p>Ubah pencarian, aktifkan lini lain, atau reset rentang harga.</p><button class="button button-secondary" type="button" data-empty-reset>Reset Filter</button></div>';
+      }
+
+      const multipleGroups = list.length > groupSize;
+      groupNav.hidden = !multipleGroups;
+      prevButton.disabled = state.group === 0;
+      nextButton.disabled = state.group >= maxGroup;
+      syncRange();
+      syncURL();
     };
 
     const syncURL = () => {
-      const url = new URL(location.href); url.search = "";
+      const url = new URL(location.href);
+      url.search = "";
       if (state.query) url.searchParams.set("q", state.query);
-      if (state.line) url.searchParams.set("line", state.line);
-      if (state.category) url.searchParams.set("category", state.category);
-      state.statuses.forEach((value) => url.searchParams.append("status", value));
+      if (state.sort !== "recommended") url.searchParams.set("sort", state.sort);
       if (state.min !== priceFloor) url.searchParams.set("min", String(state.min));
       if (state.max !== priceCeil) url.searchParams.set("max", String(state.max));
-      if (state.sort !== "recommended") url.searchParams.set("sort", state.sort);
-      if (state.pageSize !== 12) url.searchParams.set("size", String(state.pageSize));
-      if (state.page > 1) url.searchParams.set("page", String(state.page));
+      if (state.group > 0) url.searchParams.set("group", String(state.group));
+      if (state.lines.size !== 3) {
+        ["farm", "spice", "snack"].forEach((line) => {
+          if (state.lines.has(line)) url.searchParams.append("line", line);
+        });
+      }
       history.replaceState({}, "", url);
     };
 
-    const renderPagination = (pages) => {
-      const prev = Math.max(1, state.page - 1), next = Math.min(pages, state.page + 1);
-      pagination.innerHTML = `<button type="button" data-page="${prev}" ${state.page === 1 ? "disabled" : ""} aria-label="Halaman sebelumnya">‹</button>` +
-        Array.from({ length: pages }, (_, i) => `<button type="button" data-page="${i + 1}" ${state.page === i + 1 ? 'aria-current="page"' : ""}>${i + 1}</button>`).join("") +
-        `<button type="button" data-page="${next}" ${state.page === pages ? "disabled" : ""} aria-label="Halaman berikutnya">›</button>`;
+    const readLines = () => {
+      state.lines = new Set(
+        [...form.querySelectorAll('[name="line"]:checked')].map((node) => node.value)
+      );
+      state.group = 0;
     };
 
-    const render = () => {
-      const list = filtered();
-      const pages = Math.max(1, Math.ceil(list.length / state.pageSize));
-      state.page = Math.min(state.page, pages);
-      const start = (state.page - 1) * state.pageSize;
-      const current = list.slice(start, start + state.pageSize);
-      count.textContent = String(list.length);
-      grid.innerHTML = current.length ? current.map(card).join("") : '<div class="empty-state catalog-empty"><strong>Produk tidak ditemukan.</strong><p>Ubah kata kunci atau reset filter untuk melihat pilihan lain.</p><button class="button button-secondary" type="button" data-empty-reset>Reset Filter</button></div>';
-      renderPagination(pages); renderSummary(); syncRangeLabels(); syncURL();
+    const updateRange = () => {
+      let min = Number(minRange.value);
+      let max = Number(maxRange.value);
+      if (min > max - 5000) {
+        if (document.activeElement === minRange) min = Math.max(priceFloor, max - 5000);
+        else max = Math.min(priceCeil, min + 5000);
+      }
+      state.min = min;
+      state.max = max;
+      state.group = 0;
+      minRange.value = String(min);
+      maxRange.value = String(max);
+      render();
     };
 
     let searchTimer;
-    search.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(() => { state.query = search.value; state.page = 1; render(); }, 160); });
-    sort.addEventListener("change", () => { state.sort = sort.value; state.page = 1; render(); });
-    pageSize.addEventListener("change", () => { state.pageSize = Number(pageSize.value); state.page = 1; render(); });
+    search.addEventListener("input", () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        state.query = search.value;
+        state.group = 0;
+        render();
+      }, 160);
+    });
+
+    sort.addEventListener("change", () => {
+      state.sort = sort.value;
+      state.group = 0;
+      render();
+    });
+
     form.addEventListener("change", (event) => {
       if (event.target === minRange || event.target === maxRange) return;
-      readForm(); render();
-    });
-    const updateRange = () => {
-      let min = Number(minRange.value), max = Number(maxRange.value);
-      if (min > max - 5000) {
-        if (document.activeElement === minRange) min = max - 5000; else max = min + 5000;
+      if (event.target.matches('[name="line"]')) {
+        readLines();
+        render();
       }
-      state.min = Math.max(priceFloor, min); state.max = Math.min(priceCeil, max); state.page = 1;
-      minRange.value = String(state.min); maxRange.value = String(state.max); render();
-    };
-    minRange.addEventListener("input", updateRange); maxRange.addEventListener("input", updateRange);
-    form.addEventListener("reset", () => setTimeout(() => {
-      state.query = ""; search.value = ""; state.sort = "recommended"; sort.value = "recommended"; state.pageSize = 12; pageSize.value = "12";
-      state.line = state.category = ""; state.statuses = []; state.min = priceFloor; state.max = priceCeil; state.page = 1; setFormState(); render();
-    }, 0));
-    pagination.addEventListener("click", (event) => { const button = event.target.closest("[data-page]"); if (!button || button.disabled) return; state.page = Number(button.dataset.page); render(); document.querySelector(".catalog-section")?.scrollIntoView({ behavior: "smooth", block: "start" }); });
-    grid.addEventListener("click", (event) => { if (event.target.closest("[data-empty-reset]")) { form.reset(); return; } const button = event.target.closest("[data-quick-add]"); if (button) openVariant(button.dataset.quickAdd); });
-    document.querySelector("[data-filter-open]")?.addEventListener("click", () => { panel?.classList.add("open"); document.body.classList.add("filter-open"); });
-    document.querySelector("[data-filter-close]")?.addEventListener("click", () => { panel?.classList.remove("open"); document.body.classList.remove("filter-open"); });
+    });
+
+    minRange.addEventListener("input", updateRange);
+    maxRange.addEventListener("input", updateRange);
+
+    form.addEventListener("reset", () => {
+      setTimeout(() => {
+        state.lines = new Set(["farm", "spice", "snack"]);
+        form.querySelectorAll('[name="line"]').forEach((node) => { node.checked = true; });
+        state.min = priceFloor;
+        state.max = priceCeil;
+        state.group = 0;
+        minRange.value = String(priceFloor);
+        maxRange.value = String(priceCeil);
+        render();
+      }, 0);
+    });
+
+    prevButton.addEventListener("click", () => {
+      if (state.group <= 0) return;
+      state.group -= 1;
+      render();
+      grid.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    nextButton.addEventListener("click", () => {
+      const list = filtered();
+      const maxGroup = Math.max(0, Math.ceil(list.length / groupSize) - 1);
+      if (state.group >= maxGroup) return;
+      state.group += 1;
+      render();
+      grid.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    grid.addEventListener("click", (event) => {
+      if (event.target.closest("[data-empty-reset]")) {
+        search.value = "";
+        state.query = "";
+        sort.value = "recommended";
+        state.sort = "recommended";
+        form.reset();
+        return;
+      }
+      const button = event.target.closest("[data-quick-add]");
+      if (button) openVariant(button.dataset.quickAdd);
+    });
+
+    document.querySelector("[data-filter-open]")?.addEventListener("click", () => {
+      panel?.classList.add("open");
+      document.body.classList.add("filter-open");
+    });
+    document.querySelector("[data-filter-close]")?.addEventListener("click", () => {
+      panel?.classList.remove("open");
+      document.body.classList.remove("filter-open");
+    });
 
     const dialog = document.querySelector("[data-variant-dialog]");
     const title = document.querySelector("[data-variant-title]");
     const optionsNode = document.querySelector("[data-variant-options]");
     const error = document.querySelector("[data-variant-error]");
     let selected = null;
+
     function openVariant(id) {
-      const product = window.AYA.getProduct(id); if (!product || !product.orderable) return;
-      if (product.variants.length === 1) { window.AYA.addToCart(id, product.variants[0].name, product.minQuantity || 1); return; }
-      selected = product; title.textContent = product.name; error.hidden = true;
-      optionsNode.innerHTML = product.variants.map((variant) => `<label class="variant-option"><input type="radio" name="quickVariant" value="${window.AYA.escapeHTML(variant.name)}"/><span><strong>${window.AYA.escapeHTML(variant.name)}</strong><small>${window.AYA.formatPrice(variant.price)}</small></span></label>`).join("");
+      const product = products.find((item) => item.id === id);
+      if (!product || !product.orderable) return;
+
+      const variants = validVariants(product);
+      if (variants.length === 1) {
+        window.AYA.addToCart(product.id, variants[0].name, product.minQuantity || 1);
+        return;
+      }
+
+      selected = product;
+      title.textContent = product.name;
+      error.hidden = true;
+      optionsNode.innerHTML = variants.map((variant) =>
+        `<label class="variant-option">
+          <input type="radio" name="quickVariant" value="${window.AYA.escapeHTML(variant.name)}"/>
+          <span><strong>${window.AYA.escapeHTML(variant.name)}</strong><small>${format(variant.price)}</small></span>
+        </label>`
+      ).join("");
       dialog.showModal();
     }
+
     document.querySelector("[data-variant-form]")?.addEventListener("submit", (event) => {
-      if (event.submitter?.value === "cancel" || !selected) return; event.preventDefault();
+      if (event.submitter?.value === "cancel" || !selected) return;
+      event.preventDefault();
       const variant = new FormData(event.currentTarget).get("quickVariant");
-      if (!variant) { error.hidden = false; error.textContent = "Pilih satu varian sebelum menambahkan produk."; error.focus(); return; }
-      window.AYA.addToCart(selected.id, variant, selected.minQuantity || 1); dialog.close(); selected = null;
+      if (!variant) {
+        error.hidden = false;
+        error.textContent = "Pilih satu varian sebelum menambahkan produk.";
+        error.focus();
+        return;
+      }
+      window.AYA.addToCart(selected.id, variant, selected.minQuantity || 1);
+      dialog.close();
+      selected = null;
     });
+
     dialog?.addEventListener("close", () => { selected = null; });
     render();
   });
