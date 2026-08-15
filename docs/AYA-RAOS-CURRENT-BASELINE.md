@@ -1,11 +1,11 @@
 # AYA RAOS — Current Development Baseline
 
 **Status:** Canonical development baseline
-**Date:** 14 Agustus 2026
+**Date:** 15 Agustus 2026
 **Repository:** `mstatistika/AYA-RAOS`
 **Production branch:** `main`
 **Website state:** staging / `noindex`
-**Last verified implementation checkpoint:** `0e6f125` — `feat: lock AYA dedicated line pages`
+**Last verified implementation checkpoint:** `44533ef` — `feat: lock approved Product and Catalog experience`
 **Repository sanitation:** completed after the FINAL LOCK checkpoint; obsolete packages, backups, orphan line assets, and obsolete preview/feature branches were removed.
 
 ## 1. Authority
@@ -92,7 +92,7 @@ Payment, order database, audit trail, admin, role matrix, inventory, quotation, 
 - Farm is the geometry and typography master for the three Dedicated Line Pages.
 - VP1–VP3 geometry, contextual header, supporting typography, VP2 decision alignment, CTA treatment, dedicated photography, responsive behavior, and site signature are protected.
 - Do not harmonize, restyle, refactor, or replace assets in these locked scopes unless the user explicitly reopens that scope.
-- Catalog and Product Detail remain separate scopes and must start from the current clean source and `js/data.js`.
+- Catalog and Product Detail are FINAL LOCKED at implementation checkpoint `44533ef`; `js/data.js` remains the product-data source of truth and detailed rules live in `AYA-RAOS-PRODUCT-CATALOG-CANONICAL-SUPPLEMENT-v1.md`.
 - Shared/global changes must prove zero visual regression to Homepage and all three Dedicated Line Pages.
 - No parallel CSS system, stacked patch layer, or `!important`.
 - Desktop locked compositions may use explicit viewport discipline only where specifically approved. Responsive tablet/mobile pages use normal document flow.
@@ -136,12 +136,18 @@ Production remains `noindex` until explicit Production Launch approval.
 
 Implementation checkpoint:
 
-`0e6f125` — `feat: lock AYA dedicated line pages`
+`44533ef` — `feat: lock approved Product and Catalog experience`
 
-Approved protected visual scopes at this checkpoint:
+Approved protected visual scopes:
 - Homepage v3.8;
 - AYA Farm — `TUMBUH`;
 - AYA Spice Haven — `DIOLAH`;
-- AYA Snacks & Drinks — `DINIKMATI`.
+- AYA Snacks & Drinks — `DINIKMATI`;
+- Product Catalog;
+- Product Detail.
 
-Repository sanitation was completed after this implementation checkpoint without changing website source. Future work starts from the sanitized canonical `main` and a newly created preview/feature branch.
+Product + Catalog canonical rules:
+
+`AYA-RAOS-PRODUCT-CATALOG-CANONICAL-SUPPLEMENT-v1.md`
+
+Production remains staging / `noindex` until explicit Production Launch approval.

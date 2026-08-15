@@ -9,6 +9,7 @@ Canonical website repository for **AYA RAOS — Ada Rasa**.
 - Search indexing: disabled until Production Launch
 - Homepage: v3.8 locked baseline
 - Dedicated Line Pages: FINAL LOCK at `0e6f125` — AYA Farm (`TUMBUH`), AYA Spice Haven (`DIOLAH`), AYA Snacks & Drinks (`DINIKMATI`)
+- Product + Catalog: FINAL LOCK at `44533ef` — approved Catalog + Product Detail
 - Design system: `css/site.css`
 - Product data: `js/data.js`
 - WhatsApp: `AYA_CONFIG.whatsappNumber`
