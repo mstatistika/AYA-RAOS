@@ -468,6 +468,63 @@ window.AYA_PRODUCTS = Object.freeze([
   }
 ]);
 
+window.AYA_BUSINESS_SUPPLY = Object.freeze({
+  quantityStep: 5,
+  products: Object.freeze({
+    "sambal-bawang": Object.freeze({
+      variants: Object.freeze({
+        "Original": Object.freeze({ defaultUnit: "Botol", allowedUnits: Object.freeze(["Botol"]) }),
+        "Cumi/Pete": Object.freeze({ defaultUnit: "Botol", allowedUnits: Object.freeze(["Botol"]) }),
+        "Jengkol": Object.freeze({ defaultUnit: "Botol", allowedUnits: Object.freeze(["Botol"]) }),
+        "Teri Nasi": Object.freeze({ defaultUnit: "Botol", allowedUnits: Object.freeze(["Botol"]) })
+      })
+    }),
+    "bawang-goreng-sumenep": Object.freeze({
+      variants: Object.freeze({
+        "Pouch": Object.freeze({ defaultUnit: "Pouch", allowedUnits: Object.freeze(["Pouch", "Kg"]) }),
+        "Toples": Object.freeze({ defaultUnit: "Toples", allowedUnits: Object.freeze(["Toples", "Kg"]) })
+      })
+    }),
+    "rendang-daging-sapi": Object.freeze({
+      variants: Object.freeze({
+        "300 g": Object.freeze({ defaultUnit: "g", allowedUnits: Object.freeze(["g", "Kg"]) })
+      })
+    }),
+    "ayam-goreng-kuning": Object.freeze({
+      variants: Object.freeze({
+        "Paket 4 pcs": Object.freeze({ defaultUnit: "Ekor", allowedUnits: Object.freeze(["Ekor"]) }),
+        "Satuan 1 pcs": Object.freeze({ defaultUnit: "Pcs", allowedUnits: Object.freeze(["Pcs"]) }),
+        "Kulit 500 g": Object.freeze({ defaultUnit: "g", allowedUnits: Object.freeze(["g", "Kg"]) }),
+        "Ceker 500 g": Object.freeze({ defaultUnit: "g", allowedUnits: Object.freeze(["g", "Kg"]) })
+      })
+    }),
+    "dimsum-chili-oil": Object.freeze({
+      variants: Object.freeze({
+        "10 pcs + chili oil": Object.freeze({
+          defaultUnit: "Paket",
+          allowedUnits: Object.freeze(["Paket", "Pouch", "Toples", "Kg"])
+        })
+      })
+    }),
+    "kacang-tanah-jumbo": Object.freeze({
+      variants: Object.freeze({
+        "Toples": Object.freeze({ defaultUnit: "Toples", allowedUnits: Object.freeze(["Toples", "Kg"]) }),
+        "Pouch": Object.freeze({ defaultUnit: "Pouch", allowedUnits: Object.freeze(["Pouch", "Kg"]) })
+      })
+    }),
+    "kacang-mede-jumbo": Object.freeze({
+      variants: Object.freeze({
+        "250 g": Object.freeze({ defaultUnit: "g", allowedUnits: Object.freeze(["g", "Kg"]) })
+      })
+    }),
+    "es-buah": Object.freeze({
+      variants: Object.freeze({
+        "250 ml": Object.freeze({ defaultUnit: "ml", allowedUnits: Object.freeze(["ml", "Liter"]) })
+      })
+    })
+  })
+});
+
 window.AYA_TESTIMONIALS = Object.freeze({
   "videos": [],
   "featured": [
