@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
@@ -20,27 +19,105 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/site.css?v=20260809-locked-global-v1" rel="stylesheet"/>
-<script defer="" src="js/config.js?v=20260809-locked-global-v1"></script>
-<script defer="" src="js/data.js?v=20260809-locked-global-v1"></script>
-<script defer="" src="js/site.js?v=20260809-locked-global-v1"></script>
-<script defer="" src="js/testimonials.js?v=20260809-locked-global-v1"></script>
+<link href="css/site.css?v=20260815-testimonials-preview-v1-3" rel="stylesheet"/>
+<script defer src="js/config.js?v=20260809-locked-global-v1"></script>
+<script defer src="js/data.js?v=20260809-locked-global-v1"></script>
+<script defer src="js/site.js?v=20260809-locked-global-v1"></script>
+<script defer src="js/testimonials.js?v=20260815-testimonials-preview-v1-3"></script>
 </head>
-<body data-page="testimonials"><a class="skip-link" href="#main">Lewati ke konten utama</a><div data-global-header=""></div>
-<div aria-live="polite" class="global-state" data-global-state="" hidden=""></div>
+<body data-page="testimonials">
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+<div data-global-header></div>
+<div aria-live="polite" class="global-state" data-global-state hidden></div>
 <main id="main">
-<section aria-labelledby="testimonial-title" class="testimonial-live-page">
-<div aria-hidden="true" class="testimonial-rails"></div>
-<div class="testimonial-live-grid" data-testimonial-media-grid="">
-<aside class="testimonial-copy-live"><span class="eyebrow">PENGALAMAN NYATA, RASA TERPERCAYA</span><h1 id="testimonial-title">Cerita rasa dari <em>meja mereka.</em></h1><div class="ornament-rule short"></div><p>Pengalaman nyata dari pelanggan yang sudah menikmati produk AYA. Video, photo, dan cerita tulisan ditampilkan setelah melalui proses review.</p></aside>
-<section class="testimonial-video live-media-card" data-video-region=""><div data-video-content=""></div></section>
-<article class="testimonial-photo live-media-card" data-featured-testimonial=""><div class="loading-state">Cerita pilihan sedang dimuat.</div></article>
-<div class="testimonial-story-title">CERITA RASA DARI PARA PELANGGAN</div>
-<div class="story-ticker live-story-ticker" tabindex="0"><div class="story-ticker-track" data-ticker-track=""></div></div>
-<div class="testimonial-submit-cta live-testimonial-cta"><div><span aria-hidden="true">✎</span><strong>Bagikan pengalaman Anda bersama AYA RAOS.</strong><small>Testimoni Anda sangat berarti bagi kami dan dapat menginspirasi orang lain.</small></div><a class="button button-secondary" href="share.html">Kirim Testimoni →</a></div>
-</div>
+<section aria-labelledby="testimonial-title" class="testimonial-experience">
+  <aside class="testimonial-intro-column">
+    <div class="testimonial-intro-copy">
+      <span class="testimonial-kicker">CERITA PELANGGAN AYA</span>
+      <h1 id="testimonial-title">Cerita rasa dari <em>meja mereka.</em></h1>
+      <span aria-hidden="true" class="testimonial-rule"></span>
+      <p>Di sini, pelanggan AYA membagikan pengalaman mereka melalui video, foto, dan cerita singkat.</p>
+      <p class="testimonial-intro-note">Setiap cerita yang tampil telah melalui peninjauan sebelum dibagikan.</p>
+    </div>
+  </aside>
+
+  <section aria-label="Video dan cerita pelanggan" class="testimonial-motion-column">
+    <article class="testimonial-video-stage" data-testimonial-video-stage>
+      <div class="testimonial-video-content" data-video-content>
+        <div class="testimonial-media-state is-loading">Memuat video pelanggan…</div>
+      </div>
+      <button class="testimonial-view-all" data-video-gallery-open hidden type="button">Lihat semua video <span aria-hidden="true">→</span></button>
+    </article>
+
+    <section aria-labelledby="written-story-title" class="testimonial-story-reel">
+      <header class="testimonial-story-heading">
+        <h2 id="written-story-title">Cerita mereka untuk AYA</h2>
+        <small data-reel-hint hidden>Arahkan kursor atau fokus untuk berhenti</small>
+      </header>
+      <div class="testimonial-story-viewport" data-story-viewport tabindex="0" aria-label="Cerita tulisan pelanggan">
+        <div class="testimonial-story-track" data-story-track>
+          <div class="testimonial-media-state is-loading">Memuat cerita pelanggan…</div>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section aria-label="Foto dan ajakan berbagi cerita" class="testimonial-pause-column">
+    <article class="testimonial-photo-stage" data-photo-stage>
+      <div class="testimonial-photo-content" data-photo-content>
+        <div class="testimonial-media-state is-loading">Memuat foto cerita pelanggan…</div>
+      </div>
+      <div class="testimonial-photo-dots" data-photo-dots hidden aria-hidden="true"></div>
+      <button class="testimonial-view-all testimonial-photo-view-all" data-photo-gallery-open hidden type="button">Lihat foto lainnya <span aria-hidden="true">→</span></button>
+    </article>
+
+            <aside class="testimonial-share-card">
+      <div class="testimonial-share-inner">
+        <div class="testimonial-share-left">
+          <span aria-hidden="true" class="testimonial-share-flourish">
+            <svg viewBox="0 0 48 48" focusable="false">
+              <path d="M24 38V16M24 25c-7-1-11-5-13-11 7 0 12 3 13 9M24 29c7-1 12-5 14-12-7 0-12 3-14 9M24 18c-4-3-5-8-2-13 5 4 6 8 2 13"/>
+            </svg>
+          </span>
+          <h2><span>Sekarang giliran</span><em>ceritamu.</em></h2>
+        </div>
+
+        <div class="testimonial-share-right">
+          <p>Punya pengalaman bersama AYA? Bagikan melalui tulisan, foto, atau video.</p>
+          <div aria-label="Format cerita yang dapat dibagikan" class="testimonial-share-formats">
+            <span>
+              <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M7 24l2-7L22 4l6 6-13 13-8 1Z"/><path d="M19 7l6 6M9 17l6 6"/></svg>
+              <b>Tulisan</b>
+            </span>
+            <span>
+              <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="6" width="22" height="20" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M7 23l6-6 4 4 3-3 5 5"/></svg>
+              <b>Foto</b>
+            </span>
+            <span>
+              <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="7" width="18" height="18" rx="3"/><path d="M22 13l6-4v14l-6-4Z"/></svg>
+              <b>Video</b>
+            </span>
+          </div>
+        </div>
+
+        <a class="testimonial-share-button" href="share.html">BAGIKAN CERITAMU <span aria-hidden="true">→</span></a>
+      </div>
+    </aside>
+  </section>
 </section>
 </main>
-<div aria-atomic="true" aria-live="polite" class="toast-region" data-toast-region=""></div>
-<dialog class="media-dialog" data-media-dialog=""><button aria-label="Tutup" class="dialog-close" data-dialog-close="" type="button">×</button><div data-dialog-content=""></div></dialog>
-</body></html>
+<div aria-atomic="true" aria-live="polite" class="toast-region" data-toast-region></div>
+<dialog class="testimonial-gallery-dialog" data-testimonial-gallery-dialog>
+  <div class="testimonial-gallery-shell">
+    <header>
+      <div>
+        <span class="testimonial-gallery-kicker" data-gallery-kicker>TESTIMONI AYA</span>
+        <h2 data-gallery-title>Cerita pelanggan</h2>
+      </div>
+      <button aria-label="Tutup galeri" class="testimonial-gallery-close" data-gallery-close type="button">×</button>
+    </header>
+    <div class="testimonial-gallery-body" data-gallery-body></div>
+  </div>
+</dialog>
+</body>
+</html>
