@@ -1,44 +1,113 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Keranjang &amp; Pesanan — AYA RAOS</title>
-<meta content="Keranjang dan data pesanan satu kali AYA RAOS dalam satu alur." name="description"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>Keranjang &amp; Pembayaran — AYA RAOS</title>
+<meta content="Keranjang belanja, data pesanan, dan pembayaran satu kali AYA RAOS." name="description"/>
 <meta content="#651116" name="theme-color"/>
 <meta content="noindex, nofollow, noarchive" name="robots"/>
 <meta content="strict-origin-when-cross-origin" name="referrer"/>
-<meta content="website" property="og:type"/>
-<meta content="AYA RAOS" property="og:site_name"/>
-<meta content="id_ID" property="og:locale"/>
-<meta content="Keranjang &amp; Pesanan — AYA RAOS" property="og:title"/>
-<meta content="Keranjang dan data pesanan satu kali AYA RAOS dalam satu alur." property="og:description"/>
-<meta content="https://aya-raos.vercel.app/assets/visual/catalog-hero-scene.webp" property="og:image"/>
 <link href="assets/favicon.svg" rel="icon" type="image/svg+xml"/>
 <link href="site.webmanifest" rel="manifest"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/site.css?v=20260809-locked-global-v1" rel="stylesheet"/>
-<script defer="" src="js/config.js?v=20260809-locked-global-v1"></script>
-<script defer="" src="js/data.js?v=20260809-locked-global-v1"></script>
-<script defer="" src="js/site.js?v=20260809-locked-global-v1"></script>
-<script defer="" src="js/cart-page.js?v=20260809-locked-global-v1"></script>
+<link href="css/site.css?v=20260817-cart-b2c-v16" rel="stylesheet"/>
+<script defer src="js/config.js?v=20260809-locked-global-v1"></script>
+<script defer src="js/data.js?v=20260809-locked-global-v1"></script>
+<script defer src="js/site.js?v=20260809-locked-global-v1"></script>
+<script defer src="js/cart-page.js?v=20260817-cart-b2c-v16"></script>
 </head>
-<body data-page="cart"><a class="skip-link" href="#main">Lewati ke konten utama</a><div data-global-header=""></div>
-
-<div aria-live="polite" class="global-state" data-global-state="" hidden=""></div>
+<body data-page="cart">
+<a class="skip-link" href="#main">Lewati ke konten utama</a>
+<div data-global-header></div>
+<div aria-live="polite" class="global-state" data-global-state hidden></div>
 <main id="main">
-<section class="order-intro heritage-stage-soft"><div class="container page-intro-grid"><div><span class="eyebrow">PESANAN SATU KALI</span><h1>Keranjang dan data pesanan dalam satu alur.</h1></div><p>Untuk rumah atau kebutuhan produk standar. Kebutuhan usaha, acara, bulk, custom, dan perusahaan yang memerlukan koordinasi khusus dapat menggunakan jalur Pasokan Usaha.</p></div></section>
-<section class="order-section viewport-order"><div class="container order-layout">
-<section aria-labelledby="cart-title" class="cart-panel"><div class="panel-heading"><div><span class="eyebrow">KERANJANG</span><h2 id="cart-title">Produk pilihan Anda</h2></div><a href="products.html">Tambah produk</a></div><div aria-live="polite" data-cart-items=""></div><div class="cart-subtotal"><span>Subtotal Produk</span><strong data-cart-subtotal="">Rp0</strong></div></section>
-<section aria-labelledby="gateway-title" class="gateway-panel"><div aria-label="Tahapan pemesanan" class="gateway-progress"><button class="active" data-stage-button="1" type="button"><span>1</span>Data</button><button data-stage-button="2" type="button"><span>2</span>Pengiriman</button><button data-stage-button="3" type="button"><span>3</span>Ringkasan</button><button data-stage-button="4" type="button"><span>4</span>Konfirmasi</button></div><div class="gateway-content"><div class="form-error-summary" data-order-errors="" hidden="" tabindex="-1"></div>
-<section class="gateway-stage active" data-stage="1"><span class="eyebrow">LANGKAH 1 DARI 4</span><h2 id="gateway-title">Data Pesanan</h2><fieldset class="order-type"><legend>Kebutuhan Anda</legend><label><input checked="" name="orderContext" type="radio" value="personal"/><span><strong>Untuk Rumah</strong><small>Pribadi, keluarga, atau konsumsi di rumah.</small></span></label><label><input name="orderContext" type="radio" value="event"/><span><strong>Untuk Acara</strong><small>Acara atau kebutuhan satu kali lainnya.</small></span></label></fieldset><form data-customer-form="" novalidate=""><div class="form-grid" data-personal-fields=""><label>Nama lengkap<input autocomplete="name" name="customerName"/></label><label>Nomor WhatsApp<input autocomplete="tel" inputmode="tel" name="whatsapp"/></label></div><div data-event-fields="" hidden=""><div class="form-grid"><label>Nama PIC<input autocomplete="name" name="eventPic"/></label><label>Nomor WhatsApp<input autocomplete="tel" inputmode="tel" name="eventWhatsapp"/></label><label>Jenis acara / kebutuhan<select name="eventType"><option value="">Pilih kebutuhan</option><option value="family">Keluarga / pribadi</option><option value="wedding">Pernikahan / perayaan</option><option value="community">Komunitas / arisan</option><option value="office">Acara kantor</option><option value="other">Lainnya</option></select></label><label>Tanggal acara / kebutuhan<input name="eventDate" type="date"/></label><label>Perkiraan penerima / peserta<input inputmode="numeric" name="guestEstimate" placeholder="Opsional"/></label><label>Nama organisasi / acara<input name="eventName" placeholder="Opsional"/></label></div></div><div class="stage-actions stage-actions-right"><button class="button button-primary" data-next-stage="2" type="button">Lanjut Pengiriman</button></div></form></section>
-<section class="gateway-stage" data-stage="2" hidden=""><span class="eyebrow">LANGKAH 2 DARI 4</span><h2>Pengiriman</h2><form data-shipping-form="" novalidate=""><div class="form-grid"><label>Area / kota<input name="area" placeholder="Contoh: Lippo Utara, Tangerang" required=""/></label><label>Tanggal dibutuhkan<input name="deliveryDate" type="date"/></label></div><label class="full-field">Alamat atau detail lokasi<textarea name="address" required="" rows="2"></textarea></label><label class="full-field">Catatan pesanan <span class="field-optional">(opsional)</span><textarea name="notes" placeholder="Informasi lain yang perlu AYA ketahui" rows="2"></textarea></label><div class="system-state state-warning"><strong>Tarif pengiriman belum terhubung.</strong><p>Ongkir dan total final menunggu integrasi pengiriman yang disetujui.</p></div><div class="stage-actions"><button class="button button-secondary" data-prev-stage="1" type="button">Kembali</button><button class="button button-primary" data-next-stage="3" type="button">Tinjau Ringkasan</button></div></form></section>
-<section class="gateway-stage" data-stage="3" hidden=""><span class="eyebrow">LANGKAH 3 DARI 4</span><h2>Ringkasan Pesanan</h2><div class="order-review" data-order-review=""></div><div class="financial-summary"><div><span>Subtotal Produk</span><strong data-summary-subtotal="">Rp0</strong></div><div><span>Ongkos Kirim</span><strong data-summary-shipping="">Belum tersedia</strong></div><div class="total-row"><span>Total Pembayaran</span><strong data-summary-total="">Belum dapat dihitung</strong></div></div><div class="stage-actions"><button class="button button-secondary" data-prev-stage="2" type="button">Kembali</button><button class="button button-primary" data-next-stage="4" type="button">Lanjut Konfirmasi</button></div></section>
-<section class="gateway-stage" data-stage="4" hidden=""><span class="eyebrow">LANGKAH 4 DARI 4</span><h2>Konfirmasi Pesanan</h2><div class="system-state state-info" data-order-submit-state=""><strong>Konfirmasi dilakukan melalui WhatsApp.</strong><p>Ringkasan produk dan data pemesanan akan disiapkan otomatis. Ongkir dan total final menunggu konfirmasi admin.</p></div><button class="button button-primary button-wide" data-submit-order="" type="button">Konfirmasi via WhatsApp</button><button class="button button-ghost button-wide" data-whatsapp-support="" type="button">Tanya prosedur melalui WhatsApp</button><div class="stage-actions"><button class="button button-secondary" data-prev-stage="3" type="button">Kembali</button></div></section>
-</div></section>
-</div></section>
+<section class="workspace cart-workspace" id="cartWorkspace" aria-label="Keranjang dan data pesanan">
+  <div class="cart-grid" id="cartGrid">
+    <section class="panel cart-panel" aria-labelledby="cart-title">
+      <div class="cart-head"><div><div class="eyebrow">KERANJANG</div><h1 id="cart-title">Keranjang Belanja</h1></div><div class="cart-count"><strong id="itemCount">0 item</strong><span id="unitCount">0 pcs</span></div></div>
+      <div class="table-head"><div>Produk</div><div>Varian</div><div>Harga / Unit</div><div>Qty</div><div>Subtotal</div></div>
+      <div class="items" id="items" aria-live="polite"></div>
+      <div class="cart-summary desktop-only">
+        <div class="cart-summary-box"><div class="summary-title">Ringkasan Pesanan</div><div id="desktopSummary"></div></div>
+        <div class="cart-summary-footer"><a class="back-link" href="products.html">← &nbsp; Lanjut Belanja</a><div class="cart-summary-total"><span>Total Pembayaran</span><strong id="desktopTotal">Rp0</strong></div></div>
+      </div>
+      <div class="mobile-cart-actions"><a href="products.html">Lanjut Belanja</a><button type="button" id="showInfo">Isi Data Pesanan</button></div>
+    </section>
+
+    <aside class="panel data-panel" id="dataPanel" aria-labelledby="data-title">
+      <div class="data-topline"><h2 id="data-title">Jenis Pesanan</h2><button class="mobile-back" id="showCart" type="button">Kembali ke Keranjang</button></div>
+      <div class="tabs" role="group" aria-label="Jenis pesanan"><button class="tab active" data-context="regular" type="button" aria-pressed="true">Belanja Biasa</button><button class="tab" data-context="event" type="button" aria-pressed="false">Acara</button></div>
+      <div class="section-meta-row"><div class="section-label">Data Pesanan</div><div class="mini-meta compact"><span id="miniItems">0 item</span><span id="miniUnits">0 pcs</span></div></div>
+      <div class="customer-top">
+        <div class="identity-stack">
+          <div class="field"><label for="name">Nama Lengkap</label><input id="name" name="customerName" autocomplete="name"/></div>
+          <div class="field"><label for="phone">WhatsApp</label><input id="phone" name="whatsapp" autocomplete="tel" inputmode="tel"/></div>
+        </div>
+        <div class="field note"><label for="notes">Catatan Pesanan <span class="optional">(opsional)</span></label><textarea id="notes" name="notes" placeholder="Informasi yang perlu AYA ketahui"></textarea></div>
+      </div>
+      <div class="field address"><div class="label-row"><label for="address">Alamat Pengiriman</label><div class="location-status" id="locationStatus">Lokasi belum dikonfirmasi</div></div><textarea id="address" name="address" wrap="soft" placeholder="Tulis alamat lengkap beserta patokan"></textarea></div>
+      <div class="location-actions"><button type="button" id="useLocation">⌖ &nbsp; Gunakan Lokasi Saya</button><button type="button" id="mapLocation">✦ &nbsp; Pilih / Ubah Titik di Peta</button></div>
+      <div class="event-box" id="eventBox" hidden>
+        <div class="section-label">Detail Acara</div>
+        <div class="event-grid">
+          <div class="event-field"><div class="event-label-row"><label for="eventDate">Tanggal Acara</label><span class="inline-error" id="eventDateError" hidden>Wajib diisi</span></div><input id="eventDate" name="eventDate" type="date"/></div>
+          <div class="event-field"><label>Diterima sebelum acara?</label><div class="receive-choice" role="group" aria-label="Diterima sebelum acara"><button class="active" data-receive="no" type="button" aria-pressed="true">Tidak</button><button data-receive="yes" type="button" aria-pressed="false">Ya</button></div></div>
+        </div>
+      </div>
+      <div class="mobile-summary" id="mobileSummary"></div>
+      <div class="cta-wrap"><button class="primary" id="openPayment" type="button">Lanjut ke Pembayaran</button></div>
+    </aside>
+  </div>
+</section>
+
+<section class="workspace payment-workspace" id="paymentWorkspace" aria-label="Pembayaran">
+  <div class="payment-grid">
+    <aside class="panel payment-left">
+      <div class="eyebrow">Pesanan Anda</div><h2>Ringkasan Pesanan</h2><div class="payment-products" id="paymentProducts"></div>
+      <div class="payment-breakdown" id="paymentBreakdown"></div>
+      <div class="payment-total-focus"><span>Total Pesanan</span><strong id="paymentTotalLeft">Rp0</strong></div>
+      <div class="payment-trust">Status pembayaran hanya dapat berubah setelah verifikasi backend/provider.</div>
+      <button class="payment-back" type="button" data-back-payment>← &nbsp; Kembali ke Pesanan</button>
+    </aside>
+    <section class="panel payment-right">
+      <div class="payment-top"><div class="eyebrow">Pembayaran</div><button class="payment-back-mobile" type="button" data-back-payment>Kembali ke Pesanan</button></div>
+      <h1>Pilih Cara Pembayaran</h1><p class="payment-lead">Pilih metode yang paling nyaman. Instruksi pembayaran tetap berada di AYA.</p>
+      <div class="mobile-pay-total"><span>Total Pesanan</span><strong id="paymentTotalMobile">Rp0</strong></div>
+      <div class="method-tabs"><button class="method active" data-method="qris" type="button" aria-pressed="true"><strong>QRIS</strong><small>Bayar dari aplikasi yang mendukung QRIS</small></button><button class="method" data-method="va" type="button" aria-pressed="false"><strong>Virtual Account</strong><small>BCA · CIMB · Permata · BRI · Mandiri</small></button></div>
+      <div class="payment-guidance" id="paymentGuidance" hidden></div>
+      <div class="payment-status" id="paymentStatus" hidden><span class="dot"></span><span id="statusLabel"></span></div>
+      <div class="payment-content">
+        <div class="qris-view" id="qrisView">
+          <div class="qris-composition">
+            <div class="qr-wrap"><div class="qr-card" id="qrCard"><div class="payment-placeholder"><strong>QRIS</strong><span>Kode pembayaran akan tampil setelah payment request berhasil dibuat.</span></div></div></div>
+            <div class="qris-side">
+              <div class="payment-info qris-confirmation"><strong>Konfirmasi pembayaran</strong>Status akan diperbarui otomatis setelah provider mengonfirmasi pembayaran. Pemeriksaan manual tersedia setelah sesi pembayaran aktif.</div>
+              <p class="qris-copy">Scan QRIS menggunakan aplikasi pilihan Anda.</p>
+              <div class="payment-actions qris-actions"><button class="secondary" id="downloadQr" type="button" disabled>Download QRIS</button><button class="action-primary" data-check-status type="button" disabled>Periksa Status Pembayaran</button></div>
+              <div class="status-message" id="paymentUnavailable">Pembayaran online belum aktif pada staging. Pesanan belum dibuat.</div>
+            </div>
+          </div>
+        </div>
+        <div class="va-view" id="vaView" hidden>
+          <div id="vaSelect">
+            <div class="va-bank-title">Pilih Bank Virtual Account</div>
+            <div class="bank-grid"><button class="bank-btn active" data-bank="BCA" type="button">BCA</button><button class="bank-btn" data-bank="CIMB Niaga" type="button">CIMB Niaga</button><button class="bank-btn" data-bank="Permata" type="button">Permata</button><button class="bank-btn" data-bank="BRI" type="button">BRI</button><button class="bank-btn" data-bank="Mandiri" type="button">Mandiri</button></div>
+            <div class="provider-fee"><span><strong>Biaya tambahan dari provider</strong>Biaya Virtual Account dikenakan oleh provider pembayaran, bukan oleh AYA.</span><b>Rp9.000</b></div>
+            <div class="va-create"><button class="action-primary" id="createVa" type="button" disabled>Buat Virtual Account</button></div>
+            <div class="status-message">Virtual Account tersedia setelah integrasi provider aktif.</div>
+          </div>
+          <div id="vaReady" hidden></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<div class="sheet" id="sheet" aria-hidden="true"><div class="sheet-card"><div class="sheet-head"><strong>Pilih Varian</strong><button type="button" id="closeSheet" aria-label="Tutup pilihan varian">×</button></div><div class="variant-options" id="variantOptions"></div></div></div>
 </main>
-<div aria-atomic="true" aria-live="polite" class="toast-region" data-toast-region=""></div></body></html>
+<div aria-atomic="true" aria-live="polite" class="toast-region" data-toast-region></div>
+</body>
+</html>

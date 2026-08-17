@@ -1,248 +1,311 @@
 (() => {
   "use strict";
+
   document.addEventListener("DOMContentLoaded", () => {
     if (!window.AYA) return;
 
-    const cartRoot = document.querySelector("[data-cart-items]");
-    const subtotalNode = document.querySelector("[data-cart-subtotal]");
-    const draft = Object.assign({ schemaVersion: 1, context: "personal", customer: {}, shipping: {}, notes: "" }, window.AYA.readDraft());
+    const AYA = window.AYA;
+    const config = window.AYA_CONFIG || {};
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+    const nodes = {
+      cartGrid: $("#cartGrid"), items: $("#items"), itemCount: $("#itemCount"), unitCount: $("#unitCount"),
+      miniItems: $("#miniItems"), miniUnits: $("#miniUnits"), desktopSummary: $("#desktopSummary"), desktopTotal: $("#desktopTotal"),
+      mobileSummary: $("#mobileSummary"), dataPanel: $("#dataPanel"), eventBox: $("#eventBox"), eventDate: $("#eventDate"),
+      eventDateError: $("#eventDateError"), name: $("#name"), phone: $("#phone"), notes: $("#notes"), address: $("#address"),
+      locationStatus: $("#locationStatus"), sheet: $("#sheet"), variantOptions: $("#variantOptions"),
+      paymentProducts: $("#paymentProducts"), paymentBreakdown: $("#paymentBreakdown"), paymentTotalLeft: $("#paymentTotalLeft"),
+      paymentTotalMobile: $("#paymentTotalMobile"), qrisView: $("#qrisView"), vaView: $("#vaView")
+    };
+
+    const baseDraft = {
+      schemaVersion: 1,
+      context: "personal",
+      customer: {},
+      shipping: { address: "", lat: null, lng: null, confirmed: false, source: "address" },
+      event: { eventDate: "", beforeEvent: "no" },
+      notes: ""
+    };
+    const stored = AYA.readDraft() || {};
+    const draft = {
+      ...baseDraft,
+      ...stored,
+      customer: { ...baseDraft.customer, ...(stored.customer || {}) },
+      shipping: { ...baseDraft.shipping, ...(stored.shipping || {}) },
+      event: { ...baseDraft.event, ...(stored.event || {}) }
+    };
+
     const params = new URLSearchParams(location.search);
     const requestedContext = params.get("context");
-    if (["personal", "event"].includes(requestedContext)) draft.context = requestedContext;
+    if (requestedContext === "event") draft.context = "event";
+    if (["personal", "regular"].includes(requestedContext)) draft.context = "personal";
 
-    let stage = 1;
-    const customerForm = document.querySelector("[data-customer-form]");
-    const shippingForm = document.querySelector("[data-shipping-form]");
-    const errors = document.querySelector("[data-order-errors]");
-    const contextInputs = [...document.querySelectorAll('[name="orderContext"]')];
-    const personalFields = document.querySelector("[data-personal-fields]");
-    const eventFields = document.querySelector("[data-event-fields]");
-    const submitButton = document.querySelector("[data-submit-order]");
-    const submitState = document.querySelector("[data-order-submit-state]");
+    let activeVariant = null;
+    let method = "qris";
 
-    const fillForm = (form, values = {}) => {
-      Object.entries(values).forEach(([name, value]) => {
-        const field = form.elements.namedItem(name);
-        if (field && typeof value !== "object" && value != null) field.value = String(value);
+    const format = (value) => AYA.formatPrice(Number(value) || 0);
+    const details = () => AYA.cartDetails();
+    const unitCount = () => details().reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+    const shippingCharge = () => {
+      const amount = Number(draft.shipping?.amount);
+      return Number.isFinite(amount) && amount >= 0 ? amount : 25000;
+    };
+    const shippingCap = (units) => units >= 100 ? 50000 : units >= 50 ? 25000 : 0;
+    const financials = () => {
+      const units = unitCount();
+      const subtotal = AYA.cartSubtotal();
+      const shipping = shippingCharge();
+      const cap = shippingCap(units);
+      const benefit = Math.min(shipping, cap);
+      return { units, subtotal, shipping, benefit, total: subtotal + shipping - benefit };
+    };
+
+    const saveDraft = () => {
+      draft.schemaVersion = 1;
+      draft.customer = { customerName: nodes.name.value.trim(), whatsapp: nodes.phone.value.trim() };
+      draft.notes = nodes.notes.value;
+      draft.shipping = { ...draft.shipping, address: nodes.address.value.trim() };
+      draft.event = { ...draft.event, eventDate: nodes.eventDate.value };
+      AYA.saveDraft(draft);
+    };
+
+    const toast = (message) => {
+      if (typeof AYA.showToast === "function") { AYA.showToast(message); return; }
+      const region = $("[data-toast-region]");
+      if (!region) return;
+      const node = document.createElement("div");
+      node.className = "toast";
+      node.textContent = message;
+      region.appendChild(node);
+      setTimeout(() => node.remove(), 3200);
+    };
+
+    const imageSrc = (product) => product.image || product.placeholder || "assets/visual/product-placeholder.svg";
+
+    const benefitCopy = (units) => {
+      if (units >= 100) return "100+ pcs · hingga Rp50.000";
+      if (units >= 50) return "50–99 pcs · hingga Rp25.000";
+      return "Belum ada benefit ongkir";
+    };
+
+    const summaryMarkup = (mobile = false) => {
+      const money = financials();
+      const core = `<div class="sum-row"><span>Subtotal Produk</span><strong>${format(money.subtotal)}</strong></div><div class="sum-row"><span>Biaya Pengiriman</span><strong>${format(money.shipping)}</strong></div><div class="benefit"><div><strong>Benefit Ongkir</strong><small>${benefitCopy(money.units)}</small></div><strong>${money.benefit ? `− ${format(money.benefit)}` : format(0)}</strong></div>`;
+      return `${mobile ? '<div class="summary-title">Ringkasan Pesanan</div>' : ""}${core}${mobile ? `<div class="grand-total"><span>Total Pembayaran</span><strong>${format(money.total)}</strong></div>` : ""}`;
+    };
+
+    const emptyMarkup = () => '<div class="empty-cart"><div><strong>Keranjangmu masih kosong</strong><p>Pilih produk AYA yang ingin kamu nikmati, lalu tambahkan ke keranjang.</p><a href="products.html">Jelajahi Produk</a></div></div>';
+
+    const renderItem = ({ product, variant, quantity, subtotal }) => {
+      const rules = AYA.quantityRules(product);
+      return `<article class="item" data-product="${AYA.escapeHTML(product.id)}" data-variant="${AYA.escapeHTML(variant.name)}">
+        <div class="product"><div class="thumb"><img src="${AYA.escapeHTML(imageSrc(product))}" alt="${AYA.escapeHTML(product.name)}" data-image-fallback="${AYA.escapeHTML(product.id)}"></div><div><div class="pname">${AYA.escapeHTML(product.name)}</div><div class="pline">${AYA.escapeHTML(product.line)}</div></div></div>
+        <button class="variant-btn" type="button" data-variant-trigger="${AYA.escapeHTML(product.id)}" data-current-variant="${AYA.escapeHTML(variant.name)}">${AYA.escapeHTML(variant.name)}</button>
+        <div class="unit">${format(variant.price)}</div>
+        <div class="qty"><div class="stepper"><button type="button" data-minus="${AYA.escapeHTML(product.id)}" data-variant="${AYA.escapeHTML(variant.name)}" aria-label="Kurangi jumlah">−</button><span>${quantity}</span><button type="button" data-plus="${AYA.escapeHTML(product.id)}" data-variant="${AYA.escapeHTML(variant.name)}" aria-label="Tambah jumlah">+</button></div></div>
+        <div class="subtotal">${format(subtotal)}</div>
+        <button class="trash" type="button" data-remove="${AYA.escapeHTML(product.id)}" data-variant="${AYA.escapeHTML(variant.name)}" aria-label="Hapus ${AYA.escapeHTML(product.name)} ${AYA.escapeHTML(variant.name)}">×</button>
+        <span class="sr-only">Aturan jumlah: minimum ${rules.min}, maksimum ${rules.max}, kelipatan ${rules.step}.</span>
+      </article>`;
+    };
+
+    const renderPayment = () => {
+      const money = financials();
+      nodes.paymentProducts.innerHTML = details().map(({ product, variant, quantity, subtotal }) => `<div class="pay-item"><img src="${AYA.escapeHTML(imageSrc(product))}" alt="${AYA.escapeHTML(product.name)}" data-image-fallback="${AYA.escapeHTML(product.id)}"><div><strong>${AYA.escapeHTML(product.name)}</strong><small>${AYA.escapeHTML(variant.name)} · ${quantity} pcs</small></div><div class="price">${format(subtotal)}</div></div>`).join("");
+      nodes.paymentBreakdown.innerHTML = `<div class="sum-row"><span>Subtotal Produk</span><strong>${format(money.subtotal)}</strong></div><div class="sum-row"><span>Biaya Pengiriman</span><strong>${format(money.shipping)}</strong></div><div class="benefit"><div><strong>Benefit Ongkir</strong><small>${benefitCopy(money.units)}</small></div><strong>${money.benefit ? `− ${format(money.benefit)}` : format(0)}</strong></div>`;
+      nodes.paymentTotalLeft.textContent = format(money.total);
+      nodes.paymentTotalMobile.textContent = format(money.total);
+    };
+
+    const render = () => {
+      const items = details();
+      const raw = typeof AYA.getCart === "function" ? AYA.getCart() : [];
+      const invalidCount = Math.max(0, raw.length - items.length);
+      nodes.cartGrid.classList.toggle("empty", items.length === 0);
+      nodes.items.innerHTML = items.length ? items.map(renderItem).join("") : emptyMarkup();
+      const money = financials();
+      nodes.itemCount.textContent = `${items.length} item`;
+      nodes.unitCount.textContent = `${money.units} pcs`;
+      nodes.miniItems.textContent = `${items.length} item`;
+      nodes.miniUnits.textContent = `${money.units} pcs`;
+      nodes.desktopSummary.innerHTML = summaryMarkup(false);
+      nodes.desktopTotal.textContent = format(money.total);
+      nodes.mobileSummary.innerHTML = summaryMarkup(true);
+      renderPayment();
+      if (invalidCount) toast(`${invalidCount} item keranjang tidak lagi valid dan tidak ditampilkan.`);
+      if (!items.length) nodes.cartGrid.classList.remove("info-mode");
+    };
+
+    const openVariantSheet = (productId, currentVariant) => {
+      const product = AYA.getProduct(productId);
+      if (!product || !Array.isArray(product.variants)) return;
+      activeVariant = { productId, currentVariant };
+      nodes.variantOptions.innerHTML = product.variants.map((option) => `<button class="variant-option ${option.name === currentVariant ? "active" : ""}" type="button" data-set-variant="${AYA.escapeHTML(option.name)}"><span>${AYA.escapeHTML(option.name)}</span><small>${format(option.price)} / unit</small></button>`).join("");
+      nodes.sheet.classList.add("open");
+      nodes.sheet.setAttribute("aria-hidden", "false");
+    };
+
+    const closeVariantSheet = () => {
+      activeVariant = null;
+      nodes.sheet.classList.remove("open");
+      nodes.sheet.setAttribute("aria-hidden", "true");
+    };
+
+    nodes.items.addEventListener("click", (event) => {
+      const trigger = event.target.closest("[data-variant-trigger]");
+      if (trigger) { openVariantSheet(trigger.dataset.variantTrigger, trigger.dataset.currentVariant); return; }
+      const remove = event.target.closest("[data-remove]");
+      if (remove) { AYA.removeCartItem(remove.dataset.remove, remove.dataset.variant); render(); return; }
+      const minus = event.target.closest("[data-minus]");
+      const plus = event.target.closest("[data-plus]");
+      const control = minus || plus;
+      if (!control) return;
+      const productId = control.dataset.minus || control.dataset.plus;
+      const product = AYA.getProduct(productId);
+      const item = details().find((entry) => entry.product.id === productId && entry.variant.name === control.dataset.variant);
+      if (!product || !item) return;
+      const rules = AYA.quantityRules(product);
+      const next = Number(item.quantity) + (plus ? rules.step : -rules.step);
+      AYA.updateCartItem(productId, control.dataset.variant, next);
+      render();
+    });
+
+    nodes.variantOptions.addEventListener("click", (event) => {
+      const option = event.target.closest("[data-set-variant]");
+      if (!option || !activeVariant) return;
+      AYA.changeCartVariant(activeVariant.productId, activeVariant.currentVariant, option.dataset.setVariant);
+      closeVariantSheet();
+      render();
+    });
+    $("#closeSheet").addEventListener("click", closeVariantSheet);
+    nodes.sheet.addEventListener("click", (event) => { if (event.target === nodes.sheet) closeVariantSheet(); });
+
+    const setContext = (value, updateUrl = true) => {
+      draft.context = value === "event" ? "event" : "personal";
+      $$('[data-context]').forEach((button) => {
+        const active = (button.dataset.context === "event") === (draft.context === "event");
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
       });
-    };
-
-    fillForm(customerForm, draft.customer);
-    fillForm(shippingForm, { ...(draft.shipping || {}), notes: draft.notes || "" });
-
-    const invalidateTotal = () => {
-      draft.shipping = { ...(draft.shipping || {}), amount: null, status: "integration-pending" };
-      draft.total = null;
-      if (submitButton) { submitButton.disabled = false; submitButton.textContent = "Konfirmasi via WhatsApp"; }
-      window.AYA.saveDraft(draft);
-      document.querySelector("[data-summary-shipping]").textContent = "Belum tersedia";
-      document.querySelector("[data-summary-total]").textContent = "Belum dapat dihitung";
-    };
-
-    const renderCart = () => {
-      const items = window.AYA.cartDetails();
-      subtotalNode.textContent = window.AYA.formatPrice(window.AYA.cartSubtotal());
-      if (!items.length) {
-        cartRoot.innerHTML = '<div class="empty-state"><strong>Keranjang masih kosong.</strong><p>Pilih produk dan varian sebelum melanjutkan pemesanan.</p><a class="button button-primary" href="products.html">Buka Katalog</a></div>';
-        return;
-      }
-      cartRoot.innerHTML = items.map(({ product, variant, quantity, subtotal }) => {
-        const rules = window.AYA.quantityRules(product);
-        return `<article class="cart-item">
-          <img src="${window.AYA.escapeHTML(product.image || product.placeholder)}" alt="${window.AYA.escapeHTML(product.name)}" width="110" height="110" data-image-fallback="${window.AYA.escapeHTML(product.id)}"/>
-          <div class="cart-item-main">
-            <span>${window.AYA.escapeHTML(product.line)}</span><h3>${window.AYA.escapeHTML(product.name)}</h3>
-            <label class="cart-variant-label"><span>Varian</span><select data-cart-variant="${window.AYA.escapeHTML(product.id)}" data-old-variant="${window.AYA.escapeHTML(variant.name)}">${product.variants.map((option) => `<option ${option.name === variant.name ? "selected" : ""}>${window.AYA.escapeHTML(option.name)}</option>`).join("")}</select></label>
-            <strong class="cart-unit-price">${window.AYA.formatPrice(variant.price)} / unit</strong>
-          </div>
-          <div class="cart-item-side">
-            <div class="quantity-stepper" aria-label="Jumlah ${window.AYA.escapeHTML(product.name)}"><button type="button" data-cart-decrease="${window.AYA.escapeHTML(product.id)}" data-variant="${window.AYA.escapeHTML(variant.name)}" aria-label="Kurangi jumlah">−</button><input type="number" min="${rules.min}" max="${rules.max}" step="${rules.step}" value="${quantity}" data-cart-qty="${window.AYA.escapeHTML(product.id)}" data-variant="${window.AYA.escapeHTML(variant.name)}" aria-label="Jumlah"/><button type="button" data-cart-increase="${window.AYA.escapeHTML(product.id)}" data-variant="${window.AYA.escapeHTML(variant.name)}" aria-label="Tambah jumlah">+</button></div>
-            <strong class="cart-item-subtotal">${window.AYA.formatPrice(subtotal)}</strong>
-            <button class="cart-remove" type="button" data-cart-remove="${window.AYA.escapeHTML(product.id)}" data-variant="${window.AYA.escapeHTML(variant.name)}">Hapus</button>
-          </div>
-        </article>`;
-      }).join("");
-    };
-
-    cartRoot.addEventListener("change", (event) => {
-      const qty = event.target.closest("[data-cart-qty]");
-      if (qty) {
-        window.AYA.updateCartItem(qty.dataset.cartQty, qty.dataset.variant, qty.value);
-        invalidateTotal(); renderCart(); return;
-      }
-      const select = event.target.closest("[data-cart-variant]");
-      if (select) {
-        window.AYA.changeCartVariant(select.dataset.cartVariant, select.dataset.oldVariant, select.value);
-        invalidateTotal(); renderCart();
-      }
-    });
-
-    cartRoot.addEventListener("click", (event) => {
-      const remove = event.target.closest("[data-cart-remove]");
-      if (remove) {
-        window.AYA.removeCartItem(remove.dataset.cartRemove, remove.dataset.variant);
-        invalidateTotal(); renderCart(); return;
-      }
-      const minus = event.target.closest("[data-cart-decrease]");
-      const plus = event.target.closest("[data-cart-increase]");
-      const button = minus || plus;
-      if (!button) return;
-      const input = cartRoot.querySelector(`[data-cart-qty="${CSS.escape(button.dataset.cartDecrease || button.dataset.cartIncrease)}"][data-variant="${CSS.escape(button.dataset.variant)}"]`);
-      const product = window.AYA.getProduct(button.dataset.cartDecrease || button.dataset.cartIncrease);
-      if (!input || !product) return;
-      const step = window.AYA.quantityRules(product).step;
-      const next = Number(input.value) + (plus ? step : -step);
-      window.AYA.updateCartItem(product.id, button.dataset.variant, next);
-      invalidateTotal(); renderCart();
-    });
-
-    window.addEventListener("aya:cart-change", renderCart);
-
-    const setContext = (context, { updateUrl = true } = {}) => {
-      draft.context = context === "event" ? "event" : "personal";
-      contextInputs.forEach((input) => { input.checked = input.value === draft.context; });
-      personalFields.hidden = draft.context !== "personal";
-      eventFields.hidden = draft.context !== "event";
-      personalFields.querySelectorAll("input").forEach((input) => { input.required = draft.context === "personal" && ["customerName", "whatsapp"].includes(input.name); });
-      eventFields.querySelectorAll("input,select").forEach((input) => { input.required = draft.context === "event" && ["eventPic", "eventWhatsapp", "eventType", "eventDate"].includes(input.name); });
+      nodes.eventBox.hidden = draft.context !== "event";
       if (updateUrl) {
-        const url = new URL(location.href); url.search = ""; url.searchParams.set("context", draft.context); history.replaceState({}, "", url);
+        const url = new URL(location.href);
+        url.search = "";
+        url.searchParams.set("context", draft.context);
+        history.replaceState({}, "", url);
       }
-      invalidateTotal();
+      saveDraft();
     };
 
-    contextInputs.forEach((input) => input.addEventListener("change", () => setContext(input.value)));
-    setContext(draft.context, { updateUrl: !requestedContext });
-
-    const showErrors = (messages) => {
-      errors.hidden = !messages.length;
-      errors.innerHTML = messages.length ? `<strong>Periksa data berikut:</strong><ul>${messages.map((message) => `<li>${window.AYA.escapeHTML(message)}</li>`).join("")}</ul>` : "";
-      if (messages.length) errors.focus();
-    };
-
-    const customerData = () => Object.fromEntries(new FormData(customerForm));
-    const shippingData = () => Object.fromEntries(new FormData(shippingForm));
-
-    const validateCustomer = () => {
-      const data = customerData();
-      const messages = [];
-      if (draft.context === "personal") {
-        if (!data.customerName?.trim()) messages.push("Nama lengkap wajib diisi.");
-        if (!data.whatsapp?.trim()) messages.push("Nomor WhatsApp wajib diisi.");
-      } else {
-        if (!data.eventPic?.trim()) messages.push("Nama pemesan atau PIC wajib diisi.");
-        if (!data.eventWhatsapp?.trim()) messages.push("Nomor WhatsApp wajib diisi.");
-        if (!data.eventType) messages.push("Jenis acara atau kebutuhan wajib dipilih.");
-        if (!data.eventDate) messages.push("Tanggal acara atau kebutuhan wajib diisi.");
-      }
-      if (!window.AYA.cartDetails().length) messages.push("Keranjang masih kosong.");
-      showErrors(messages);
-      if (!messages.length) {
-        draft.customer = data; window.AYA.saveDraft(draft);
-      }
-      return !messages.length;
-    };
-
-    const validateShipping = () => {
-      const data = shippingData();
-      const messages = [];
-      if (!data.area?.trim()) messages.push("Area atau kota wajib diisi.");
-      if (!data.address?.trim()) messages.push("Alamat atau detail lokasi wajib diisi.");
-      showErrors(messages);
-      if (!messages.length) {
-        draft.notes = data.notes || "";
-        const { notes, ...shippingFields } = data;
-        draft.shipping = { ...shippingFields, amount: null, status: "integration-pending" };
-        window.AYA.saveDraft(draft);
-      }
-      return !messages.length;
-    };
-
-    const renderReview = () => {
-      const items = window.AYA.cartDetails();
-      const customer = draft.customer || {};
-      const shipping = draft.shipping || {};
-      const identity = draft.context === "event" ? (customer.eventPic || "") : (customer.customerName || "");
-      document.querySelector("[data-order-review]").innerHTML = `<div class="review-block"><strong>${draft.context === "event" ? "Untuk Acara" : "Untuk Rumah"}</strong><p>${window.AYA.escapeHTML(identity)}</p></div><div class="review-block"><strong>Produk</strong>${items.map((item) => `<p>${window.AYA.escapeHTML(item.product.name)} · ${window.AYA.escapeHTML(item.variant.name)} × ${item.quantity}</p>`).join("")}</div><div class="review-block"><strong>Pengiriman</strong><p>${window.AYA.escapeHTML(shipping.area || "")} — ${window.AYA.escapeHTML(shipping.address || "")}</p></div>`;
-      document.querySelector("[data-summary-subtotal]").textContent = window.AYA.formatPrice(window.AYA.cartSubtotal());
-      document.querySelector("[data-summary-shipping]").textContent = "Belum tersedia";
-      document.querySelector("[data-summary-total]").textContent = "Belum dapat dihitung";
-    };
-
-    const go = (target, shouldScroll = true) => {
-      if (target === 2 && stage === 1 && !validateCustomer()) return;
-      if (target === 3 && stage === 2 && !validateShipping()) return;
-      if (target === 3 || target === 4) renderReview();
-      stage = target;
-      document.querySelectorAll("[data-stage]").forEach((node) => {
-        const active = Number(node.dataset.stage) === stage;
-        node.hidden = !active; node.classList.toggle("active", active);
+    $$('[data-context]').forEach((button) => button.addEventListener("click", () => setContext(button.dataset.context)));
+    $$('[data-receive]').forEach((button) => button.addEventListener("click", () => {
+      draft.event.beforeEvent = button.dataset.receive;
+      $$('[data-receive]').forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
       });
-      document.querySelectorAll("[data-stage-button]").forEach((button) => {
-        const position = Number(button.dataset.stageButton);
-        button.classList.toggle("active", position === stage);
-        button.classList.toggle("complete", position < stage);
-        if (position === stage) button.setAttribute("aria-current", "step"); else button.removeAttribute("aria-current");
-      });
-      if (shouldScroll) document.querySelector(".gateway-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
-    document.querySelectorAll("[data-next-stage]").forEach((button) => button.addEventListener("click", () => go(Number(button.dataset.nextStage))));
-    document.querySelectorAll("[data-prev-stage]").forEach((button) => button.addEventListener("click", () => go(Number(button.dataset.prevStage))));
-    document.querySelectorAll("[data-stage-button]").forEach((button) => button.addEventListener("click", () => {
-      const target = Number(button.dataset.stageButton); if (target < stage) go(target);
+      saveDraft();
     }));
 
-    const orderMessage = () => {
-      const customer = draft.customer || {};
-      const shipping = draft.shipping || {};
-      const identity = draft.context === "event" ? customer.eventPic : customer.customerName;
-      const whatsapp = draft.context === "event" ? customer.eventWhatsapp : customer.whatsapp;
-      const lines = [
-        "Halo AYA RAOS, saya ingin mengonfirmasi pesanan dari website.",
-        "",
-        `Konteks: ${draft.context === "event" ? "Untuk Acara" : "Untuk Rumah"}`,
-        `Nama/PIC: ${identity || "-"}`,
-        `WhatsApp: ${whatsapp || "-"}`,
-        "",
-        "Produk:"
-      ];
-      window.AYA.cartDetails().forEach((item) => {
-        lines.push(`- ${item.product.name} · ${item.variant.name} · ${item.quantity} × ${window.AYA.formatPrice(item.variant.price)} = ${window.AYA.formatPrice(item.subtotal)}`);
-      });
-      lines.push("", `Subtotal produk: ${window.AYA.formatPrice(window.AYA.cartSubtotal())}`);
-      lines.push("Ongkir dan total final: menunggu konfirmasi admin");
-      lines.push(`Area: ${shipping.area || "-"}`);
-      lines.push(`Alamat: ${shipping.address || "-"}`);
-      if (shipping.deliveryDate) lines.push(`Tanggal kebutuhan/pengiriman: ${shipping.deliveryDate}`);
-      if (draft.context === "event") {
-        if (customer.eventType) lines.push(`Jenis acara/kebutuhan: ${customer.eventType}`);
-        if (customer.guestEstimate) lines.push(`Perkiraan penerima/peserta: ${customer.guestEstimate}`);
-        if (customer.eventName) lines.push(`Nama organisasi/acara: ${customer.eventName}`);
-      }
-      if (draft.notes) lines.push(`Catatan: ${draft.notes}`);
-      return lines.join("\n");
+    const setLocationStatus = () => {
+      const confirmed = Boolean(draft.shipping?.confirmed && Number.isFinite(Number(draft.shipping?.lat)) && Number.isFinite(Number(draft.shipping?.lng)));
+      nodes.locationStatus.textContent = confirmed ? "Lokasi dikonfirmasi" : "Lokasi belum dikonfirmasi";
+      nodes.locationStatus.classList.toggle("confirmed", confirmed);
     };
 
-    submitButton?.addEventListener("click", () => {
-      if (!validateCustomer() || !validateShipping()) return;
-      if (!window.AYA.cartDetails().length) { showErrors(["Keranjang masih kosong."]); return; }
-      showErrors([]);
-      const url = window.AYA.buildWhatsAppUrl(orderMessage());
-      if (!url) {
-        submitState.className = "system-state state-error";
-        submitState.innerHTML = "<strong>WhatsApp belum tersedia.</strong><p>Nomor tujuan belum dapat dipakai. Silakan coba kembali nanti.</p>";
-        return;
+    $("#useLocation").addEventListener("click", () => {
+      if (!navigator.geolocation) { toast("Perangkat ini tidak menyediakan akses lokasi. Tulis alamat dengan jelas beserta patokan."); return; }
+      $("#useLocation").disabled = true;
+      navigator.geolocation.getCurrentPosition((position) => {
+        draft.shipping = { ...draft.shipping, lat: position.coords.latitude, lng: position.coords.longitude, confirmed: true, source: "gps" };
+        saveDraft(); setLocationStatus(); $("#useLocation").disabled = false; toast("Lokasi berhasil dikonfirmasi.");
+      }, () => {
+        draft.shipping = { ...draft.shipping, lat: null, lng: null, confirmed: false, source: "address" };
+        saveDraft(); setLocationStatus(); $("#useLocation").disabled = false; toast("Lokasi belum dapat dikonfirmasi. Mohon tulis alamat dengan jelas beserta patokan.");
+      }, { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 });
+    });
+
+    $("#mapLocation").addEventListener("click", () => toast("Pemilihan titik peta belum aktif pada staging. Alamat tetap dapat digunakan untuk melanjutkan."));
+    nodes.address.addEventListener("input", () => {
+      if (draft.shipping.confirmed) draft.shipping = { ...draft.shipping, lat: null, lng: null, confirmed: false, source: "address" };
+      saveDraft(); setLocationStatus();
+    });
+    [nodes.name, nodes.phone, nodes.notes, nodes.eventDate].forEach((field) => field.addEventListener("input", saveDraft));
+
+    const clearInvalid = () => {
+      [nodes.name, nodes.phone, nodes.address, nodes.eventDate].forEach((field) => field.removeAttribute("aria-invalid"));
+      nodes.eventDateError.hidden = true;
+    };
+    const validPhone = (value) => /^\+?[0-9][0-9\s()-]{7,18}$/.test(value.trim());
+    const validate = () => {
+      clearInvalid();
+      const messages = [];
+      if (!details().length) messages.push("Keranjang masih kosong.");
+      if (!nodes.name.value.trim()) { nodes.name.setAttribute("aria-invalid", "true"); messages.push("Nama Lengkap wajib diisi."); }
+      if (!validPhone(nodes.phone.value)) { nodes.phone.setAttribute("aria-invalid", "true"); messages.push("WhatsApp belum valid."); }
+      if (!nodes.address.value.trim()) { nodes.address.setAttribute("aria-invalid", "true"); messages.push("Alamat Pengiriman wajib diisi."); }
+      if (draft.context === "event" && !nodes.eventDate.value) { nodes.eventDate.setAttribute("aria-invalid", "true"); nodes.eventDateError.hidden = false; messages.push("Tanggal Acara wajib diisi."); }
+      if (messages.length) {
+        toast(messages[0]);
+        const first = $("[aria-invalid='true']");
+        first?.focus({ preventScroll: true });
+        return false;
       }
-      submitState.className = "system-state state-success";
-      submitState.innerHTML = "<strong>Ringkasan siap dikirim.</strong><p>Ongkir dan total final akan dikonfirmasi admin melalui WhatsApp.</p>";
-      window.open(url, "_blank", "noopener,noreferrer");
-    });
+      return true;
+    };
 
-    document.querySelector("[data-whatsapp-support]")?.addEventListener("click", () => {
-      window.AYA.openWhatsApp("Halo AYA RAOS, saya sedang mengisi pesanan di website dan membutuhkan bantuan mengenai prosedur pemesanan.");
-    });
+    const openPayment = () => {
+      if (!validate()) return;
+      saveDraft();
+      renderPayment();
+      document.body.classList.add("payment-mode");
+      setMethod("qris");
+    };
+    $("#openPayment").addEventListener("click", openPayment);
+    $$('[data-back-payment]').forEach((button) => button.addEventListener("click", () => document.body.classList.remove("payment-mode")));
 
-    renderCart(); go(1, false);
+    const setMethod = (next) => {
+      method = next === "va" ? "va" : "qris";
+      $$('[data-method]').forEach((button) => {
+        const active = button.dataset.method === method;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      nodes.qrisView.hidden = method !== "qris";
+      nodes.vaView.hidden = method !== "va";
+    };
+    $$('[data-method]').forEach((button) => button.addEventListener("click", () => setMethod(button.dataset.method)));
+    $$('[data-bank]').forEach((button) => button.addEventListener("click", () => {
+      $$('[data-bank]').forEach((item) => item.classList.toggle("active", item === button));
+    }));
+
+    $("#showInfo").addEventListener("click", () => nodes.cartGrid.classList.add("info-mode"));
+    $("#showCart").addEventListener("click", () => nodes.cartGrid.classList.remove("info-mode"));
+
+    window.addEventListener("aya:cart-change", render);
+
+    nodes.name.value = draft.customer.customerName || draft.customer.eventPic || "";
+    nodes.phone.value = draft.customer.whatsapp || draft.customer.eventWhatsapp || "";
+    nodes.notes.value = draft.notes || "";
+    nodes.address.value = draft.shipping.address || "";
+    nodes.eventDate.value = draft.event.eventDate || draft.customer.eventDate || "";
+    const receiveValue = draft.event.beforeEvent === "yes" ? "yes" : "no";
+    $$('[data-receive]').forEach((button) => {
+      const active = button.dataset.receive === receiveValue;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    draft.event.beforeEvent = receiveValue;
+
+    setLocationStatus();
+    setContext(draft.context, !requestedContext);
+    setMethod("qris");
+    render();
+
+    if (config.payment?.enabled) {
+      toast("Provider pembayaran belum memiliki client backend aktif pada halaman ini; status pembayaran tetap dinonaktifkan.");
+    }
   });
 })();
