@@ -111,3 +111,59 @@ td, th {
     display: flex;
   }
 }
+
+/* WA Link styles */
+.wa-link {
+  color: #25D366;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 11px;
+}
+.wa-link:hover {
+  text-decoration: underline;
+}
+
+/* Subnav improvements */
+.subnav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.subnav button {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 20px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: inherit;
+}
+.subnav button.active {
+  background: var(--maroon);
+  color: white;
+  border-color: var(--maroon);
+}
+
+/* CMS filter buttons */
+.cms-filter.active {
+  background: var(--maroon);
+  color: white;
+  border-color: var(--maroon);
+}
+
+/* Variant & measure row inputs */
+.variant-row, .measure-row {
+  gap: 12px;
+}
+.variant-row input:focus, .measure-row input:focus {
+  outline: 1px solid var(--gold);
+  background: white !important;
+}
+
+/* Access matrix checkboxes */
+.acc-v, .acc-e, .acc-d, .acc-c {
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
