@@ -139,9 +139,6 @@
     if (!window.matchMedia("(max-width: 900px)").matches) return;
     const targetPages = new Set(["home", "line", "products", "testimonials", "share"]);
     if (!targetPages.has(document.body.dataset.page)) return;
-    if (!document.querySelector('link[data-aya-mobile-public-ui]')) {
-      const link = document.createElement("link"); link.rel = "stylesheet"; link.href = "css/mobile-public-ui.css?v=20260822-mobile-public-ui-v1"; link.dataset.ayaMobilePublicUi = ""; document.head.append(link);
-    }
     window.setTimeout(() => {
       if (document.querySelector('script[data-aya-mobile-public-ui]')) return;
       const script = document.createElement("script"); script.src = "js/mobile-public-ui.js?v=20260822-mobile-public-ui-v1"; script.dataset.ayaMobilePublicUi = ""; document.body.append(script);
