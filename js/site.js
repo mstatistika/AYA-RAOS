@@ -92,16 +92,9 @@
     const page = document.body.dataset.page;
     const map = { line: "lines", products: "products", product: "products", testimonials: "testimonials", share: "testimonials", information: "information", business: "business", cart: "", "not-found": "" };
     if (page !== "home") { setActiveNav(map[page] || ""); return; }
-    const sections = [
-      ["beranda", "home"], ["tentang-aya", "about"], ["lini-aya", "lines"], ["mulai-dari-aya", "home"]
-    ].map(([id,key]) => [document.getElementById(id), key]).filter(([node]) => node);
+    const sections = [["beranda", "home"], ["tentang-aya", "about"], ["lini-aya", "lines"], ["mulai-dari-aya", "home"]].map(([id,key]) => [document.getElementById(id), key]).filter(([node]) => node);
     if (!sections.length) { setActiveNav("home"); return; }
-    const update = () => {
-      const y = window.scrollY + Math.max(90, window.innerHeight * .28);
-      let active = "home";
-      sections.forEach(([node,key]) => { if (node.offsetTop <= y) active = key; });
-      setActiveNav(active);
-    };
+    const update = () => { const y = window.scrollY + Math.max(90, window.innerHeight * .28); let active = "home"; sections.forEach(([node,key]) => { if (node.offsetTop <= y) active = key; }); setActiveNav(active); };
     update(); window.addEventListener("scroll", update, { passive: true }); window.addEventListener("hashchange", update);
   };
 
@@ -110,22 +103,19 @@
   const initInformationHelp = () => document.querySelectorAll("[data-whatsapp-help]").forEach((button) => button.addEventListener("click", () => openWhatsApp("Halo AYA RAOS, saya membutuhkan bantuan mengenai informasi pemesanan.")));
 
   const initHomeMobile = () => {
-    if (document.body.dataset.page !== "home") return;
-
+    if (document.body.dataset.page !== "home" || !window.matchMedia("(max-width: 900px)").matches) return;
     const heroCopy = document.querySelector(".home-copy-stage");
     if (heroCopy && !heroCopy.querySelector(".home-mobile-semesta")) {
       const mobileSemesta = document.createElement("div");
       mobileSemesta.className = "home-mobile-semesta";
       mobileSemesta.innerHTML = '<p>Semesta rasa tempat tiga dunia AYA bertemu.</p><p>Dari yang tumbuh, diolah, hingga dinikmati.</p>';
       heroCopy.querySelector("h1")?.insertAdjacentElement("afterend", mobileSemesta);
-
       const signatures = document.createElement("div");
       signatures.className = "home-mobile-line-signatures";
       signatures.setAttribute("aria-label", "Tiga lini AYA");
       signatures.innerHTML = '<div><span aria-hidden="true">⌁</span><strong>FARM</strong><small>TUMBUH</small></div><div><span aria-hidden="true">✦</span><strong>AYA SPICE HAVEN</strong><small>DIOLAH</small></div><div><span aria-hidden="true">◌</span><strong>AYA SNACKS &amp; DRINKS</strong><small>DINIKMATI</small></div>';
       heroCopy.append(signatures);
     }
-
     const aboutCopy = document.querySelector(".home-about .about-copy");
     if (aboutCopy && !aboutCopy.querySelector(".home-mobile-about-copy")) {
       const mobileAbout = document.createElement("div");
@@ -133,56 +123,32 @@
       mobileAbout.innerHTML = '<p>Bagi AYA, rasa hadir dari perhatian pada bahan, proses, dan momen kebersamaan.</p><p>Karena itu, AYA membuat produk yang sederhana, jelas fungsinya, dan dekat dengan keseharian.</p>';
       aboutCopy.querySelector("h2")?.insertAdjacentElement("afterend", mobileAbout);
     }
-
-    const lines = document.querySelector(".home-lines");
-    const worlds = lines?.querySelector(".line-worlds");
+    const lines = document.querySelector(".home-lines"); const worlds = lines?.querySelector(".line-worlds");
     if (!lines || !worlds) return;
-
-    if (!lines.querySelector(".home-mobile-lines-heading")) {
-      const heading = document.createElement("div");
-      heading.className = "home-mobile-lines-heading";
-      heading.innerHTML = '<span>LINI AYA</span><h2>Tiga dunia.<br><em>Satu rasa.</em></h2><p>Tumbuh. Diolah. Dinikmati.</p>';
-      worlds.insertAdjacentElement("beforebegin", heading);
-    }
-
+    if (!lines.querySelector(".home-mobile-lines-heading")) { const heading = document.createElement("div"); heading.className = "home-mobile-lines-heading"; heading.innerHTML = '<span>LINI AYA</span><h2>Tiga dunia.<br><em>Satu rasa.</em></h2><p>Tumbuh. Diolah. Dinikmati.</p>'; worlds.insertAdjacentElement("beforebegin", heading); }
     if (lines.querySelector(".home-mobile-line-rail")) return;
-    const cards = [...worlds.querySelectorAll(".line-world")];
-    if (!cards.length) return;
+    const cards = [...worlds.querySelectorAll(".line-world")]; if (!cards.length) return;
+    const meta = [{key:"farm",label:"FARM",mark:"⌁"},{key:"spice",label:"SPICE",mark:"✦"},{key:"snack",label:"SNACKS",mark:"◌"}];
+    const rail = document.createElement("nav"); rail.className = "home-mobile-line-rail"; rail.setAttribute("aria-label", "Pilih lini AYA");
+    const activate = (index) => { cards.forEach((card, cardIndex) => { const active = cardIndex === index; card.classList.toggle("mobile-active", active); card.setAttribute("aria-hidden", String(!active)); }); [...rail.querySelectorAll("button")].forEach((button, buttonIndex) => { const active = buttonIndex === index; button.classList.toggle("active", active); button.setAttribute("aria-pressed", String(active)); }); };
+    meta.forEach((item,index)=>{const button=document.createElement("button");button.type="button";button.dataset.homeLine=item.key;button.innerHTML=`<span aria-hidden="true">${item.mark}</span><strong>${item.label}</strong>`;button.addEventListener("click",()=>activate(index));rail.append(button);});
+    worlds.insertAdjacentElement("afterend", rail); activate(1);
+  };
 
-    const meta = [
-      { key: "farm", label: "FARM", mark: "⌁" },
-      { key: "spice", label: "SPICE", mark: "✦" },
-      { key: "snack", label: "SNACKS", mark: "◌" }
-    ];
-    const rail = document.createElement("nav");
-    rail.className = "home-mobile-line-rail";
-    rail.setAttribute("aria-label", "Pilih lini AYA");
-    meta.forEach((item, index) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.dataset.homeLine = item.key;
-      button.innerHTML = `<span aria-hidden="true">${item.mark}</span><strong>${item.label}</strong>`;
-      button.addEventListener("click", () => activate(index));
-      rail.append(button);
-    });
-    worlds.insertAdjacentElement("afterend", rail);
-
-    const activate = (index) => {
-      cards.forEach((card, cardIndex) => {
-        const active = cardIndex === index;
-        card.classList.toggle("mobile-active", active);
-        card.setAttribute("aria-hidden", String(!active));
-      });
-      [...rail.querySelectorAll("button")].forEach((button, buttonIndex) => {
-        const active = buttonIndex === index;
-        button.classList.toggle("active", active);
-        button.setAttribute("aria-pressed", String(active));
-      });
-    };
-    activate(1);
+  const loadMobilePublicUi = () => {
+    if (!window.matchMedia("(max-width: 900px)").matches) return;
+    const targetPages = new Set(["home", "line", "products", "testimonials", "share"]);
+    if (!targetPages.has(document.body.dataset.page)) return;
+    if (!document.querySelector('link[data-aya-mobile-public-ui]')) {
+      const link = document.createElement("link"); link.rel = "stylesheet"; link.href = "css/mobile-public-ui.css?v=20260822-mobile-public-ui-v1"; link.dataset.ayaMobilePublicUi = ""; document.head.append(link);
+    }
+    window.setTimeout(() => {
+      if (document.querySelector('script[data-aya-mobile-public-ui]')) return;
+      const script = document.createElement("script"); script.src = "js/mobile-public-ui.js?v=20260822-mobile-public-ui-v1"; script.dataset.ayaMobilePublicUi = ""; document.body.append(script);
+    }, 0);
   };
 
   window.AYA = Object.freeze({ escapeHTML, formatPrice, products, getProduct, getVariant, getCart, saveCart, addToCart, updateCartItem, changeCartVariant, removeCartItem, cartDetails, cartSubtotal, updateCartCount, quantityRules, normalizeProductQuantity, toast, showGlobalState, buildWhatsAppUrl, openWhatsApp, readDraft, saveDraft });
 
-  document.addEventListener("DOMContentLoaded", () => { renderGlobalShell(); validateRuntime(); updateCartCount(); initImages(); initMenu(); initActiveNav(); initInformationHelp(); initHomeMobile(); });
+  document.addEventListener("DOMContentLoaded", () => { renderGlobalShell(); validateRuntime(); updateCartCount(); initImages(); initMenu(); initActiveNav(); initInformationHelp(); initHomeMobile(); loadMobilePublicUi(); });
 })();
