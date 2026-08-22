@@ -6,6 +6,9 @@ window.AYA_CONFIG = Object.freeze({
   leadTime: "2–3 hari setelah pembayaran diterima",
   serviceArea: "Lippo Utara, Jabodetabek, lalu Indonesia sesuai produk dan metode kirim",
   environment: "staging",
+  // Integration Preview only: the AYA mark opens the real Admin Platform without a login form.
+  previewAdminBypass: true,
+  previewAdminUserId: "c8b72460-9c4e-4f93-8916-cb8c4f131831",
   checkout: Object.freeze({ mode: "whatsapp-confirmation", orderPersistence: false }),
   businessSupply: Object.freeze({ enabled: true, persistence: false }),
   shipping: Object.freeze({ enabled: false, provider: "", source: "" }),
