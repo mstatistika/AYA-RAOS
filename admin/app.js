@@ -107,6 +107,12 @@ const dummyProducts = [
   {product_id:'REN-001',product_name:'Rendang Daging Sapi',line_name:'Spice Haven',orderable:true,visible:true},
   {product_id:'BER-001',product_name:'Beras Pilihan',line_name:'Farm',orderable:true,visible:true},
 ];
+const dummyB2B = [
+  {product_id:'SAM-001',supply_eligible:true},
+  {product_id:'SAM-002',supply_eligible:true},
+  {product_id:'BER-001',supply_eligible:false},
+];
+
 const dummyVariants = [
   {variant_id:'v1',product_id:'SAM-001',variant_name:'Original',unit_price:40000},
   {variant_id:'v2',product_id:'SAM-001',variant_name:'Extra Pedas',unit_price:42000},
