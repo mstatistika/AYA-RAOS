@@ -22,38 +22,16 @@
       </form>
     </section>
   </div>
-
   <div id="appView" class="app" hidden>
     <main class="workspace">
-      <header class="topbar">
-        <div><span class="eyebrow">AYA ADMIN</span><strong id="pageTitle">Dashboard</strong></div>
-        <div class="top-actions"><span id="sessionLabel" class="session-label"></span><button id="refreshBtn" class="btn ghost">Refresh</button><button id="logoutBtn" class="btn ghost">Keluar</button></div>
-      </header>
-      <div class="content">
-        <div id="globalMessage" class="message" hidden></div>
-        <section class="page active" data-page="dashboard"></section>
-        <section class="page" data-page="cms"></section>
-        <section class="page" data-page="products"></section>
-        <section class="page" data-page="b2c"></section>
-        <section class="page" data-page="b2b"></section>
-        <section class="page" data-page="testimonials"></section>
-        <section class="page" data-page="finance"></section>
-        <section class="page" data-page="access"></section>
-        <section class="page" data-page="audit"></section>
-        <section class="page" data-page="system"></section>
-      </div>
+      <header class="topbar"><div><span class="eyebrow">AYA ADMIN</span><strong id="pageTitle">Dashboard</strong></div><div class="top-actions"><span id="sessionLabel" class="session-label"></span><button id="refreshBtn" class="btn ghost">Refresh</button><button id="logoutBtn" class="btn ghost">Keluar</button></div></header>
+      <div class="content"><div id="globalMessage" class="message" hidden></div><section class="page active" data-page="dashboard"></section><section class="page" data-page="cms"></section><section class="page" data-page="products"></section><section class="page" data-page="b2c"></section><section class="page" data-page="b2b"></section><section class="page" data-page="testimonials"></section><section class="page" data-page="finance"></section><section class="page" data-page="access"></section><section class="page" data-page="audit"></section><section class="page" data-page="system"></section></div>
     </main>
-    <aside class="rail">
-      <div class="rail-brand"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div>
-      <nav id="nav" class="nav"></nav>
-      <div class="rail-footer"><span class="status-dot"></span><span>Staging · noindex</span></div>
-    </aside>
+    <aside class="rail"><div class="rail-brand"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div><nav id="nav" class="nav"></nav><div class="rail-footer"><span class="status-dot"></span><span>Staging · noindex</span></div></aside>
   </div>
-
   <dialog id="modal"><form method="dialog" class="modal-card"><button class="modal-close" value="cancel" aria-label="Tutup">×</button><div id="modalBody"></div></form></dialog>
-
   <script src="../js/config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
-  <script src="./admin.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
