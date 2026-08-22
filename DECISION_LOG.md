@@ -56,9 +56,16 @@ This file contains only decisions that remain active for the current development
 | AD-048 | Broader B2B Commercial Architecture v1 remains APPROVED / LOCKED target architecture but not implemented by the public frontend release: Product Master eligibility, pricing/margin, commitment, account, payment, delivery, credit, shipping, Admin, Finance and Audit remain separate implementation phases. |
 | AD-049 | Admin target access is `Function Registry → Role → Admin User`; one Admin User may have multiple Roles and effective permissions are the union of Role functions. This explicit B2B architecture supersedes Constitution v1.1's older one-user-one-role target statement until Constitution v1.2 is produced. |
 | AD-050 | Public Pasokan vNext implementation scope is exactly `business.html`, the Business source block in `css/site.css`, and `js/business-inquiry.js`; protected scopes remain unchanged. |
+| AD-051 | Public Mobile UI final implementation checkpoint is `ae52958a4408d9da95464e2f7b07de1544015457`; the mobile runtime is scoped to `max-width:900px` and only Home, Dedicated Lines, Product Catalog, Testimonials and Share. |
+| AD-052 | Final approved mobile visual references are Homepage V3.7, Dedicated Line Pages V4.9, Catalog V5.31, Testimonials V6.5 and Share V7.23. Mobile presentation is governed by `AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md`. |
+| AD-053 | Final Mobile implementation source boundary is exactly `css/site.css`, `js/site.js`, and `js/mobile-public-ui.js`. `css/site.css` remains the only public stylesheet/design system; the temporary standalone mobile stylesheet was removed before release. |
+| AD-054 | Information, Cart/B2C, Pasokan/B2B and direct Product Detail source/page are not modified by the Mobile release and remain governed by their existing locks/current authority. |
+| AD-055 | Mobile Catalog uses one active product decision stage with AYA-line filtering, previous/next + swipe, explicit variant selection, inspectable photo and existing Cart runtime. Product/price/variant/fact truth continues to come from canonical public data and may not be invented. |
+| AD-056 | Mobile Testimonials/Share presentation preserves real testimonial/submission data, upload, Supabase, moderation and approval contracts. Preview-only fake submission or fabricated testimonial/video content is never production truth. |
 
 ## Canonical supplements
 
+- `AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md`
 - `AYA-RAOS-PRODUCT-CATALOG-CANONICAL-SUPPLEMENT-v1.md`
 - `AYA-RAOS-TESTIMONIALS-SHARE-CANONICAL-SUPPLEMENT-v1.md`
 - `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md`
@@ -67,6 +74,6 @@ This file contains only decisions that remain active for the current development
 The broader approved B2B commercial/account/admin target is governed by the project resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.md` until it is synchronized into repository governance as part of its implementation phase.
 
 Latest development baseline:
-- `docs/AYA-RAOS-CURRENT-BASELINE-2026-08-21.md`
+- `docs/AYA-RAOS-CURRENT-BASELINE-2026-08-22.md`
 
 See Git history for superseded baseline detail.
