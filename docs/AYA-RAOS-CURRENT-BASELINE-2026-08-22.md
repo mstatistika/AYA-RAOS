@@ -1,138 +1,159 @@
 # AYA RAOS — Current Development Baseline — 22 Agustus 2026
 
-**Status:** Public Mobile UI implementation completed and governance synchronized for canonical release.  
+**Status:** Public Pasokan vNext + Public Mobile UI released; post-release parity / polish.  
 **Repository:** `mstatistika/AYA-RAOS`  
 **Canonical branch:** `main`  
+**Verified parent checkpoint before this governance sync:** `1d8acbaad0bb8b8af84e2c721464b155c1e3d31c`  
 **Website state:** staging / `noindex`; Production Launch is not approved.
+
+> Re-verify branch, HEAD, `origin/main`, and status before any mutation. The checkpoint above records verified history; it is not permission to assume Git has not moved.
 
 ## 1. Authority
 
 Use this order:
 1. latest explicit user approval/correction;
-2. this baseline;
-3. `AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md` for the released mobile presentation;
-4. `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.md` for approved target B2B architecture;
-5. `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md` for current public Pasokan vNext;
-6. applicable Product/Catalog, Testimonials/Share, Cart/B2C and Dedicated Line canonical supplements;
-7. Project Constitution v1.1 except explicit newer supersessions;
-8. Execution Discipline v1.1;
-9. verified facts and actual source/Git state;
-10. historical/recovery files only as evidence.
+2. `AYA-RAOS-CURRENT-STATE-2026-08-22-v12.md` in active Project Resources;
+3. applicable canonical supplement for the active scope;
+4. `AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md` for released mobile presentation;
+5. `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md` for approved target B2B commercial/account/admin architecture;
+6. `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md` for current public Pasokan vNext;
+7. applicable Product/Catalog, Testimonials/Share, Cart/B2C and Dedicated Line canonical supplements;
+8. Project Constitution v1.1 except explicit newer supersessions;
+9. Execution Discipline v1.2;
+10. verified facts and actual source/Git state;
+11. historical/recovery files only as evidence.
 
 Historical files do not regain authority because they contain `LOCKED` or `APPROVED`.
 
-## 2. Canonical state entering Mobile release
+## 2. Canonical release state
 
-Canonical `main` before Mobile release:
-`6a1b981ba4bd6d4facfeb13d79cfe71ec07902bf`
+Public Pasokan vNext is released and protected.
 
-That checkpoint already contains the released Public Pasokan vNext frontend and its governance package.
+Current released source boundary:
+- `business.html`;
+- approved Business block inside `css/site.css`;
+- `js/business-inquiry.js`.
 
-Mobile implementation branch:
-`feature/mobile-public-ui-locked-20260822`
+Public cadence vocabulary is only W1 / W2 / M1 / M2. Browser-side code does not calculate commercial eligibility. Trusted qualification/backend services remain separate and inactive until connected.
 
-Final implementation checkpoint before governance:
-`ae52958a4408d9da95464e2f7b07de1544015457` — `refactor: consolidate locked public mobile UI`.
-
-Immediately before governance sync the branch was verified:
-- **6 commits ahead / 0 behind** `main`;
-- implementation diff only:
-  - `css/site.css`;
-  - `js/site.js`;
-  - `js/mobile-public-ui.js`;
-- Vercel status = success.
+Broader B2B Commercial Architecture v1.1 remains APPROVED / LOCKED target architecture and is not made live by the public frontend release.
 
 ## 3. Public Mobile UI release
 
 Approved mobile presentation applies at `max-width: 900px` only to:
 - Homepage;
-- AYA Farm / TUMBUH;
-- AYA Spice Haven / DIOLAH;
-- AYA Snacks & Drinks / DINIKMATI;
+- Dedicated Line Pages;
 - Product Catalog;
 - Public Testimonials;
 - Testimonial Share.
 
-Detailed authority:
-`AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md`.
-
-Approved final preview lineage:
+Final preview lineage:
 - Homepage V3.7;
 - Dedicated Lines V4.9;
 - Catalog V5.31;
 - Testimonials V6.5;
 - Share V7.23.
 
-Primary mobile review target remains `390 × 844`, with narrow/wider sanity targets around 360 and 430 px.
+Final mobile source boundary:
+- `css/site.css`;
+- `js/site.js`;
+- `js/mobile-public-ui.js`.
 
-## 4. Mobile source architecture
+`css/site.css` remains the single public-site stylesheet/design system. The temporary standalone mobile stylesheet was removed before release.
 
-`css/site.css` remains the single public-site stylesheet/design system.
+## 4. Protected / unchanged scopes
 
-The final mobile source boundary is:
-- `css/site.css` — scoped mobile block consolidated into the single design system;
-- `js/site.js` — scoped mobile runtime loader;
-- `js/mobile-public-ui.js` — mobile-only presentation/runtime.
-
-The temporary `css/mobile-public-ui.css` implementation file was removed before release. No parallel stylesheet is part of the final state.
-
-Desktop and non-target pages remain outside the mobile runtime/breakpoint boundary.
-
-## 5. Protected / unchanged by Mobile release
-
-The Mobile release does not modify or reopen:
-- Information — remains PARKED/protected;
+Protected unless explicitly reopened:
+- desktop Homepage;
+- desktop Dedicated Line Pages;
+- desktop Product Catalog;
+- Product Detail;
+- Testimonials public;
+- Testimonial Share;
+- testimonial/Supabase/moderation contracts;
 - Cart/B2C v16;
-- Pasokan/B2B vNext;
-- direct Product Detail source/page;
-- testimonial/Supabase/moderation/approval backend behavior;
-- canonical product data in `js/data.js`;
-- payment/order/backend truth boundaries.
+- Public Pasokan vNext;
+- Information.
 
-Desktop locks remain governed by their existing canonical supplements.
+Information mobile remains PARKED.
 
-## 6. Product / Catalog truth
+Shared changes require zero-regression proof.
 
-Mobile Catalog reads canonical product data and existing Cart runtime.
+## 5. Preview → LOCK → implementation parity
 
-The mobile decision stage may change presentation and interaction, but it may not invent or override:
-- prices;
-- variants;
-- product facts;
-- availability truth;
-- ratings/reviews/popularity;
-- unsupported product claims.
+Design/review happens in ChatGPT first.
 
-Direct Product Detail remains an existing protected page and is not removed by the unified mobile Catalog decision experience.
+For layout/interaction, use an HTML/browser preview. Once explicitly approved/LOCKED:
+- the approved preview becomes visual + interaction authority;
+- implementation is translation, not a second design phase;
+- no new design interpretation is allowed during implementation;
+- visible implementation drift is an implementation defect;
+- fix implementation toward the LOCK rather than asking for the same design to be reviewed again.
 
-## 7. Testimonials / Share truth
+This rule exists to prevent preview approval followed by a second visual-design cycle during source implementation.
 
-Mobile presentation does not change testimonial truth or moderation authority.
+## 6. Codespaces economy
 
-Real data/upload/Supabase/moderation/approval remain protected. No testimonial content, customer identity/location, video, review count, or approval claim may be fabricated.
+Codespaces is not the default preview/review environment.
 
-Share continues to use the canonical submission contract. Standalone preview-only fake submission behavior is not production behavior.
+Use it only when safe actual-source mutation requires it, especially:
+- scoped `css/site.css` mutation;
+- another source mutation unavailable safely through current GitHub tooling;
+- local runtime/build checks unavailable otherwise.
 
-## 8. Pasokan / broader B2B state
+Routine preview iteration, remote-resolvable Git inspection and documentation housekeeping should not consume Codespaces quota.
 
-Public Pasokan vNext remains released and protected from this Mobile scope.
+Prefer one bounded Codespaces session for the smallest necessary mutation batch.
 
-Broader B2B Commercial Architecture v1 remains approved target architecture. Backend/account/payment/admin capabilities are not made live by the Mobile release.
+## 7. Stuck / long-loading recovery
 
-`Paid ≠ Settled` remains mandatory commercial truth.
+If ChatGPT/tool execution stalls, times out, shows stopped thinking, or ends ambiguously, never infer completion.
+
+Verify read-only first:
+- branch;
+- HEAD;
+- `origin/main`;
+- working tree/status when available;
+- staged diff;
+- changed paths;
+- remote branch/commit comparison.
+
+If a mutation command exits non-zero, determine zero-write vs partial-write state before another mutation attempt.
+
+Avoid opaque mega-runs. Use bounded phases:
+`audit/preflight → preview/LOCK → mutation → validation → commit/push → remote verify → governance if needed → main → housekeeping`.
+
+## 8. Commercial truth
+
+Do not fabricate or publicly promise:
+- MOQ/capacity;
+- special price;
+- quotation/order/agreement/invoice IDs;
+- payment/provider/Paid state;
+- stock reservation;
+- delivery guarantee;
+- account/history state.
+
+Frontend-only state never impersonates backend truth.
+
+`Paid != Settled` remains mandatory commercial truth.
 
 ## 9. Open / parked items
 
-- Information mobile remains parked until explicitly reopened.
-- Cart minor desktop item-count pill follow-up remains separate and does not reopen Cart geometry.
-- broader B2B Account/Admin/Payment implementation remains a later implementation phase.
-- Production Launch/noindex removal still requires explicit approval.
+Only when explicitly reopened:
+- post-release parity/polish where actual implementation visibly drifts from a LOCK;
+- Information mobile;
+- Cart minor desktop item-count pill follow-up;
+- broader B2B Account/Admin/Payment/backend implementation;
+- Production Launch.
 
 ## 10. Release discipline
 
-The Mobile release follows:
-implementation validation/commit/push/remote verify → governance sync/commit/push/remote verify → fast-forward `main` → verify `origin/main` → housekeeping separately.
+Release remains:
+read-only preflight → implementation validation/commit/push/remote verify → governance sync only when needed → governance commit/push/remote verify → fast-forward `main` → verify `origin/main` → housekeeping separately.
 
 No force update of `main`.
 
-Housekeeping is not part of this governance commit.
+No Production Launch/noindex removal without explicit approval.
+
+Historical evidence remains in Git/conversation history; active Project Resources should retain current authority rather than obsolete handoffs/recovery notes.

@@ -13,10 +13,10 @@ This supplement supersedes Pasokan Usaha Canonical Supplement v1 for the public 
 Read together with:
 1. latest explicit user approval/correction;
 2. latest CURRENT STATE / development baseline;
-3. `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.md` for the approved target commercial/account/admin architecture;
+3. `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md` for the approved target commercial/account/admin architecture;
 4. applicable Cart/B2C and other protected-scope supplements;
 5. Project Constitution;
-6. Execution Discipline;
+6. Execution Discipline v1.2;
 7. verified actual source and Git state.
 
 The v1 Pasokan supplement remains historical evidence for the former `a779b6e` implementation only.
@@ -183,7 +183,7 @@ Homepage; Dedicated Line Pages; Product Catalog; Product Detail; Testimonials pu
 
 ## 12. Commercial architecture still pending implementation
 
-The broader B2B Commercial Architecture v1 remains approved target authority for:
+The broader B2B Commercial Architecture v1.1 remains approved target authority for:
 - explicit Product Master B2B eligibility;
 - COGS / Unit Price / Supply Price / margin guard;
 - immutable commitment snapshots;
@@ -199,5 +199,8 @@ This public frontend release must not be interpreted as implementation of those 
 ## 13. Release discipline
 
 This checkpoint remains staging / `noindex` until explicit Production Launch approval.
+
+For future visual correction, follow Execution Discipline v1.2:
+preview/review in ChatGPT → explicit LOCK → implementation parity → validation/release.
 
 Governance sync and remote verification precede fast-forward of `main`. Housekeeping remains separate.

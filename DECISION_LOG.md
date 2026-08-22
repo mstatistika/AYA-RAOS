@@ -53,7 +53,7 @@ This file contains only decisions that remain active for the current development
 | AD-045 | Approved B2B entry thresholds: Beras W1 5kg / W2 10kg / M1 25kg / M2 50kg; other products W1 Rp100k / W2 Rp200k / M1 Rp500k / M2 Rp1m. These thresholds never classify one-time B2C purchases. |
 | AD-046 | `businessSupply.qualificationEndpoint` is intentionally absent from current staging config. Therefore public vNext must show `Status belum bisa diperiksa` rather than fabricate eligible/adjust status. |
 | AD-047 | Positive status may expose `Aktivasi Akun Pasokan` only from a trusted response with a safe same-origin activation URL. The frontend itself creates no B2B account or commitment. |
-| AD-048 | Broader B2B Commercial Architecture v1 remains APPROVED / LOCKED target architecture but not implemented by the public frontend release: Product Master eligibility, pricing/margin, commitment, account, payment, delivery, credit, shipping, Admin, Finance and Audit remain separate implementation phases. |
+| AD-048 | Broader B2B Commercial Architecture v1.1 remains APPROVED / LOCKED target architecture but not implemented by the public frontend release: Product Master eligibility, pricing/margin, commitment, account, payment, delivery, credit, shipping, Admin, Finance and Audit remain separate implementation phases. |
 | AD-049 | Admin target access is `Function Registry → Role → Admin User`; one Admin User may have multiple Roles and effective permissions are the union of Role functions. This explicit B2B architecture supersedes Constitution v1.1's older one-user-one-role target statement until Constitution v1.2 is produced. |
 | AD-050 | Public Pasokan vNext implementation scope is exactly `business.html`, the Business source block in `css/site.css`, and `js/business-inquiry.js`; protected scopes remain unchanged. |
 | AD-051 | Public Mobile UI final implementation checkpoint is `ae52958a4408d9da95464e2f7b07de1544015457`; the mobile runtime is scoped to `max-width:900px` and only Home, Dedicated Lines, Product Catalog, Testimonials and Share. |
@@ -62,6 +62,8 @@ This file contains only decisions that remain active for the current development
 | AD-054 | Information, Cart/B2C, Pasokan/B2B and direct Product Detail source/page are not modified by the Mobile release and remain governed by their existing locks/current authority. |
 | AD-055 | Mobile Catalog uses one active product decision stage with AYA-line filtering, previous/next + swipe, explicit variant selection, inspectable photo and existing Cart runtime. Product/price/variant/fact truth continues to come from canonical public data and may not be invented. |
 | AD-056 | Mobile Testimonials/Share presentation preserves real testimonial/submission data, upload, Supabase, moderation and approval contracts. Preview-only fake submission or fabricated testimonial/video content is never production truth. |
+| AD-057 | For visual/interaction work, an explicitly approved ChatGPT HTML/browser preview is the implementation authority. After LOCK, implementation is translation rather than a second design phase; visible drift is an implementation defect and must be corrected toward the LOCK. |
+| AD-058 | Codespaces is reserved for safe actual-source mutation that genuinely requires it, especially scoped `css/site.css` work. If execution stalls or a mutation fails, recover with read-only state verification before any retry; do not infer completion from a spinner, narration or intended command. |
 
 ## Canonical supplements
 
@@ -71,7 +73,7 @@ This file contains only decisions that remain active for the current development
 - `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md`
 - `AYA-RAOS-CART-B2C-CANONICAL-SUPPLEMENT-v1.md`
 
-The broader approved B2B commercial/account/admin target is governed by the project resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.md` until it is synchronized into repository governance as part of its implementation phase.
+The broader approved B2B commercial/account/admin target is governed by the active Project Resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md` until it is synchronized into repository governance as part of its implementation phase.
 
 Latest development baseline:
 - `docs/AYA-RAOS-CURRENT-BASELINE-2026-08-22.md`
