@@ -50,14 +50,14 @@ create table if not exists public.aya_b2b_commercial_summaries (
   unique (relationship_id, version_no),
   constraint aya_b2b_summary_version_check check (version_no >= 1),
   constraint aya_b2b_summary_kind_check check (summary_kind in ('fixed_commitment','nfc')),
-  constraint aya_b2b_summary_status_check check (status in ('draft','confirmed','superseded')),
+  constraint aya_b2b_summary_status_check check (status in ('draft','confirmed')),
   constraint aya_b2b_summary_billing_check check (billing_option in ('per_delivery','per_month','per_2_months')),
   constraint aya_b2b_summary_payment_check check (payment_option in ('upfront_100','upfront_50','pay_per_delivery')),
   constraint aya_b2b_summary_value_check check (total_committed_value is null or total_committed_value >= 0),
   constraint aya_b2b_summary_confirmation_shape_check check (
     (status = 'draft' and confirmed_by is null and confirmed_at is null)
     or
-    (status in ('confirmed','superseded') and confirmed_by is not null and confirmed_at is not null)
+    (status = 'confirmed' and confirmed_by is not null and confirmed_at is not null)
   ),
   constraint aya_b2b_summary_fixed_shape_check check (
     (summary_kind = 'fixed_commitment' and commitment_months = 6)
@@ -104,13 +104,13 @@ set search_path = pg_catalog, public
 as $$
 begin
   if tg_op = 'DELETE' then
-    if old.status in ('confirmed','superseded') then
+    if old.status = 'confirmed' then
       raise exception using message = 'confirmed_summary_is_immutable', errcode = '55000';
     end if;
     return old;
   end if;
 
-  if old.status in ('confirmed','superseded') then
+  if old.status = 'confirmed' then
     raise exception using message = 'confirmed_summary_is_immutable', errcode = '55000';
   end if;
   return new;
@@ -124,18 +124,27 @@ security invoker
 set search_path = pg_catalog, public
 as $$
 declare
-  v_summary_id uuid := coalesce(new.summary_id, old.summary_id);
+  v_summary_id uuid;
   v_status text;
 begin
+  if tg_op = 'DELETE' then
+    v_summary_id := old.summary_id;
+  else
+    v_summary_id := new.summary_id;
+  end if;
+
   select status into v_status
   from public.aya_b2b_commercial_summaries
   where id = v_summary_id;
 
-  if v_status in ('confirmed','superseded') then
+  if v_status = 'confirmed' then
     raise exception using message = 'confirmed_summary_items_are_immutable', errcode = '55000';
   end if;
 
-  return case when tg_op = 'DELETE' then old else new end;
+  if tg_op = 'DELETE' then
+    return old;
+  end if;
+  return new;
 end;
 $$;
 
