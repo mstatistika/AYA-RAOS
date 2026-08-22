@@ -139,13 +139,13 @@ const dummyTestimonials = [
   {id:'t4',display_name:'Budi Santoso',phone:'081234567890',city:'Jakarta',product_name_snapshot:'Sambal Rawang',testimonial_format:'text',status:'draft',is_featured:false,testimonial_text:'Pedasnya nampol, recommended!'},
 ];
 const dummyCMS = [
-  {slot_key:'hero_title',label:'Hero Title',area:'homepage',position:'Hero Section',viewport:'100vh',state:'published',draft_content:{text:'AYA RAOS. Ada Rasa.'},published_content:{text:'AYA RAOS. Ada Rasa.'}},
-  {slot_key:'hero_subtitle',label:'Hero Subtitle',area:'homepage',position:'Hero Section',viewport:'100vh',state:'published',draft_content:{text:'Wilujeng Sumping'},published_content:{text:'Wilujeng Sumping'}},
-  {slot_key:'about_text',label:'About Text',area:'homepage',position:'About Section',viewport:'80vh',state:'published',draft_content:{text:'Rasa yang dekat dengan keseharian.'},published_content:{text:'Rasa yang dekat dengan keseharian.'}},
-  {slot_key:'about_values',label:'About Values',area:'homepage',position:'About Section',viewport:'80vh',state:'draft',draft_content:{text:'Sederhana, Hangat, Jelas'},published_content:{text:''}},
-  {slot_key:'lines_title',label:'Lines Title',area:'homepage',position:'Lines Section',viewport:'90vh',state:'published',draft_content:{text:'Satu keluarga, ada tiga rasa.'},published_content:{text:'Satu keluarga, ada tiga rasa.'}},
-  {slot_key:'closing_cta',label:'Closing CTA',area:'homepage',position:'Closing Section',viewport:'60vh',state:'draft',draft_content:{text:'Mulai dari AYA.'},published_content:{text:''}},
-  {slot_key:'footer_tagline',label:'Footer Tagline',area:'footer',position:'Footer',viewport:'20vh',state:'published',draft_content:{text:'Rasa yang dekat dengan keseharian.'},published_content:{text:'Rasa yang dekat dengan keseharian.'}},
+  {slot_key:'hero_title',label:'Hero Title',area:'homepage',position:'Hero Section',viewport:'1',state:'published',draft_content:{text:'AYA RAOS. Ada Rasa.'},published_content:{text:'AYA RAOS. Ada Rasa.'}},
+  {slot_key:'hero_subtitle',label:'Hero Subtitle',area:'homepage',position:'Hero Section',viewport:'1',state:'published',draft_content:{text:'Wilujeng Sumping'},published_content:{text:'Wilujeng Sumping'}},
+  {slot_key:'about_text',label:'About Text',area:'homepage',position:'About Section',viewport:'2',state:'published',draft_content:{text:'Rasa yang dekat dengan keseharian.'},published_content:{text:'Rasa yang dekat dengan keseharian.'}},
+  {slot_key:'about_values',label:'About Values',area:'homepage',position:'About Section',viewport:'2',state:'draft',draft_content:{text:'Sederhana, Hangat, Jelas'},published_content:{text:''}},
+  {slot_key:'lines_title',label:'Lines Title',area:'homepage',position:'Lines Section',viewport:'3',state:'published',draft_content:{text:'Satu keluarga, ada tiga rasa.'},published_content:{text:'Satu keluarga, ada tiga rasa.'}},
+  {slot_key:'closing_cta',label:'Closing CTA',area:'homepage',position:'Closing Section',viewport:'4',state:'draft',draft_content:{text:'Mulai dari AYA.'},published_content:{text:''}},
+  {slot_key:'footer_tagline',label:'Footer Tagline',area:'footer',position:'Footer',viewport:'4',state:'published',draft_content:{text:'Rasa yang dekat dengan keseharian.'},published_content:{text:'Rasa yang dekat dengan keseharian.'}},
 ];
 const dummyRoles = [
   {id:'r1',role_name:'Super Admin',description:'Full access',is_system:true,access:{dashboard:'ved',cms:'ved',products:'ved',b2c:'ved',b2b:'ved',testimonials:'ved',finance:'ved',access:'ved',history:'ved',system:'ved'}},
@@ -215,7 +215,7 @@ async function cms() {
     `<button class="btn ghost cms-filter active" data-area="all" style="font-size:11px;padding:6px 12px;">All</button>` +
     areas.map(a => `<button class="btn ghost cms-filter" data-area="${esc(a)}" style="font-size:11px;padding:6px 12px;">${esc(a)}</button>`).join('') +
     `</div>` +
-    `<div id="cmsSlots"><div class="table-wrap"><table><thead><tr><th>Slot</th><th>Area</th><th>Position</th><th>Viewport</th><th>State</th><th></th></tr></thead><tbody>` +
+    `<div id="cmsSlots"><div class="table-wrap"><table><thead><tr><th>Slot</th><th>Area</th><th>Position</th><th>VP</th><th>State</th><th></th></tr></thead><tbody>` +
     S.cms.map(s => `<tr data-cms-area="${esc(s.area)}"><td><b>${esc(s.label)}</b><div class="muted-line">${esc(s.slot_key)}</div></td><td>${esc(s.area)}</td><td>${esc(s.position)}</td><td>${esc(s.viewport)}</td>` +
     `<td>${s.state==='published'?chip('Published','good'):chip('Draft','warn')}</td><td><button class="btn ghost" data-slot="${esc(s.slot_key)}">Open</button></td></tr>`).join('') +
     `</tbody></table></div></div>` +
@@ -293,12 +293,12 @@ function openProductEdit(id) {
     `</div>` +
     `<div class="section-title"><h2>B2C Variants</h2><span>editable</span></div>` +
     `<div class="list" id="variantList">` +
-    vs.map((v,i) => `<div class="row variant-row" data-vi="${i}"><input class="v-name" value="${esc(v.variant_name)}" style="flex:1;border:none;background:transparent;font:inherit;"><input class="v-price" type="number" value="${v.unit_price}" style="width:100px;text-align:right;border:none;background:transparent;font:inherit;"></div>`).join('') +
+    vs.map((v,i) => `<div class="row variant-row" data-vi="${i}"><input class="v-name" value="${esc(v.variant_name)}" style="flex:1;border:1px solid transparent;background:transparent;font:inherit;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"><input class="v-price" type="number" value="${v.unit_price}" style="width:100px;text-align:right;border:1px solid transparent;background:transparent;font:inherit;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"></div>`).join('') +
     `</div>` +
     `<button class="btn ghost" id="addVariant" type="button" style="margin-top:8px;font-size:11px;">+ Tambah Variant</button>` +
     `<div class="section-title"><h2>B2B Measurements</h2><span>editable per variant</span></div>` +
     `<div class="list" id="measureList">` +
-    ms.map((m,i) => `<div class="row measure-row" data-mi="${i}"><div style="flex:1"><input class="m-variant" value="${esc(m.variant_name)}" style="border:none;background:transparent;font:inherit;width:100%;"><small><input class="m-unit" value="${esc(m.unit_label)}" style="border:none;background:transparent;font:inherit;width:100%;"></small></div><div style="text-align:right"><input class="m-base" type="number" value="${m.base_cost}" style="width:80px;border:none;background:transparent;font:inherit;text-align:right;"><br><input class="m-final" type="number" value="${m.final_unit_price}" style="width:80px;border:none;background:transparent;font:inherit;text-align:right;"></div></div>`).join('') +
+    ms.map((m,i) => `<div class="row measure-row" data-mi="${i}"><div style="flex:1"><input class="m-variant" value="${esc(m.variant_name)}" style="border:1px solid transparent;background:transparent;font:inherit;width:100%;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"><small><input class="m-unit" value="${esc(m.unit_label)}" style="border:1px solid transparent;background:transparent;font:inherit;width:100%;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"></small></div><div style="text-align:right"><input class="m-base" type="number" value="${m.base_cost}" style="width:80px;border:1px solid transparent;background:transparent;font:inherit;text-align:right;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"><br><input class="m-final" type="number" value="${m.final_unit_price}" style="width:80px;border:1px solid transparent;background:transparent;font:inherit;text-align:right;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"></div></div>`).join('') +
     `</div>` +
     `<button class="btn ghost" id="addMeasure" type="button" style="margin-top:8px;font-size:11px;">+ Tambah Measurement</button>` +
     `<div class="toolbar" style="margin-top:20px"><button id="productSave" class="btn primary">Save</button></div>` +
@@ -307,14 +307,14 @@ function openProductEdit(id) {
   $('#addVariant').onclick = () => {
     const div = document.createElement('div');
     div.className = 'row variant-row';
-    div.innerHTML = `<input class="v-name" placeholder="Nama variant" style="flex:1;border:none;background:transparent;font:inherit;"><input class="v-price" type="number" placeholder="Harga" style="width:100px;text-align:right;border:none;background:transparent;font:inherit;">`;
+    div.innerHTML = `<input class="v-name" placeholder="Nama variant" style="flex:1;border:1px solid transparent;background:transparent;font:inherit;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"><input class="v-price" type="number" placeholder="Harga" style="width:100px;text-align:right;border:1px solid transparent;background:transparent;font:inherit;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'">`;
     $('#variantList').appendChild(div);
   };
 
   $('#addMeasure').onclick = () => {
     const div = document.createElement('div');
     div.className = 'row measure-row';
-    div.innerHTML = `<div style="flex:1"><input class="m-variant" placeholder="Variant name" style="border:none;background:transparent;font:inherit;width:100%;"><small><input class="m-unit" placeholder="Unit label" style="border:none;background:transparent;font:inherit;width:100%;"></small></div><div style="text-align:right"><input class="m-base" type="number" placeholder="Base" style="width:80px;border:none;background:transparent;font:inherit;text-align:right;"><br><input class="m-final" type="number" placeholder="Final" style="width:80px;border:none;background:transparent;font:inherit;text-align:right;"></div>`;
+    div.innerHTML = `<div style="flex:1"><input class="m-variant" placeholder="Variant name" style="border:1px solid transparent;background:transparent;font:inherit;width:100%;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"><small><input class="m-unit" placeholder="Unit label" style="border:1px solid transparent;background:transparent;font:inherit;width:100%;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"></small></div><div style="text-align:right"><input class="m-base" type="number" placeholder="Base" style="width:80px;border:1px solid transparent;background:transparent;font:inherit;text-align:right;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"><br><input class="m-final" type="number" placeholder="Final" style="width:80px;border:1px solid transparent;background:transparent;font:inherit;text-align:right;padding:4px;border-radius:4px;" onfocus="this.style.borderColor='var(--gold)';this.style.background='white'" onblur="this.style.borderColor='transparent';this.style.background='transparent'"></div>`;
     $('#measureList').appendChild(div);
   };
 
@@ -368,6 +368,7 @@ async function b2b() {
   const settings = set[0]||{};
 
   page('b2b').innerHTML = head('B2B OPERATIONS','Konfigurasi nyata; lifecycle mengikuti backend.','Preview mode — data sample.',settings?.qualification_enabled?chip('Qualification ON','good'):chip('Qualification OFF','warn')) +
+    `<div style="overflow-y:auto;max-height:calc(100vh - 200px);">` +
     `<div class="grid cols4">${metric('Companies',companies.length||0,'B2B identity foundation')}${metric('Company Members',members.length||0,'Individual identities')}${metric('Eligible Products',S.b2b.filter(x=>x.supply_eligible).length,'Explicit config')}${metric('Commercial Enabled',S.measures.filter(x=>x.commercial_enabled).length,'Subject to margin guard')}</div>` +
     `<div class="section-title"><h2>Inquiry Tracker</h2><span>siapa, berapa, frekuensi</span></div>` +
     `<div class="table-wrap"><table><thead><tr><th>Company</th><th>Contact</th><th>Phone</th><th>Status</th><th>Items</th><th>Nominal</th><th>Freq</th><th></th></tr></thead><tbody>` +
@@ -381,7 +382,7 @@ async function b2b() {
     `<div class="section-title"><h2>Measurements</h2><span>economics backend-owned</span></div>` +
     `<div class="table-wrap"><table><thead><tr><th>Product</th><th>Variant</th><th>Unit</th><th>Base Cost</th><th>Final Price</th><th>Enabled</th></tr></thead><tbody>` +
     S.measures.map(m => `<tr><td>${esc(m.product_id)}</td><td>${esc(m.variant_name)}</td><td>${esc(m.unit_label)}</td><td>${money(m.base_cost)}</td><td>${money(m.final_unit_price)}</td><td>${m.commercial_enabled?chip('Yes','good'):chip('No')}</td></tr>`).join('') +
-    `</tbody></table></div>`;
+    `</tbody></table></div></div>`;
 
   page('b2b').querySelectorAll('[data-inq]').forEach(b => b.onclick = () => openInquiryDetail(b.dataset.inq));
 }
