@@ -97,10 +97,12 @@ create table if not exists public.aya_b2b_qualification_settings (
   -- Aggregation semantics are intentionally not activated until explicitly resolved.
   -- 'cadence_group' is a technical mode only; seed remains 'pending'.
   evaluation_scope text not null default 'pending',
+  value_basis text not null default 'pending',
   qualification_enabled boolean not null default false,
   updated_at timestamptz not null default now(),
   constraint aya_b2b_settings_singleton_check check (singleton is true),
-  constraint aya_b2b_settings_scope_check check (evaluation_scope in ('pending','cadence_group'))
+  constraint aya_b2b_settings_scope_check check (evaluation_scope in ('pending','cadence_group')),
+  constraint aya_b2b_settings_value_basis_check check (value_basis in ('pending','supply_price'))
 );
 
 insert into public.aya_b2b_qualification_thresholds
@@ -117,9 +119,9 @@ values
 on conflict (rule_version, product_class, cadence) do nothing;
 
 insert into public.aya_b2b_qualification_settings
-  (singleton, active_rule_version, evaluation_scope, qualification_enabled)
+  (singleton, active_rule_version, evaluation_scope, value_basis, qualification_enabled)
 values
-  (true, '2026-08-19-v1', 'pending', false)
+  (true, '2026-08-19-v1', 'pending', 'pending', false)
 on conflict (singleton) do nothing;
 
 -- Seed shared product identity from current canonical public data.
@@ -207,7 +209,7 @@ returns table (
 )
 language sql
 stable
-security definer
+security invoker
 set search_path = pg_catalog, public
 as $$
   select
@@ -231,7 +233,7 @@ $$;
 create or replace function public.aya_b2b_qualify_v1(p_payload jsonb)
 returns jsonb
 language plpgsql
-security definer
+security invoker
 set search_path = pg_catalog, public
 as $$
 declare
@@ -263,6 +265,9 @@ begin
   end if;
   if v_settings.evaluation_scope <> 'cadence_group' then
     raise exception using message = 'qualification_policy_incomplete', errcode = 'P0001';
+  end if;
+  if v_settings.value_basis <> 'supply_price' then
+    raise exception using message = 'qualification_value_basis_incomplete', errcode = 'P0001';
   end if;
 
   if jsonb_typeof(v_rows) <> 'array' or jsonb_array_length(v_rows) < 1 or jsonb_array_length(v_rows) > 20 then
