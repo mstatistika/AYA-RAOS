@@ -109,7 +109,80 @@
   const validateRuntime = () => { if (!window.AYA_CONFIG) showGlobalState("Konfigurasi AYA gagal dimuat. Beberapa fungsi dinonaktifkan.", "error"); if (!Array.isArray(window.AYA_PRODUCTS)) showGlobalState("Data produk gagal dimuat. Silakan muat ulang halaman.", "error"); };
   const initInformationHelp = () => document.querySelectorAll("[data-whatsapp-help]").forEach((button) => button.addEventListener("click", () => openWhatsApp("Halo AYA RAOS, saya membutuhkan bantuan mengenai informasi pemesanan.")));
 
+  const initHomeMobile = () => {
+    if (document.body.dataset.page !== "home") return;
+
+    const heroCopy = document.querySelector(".home-copy-stage");
+    if (heroCopy && !heroCopy.querySelector(".home-mobile-semesta")) {
+      const mobileSemesta = document.createElement("div");
+      mobileSemesta.className = "home-mobile-semesta";
+      mobileSemesta.innerHTML = '<p>Semesta rasa tempat tiga dunia AYA bertemu.</p><p>Dari yang tumbuh, diolah, hingga dinikmati.</p>';
+      heroCopy.querySelector("h1")?.insertAdjacentElement("afterend", mobileSemesta);
+
+      const signatures = document.createElement("div");
+      signatures.className = "home-mobile-line-signatures";
+      signatures.setAttribute("aria-label", "Tiga lini AYA");
+      signatures.innerHTML = '<div><span aria-hidden="true">⌁</span><strong>FARM</strong><small>TUMBUH</small></div><div><span aria-hidden="true">✦</span><strong>AYA SPICE HAVEN</strong><small>DIOLAH</small></div><div><span aria-hidden="true">◌</span><strong>AYA SNACKS &amp; DRINKS</strong><small>DINIKMATI</small></div>';
+      heroCopy.append(signatures);
+    }
+
+    const aboutCopy = document.querySelector(".home-about .about-copy");
+    if (aboutCopy && !aboutCopy.querySelector(".home-mobile-about-copy")) {
+      const mobileAbout = document.createElement("div");
+      mobileAbout.className = "home-mobile-about-copy";
+      mobileAbout.innerHTML = '<p>Bagi AYA, rasa hadir dari perhatian pada bahan, proses, dan momen kebersamaan.</p><p>Karena itu, AYA membuat produk yang sederhana, jelas fungsinya, dan dekat dengan keseharian.</p>';
+      aboutCopy.querySelector("h2")?.insertAdjacentElement("afterend", mobileAbout);
+    }
+
+    const lines = document.querySelector(".home-lines");
+    const worlds = lines?.querySelector(".line-worlds");
+    if (!lines || !worlds) return;
+
+    if (!lines.querySelector(".home-mobile-lines-heading")) {
+      const heading = document.createElement("div");
+      heading.className = "home-mobile-lines-heading";
+      heading.innerHTML = '<span>LINI AYA</span><h2>Tiga dunia.<br><em>Satu rasa.</em></h2><p>Tumbuh. Diolah. Dinikmati.</p>';
+      worlds.insertAdjacentElement("beforebegin", heading);
+    }
+
+    if (lines.querySelector(".home-mobile-line-rail")) return;
+    const cards = [...worlds.querySelectorAll(".line-world")];
+    if (!cards.length) return;
+
+    const meta = [
+      { key: "farm", label: "FARM", mark: "⌁" },
+      { key: "spice", label: "SPICE", mark: "✦" },
+      { key: "snack", label: "SNACKS", mark: "◌" }
+    ];
+    const rail = document.createElement("nav");
+    rail.className = "home-mobile-line-rail";
+    rail.setAttribute("aria-label", "Pilih lini AYA");
+    meta.forEach((item, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.homeLine = item.key;
+      button.innerHTML = `<span aria-hidden="true">${item.mark}</span><strong>${item.label}</strong>`;
+      button.addEventListener("click", () => activate(index));
+      rail.append(button);
+    });
+    worlds.insertAdjacentElement("afterend", rail);
+
+    const activate = (index) => {
+      cards.forEach((card, cardIndex) => {
+        const active = cardIndex === index;
+        card.classList.toggle("mobile-active", active);
+        card.setAttribute("aria-hidden", String(!active));
+      });
+      [...rail.querySelectorAll("button")].forEach((button, buttonIndex) => {
+        const active = buttonIndex === index;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    };
+    activate(1);
+  };
+
   window.AYA = Object.freeze({ escapeHTML, formatPrice, products, getProduct, getVariant, getCart, saveCart, addToCart, updateCartItem, changeCartVariant, removeCartItem, cartDetails, cartSubtotal, updateCartCount, quantityRules, normalizeProductQuantity, toast, showGlobalState, buildWhatsAppUrl, openWhatsApp, readDraft, saveDraft });
 
-  document.addEventListener("DOMContentLoaded", () => { renderGlobalShell(); validateRuntime(); updateCartCount(); initImages(); initMenu(); initActiveNav(); initInformationHelp(); });
+  document.addEventListener("DOMContentLoaded", () => { renderGlobalShell(); validateRuntime(); updateCartCount(); initImages(); initMenu(); initActiveNav(); initInformationHelp(); initHomeMobile(); });
 })();
