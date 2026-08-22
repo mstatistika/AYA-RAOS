@@ -12,10 +12,10 @@
     <main class="workspace">
       <header class="topbar">
         <div><span class="eyebrow">AYA ADMIN · PREVIEW</span><strong id="pageTitle">Dashboard</strong></div>
-        <div class="top-actions"><span class="session-label">Read-only demo</span><button id="refreshBtn" class="btn ghost" type="button">Refresh</button></div>
+        <div class="top-actions"><span class="session-label">Dev Admin · Supabase Preview</span><button id="refreshBtn" class="btn ghost" type="button">Refresh</button></div>
       </header>
       <div class="content">
-        <div class="message success"><strong>PREVIEW DEMO — READ-ONLY.</strong> Login dinonaktifkan hanya pada integration branch agar struktur Admin dapat direview. Tidak ada perubahan yang disimpan ke Supabase.</div>
+        <div id="globalMessage" class="message success"><strong>DEV ADMIN — PREVIEW.</strong> Mode development tanpa login. Data dan perubahan terbatas pada environment Preview Supabase.</div>
         <section class="page active" data-page="dashboard"></section>
         <section class="page" data-page="cms"></section>
         <section class="page" data-page="products"></section>
@@ -31,9 +31,9 @@
     <aside class="rail">
       <div class="rail-brand"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PREVIEW</small></div></div>
       <nav id="nav" class="nav" aria-label="Admin preview navigation"></nav>
-      <div class="rail-footer"><span class="status-dot"></span><span>Preview · noindex · read-only</span></div>
+      <div class="rail-footer"><span class="status-dot"></span><span>Preview · noindex · development</span></div>
     </aside>
   </div>
-  <script src="./demo.js"></script>
+  <script src="./dev.js"></script>
 </body>
 </html>
