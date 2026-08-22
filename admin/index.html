@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>AYA RAOS — Admin</title>
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+  <div id="loginView" class="login-shell">
+    <section class="login-card">
+      <div class="brand-lockup"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div>
+      <p class="eyebrow">PRIVATE WORKSPACE</p>
+      <h1>Masuk ke ruang operasional AYA.</h1>
+      <p class="muted">Akses hanya untuk Admin User aktif. Permission ditentukan oleh Functions melalui Roles.</p>
+      <form id="loginForm" class="stack">
+        <label>Email<input id="loginEmail" type="email" autocomplete="username" required></label>
+        <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required></label>
+        <button class="btn primary" type="submit">Masuk</button>
+        <p id="loginError" class="form-error" role="alert"></p>
+      </form>
+    </section>
+  </div>
+  <div id="appView" class="app" hidden>
+    <main class="workspace">
+      <header class="topbar"><div><span class="eyebrow">AYA ADMIN</span><strong id="pageTitle">Dashboard</strong></div><div class="top-actions"><span id="sessionLabel" class="session-label"></span><button id="refreshBtn" class="btn ghost">Refresh</button><button id="logoutBtn" class="btn ghost">Keluar</button></div></header>
+      <div class="content"><div id="globalMessage" class="message" hidden></div><section class="page active" data-page="dashboard"></section><section class="page" data-page="cms"></section><section class="page" data-page="products"></section><section class="page" data-page="b2c"></section><section class="page" data-page="b2b"></section><section class="page" data-page="testimonials"></section><section class="page" data-page="finance"></section><section class="page" data-page="access"></section><section class="page" data-page="audit"></section><section class="page" data-page="system"></section></div>
+    </main>
+    <aside class="rail"><div class="rail-brand"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div><nav id="nav" class="nav"></nav><div class="rail-footer"><span class="status-dot"></span><span>Staging · noindex</span></div></aside>
+  </div>
+  <dialog id="modal"><form method="dialog" class="modal-card"><button class="modal-close" value="cancel" aria-label="Tutup">×</button><div id="modalBody"></div></form></dialog>
+  <script src="../js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
+  <script src="./client.js"></script>
+  <script src="./app.js"></script>
+  <script src="./product-master.js"></script>
+  <script src="./b2b.js"></script>
+  <script src="./finance.js"></script>
+  <script src="./domain-refresh.js"></script>
+</body>
+</html>
