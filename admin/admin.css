@@ -167,3 +167,21 @@ td, th {
   height: 14px;
   cursor: pointer;
 }
+
+/* Editable inputs in modal */
+.modal-card input:not([type="checkbox"]):not([type="radio"]),
+.modal-card select,
+.modal-card textarea {
+  border: 1px solid var(--line);
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+}
+.modal-card input:focus,
+.modal-card select:focus,
+.modal-card textarea:focus {
+  border-color: var(--gold);
+  outline: none;
+}

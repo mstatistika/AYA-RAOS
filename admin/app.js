@@ -286,7 +286,7 @@ function openProductEdit(id) {
   const ms = S.measures.filter(x => x.product_id === id);
 
   modal(`<h2>${esc(p.product_name)}</h2>` +
-    `<div class="form-grid">` +
+    `<div class="form-grid" style="grid-template-columns:repeat(3,1fr);">` +
     `<label>Orderable<select id="ppOrder"><option value="true" ${p.orderable?'selected':''}>Ya</option><option value="false" ${!p.orderable?'selected':''}>Tidak</option></select></label>` +
     `<label>Visible<select id="ppVisible"><option value="true" ${p.visible?'selected':''}>Ya</option><option value="false" ${!p.visible?'selected':''}>Tidak</option></select></label>` +
     `<label>Pasokan<select id="ppSupply"><option value="true" ${b?.supply_eligible?'selected':''}>Bisa</option><option value="false" ${!b?.supply_eligible?'selected':''}>Tidak Bisa</option></select></label>` +
@@ -295,12 +295,12 @@ function openProductEdit(id) {
     `<div class="list" id="variantList">` +
     vs.map((v,i) => `<div class="row variant-row" data-vi="${i}"><input class="v-name" value="${esc(v.variant_name)}" style="flex:1;border:none;background:transparent;font:inherit;"><input class="v-price" type="number" value="${v.unit_price}" style="width:100px;text-align:right;border:none;background:transparent;font:inherit;"></div>`).join('') +
     `</div>` +
-    `<button class="btn ghost" id="addVariant" style="margin-top:8px;font-size:11px;">+ Tambah Variant</button>` +
+    `<button class="btn ghost" id="addVariant" type="button" style="margin-top:8px;font-size:11px;">+ Tambah Variant</button>` +
     `<div class="section-title"><h2>B2B Measurements</h2><span>editable per variant</span></div>` +
     `<div class="list" id="measureList">` +
     ms.map((m,i) => `<div class="row measure-row" data-mi="${i}"><div style="flex:1"><input class="m-variant" value="${esc(m.variant_name)}" style="border:none;background:transparent;font:inherit;width:100%;"><small><input class="m-unit" value="${esc(m.unit_label)}" style="border:none;background:transparent;font:inherit;width:100%;"></small></div><div style="text-align:right"><input class="m-base" type="number" value="${m.base_cost}" style="width:80px;border:none;background:transparent;font:inherit;text-align:right;"><br><input class="m-final" type="number" value="${m.final_unit_price}" style="width:80px;border:none;background:transparent;font:inherit;text-align:right;"></div></div>`).join('') +
     `</div>` +
-    `<button class="btn ghost" id="addMeasure" style="margin-top:8px;font-size:11px;">+ Tambah Measurement</button>` +
+    `<button class="btn ghost" id="addMeasure" type="button" style="margin-top:8px;font-size:11px;">+ Tambah Measurement</button>` +
     `<div class="toolbar" style="margin-top:20px"><button id="productSave" class="btn primary">Save</button></div>` +
     `<div class="message" style="margin-top:10px">Preview mode: perubahan tidak tersimpan ke database.</div>`);
 
