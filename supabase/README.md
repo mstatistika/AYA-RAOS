@@ -14,9 +14,11 @@ Safety gates are intentional:
 
 - public/anon/authenticated roles receive no direct access to the private B2B commercial tables or RPCs;
 - COGS, margin, and Final Unit Price remain server-side only;
+- privileged qualification functions use `SECURITY INVOKER`; access comes from the server-side service role rather than function-owner privilege escalation;
 - seeded B2B measurements contain no invented private cost or price values and start `commercial_enabled = false`;
 - qualification starts `qualification_enabled = false`;
 - qualification aggregation policy starts `evaluation_scope = 'pending'` until that commercial interpretation is explicitly resolved;
+- qualification monetary basis starts `value_basis = 'pending'`; the engine cannot assume Supply Price is the approved threshold basis until that policy is explicitly resolved;
 - the existing public Pasokan frontend must not be wired to `/api/business/qualification` until the migration is applied, server environment variables are configured, commercial measurements are complete, and qualification is explicitly enabled.
 
 The long-term public data path remains:
