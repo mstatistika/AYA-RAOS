@@ -6,7 +6,7 @@ window.AYA_CONFIG = Object.freeze({
   leadTime: "2–3 hari setelah pembayaran diterima",
   serviceArea: "Lippo Utara, Jabodetabek, lalu Indonesia sesuai produk dan metode kirim",
   environment: "staging",
-  previewAdminBypass: true,
+  previewAdminBypass: false,
   checkout: Object.freeze({ mode: "whatsapp-confirmation", orderPersistence: false }),
   businessSupply: Object.freeze({ enabled: true, persistence: false }),
   shipping: Object.freeze({ enabled: false, provider: "", source: "" }),
