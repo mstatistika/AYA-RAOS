@@ -3,8 +3,19 @@
 
 const cfg = window.AYA_CONFIG?.supabase || {};
 let sb = null;
-try {
-  sb = window.supabase.createClient(cfg.url, cfg.publishableKey, {
+function initSb() {
+  const cfg = window.AYA_CONFIG?.supabase || {};
+  if (!cfg.url || !cfg.publishableKey) return null;
+  try {
+    return window.supabase.createClient(cfg.url, cfg.publishableKey, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+    });
+  } catch(e) {
+    console.warn('Supabase init failed', e);
+    return null;
+  }
+}
+sb = initSb();
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
 } catch(e) {
