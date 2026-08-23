@@ -601,8 +601,7 @@ async function loadUserPermissions(userId) {
   }
 }ync function boot() {
   S.fx = new Set(previewFx);
-  S.previewMode = true;
-  if(sb){try{const {data}=await sb.auth.getSession(); if(data.session){S.session=data.session; S.previewMode=false; $('#sessionLabel').textContent=data.session.user.email||'Admin';}}catch(e){}}
+  // Removed: auto preview mode — now handled in boot()
   $('#loginView').hidden = true;
   $('#appView').hidden = false;
   renderNav();
