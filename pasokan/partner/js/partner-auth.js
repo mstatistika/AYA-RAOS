@@ -33,7 +33,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (v) =>
     String(v ?? "").replace(/[&<>"']/g, (m) =>
-      ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;" }[m])
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])
     );
 
   function showView(name) {
@@ -113,8 +113,21 @@
 
   async function routeAfterAuth(session) {
     showView("loadingView");
-    const state = await ensureProfile(session);
-    window.AYA_PARTNER_STATE = state || {};
+    let state = null;
+    try {
+      state = await Promise.race([
+        ensureProfile(session),
+        new Promise((resolve) => setTimeout(() => resolve(null), 8000))
+      ]);
+    } catch (err) {
+      console.warn("[partner-auth] ensureProfile failed", err);
+    }
+    window.AYA_PARTNER_STATE = state || {
+      user_id: session?.user?.id,
+      has_membership: false,
+      memberships: [],
+      profile_exists: false
+    };
     const label = $("sessionLabel");
     if (label) {
       label.textContent =
@@ -122,6 +135,12 @@
         session.user?.phone ||
         "Mitra";
     }
+
+    try {
+      if (window.location.hash || window.location.search.includes("code=")) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    } catch (_) {}
 
     if (state?.has_membership) {
       showView("dashboardView");
@@ -254,22 +273,56 @@
       showView("loginView");
     });
 
-    const { data } = await client.auth.getSession();
-    if (data?.session) {
-      await routeAfterAuth(data.session);
-    } else {
-      showView("loginView");
+    const isAuthCallback =
+      /[?&#](code|access_token)=/.test(window.location.href) ||
+      window.location.hash.includes("access_token");
+
+    if (isAuthCallback) {
+      showView("loadingView");
     }
+
+    let routed = false;
+    const safeRoute = async (session) => {
+      if (!session || routed) return;
+      routed = true;
+      await routeAfterAuth(session);
+    };
 
     client.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_OUT") {
+        routed = false;
         window.AYA_PARTNER_STATE = null;
         showView("loginView");
       }
-      if (event === "SIGNED_IN" && session) {
-        await routeAfterAuth(session);
+      if ((event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || event === "INITIAL_SESSION") && session) {
+        await safeRoute(session);
       }
     });
+
+    try {
+      const { data } = await client.auth.getSession();
+      if (data?.session) {
+        await safeRoute(data.session);
+      } else if (isAuthCallback) {
+        await new Promise((r) => setTimeout(r, 2500));
+        const again = await client.auth.getSession();
+        if (again?.data?.session) {
+          await safeRoute(again.data.session);
+        } else {
+          showView("loginView");
+          msg(
+            "loginError",
+            "Tautan masuk tidak valid atau sudah kedaluwarsa. Kirim tautan baru dari halaman ini (bukan dari production)."
+          );
+        }
+      } else {
+        showView("loginView");
+      }
+    } catch (err) {
+      console.error("[partner-auth] getSession", err);
+      showView("loginView");
+      msg("loginError", err.message || "Gagal memuat sesi.");
+    }
   }
 
   window.AYA_PARTNER = Object.freeze({
