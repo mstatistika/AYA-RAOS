@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>AYA RAOS — Admin Preview</title>
-  <link rel="stylesheet" href="./admin.css">
+  <title>AYA RAOS — Admin Platform</title>
+  <link rel="stylesheet" href="./admin.css?v=20260823-auth">
 </head>
 <body>
-  <div id="loginView" class="login-shell" hidden>
+  <div id="loginView" class="login-shell">
     <section class="login-card">
       <div class="brand-lockup">
         <span class="brand-mark">A</span>
@@ -18,15 +18,34 @@
       <h1>Masuk ke ruang operasional AYA.</h1>
       <p class="muted">Akses hanya untuk Admin User aktif.</p>
       <form id="loginForm" class="stack">
-        <label>Email<input id="loginEmail" type="email" required></label>
-        <label>Password<input id="loginPassword" type="password" required></label>
+        <label>Email<input id="loginEmail" type="email" autocomplete="username" required value="michael.statistika@gmail.com"></label>
+        <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required></label>
         <button class="btn primary" type="submit">Masuk</button>
+        <button id="forgotPasswordBtn" class="btn ghost" type="button">Forgot Password / Reset Password</button>
         <p id="loginError" class="form-error" role="alert"></p>
       </form>
     </section>
   </div>
 
-  <div id="appView" class="app">
+  <div id="resetView" class="login-shell" hidden>
+    <section class="login-card">
+      <div class="brand-lockup">
+        <span class="brand-mark">A</span>
+        <div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div>
+      </div>
+      <p class="eyebrow">SET NEW PASSWORD</p>
+      <h1>Buat password baru.</h1>
+      <p class="muted">Gunakan password baru ini untuk login Admin AYA RAOS.</p>
+      <form id="resetForm" class="stack">
+        <label>Password Baru<input id="newPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+        <label>Konfirmasi Password<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+        <button class="btn primary" type="submit">Simpan Password</button>
+        <p id="resetError" class="form-error" role="alert"></p>
+      </form>
+    </section>
+  </div>
+
+  <div id="appView" class="app" hidden>
     <main class="workspace">
       <header class="topbar">
         <div>
@@ -34,10 +53,8 @@
           <strong id="pageTitle">Dashboard</strong>
         </div>
         <div class="top-actions">
-          <span id="sessionLabel" class="session-label">Preview Mode</span>
+          <span id="sessionLabel" class="session-label">Admin</span>
           <button id="refreshBtn" class="btn ghost">Refresh</button>
-          <button id="previewToggleBtn" class="btn ghost">Preview Mode</button>
-          <button id="toggleLoginBtn" class="btn ghost">Login</button>
           <button id="toggleLoginBtn" class="btn ghost">Login</button>
         </div>
       </header>
@@ -66,8 +83,8 @@
       </div>
       <nav id="nav" class="nav"></nav>
       <div class="rail-footer">
-        <span class="status-dot preview"></span>
-        <span>Preview · No Auth</span>
+        <span class="status-dot"></span>
+        <span>Staging · Authenticated</span>
       </div>
     </aside>
   </div>
@@ -82,12 +99,13 @@
     </form>
   </dialog>
 
-  <script src="../js/config.js"></script>
+  <script src="../js/config.js?v=20260823-auth"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
-  <script src="./app.js"></script>
-  <script src="./product-master.js"></script>
-  <script src="./b2b.js"></script>
-  <script src="./finance.js"></script>
-  <script src="./domain-refresh.js"></script>
+  <script src="./auth.js?v=20260823-auth"></script>
+  <script src="./app-loader.js?v=20260823-auth"></script>
+  <script src="./product-master.js?v=20260823-auth"></script>
+  <script src="./b2b.js?v=20260823-auth"></script>
+  <script src="./finance.js?v=20260823-auth"></script>
+  <script src="./domain-refresh.js?v=20260823-auth"></script>
 </body>
 </html>

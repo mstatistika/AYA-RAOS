@@ -39,7 +39,7 @@ This file contains only decisions that remain active for the current development
 | AD-031 | Public Pasokan vNext supersedes the old `a779b6e` public-flow behavior after release while preserving the three-VP architecture. Detailed public authority is `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md`. |
 | AD-032 | Public Pasokan vNext cadence vocabulary is only W1 / W2 / M1 / M2. Old `Setiap hari` / custom-frequency UI is obsolete for vNext. |
 | AD-033 | vNext quantity is estimated recurring need with normal integer increments; it is not MOQ, final order quantity, production commitment or capacity guarantee. The old global `quantityStep: 5` rule is v1 history only. |
-| AD-034 | Current vNext frontend still reads selectable supply products/units through `AYA_BUSINESS_SUPPLY` + `AYA_PRODUCTS`; explicit Product Master B2B eligibility is approved target architecture but not yet implemented. No product-name heuristic is allowed. |
+| AD-034 | Product Master B2B eligibility exists as platform/database foundation; public Pasokan remains governed by its released source boundary and must not invent Product Master eligibility until a trusted publish/read-model contract is explicitly activated. |
 | AD-035 | Public Pasokan vNext company context requires company/business name, business context, PIC, WhatsApp, start time, delivery location and consent; Email and notes are optional at public entry. |
 | AD-036 | Public Pasokan vNext no longer ends in the former structured WhatsApp inquiry. It proceeds to Summary + trusted system status; if qualification service is unavailable, the website stops truthfully and does not fabricate a result. |
 | AD-037 | Information remains unchanged and protected until explicitly reopened. |
@@ -51,9 +51,9 @@ This file contains only decisions that remain active for the current development
 | AD-043 | The 1VP rule is geometry-first: readability, comfortable controls and premium visual weight must not be sacrificed merely to eliminate page scroll. |
 | AD-044 | B2B commercial qualification is system-driven. Browser code must not calculate or assert eligibility. Approved thresholds live in the B2B Commercial Architecture and must be enforced by trusted backend/state when implemented. |
 | AD-045 | Approved B2B entry thresholds: Beras W1 5kg / W2 10kg / M1 25kg / M2 50kg; other products W1 Rp100k / W2 Rp200k / M1 Rp500k / M2 Rp1m. These thresholds never classify one-time B2C purchases. |
-| AD-046 | `businessSupply.qualificationEndpoint` is intentionally absent from current staging config. Therefore public vNext must show `Status belum bisa diperiksa` rather than fabricate eligible/adjust status. |
+| AD-046 | A qualification backend/API foundation exists, but current qualification configuration is disabled (`qualification_enabled=false`, scope/value basis pending). Public vNext must therefore remain truthful whenever trusted qualification is unavailable or disabled. |
 | AD-047 | Positive status may expose `Aktivasi Akun Pasokan` only from a trusted response with a safe same-origin activation URL. The frontend itself creates no B2B account or commitment. |
-| AD-048 | Broader B2B Commercial Architecture v1.1 remains APPROVED / LOCKED target architecture but not implemented by the public frontend release: Product Master eligibility, pricing/margin, commitment, account, payment, delivery, credit, shipping, Admin, Finance and Audit remain separate implementation phases. |
+| AD-048 | Broader B2B Commercial Architecture is present in source/database as platform foundation. Current main is under Admin/backend hardening; this does not constitute full live commercial activation. |
 | AD-049 | Admin target access is `Function Registry → Role → Admin User`; one Admin User may have multiple Roles and effective permissions are the union of Role functions. This explicit B2B architecture supersedes Constitution v1.1's older one-user-one-role target statement until Constitution v1.2 is produced. |
 | AD-050 | Public Pasokan vNext implementation scope is exactly `business.html`, the Business source block in `css/site.css`, and `js/business-inquiry.js`; protected scopes remain unchanged. |
 | AD-051 | Public Mobile UI final implementation checkpoint is `ae52958a4408d9da95464e2f7b07de1544015457`; the mobile runtime is scoped to `max-width:900px` and only Home, Dedicated Lines, Product Catalog, Testimonials and Share. |
@@ -64,6 +64,13 @@ This file contains only decisions that remain active for the current development
 | AD-056 | Mobile Testimonials/Share presentation preserves real testimonial/submission data, upload, Supabase, moderation and approval contracts. Preview-only fake submission or fabricated testimonial/video content is never production truth. |
 | AD-057 | For visual/interaction work, an explicitly approved ChatGPT HTML/browser preview is the implementation authority. After LOCK, implementation is translation rather than a second design phase; visible drift is an implementation defect and must be corrected toward the LOCK. |
 | AD-058 | Codespaces is reserved for safe actual-source mutation that genuinely requires it, especially scoped `css/site.css` work. If execution stalls or a mutation fails, recover with read-only state verification before any retry; do not infer completion from a spinner, narration or intended command. |
+| AD-059 | Current governance reconciliation checkpoint is `afeb5f45403920e9883d53bc0b18cafaf7918f68`. The latest main state is the current Admin/backend hardening state and must be re-verified before mutation. |
+| AD-060 | Platform foundation and commercial activation are separate states: Admin/B2B/payment/shipping/qualification foundations may exist in source/database while public commercial activation remains disabled. |
+| AD-061 | Reconciliation baseline is `docs/AYA-RAOS-CURRENT-STATE-2026-08-23-v13.md`; it is the current repository-state record until a newer CURRENT STATE is explicitly established. |
+| AD-062 | Observed Supabase state at reconciliation: 1 admin user, 10 product-master rows, 10 catalog products, 0 B2B relationships, 0 invoices, 0 payment attempts, 0 provider payment attempts, 4 testimonials. Schema existence must not be treated as transaction history. |
+| AD-063 | Active B2B shipping configuration observed in Supabase is Rp5.187/km motor and Rp10.021/km mobil. These are backend configuration facts and do not reopen B2C shipping authority. |
+| AD-064 | Payment architecture is implemented as foundation, but live payment activation remains disabled. DOKU remains primary and Midtrans fallback by approved architecture; `Paid != Settled` remains mandatory. |
+| AD-065 | No public visual scope is reopened by this governance sync. Post-release parity/polish remains available only when the user explicitly reopens a region. |
 
 ## Canonical supplements
 
@@ -73,9 +80,9 @@ This file contains only decisions that remain active for the current development
 - `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md`
 - `AYA-RAOS-CART-B2C-CANONICAL-SUPPLEMENT-v1.md`
 
-The broader approved B2B commercial/account/admin target is governed by the active Project Resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md` until it is synchronized into repository governance as part of its implementation phase.
+The broader B2B commercial/account/admin architecture remains governed by the active Project Resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md`; repository governance now records its actual platform-foundation/hardening state rather than treating the entire platform as nonexistent.
 
 Latest development baseline:
-- `docs/AYA-RAOS-CURRENT-BASELINE-2026-08-22.md`
+- `docs/AYA-RAOS-CURRENT-STATE-2026-08-23-v13.md`
 
 See Git history for superseded baseline detail.
