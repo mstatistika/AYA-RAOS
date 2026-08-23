@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/partner.css?v=20260824-partner-v1-blankfix">
+  <link rel="stylesheet" href="./css/partner.css?v=20260824-partner-v1-magiclink">
 </head>
 <body>
   <!-- ========== LOGIN ========== -->
@@ -38,8 +38,8 @@
             Email usaha / PIC
             <input id="loginEmail" type="email" autocomplete="username" required placeholder="nama@usaha.co.id">
           </label>
-          <button id="emailOtpBtn" class="btn primary block" type="submit">Kirim kode OTP</button>
-          <p class="auth-hint">Kami kirim kode sekali pakai ke email Anda. Tidak perlu password.</p>
+          <button id="emailOtpBtn" class="btn primary block" type="submit">Kirim tautan masuk</button>
+          <p class="auth-hint">Kami kirim tautan masuk ke email Anda. Klik Sign in di email — tidak perlu password.</p>
           <p id="loginError" class="form-error" role="alert"></p>
         </form>
       </div>
@@ -69,12 +69,12 @@
         </div>
       </div>
       <p class="eyebrow">Verifikasi</p>
-      <h1>Masukkan kode OTP.</h1>
-      <p class="muted">Kode dikirim ke <strong id="otpEmailHint">—</strong></p>
+      <h1>Cek email Anda.</h1>
+      <p class="muted">Tautan masuk dikirim ke <strong id="otpEmailHint">—</strong>. Klik <em>Sign in</em> di email, atau masukkan kode 6 digit jika tersedia.</p>
       <form id="otpForm" class="stack">
         <label>
-          Kode OTP
-          <input id="otpCode" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="8" placeholder="••••••" required>
+          Kode 6 digit (opsional)
+          <input id="otpCode" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="8" placeholder="••••••">
         </label>
         <button class="btn primary block" type="submit">Verifikasi &amp; masuk</button>
         <button id="backToLoginBtn" class="btn ghost block" type="button">Kembali</button>
@@ -176,7 +176,7 @@
   </div>
 
   <!-- Site-root config (canonical). Embedded fallback only if config.js fails. -->
-  <script src="../../js/config.js?v=20260824-partner-v1-blankfix"></script>
+  <script src="../../js/config.js?v=20260824-partner-v1-magiclink"></script>
   <script>
     if (!window.AYA_CONFIG) {
       console.warn("[partner] js/config.js missing — using embedded staging fallback");
@@ -194,8 +194,8 @@
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
-  <script src="./js/partner-auth.js?v=20260824-partner-v1-blankfix"></script>
-  <script src="./js/partner-app.js?v=20260824-partner-v1-blankfix"></script>
+  <script src="./js/partner-auth.js?v=20260824-partner-v1-magiclink"></script>
+  <script src="./js/partner-app.js?v=20260824-partner-v1-magiclink"></script>
   <script>
     // Safety: if auth never un-hides a view within 2.5s, force login visible
     window.setTimeout(function () {
