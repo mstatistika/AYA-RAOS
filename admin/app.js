@@ -600,7 +600,7 @@ async function loadUserPermissions(userId) {
     S.fx = new Set();
   }
 }
-async function boot() {
+ync function boot() {
   S.fx = new Set(previewFx);
   // Removed: auto preview mode — now handled in boot()
   $('#loginView').hidden = true;
