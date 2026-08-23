@@ -1,8 +1,8 @@
 /**
  * AYA RAOS — Partner Portal Auth
  * Route: /pasokan/partner
- * Auth: email OTP / magic link (primary). WhatsApp channel recorded via phone_e164.
- * Session isolated from Admin (different origin path; same Supabase project OK).
+ * Auth: magic link primary (email). OTP code optional if email template includes {{ .Token }}.
+ * Session isolated from Admin (storageKey: aya-partner-auth).
  */
 (() => {
   "use strict";
@@ -10,7 +10,6 @@
   const cfg = window.AYA_CONFIG?.supabase || {};
   if (!window.supabase?.createClient || !cfg.url || !cfg.publishableKey) {
     console.error("[partner-auth] Supabase config missing");
-    // Still show login shell so the page is never a blank cream screen
     const login = document.getElementById("loginView");
     if (login) login.hidden = false;
     const err = document.getElementById("loginError");
@@ -34,7 +33,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (v) =>
     String(v ?? "").replace(/[&<>"']/g, (m) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])
+      ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;" }[m])
     );
 
   function showView(name) {
@@ -134,7 +133,6 @@
   }
 
   async function init() {
-    // Visible immediately — avoid blank cream while session is checked
     showView("loginView");
 
     document.querySelectorAll("[data-auth-tab]").forEach((btn) => {
@@ -165,9 +163,13 @@
         if (error) throw error;
         $("otpEmailHint").textContent = email;
         showView("otpView");
-        msg("otpError", "Kode OTP sudah dikirim ke email Anda.", "success");
+        msg(
+          "otpError",
+          "Cek email Anda. Klik tautan \"Sign in\" — Anda akan kembali ke portal mitra. Atau masukkan kode 6 digit jika ada di email.",
+          "success"
+        );
       } catch (err) {
-        msg("loginError", err.message || "Gagal mengirim OTP.");
+        msg("loginError", err.message || "Gagal mengirim tautan masuk.");
       } finally {
         if (btn) btn.disabled = false;
       }
@@ -179,7 +181,10 @@
       const email = $("otpEmailHint")?.textContent?.trim();
       const token = $("otpCode")?.value.trim();
       if (!token || token.length < 6) {
-        msg("otpError", "Masukkan kode OTP 6–8 digit.");
+        msg(
+          "otpError",
+          "Belum ada kode di form. Lebih mudah: buka email lalu klik \"Sign in\" — tautan akan mengarahkan ke portal ini."
+        );
         return;
       }
       const btn = e.submitter;
@@ -193,7 +198,7 @@
         if (error) throw error;
         if (data?.session) await routeAfterAuth(data.session);
       } catch (err) {
-        msg("otpError", err.message || "Kode OTP tidak valid.");
+        msg("otpError", err.message || "Kode tidak valid.");
       } finally {
         if (btn) btn.disabled = false;
       }
@@ -226,18 +231,17 @@
         if (error) {
           msg(
             "waError",
-            "Login via WhatsApp belum diaktifkan di staging. Gunakan email OTP, lalu lengkapi nomor WA di aktivasi akun."
+            "Login via WhatsApp belum diaktifkan di staging. Gunakan email, lalu lengkapi nomor WA di aktivasi akun."
           );
           return;
         }
         $("otpEmailHint").textContent = phone;
         showView("otpView");
-        msg("otpError", "Kode OTP dikirim via SMS/WhatsApp (jika provider aktif).", "success");
+        msg("otpError", "Cek WhatsApp/SMS untuk tautan atau kode (jika provider aktif).", "success");
       } catch (err) {
         msg(
           "waError",
-          err.message ||
-            "Login via WhatsApp belum tersedia. Silakan gunakan email."
+          err.message || "Login via WhatsApp belum tersedia. Silakan gunakan email."
         );
       } finally {
         if (btn) btn.disabled = false;
