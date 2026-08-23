@@ -47,18 +47,6 @@
       if (event === 'SIGNED_OUT') show('login');
     });
 
-    const loginForm = $('loginForm');
-    if (loginForm) {
-      loginForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        message('loginError', '');
-        const email = $('loginEmail')?.value.trim();
-        const password = $('loginPassword')?.value || '';
-        const { error } = await auth.auth.signInWithPassword({ email, password });
-        if (error) message('loginError', error.message);
-      }, { capture: true });
-    }
-
     $('forgotPasswordBtn')?.addEventListener('click', async () => {
       const email = $('loginEmail')?.value.trim();
       message('loginError', '');
