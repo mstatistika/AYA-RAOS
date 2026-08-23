@@ -17,7 +17,7 @@ function initSb() {
 }
 sb = initSb();
 
-const S = {const S = {
+const S = {setTimeout(()=>{document.querySelectorAll('.rail-brand,.brand-lockup').forEach(el=>{el.style.cursor='pointer';el.title='Klik untuk ke Dashboard';el.onclick=(e)=>{e.stopPropagation();go('dashboard')}})},100);const S = {
   session: null,
   fx: new Set(),
   page: 'dashboard',
@@ -451,8 +451,8 @@ function testimonialReview(id) {
 
   $('#ttSave').onclick = () => { msg('Saved (lokal).','success'); };
   $('#ttPublish').onclick = () => { msg('Published (lokal).','success'); $('#modal').close(); };
-  if($('#ttDownload')) $('#ttDownload').onclick = () => msg('Download started (dummy).','success');
-  if($('#ttUpload')) $('#ttUpload').onclick = () => msg('Upload dialog (dummy).','success');
+  if($('#ttDownload')){$('#ttDownload').onclick=async()=>{try{const t=S.testimonials.find(x=>x.id===id);if(t.media_path||t.media_url){const url=t.media_url||await sb.storage.from('aya-testimonial-media').createSignedUrl(t.media_path,60).then(r=>r.data?.signedUrl).catch(()=>null);if(url){const a=document.createElement('a');a.href=url;a.download=(t.media_path||'media').split('/').pop();a.target='_blank';a.click();msg('Download dimulai.','success')}else{msg('Media belum tersedia.','warn')}}else{msg('Tidak ada media.','warn')}}catch(e){msg('Download gagal: '+e.message,'error')}}}
+  if($('#ttUpload')){$('#ttUpload').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='video/mp4,video/quicktime,video/webm,image/jpeg,image/png,image/webp';i.onchange=async(ev)=>{const file=ev.target.files[0];if(!file)return;try{const ext=file.name.split('.').pop();const path=`testimonials/${id}/refine_${Date.now()}.${ext}`;const{error}=await sb.storage.from('aya-testimonial-media').upload(path,file,{upsert:true});if(error)throw error;msg('Upload berhasil.','success')}catch(err){msg('Upload gagal: '+err.message,'error')}};i.click()}}
 }
 
 /* ============================================================
