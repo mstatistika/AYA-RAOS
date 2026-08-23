@@ -10,6 +10,14 @@
   const cfg = window.AYA_CONFIG?.supabase || {};
   if (!window.supabase?.createClient || !cfg.url || !cfg.publishableKey) {
     console.error("[partner-auth] Supabase config missing");
+    // Still show login shell so the page is never a blank cream screen
+    const login = document.getElementById("loginView");
+    if (login) login.hidden = false;
+    const err = document.getElementById("loginError");
+    if (err) {
+      err.textContent = "Konfigurasi Supabase belum siap. Muat ulang halaman atau cek js/config.js.";
+      err.className = "form-error error";
+    }
     return;
   }
 
@@ -26,7 +34,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (v) =>
     String(v ?? "").replace(/[&<>"']/g, (m) =>
-      ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "&#39;" }[m])
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m])
     );
 
   function showView(name) {
@@ -126,6 +134,9 @@
   }
 
   async function init() {
+    // Visible immediately — avoid blank cream while session is checked
+    showView("loginView");
+
     document.querySelectorAll("[data-auth-tab]").forEach((btn) => {
       btn.addEventListener("click", () => setAuthTab(btn.dataset.authTab));
     });
