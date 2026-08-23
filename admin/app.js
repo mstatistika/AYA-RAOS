@@ -3,25 +3,19 @@
 
 const cfg = window.AYA_CONFIG?.supabase || {};
 let sb = null;
-function initSb() {
-  const cfg = window.AYA_CONFIG?.supabase || {};
-  if (!cfg.url || !cfg.publishableKey) return null;
-  try {
-    return window.supabase.createClient(cfg.url, cfg.publishableKey, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-    });
-  } catch(e) {
-    console.warn('Supabase init failed', e);
-    return null;
-  }
+try {
+  sb = window.supabase.createClient(cfg.url, cfg.publishableKey, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
+} catch(e) {
+  console.warn('Supabase not connected — running in offline preview');
 }
-sb = initSb();
 
 const S = {
   session: null,
   fx: new Set(),
   page: 'dashboard',
-  previewMode: false,
+  previewMode: true,
   products: [], variants: [], b2b: [], measures: [],
   cms: [], testimonials: [], orders: [],
   roles: [], admins: [], users: [],
@@ -576,39 +570,9 @@ async function render(n) {
 }
 
 async function boot() {
-  if(sb){try{const {data}=await sb.auth.getSession(); if(data.session){S.session=data.session; S.previewMode=false; await loadUserPermissions(data.session.user.id); $('#sessionLabel').textContent=data.session.user.email||'Admin'; $('#toggleLoginBtn').textContent='Logout'; $('#toggleLoginBtn').onclick=()=>{sb.auth.signOut(); location.reload();}; $('#previewToggleBtn').style.display='none'; showApp(); return;}}catch(e){console.warn('Session check failed',e);}}
-  $('#loginView').hidden=false; $('#appView').hidden=true; $('#sessionLabel').textContent='Please login';
-  $('#previewToggleBtn').style.display='inline-block'; $('#previewToggleBtn').onclick=()=>{S.fx=new Set(previewFx); S.previewMode=true; $('#sessionLabel').textContent='Preview Mode'; $('#toggleLoginBtn').style.display='none'; showApp();};
-  $('#loginForm').onsubmit=async(e)=>{e.preventDefault(); try{const {data,error}=await sb.auth.signInWithPassword({email:$('#loginEmail').value, password:$('#loginPassword').value}); if(error) throw error; S.session=data.session; S.previewMode=false; await loadUserPermissions(data.session.user.id); $('#sessionLabel').textContent=data.session.user.email; $('#toggleLoginBtn').textContent='Logout'; $('#toggleLoginBtn').onclick=()=>{sb.auth.signOut(); location.reload();}; $('#previewToggleBtn').style.display='none'; showApp();}catch(err){$('#loginError').textContent=err.message||'Login failed';}};
-}
-
-function showApp() {
-  $('#loginView').hidden = true;
-  $('#appView').hidden = false;
-  renderNav();
-  const first = navItems.find(x => can(x[3]))?.[0] || 'dashboard';
-  go(first);
-}
-
-async function loadUserPermissions(userId) {
-  if(!sb || !userId) return;
-  try {
-    const {data: userRoles} = await sb.from('aya_admin_user_roles').select('role_id').eq('user_id', userId);
-    if(!userRoles?.length){S.fx=new Set(); return;}
-    const roleIds = userRoles.map(ur => ur.role_id);
-    const {data: roleFuncs} = await sb.from('aya_admin_role_functions').select('function_id').in('role_id', roleIds);
-    if(!roleFuncs?.length){S.fx=new Set(); return;}
-    const funcIds = roleFuncs.map(rf => rf.function_id);
-    const {data: functions} = await sb.from('aya_admin_functions').select('function_code').in('id', funcIds);
-    S.fx = new Set((functions || []).map(f => f.function_code));
-  } catch(e) {
-    console.warn('Permission load failed', e);
-    S.fx = new Set();
-  }
-}
-async function boot() {
   S.fx = new Set(previewFx);
-  // Removed: auto preview mode — now handled in boot()
+  S.previewMode = true;
+  if(sb){try{const {data}=await sb.auth.getSession(); if(data.session){S.session=data.session; S.previewMode=false; $('#sessionLabel').textContent=data.session.user.email||'Admin';}}catch(e){}}
   $('#loginView').hidden = true;
   $('#appView').hidden = false;
   renderNav();
