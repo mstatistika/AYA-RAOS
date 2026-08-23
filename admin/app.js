@@ -16,11 +16,6 @@ function initSb() {
   }
 }
 sb = initSb();
-    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-  });
-} catch(e) {
-  console.warn('Supabase not connected — running in offline preview');
-}
 
 const S = {
   session: null,
