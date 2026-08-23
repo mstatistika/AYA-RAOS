@@ -10,11 +10,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/partner.css?v=20260823-partner-v1">
+  <link rel="stylesheet" href="./css/partner.css?v=20260824-partner-v1-blankfix">
 </head>
 <body>
   <!-- ========== LOGIN ========== -->
-  <div id="loginView" class="login-shell" hidden>
+  <div id="loginView" class="login-shell">
     <section class="login-card">
       <div class="brand-lockup">
         <span class="brand-mark">A</span>
@@ -176,7 +176,7 @@
   </div>
 
   <!-- Site-root config (canonical). Embedded fallback only if config.js fails. -->
-  <script src="../../js/config.js?v=20260823-partner-v1"></script>
+  <script src="../../js/config.js?v=20260824-partner-v1-blankfix"></script>
   <script>
     if (!window.AYA_CONFIG) {
       console.warn("[partner] js/config.js missing — using embedded staging fallback");
@@ -194,8 +194,23 @@
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
-  <script src="./js/partner-auth.js?v=20260823-partner-v1"></script>
-  <script src="./js/partner-app.js?v=20260823-partner-v1"></script>
+  <script src="./js/partner-auth.js?v=20260824-partner-v1-blankfix"></script>
+  <script src="./js/partner-app.js?v=20260824-partner-v1-blankfix"></script>
+  <script>
+    // Safety: if auth never un-hides a view within 2.5s, force login visible
+    window.setTimeout(function () {
+      var ids = ["loginView", "otpView", "activateView", "dashboardView", "loadingView"];
+      var anyVisible = ids.some(function (id) {
+        var el = document.getElementById(id);
+        return el && !el.hidden;
+      });
+      if (!anyVisible) {
+        var login = document.getElementById("loginView");
+        if (login) login.hidden = false;
+        console.warn("[partner] forced loginView visible after boot timeout");
+      }
+    }, 2500);
+  </script>
   <script>
     // Mirror session label on dashboard topbar
     const obs = new MutationObserver(() => {
