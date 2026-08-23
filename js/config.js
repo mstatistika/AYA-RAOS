@@ -17,10 +17,28 @@ window.AYA_CONFIG = Object.freeze({
   damagePolicy: Object.freeze({ enabled: false }),
   supabase: Object.freeze({
     url: "https://zysxhtlbfgqaymgwbjaq.supabase.co",
-    publishableKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5c3hodGxiZmdxYXltZ3diamFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1MTI3MjksImV4cCI6MjEwMDA4ODcyOX0.k0tYhGuJkWH67ByfdQDwz6rzSUAE2prpg09DpF8Mw0Q",
+    publishableKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6Inp5c3hodGxiZmdxYXltZ3diamFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1MTI3MjksImV4cCI6MjEwMDA4ODcyOX0.k0tYhGuJkWH67ByfdQDwz6rzSUAE2prpg09DpF8Mw0Q",
     environment: "staging",
     timeoutMs: 20000
   }),
 
   testimonialEndpoint: ""
+});
+
+/* Mobile Homepage parity correction — V3.7 LOCK. */
+document.addEventListener("DOMContentLoaded", () => {
+  if (!window.matchMedia("(max-width: 900px)").matches) return;
+  if (document.body?.dataset.page !== "home") return;
+  const hero = document.querySelector(".live-home-hero");
+  const seal = hero?.querySelector(".live-home-right");
+  const copy = hero?.querySelector(".live-home-left");
+  if (!hero || !seal || !copy) return;
+  hero.style.display = "flex";
+  hero.style.flexDirection = "column";
+  hero.style.height = "auto";
+  hero.insertBefore(seal, copy);
+  seal.style.order = "1";
+  copy.style.order = "2";
+  seal.style.height = "calc(100svh - var(--header-h))";
+  copy.style.height = "calc(100svh - var(--header-h))";
 });
