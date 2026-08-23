@@ -15,7 +15,7 @@ const S = {
   session: null,
   fx: new Set(),
   page: 'dashboard',
-  previewMode: true,
+  previewMode: false,
   products: [], variants: [], b2b: [], measures: [],
   cms: [], testimonials: [], orders: [],
   roles: [], admins: [], users: [],
