@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/partner.css?v=20260824-partner-v1-magiclink">
+  <link rel="stylesheet" href="./css/partner.css?v=20260824-partner-v1-callback">
 </head>
 <body>
   <!-- ========== LOGIN ========== -->
@@ -76,7 +76,7 @@
           Kode 6 digit (opsional)
           <input id="otpCode" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="8" placeholder="••••••">
         </label>
-        <button class="btn primary block" type="submit">Verifikasi &amp; masuk</button>
+        <button class="btn primary block" type="submit">Verifikasi & masuk</button>
         <button id="backToLoginBtn" class="btn ghost block" type="button">Kembali</button>
         <p id="otpError" class="form-error" role="alert"></p>
       </form>
@@ -129,7 +129,7 @@
                 <label><input type="checkbox" name="responsibility" value="primary_owner_pic"> Owner / PIC utama</label>
                 <label><input type="checkbox" name="responsibility" value="finance"> Finance</label>
                 <label><input type="checkbox" name="responsibility" value="purchasing"> Purchasing</label>
-                <label><input type="checkbox" name="responsibility" value="operational_delivery_pic"> Operasional &amp; delivery</label>
+                <label><input type="checkbox" name="responsibility" value="operational_delivery_pic"> Operasional & delivery</label>
               </div>
             </div>
             <button id="activateSubmit" class="btn primary block" type="submit">Aktifkan akun mitra</button>
@@ -175,8 +175,7 @@
     </div>
   </div>
 
-  <!-- Site-root config (canonical). Embedded fallback only if config.js fails. -->
-  <script src="../../js/config.js?v=20260824-partner-v1-magiclink"></script>
+  <script src="../../js/config.js?v=20260824-partner-v1-callback"></script>
   <script>
     if (!window.AYA_CONFIG) {
       console.warn("[partner] js/config.js missing — using embedded staging fallback");
@@ -194,10 +193,9 @@
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
-  <script src="./js/partner-auth.js?v=20260824-partner-v1-magiclink"></script>
-  <script src="./js/partner-app.js?v=20260824-partner-v1-magiclink"></script>
+  <script src="./js/partner-auth.js?v=20260824-partner-v1-callback"></script>
+  <script src="./js/partner-app.js?v=20260824-partner-v1-callback"></script>
   <script>
-    // Safety: if auth never un-hides a view within 2.5s, force login visible
     window.setTimeout(function () {
       var ids = ["loginView", "otpView", "activateView", "dashboardView", "loadingView"];
       var anyVisible = ids.some(function (id) {
@@ -212,7 +210,6 @@
     }, 2500);
   </script>
   <script>
-    // Mirror session label on dashboard topbar
     const obs = new MutationObserver(() => {
       const src = document.getElementById("sessionLabel");
       document.querySelectorAll("[data-session-mirror]").forEach((el) => {
