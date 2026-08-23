@@ -599,7 +599,8 @@ async function loadUserPermissions(userId) {
     console.warn('Permission load failed', e);
     S.fx = new Set();
   }
-}ync function boot() {
+}
+async function boot() {
   S.fx = new Set(previewFx);
   // Removed: auto preview mode — now handled in boot()
   $('#loginView').hidden = true;
