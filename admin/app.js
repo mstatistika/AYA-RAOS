@@ -17,7 +17,7 @@ function initSb() {
 }
 sb = initSb();
 
-const S = {setTimeout(()=>{document.querySelectorAll('.rail-brand,.brand-lockup').forEach(el=>{el.style.cursor='pointer';el.title='Klik untuk ke Dashboard';el.onclick=(e)=>{e.stopPropagation();go('dashboard')}})},100);const S = {
+const S = {
   session: null,
   fx: new Set(),
   page: 'dashboard',
@@ -601,4 +601,4 @@ $('#loginForm').onsubmit = async e => {
 };
 
 document.addEventListener('DOMContentLoaded', () => boot());
-})();
+})();setTimeout(()=>{document.querySelectorAll('.rail-brand,.brand-lockup').forEach(el=>{el.style.cursor='pointer';el.title='Klik untuk ke Dashboard';el.onclick=(e)=>{e.stopPropagation();go('dashboard')}})},100);
