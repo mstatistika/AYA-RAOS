@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const sourceUrl = './app.js?authBootstrap=20260824';
+  const sourceUrl = './app.js?authBootstrap=20260825';
 
   async function load() {
     try {
@@ -12,16 +12,16 @@
       // Keep the loader narrowly scoped to legacy syntax repair only.
       source = source.replace('const S = {const S = {', 'const S = {');
 
-      // Inject the verified database-backed permission set before app.js executes.
-      // This removes the old preview permission bypass without rewriting app.js here.
+      // Use the verified database-backed permission set. Do not allow preview permissions.
       source = source.replace('fx: new Set(),', 'fx: new Set(window.AYA_ADMIN_FUNCTIONS || []),');
-      source = source.replace('previewMode: false,', 'previewMode: false,');
+      source = source.replace('S.fx = new Set(previewFx);', 'S.fx = new Set(window.AYA_ADMIN_FUNCTIONS || []);');
+      source = source.replace('S.previewMode = true;', 'S.previewMode = false;');
       source = source.replace('const can = k => S.fx.has(k) || S.previewMode;', 'const can = k => S.fx.has(k);');
 
-      // Main staging uses real Supabase Auth. No preview client or no-auth bypass.
+      // Admin shell opens only after a verified Supabase Admin session exists.
       source = source.replace(
         "$('#loginView').hidden = true;\n  $('#appView').hidden = false;",
-        "if (!S.session) { $('#loginView').hidden = false; $('#appView').hidden = true; return; }\n  $('#loginView').hidden = true;\n  $('#appView').hidden = false;"
+        "if (!S.session || !(window.AYA_ADMIN_FUNCTIONS instanceof Set)) { $('#loginView').hidden = false; $('#appView').hidden = true; return; }\n  $('#loginView').hidden = true;\n  $('#appView').hidden = false;"
       );
 
       (0, eval)(source);
