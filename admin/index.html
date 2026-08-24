@@ -10,13 +10,8 @@
 <body>
   <div id="loginView" class="login-shell">
     <section class="login-card">
-      <div class="brand-lockup">
-        <span class="brand-mark">A</span>
-        <div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div>
-      </div>
-      <p class="eyebrow">PRIVATE WORKSPACE</p>
-      <h1>Masuk ke ruang operasional AYA.</h1>
-      <p class="muted">Akses hanya untuk Admin User aktif.</p>
+      <div class="brand-lockup"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div>
+      <p class="eyebrow">PRIVATE WORKSPACE</p><h1>Masuk ke ruang operasional AYA.</h1><p class="muted">Akses hanya untuk Admin User aktif.</p>
       <form id="loginForm" class="stack">
         <label>Email<input id="loginEmail" type="email" autocomplete="username" required value="michael.statistika@gmail.com"></label>
         <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required></label>
@@ -26,86 +21,27 @@
       </form>
     </section>
   </div>
-
   <div id="resetView" class="login-shell" hidden>
-    <section class="login-card">
-      <div class="brand-lockup">
-        <span class="brand-mark">A</span>
-        <div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div>
-      </div>
-      <p class="eyebrow">SET NEW PASSWORD</p>
-      <h1>Buat password baru.</h1>
-      <p class="muted">Gunakan password baru ini untuk login Admin AYA RAOS.</p>
-      <form id="resetForm" class="stack">
-        <label>Password Baru<input id="newPassword" type="password" autocomplete="new-password" minlength="8" required></label>
-        <label>Konfirmasi Password<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required></label>
-        <button class="btn primary" type="submit">Simpan Password</button>
-        <p id="resetError" class="form-error" role="alert"></p>
-      </form>
+    <section class="login-card"><div class="brand-lockup"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div><p class="eyebrow">SET NEW PASSWORD</p><h1>Buat password baru.</h1><p class="muted">Gunakan password baru ini untuk login Admin AYA RAOS.</p>
+      <form id="resetForm" class="stack"><label>Password Baru<input id="newPassword" type="password" autocomplete="new-password" minlength="8" required></label><label>Konfirmasi Password<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" required></label><button class="btn primary" type="submit">Simpan Password</button><p id="resetError" class="form-error" role="alert"></p></form>
     </section>
   </div>
-
   <div id="appView" class="app" hidden>
-    <main class="workspace">
-      <header class="topbar">
-        <div>
-          <span class="eyebrow">AYA ADMIN</span>
-          <strong id="pageTitle">Dashboard</strong>
-        </div>
-        <div class="top-actions">
-          <span id="sessionLabel" class="session-label">Admin</span>
-          <button id="refreshBtn" class="btn ghost">Refresh</button>
-          <button id="toggleLoginBtn" class="btn ghost">Login</button>
-        </div>
-      </header>
-      <div class="content">
-        <div id="globalMessage" class="message" hidden></div>
-        <div id="loadingState" class="loading-overlay">
-          <div class="spinner"></div>
-          <p>Memuat panel admin...</p>
-        </div>
-        <section class="page active" data-page="dashboard"></section>
-        <section class="page" data-page="cms"></section>
-        <section class="page" data-page="products"></section>
-        <section class="page" data-page="b2c"></section>
-        <section class="page" data-page="b2b"></section>
-        <section class="page" data-page="testimonials"></section>
-        <section class="page" data-page="finance"></section>
-        <section class="page" data-page="access"></section>
-        <section class="page" data-page="history"></section>
-        <section class="page" data-page="system"></section>
-      </div>
+    <main class="workspace"><header class="topbar"><div><span class="eyebrow">AYA ADMIN</span><strong id="pageTitle">Dashboard</strong></div><div class="top-actions"><span id="sessionLabel" class="session-label">Admin</span><button id="refreshBtn" class="btn ghost">Refresh</button><button id="toggleLoginBtn" class="btn ghost">Login</button></div></header>
+      <div class="content"><div id="globalMessage" class="message" hidden></div><div id="loadingState" class="loading-overlay"><div class="spinner"></div><p>Memuat panel admin...</p></div><section class="page active" data-page="dashboard"></section><section class="page" data-page="cms"></section><section class="page" data-page="products"></section><section class="page" data-page="b2c"></section><section class="page" data-page="b2b"></section><section class="page" data-page="testimonials"></section><section class="page" data-page="finance"></section><section class="page" data-page="access"></section><section class="page" data-page="history"></section><section class="page" data-page="system"></section></div>
     </main>
-    <aside class="rail">
-      <div class="rail-brand">
-        <span class="brand-mark">A</span>
-        <div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div>
-      </div>
-      <nav id="nav" class="nav"></nav>
-      <div class="rail-footer">
-        <span class="status-dot"></span>
-        <span>Staging · Authenticated</span>
-      </div>
-    </aside>
+    <aside class="rail"><div class="rail-brand"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div><nav id="nav" class="nav"></nav><div class="rail-footer"><span class="status-dot"></span><span>Staging · Authenticated</span></div></aside>
   </div>
-
-  <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Menu">☰</button>
-  <nav class="mobile-nav-panel" id="mobileNavPanel" aria-label="Navigasi mobile"></nav>
-
-  <dialog id="modal">
-    <form method="dialog" class="modal-card">
-      <button class="modal-close" value="cancel" aria-label="Tutup">×</button>
-      <div id="modalBody"></div>
-    </form>
-  </dialog>
-
+  <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Menu">☰</button><nav class="mobile-nav-panel" id="mobileNavPanel" aria-label="Navigasi mobile"></nav>
+  <dialog id="modal"><form method="dialog" class="modal-card"><button class="modal-close" value="cancel" aria-label="Tutup">×</button><div id="modalBody"></div></form></dialog>
   <script src="../js/config.js?v=20260823-auth"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
   <script src="./auth.js?v=20260823-auth"></script>
-  <script src="./app-loader.js?v=20260823-auth"></script>
+  <script src="./app-loader.js?v=20260825-access"></script>
   <script src="./product-master.js?v=20260823-auth"></script>
   <script src="./b2b.js?v=20260823-auth"></script>
   <script src="./finance.js?v=20260823-auth"></script>
+  <script src="./access.js?v=20260825-access"></script>
   <script src="./domain-refresh.js?v=20260823-auth"></script>
 </body>
 </html>
