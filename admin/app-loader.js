@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const sourceUrl = './app.js?authBootstrap=20260823';
+  const sourceUrl = './app.js?authBootstrap=20260824';
 
   async function load() {
     try {
@@ -9,12 +9,16 @@
       if (!response.ok) throw new Error(`Admin app gagal dimuat (${response.status})`);
       let source = await response.text();
 
-      // app.js contains an existing malformed duplicate declaration. Repair only that
-      // syntax defect at load time so the rest of the Admin implementation remains intact.
+      // Keep the loader narrowly scoped to legacy syntax repair only.
       source = source.replace('const S = {const S = {', 'const S = {');
 
+      // Inject the verified database-backed permission set before app.js executes.
+      // This removes the old preview permission bypass without rewriting app.js here.
+      source = source.replace('fx: new Set(),', 'fx: new Set(window.AYA_ADMIN_FUNCTIONS || []),');
+      source = source.replace('previewMode: false,', 'previewMode: false,');
+      source = source.replace('const can = k => S.fx.has(k) || S.previewMode;', 'const can = k => S.fx.has(k);');
+
       // Main staging uses real Supabase Auth. No preview client or no-auth bypass.
-      source = source.replace('S.previewMode = true;', 'S.previewMode = false;');
       source = source.replace(
         "$('#loginView').hidden = true;\n  $('#appView').hidden = false;",
         "if (!S.session) { $('#loginView').hidden = false; $('#appView').hidden = true; return; }\n  $('#loginView').hidden = true;\n  $('#appView').hidden = false;"
