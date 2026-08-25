@@ -6,11 +6,12 @@
   <meta name="robots" content="noindex,nofollow">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <title>AYA RAOS — Admin Platform</title>
-  <link rel="stylesheet" href="/admin/admin.css?v=20260826-v26d">
+  <link rel="stylesheet" href="/admin/admin.css?v=20260826-v26e">
+  <link rel="stylesheet" href="/admin/admin-mobile.css?v=20260826-v26e">
   <style>
     html,body{margin:0;min-height:100%;background:#f6ead4;color:#321713;font-family:Inter,Arial,sans-serif}
     [hidden]{display:none!important}
-    #appView[hidden],#resetView[hidden],#mobileNavToggle[hidden],#mobileNavPanel[hidden]{display:none!important}
+    #appView[hidden],#resetView[hidden]{display:none!important}
     .login-shell[hidden]{display:none!important}.login-shell{position:relative;z-index:200;min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(140deg,#f6ead4,#efe0c8)}
     .login-card{position:relative;z-index:201;width:min(430px,100%);padding:34px;border:1px solid #dfcfbd;border-radius:22px;background:#fff9eff2;box-shadow:0 14px 36px rgba(64,41,25,.08);pointer-events:auto}
     .brand-lockup{display:flex;align-items:center;gap:12px}.brand-mark{width:38px;height:38px;border:1px solid #c69239;border-radius:50%;display:grid;place-items:center;font:700 18px Georgia,serif;color:#c69239}.brand-lockup strong{display:block;font:700 18px Georgia,serif}.brand-lockup small{display:block;font-size:14px;letter-spacing:.16em;color:#78675d}
@@ -44,17 +45,30 @@
     </main>
     <aside class="rail"><div class="rail-brand"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div><nav id="nav" class="nav"></nav><div class="rail-footer"><span class="status-dot"></span><span>Staging · Authenticated</span></div></aside>
   </div>
-  <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Menu" hidden>☰</button><nav class="mobile-nav-panel" id="mobileNavPanel" aria-label="Navigasi mobile" hidden></nav>
+  <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Menu admin" type="button" hidden>☰</button>
+  <nav class="mobile-nav-panel" id="mobileNavPanel" aria-label="Navigasi mobile"></nav>
   <dialog id="modal"><form method="dialog" class="modal-card"><button class="modal-close" value="cancel" aria-label="Tutup">×</button><div id="modalBody"></div></form></dialog>
-  <script src="../js/config.js?v=20260826-v26d"></script>
+  <script src="../js/config.js?v=20260826-v26e"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js"></script>
-  <script src="./auth.js?v=20260826-v26d"></script>
-  <script src="./auth-mobile-bridge.js?v=20260826-v26d"></script>
-  <script src="./app-loader.js?v=20260826-v26d"></script>
-  <script src="./product-master.js?v=20260826-v26d"></script>
-  <script src="./b2b.js?v=20260826-v26d"></script>
-  <script src="./finance.js?v=20260826-v26d"></script>
-  <script src="./access.js?v=20260826-v26d"></script>
-  <script src="./domain-refresh.js?v=20260826-v26d"></script>
+  <script src="./auth.js?v=20260826-v26e"></script>
+  <script src="./auth-mobile-bridge.js?v=20260826-v26e"></script>
+  <script src="./app-loader.js?v=20260826-v26e"></script>
+  <script src="./product-master.js?v=20260826-v26e"></script>
+  <script src="./b2b.js?v=20260826-v26e"></script>
+  <script src="./finance.js?v=20260826-v26e"></script>
+  <script src="./access.js?v=20260826-v26e"></script>
+  <script src="./domain-refresh.js?v=20260826-v26e"></script>
+  <script>
+  (function () {
+    function showMobileNav() {
+      var t = document.getElementById('mobileNavToggle');
+      var p = document.getElementById('mobileNavPanel');
+      if (t) { t.hidden = false; t.removeAttribute('hidden'); }
+      if (p) { p.hidden = false; p.removeAttribute('hidden'); }
+    }
+    window.addEventListener('aya:admin-auth-ready', showMobileNav);
+    if (window.AYA_ADMIN_FUNCTIONS) showMobileNav();
+  })();
+  </script>
 </body>
 </html>
