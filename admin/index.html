@@ -5,7 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <title>AYA RAOS — Admin Platform</title>
-  <link rel="stylesheet" href="./admin.css?v=20260825-admin-mobile">
+  <link rel="stylesheet" href="/admin/admin.css?v=20260825-admin-mobile-2">
+  <style>
+    html,body{margin:0;min-height:100%;background:#f6ead4;color:#321713;font-family:Inter,Arial,sans-serif}
+    .login-shell[hidden]{display:none!important}.login-shell{min-height:100vh;display:grid;place-items:center;padding:24px;background:linear-gradient(140deg,#f6ead4,#efe0c8)}
+    .login-card{width:min(430px,100%);padding:34px;border:1px solid #dfcfbd;border-radius:22px;background:#fff9eff2;box-shadow:0 14px 36px rgba(64,41,25,.08)}
+    .brand-lockup{display:flex;align-items:center;gap:12px}.brand-mark{width:38px;height:38px;border:1px solid #c69239;border-radius:50%;display:grid;place-items:center;font:700 18px Georgia,serif;color:#c69239}.brand-lockup strong{display:block;font:700 18px Georgia,serif}.brand-lockup small{display:block;font-size:14px;letter-spacing:.16em;color:#78675d}
+    .login-card h1{font:600 34px/1.04 Georgia,'Times New Roman',serif;margin:10px 0}.eyebrow{font-size:13px;font-weight:800;letter-spacing:.14em;color:#c69239}.muted{color:#78675d;font-size:14px;line-height:1.6}.stack{display:grid;gap:12px;margin-top:22px}label{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#78675d}input{width:100%;border:1px solid #dfcfbd;border-radius:10px;background:#fff;padding:10px;color:#321713;outline:none;box-sizing:border-box}.btn{height:36px;border-radius:10px;border:1px solid #dfcfbd;padding:0 13px;background:#fff9ef;color:#321713;font-size:14px;font-weight:800;cursor:pointer}.btn.primary{background:#4b090d;border-color:#4b090d;color:#fff}.btn.ghost{background:rgba(255,255,255,.55)}.form-error{min-height:16px;color:#973d3d;font-size:14px;margin:0}
+    @media(max-width:520px){.login-shell{padding:16px}.login-card{padding:24px;border-radius:18px}.login-card h1{font-size:30px}.brand-lockup small{font-size:12px}}
+  </style>
 </head>
 <body>
   <div id="loginView" class="login-shell">
@@ -34,7 +42,7 @@
   </div>
   <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Menu">☰</button><nav class="mobile-nav-panel" id="mobileNavPanel" aria-label="Navigasi mobile"></nav>
   <dialog id="modal"><form method="dialog" class="modal-card"><button class="modal-close" value="cancel" aria-label="Tutup">×</button><div id="modalBody"></div></form></dialog>
-  <script src="../js/config.js?v=20260823-auth"></script>
+  <script src="../js/config.js?v=20260825-admin-mobile-2"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
   <script src="./auth.js?v=20260823-auth"></script>
   <script src="./app-loader.js?v=20260825-access"></script>
