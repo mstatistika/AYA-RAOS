@@ -17,7 +17,7 @@ window.AYA_CONFIG = Object.freeze({
   damagePolicy: Object.freeze({ enabled: false }),
   supabase: Object.freeze({
     url: "https://zysxhtlbfgqaymgwbjaq.supabase.co",
-    publishableKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5c3hodGxiZmdxYXltZ3diamFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1MTI3MjksImV4cCI6MjEwMDA4ODcyOX0.k0tYhGuJkWH67ByfdQwz6rzSUAE2prpg09DpF8Mw0Q",
+    publishableKey: "sb_publishable_WyTnT4aUSaYybXpo1a0gNQ_PPbTcRQb",
     environment: "staging",
     timeoutMs: 20000
   }),
