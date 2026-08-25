@@ -22,12 +22,12 @@
     <section class="login-card">
       <div class="brand-lockup"><span class="brand-mark">A</span><div><strong>AYA RAOS</strong><small>ADMIN PLATFORM</small></div></div>
       <p class="eyebrow">PRIVATE WORKSPACE</p><h1>Masuk ke ruang operasional AYA.</h1><p class="muted">Akses hanya untuk Admin User aktif.</p>
-      <form id="loginForm" class="stack">
+      <form id="loginForm" class="stack" novalidate>
         <label>Email<input id="loginEmail" type="email" autocomplete="username" required value="michael.statistika@gmail.com"></label>
         <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required></label>
         <button class="btn primary" type="submit">Masuk</button>
         <button id="forgotPasswordBtn" class="btn ghost" type="button">Forgot Password / Reset Password</button>
-        <p id="loginError" class="form-error" role="alert"></p>
+        <p id="loginError" class="form-error" role="alert" aria-live="polite"></p>
       </form>
     </section>
   </div>
@@ -46,8 +46,8 @@
   <dialog id="modal"><form method="dialog" class="modal-card"><button class="modal-close" value="cancel" aria-label="Tutup">×</button><div id="modalBody"></div></form></dialog>
   <script src="../js/config.js?v=20260825-admin-mobile-6"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js"></script>
-  <script src="./auth.js?v=20260825-auth-fix-5"></script>
-  <script src="./auth-mobile-bridge.js?v=20260825-mobile-bridge-1"></script>
+  <script src="./auth.js?v=20260826-auth-mobile-7"></script>
+  <script src="./auth-mobile-bridge.js?v=20260826-mobile-bridge-2"></script>
   <script src="./app-loader.js?v=20260825-access-3"></script>
   <script src="./product-master.js?v=20260826-shared-auth"></script>
   <script src="./b2b.js?v=20260826-shared-auth"></script>
