@@ -1,0 +1,245 @@
+/* AYA RAOS — mobile luxury v26i
+   1) Crest: restore panorama + richer stage (was flat maroon)
+   2) 3 line icons: real mark-*.png (via JS) + sizing
+   3) Scroll-snap: stable 1-viewport stops
+   4) Closing: better image crop + equal-height cards
+*/
+
+@media (max-width: 900px) {
+  /* ── Stable viewport units for snap ── */
+  :root {
+    --aya-mobile-header-h: 62px;
+    --aya-mobile-vp: calc(100svh - var(--aya-mobile-header-h));
+  }
+
+  body[data-page="home"] #main {
+    height: var(--aya-mobile-vp) !important;
+    max-height: var(--aya-mobile-vp) !important;
+    scroll-snap-type: y mandatory !important;
+    scroll-padding: 0 !important;
+    overscroll-behavior-y: contain !important;
+  }
+
+  body[data-page="home"] .live-home-right,
+  body[data-page="home"] .live-home-left,
+  body[data-page="home"] .home-about,
+  body[data-page="home"] .home-lines,
+  body[data-page="home"] .home-closing-shell {
+    height: var(--aya-mobile-vp) !important;
+    min-height: var(--aya-mobile-vp) !important;
+    max-height: var(--aya-mobile-vp) !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
+    overflow: hidden !important;
+  }
+
+  /* ── Crest: panorama luxury background ── */
+  body[data-page="home"] .live-home-right {
+    isolation: isolate;
+    background:
+      linear-gradient(180deg, rgba(40, 4, 6, 0.55) 0%, rgba(54, 5, 7, 0.72) 45%, rgba(30, 2, 4, 0.88) 100%),
+      radial-gradient(circle at 50% 36%, rgba(255, 241, 207, 0.12), transparent 42%),
+      url("../assets/visual/home-lock/panorama-approved.webp") center 42% / cover no-repeat,
+      linear-gradient(180deg, #5f0b10, #360507) !important;
+    color: #fff0da !important;
+  }
+  body[data-page="home"] .live-home-right::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at 50% 70%, transparent 30%, rgba(20, 1, 2, 0.45) 100%);
+    pointer-events: none;
+  }
+  body[data-page="home"] .home-arch-outline {
+    opacity: 0.85 !important;
+    filter: drop-shadow(0 0 18px rgba(226, 182, 80, 0.15));
+  }
+  body[data-page="home"] .home-seal-stage {
+    z-index: 2 !important;
+  }
+  body[data-page="home"] .home-crest {
+    width: min(68vw, 268px) !important;
+    filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.35));
+  }
+
+  /* ── 3 line signature icons (copy screen) ── */
+  body[data-page="home"] .home-mobile-line-signatures {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 26px !important;
+    align-items: start !important;
+  }
+  body[data-page="home"] .home-mobile-line-signatures > div {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0 !important;
+  }
+  body[data-page="home"] .home-mobile-line-signatures .home-mobile-sig-mark,
+  body[data-page="home"] .home-mobile-line-signatures img {
+    width: 44px !important;
+    height: 44px !important;
+    object-fit: contain !important;
+    margin: 0 auto 6px !important;
+    display: block !important;
+  }
+  body[data-page="home"] .home-mobile-line-signatures span {
+    display: none !important; /* hide leftover unicode if any */
+  }
+  body[data-page="home"] .home-mobile-line-signatures strong {
+    margin-top: 0 !important;
+    font-size: 10px !important;
+    letter-spacing: 0.04em !important;
+    color: #4a2f28 !important;
+    line-height: 1.2 !important;
+  }
+  body[data-page="home"] .home-mobile-line-signatures small {
+    margin-top: 3px !important;
+    font-size: 9px !important;
+    letter-spacing: 0.1em !important;
+    color: #7a6356 !important;
+  }
+
+  /* ── Lines rail: real marks ── */
+  body[data-page="home"] .home-mobile-line-rail button span.home-mobile-rail-mark,
+  body[data-page="home"] .home-mobile-line-rail button span {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    overflow: hidden !important;
+    background: rgba(255, 252, 246, 0.9) !important;
+  }
+  body[data-page="home"] .home-mobile-line-rail button img {
+    width: 26px !important;
+    height: 26px !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+  body[data-page="home"] .home-mobile-line-rail button.active span {
+    background: rgba(255, 248, 232, 0.12) !important;
+    border-color: rgba(226, 182, 80, 0.5) !important;
+  }
+  body[data-page="home"] .home-mobile-line-rail button.active img {
+    filter: brightness(1.15) saturate(1.05);
+  }
+  body[data-page="home"] .home-mobile-line-rail button strong {
+    font-size: 9px !important;
+  }
+
+  /* ── Closing: image fit + equal cards ── */
+  body[data-page="home"] .closing-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 12px 14px 14px !important;
+    height: 100% !important;
+  }
+  body[data-page="home"] .closing-lead {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto minmax(100px, 34%) !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+  }
+  body[data-page="home"] .closing-lead-copy {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 14px 16px 10px !important;
+    background: linear-gradient(180deg, #fbf3e4, #f6ead4) !important;
+  }
+  body[data-page="home"] .closing-lead-copy > p {
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+  }
+  body[data-page="home"] .closing-main-image {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100px !important;
+    max-height: none !important;
+  }
+  body[data-page="home"] .closing-main-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center 40% !important;
+  }
+  body[data-page="home"] .closing-card-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    align-items: stretch !important;
+  }
+  body[data-page="home"] .closing-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 12px 10px 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+  body[data-page="home"] .closing-card-icon {
+    width: 40px !important;
+    height: 40px !important;
+    margin: 0 auto 2px !important;
+    flex: 0 0 auto !important;
+  }
+  body[data-page="home"] .closing-card-icon svg {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  body[data-page="home"] .closing-card-kicker,
+  body[data-page="home"] .closing-card h3,
+  body[data-page="home"] .closing-card .value-rule {
+    flex: 0 0 auto !important;
+    text-align: center !important;
+  }
+  body[data-page="home"] .closing-card h3 {
+    font-size: clamp(1rem, 4vw, 1.15rem) !important;
+    min-height: 2.4em !important; /* equal title block so images align */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  body[data-page="home"] .closing-card-image {
+    flex: 1 1 auto !important;
+    width: calc(100% + 20px) !important;
+    margin: 6px -10px 0 !important;
+    min-height: 80px !important;
+    position: relative !important;
+  }
+  body[data-page="home"] .closing-card-image img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  body[data-page="home"] .closing-cta {
+    position: relative !important;
+    z-index: 2 !important;
+    flex: 0 0 auto !important;
+    min-height: 30px !important;
+    margin: -26px 6px 8px !important;
+    font-size: 10px !important;
+  }
+  body[data-page="home"] .closing-card > p {
+    display: none !important;
+  }
+  body[data-page="home"] .closing-brand-note {
+    display: none !important;
+  }
+}
