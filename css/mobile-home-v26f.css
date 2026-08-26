@@ -1,0 +1,62 @@
+/* AYA RAOS — mobile homepage fixes v26f
+   1) Crest / logo on first mobile viewport (was second)
+   2) Stronger copy contrast on cream stage
+   3) Safe flex order for scroll-snap screens
+*/
+@media (max-width: 900px) {
+  body[data-page="home"] #main {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Crest panel first, then copy, then remaining story */
+  body[data-page="home"] .live-home-right { order: 1; }
+  body[data-page="home"] .live-home-left { order: 2; }
+  body[data-page="home"] .home-about { order: 3; }
+  body[data-page="home"] .home-lines { order: 4; }
+  body[data-page="home"] .home-closing-shell { order: 5; }
+
+  /* First screen: brand seal — keep crest prominent */
+  body[data-page="home"] .live-home-right {
+    display: grid;
+    place-items: center;
+  }
+  body[data-page="home"] .home-crest {
+    width: min(72vw, 280px);
+    margin: 0 auto 14px;
+  }
+  body[data-page="home"] .seal-kicker {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: #e2b650;
+  }
+  body[data-page="home"] .home-seal-stage h2 {
+    margin: 6px 0 0;
+    color: #fff0da;
+  }
+  body[data-page="home"] .seal-meaning {
+    color: #e2b650;
+  }
+
+  /* Second screen: readable copy on cream */
+  body[data-page="home"] .home-mobile-semesta {
+    color: #5a4338 !important;
+    font-size: 12px;
+    line-height: 1.55;
+  }
+  body[data-page="home"] .home-mobile-semesta p {
+    color: inherit;
+  }
+  body[data-page="home"] .home-copy-stage h1 {
+    color: #5c1618;
+  }
+  body[data-page="home"] .home-mobile-line-signatures {
+    color: #5a4034;
+  }
+  body[data-page="home"] .home-mobile-line-signatures strong {
+    color: #4a2f28;
+  }
+  body[data-page="home"] .home-mobile-line-signatures small {
+    color: #7a6356;
+  }
+}
