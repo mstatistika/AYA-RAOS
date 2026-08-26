@@ -113,7 +113,7 @@
       const signatures = document.createElement("div");
       signatures.className = "home-mobile-line-signatures";
       signatures.setAttribute("aria-label", "Tiga lini AYA");
-      signatures.innerHTML = '<div><span aria-hidden="true">⌁</span><strong>FARM</strong><small>TUMBUH</small></div><div><span aria-hidden="true">✦</span><strong>AYA SPICE HAVEN</strong><small>DIOLAH</small></div><div><span aria-hidden="true">◌</span><strong>AYA SNACKS &amp; DRINKS</strong><small>DINIKMATI</small></div>';
+      signatures.innerHTML = '<div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-farm.png" alt="" width="48" height="48" decoding="async"/><strong>FARM</strong><small>TUMBUH</small></div><div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-spice.png" alt="" width="48" height="48" decoding="async"/><strong>AYA SPICE HAVEN</strong><small>DIOLAH</small></div><div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-snack.png" alt="" width="48" height="48" decoding="async"/><strong>AYA SNACKS &amp; DRINKS</strong><small>DINIKMATI</small></div>';
       heroCopy.append(signatures);
     }
     const aboutCopy = document.querySelector(".home-about .about-copy");
@@ -128,10 +128,10 @@
     if (!lines.querySelector(".home-mobile-lines-heading")) { const heading = document.createElement("div"); heading.className = "home-mobile-lines-heading"; heading.innerHTML = '<span>LINI AYA</span><h2>Tiga dunia.<br><em>Satu rasa.</em></h2><p>Tumbuh. Diolah. Dinikmati.</p>'; worlds.insertAdjacentElement("beforebegin", heading); }
     if (lines.querySelector(".home-mobile-line-rail")) return;
     const cards = [...worlds.querySelectorAll(".line-world")]; if (!cards.length) return;
-    const meta = [{key:"farm",label:"FARM",mark:"⌁"},{key:"spice",label:"SPICE",mark:"✦"},{key:"snack",label:"SNACKS",mark:"◌"}];
+    const meta = [{key:"farm",label:"FARM",mark:"assets/visual/home-lock/mark-farm.png"},{key:"spice",label:"SPICE",mark:"assets/visual/home-lock/mark-spice.png"},{key:"snack",label:"SNACKS",mark:"assets/visual/home-lock/mark-snack.png"}];
     const rail = document.createElement("nav"); rail.className = "home-mobile-line-rail"; rail.setAttribute("aria-label", "Pilih lini AYA");
     const activate = (index) => { cards.forEach((card, cardIndex) => { const active = cardIndex === index; card.classList.toggle("mobile-active", active); card.setAttribute("aria-hidden", String(!active)); }); [...rail.querySelectorAll("button")].forEach((button, buttonIndex) => { const active = buttonIndex === index; button.classList.toggle("active", active); button.setAttribute("aria-pressed", String(active)); }); };
-    meta.forEach((item,index)=>{const button=document.createElement("button");button.type="button";button.dataset.homeLine=item.key;button.innerHTML=`<span aria-hidden="true">${item.mark}</span><strong>${item.label}</strong>`;button.addEventListener("click",()=>activate(index));rail.append(button);});
+    meta.forEach((item,index)=>{const button=document.createElement("button");button.type="button";button.dataset.homeLine=item.key;button.innerHTML=`<span aria-hidden="true" class="home-mobile-rail-mark"><img src="${item.mark}" alt="" width="28" height="28" decoding="async"/></span><strong>${item.label}</strong>`;button.addEventListener("click",()=>activate(index));rail.append(button);});
     worlds.insertAdjacentElement("afterend", rail); activate(1);
   };
 
