@@ -1,0 +1,290 @@
+/* AYA RAOS — mobile luxury polish v26g
+   Goals: premium typography, larger icons, 48px+ touch targets, breathing spacing.
+   Constraint: crest/logo STAYS first viewport (order from mobile-home-v26f).
+   Scope: homepage + shared header chrome. Does not rewrite site.css.
+*/
+
+@media (max-width: 900px) {
+  /* ── Header chrome: larger touch targets ── */
+  .menu-toggle {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+  }
+  .menu-toggle span {
+    width: 22px;
+    height: 2px;
+    margin: 4px auto;
+  }
+  .cart-icon-link {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+  }
+  .cart-icon-link svg {
+    width: 26px;
+    height: 26px;
+  }
+  .cart-icon-link .cart-count {
+    min-width: 18px;
+    height: 18px;
+    font-size: 10px;
+    line-height: 18px;
+  }
+
+  /* ── Shared buttons / form controls ── */
+  .button {
+    min-height: 48px;
+    padding: 0 22px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  .form-grid input,
+  .form-grid select,
+  .form-grid textarea,
+  .full-field textarea {
+    min-height: 48px;
+    font-size: 16px; /* prevents iOS zoom */
+    padding: 0 14px;
+    border-radius: 8px;
+  }
+  .form-grid label,
+  .full-field {
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Homepage: keep crest first (reinforce v26f) ── */
+  body[data-page="home"] #main {
+    display: flex;
+    flex-direction: column;
+  }
+  body[data-page="home"] .live-home-right { order: 1; }
+  body[data-page="home"] .live-home-left  { order: 2; }
+  body[data-page="home"] .home-about      { order: 3; }
+  body[data-page="home"] .home-lines      { order: 4; }
+  body[data-page="home"] .home-closing-shell { order: 5; }
+
+  /* Crest screen — slightly more breathing room */
+  body[data-page="home"] .home-crest {
+    width: min(70vw, 272px);
+    margin: 0 auto 16px;
+  }
+  body[data-page="home"] .seal-kicker {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+  body[data-page="home"] .home-seal-stage h2 {
+    font-size: clamp(68px, 20vw, 90px);
+  }
+  body[data-page="home"] .seal-meaning {
+    font-size: clamp(40px, 12vw, 54px);
+  }
+
+  /* Copy screen — more legible body */
+  body[data-page="home"] .home-copy-stage {
+    padding: 28px 22px 22px;
+  }
+  body[data-page="home"] .home-copy-stage .home-kicker {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+  }
+  body[data-page="home"] .home-copy-stage h1 {
+    font-size: clamp(2.6rem, 11vw, 3.4rem);
+    line-height: 0.92;
+  }
+  body[data-page="home"] .home-copy-stage p {
+    font-size: clamp(14px, 3.8vw, 16px);
+    line-height: 1.62;
+    max-width: 34ch;
+  }
+  body[data-page="home"] .home-lines-copy {
+    font-size: clamp(13px, 3.5vw, 15px);
+  }
+  body[data-page="home"] .home-line-lockups {
+    margin-top: 14px;
+    max-width: min(88vw, 320px);
+  }
+
+  /* About — larger value icons + readable type */
+  body[data-page="home"] .home-about {
+    padding: 22px 0 18px;
+  }
+  body[data-page="home"] .about-grid {
+    gap: 22px;
+    padding: 0 4px;
+  }
+  body[data-page="home"] .about-copy h2 {
+    font-size: clamp(1.85rem, 7.5vw, 2.35rem);
+    line-height: 1.08;
+  }
+  body[data-page="home"] .about-copy p {
+    font-size: 14px;
+    line-height: 1.58;
+    margin-bottom: 10px;
+  }
+  body[data-page="home"] .about-equation {
+    margin-top: 12px;
+    padding: 10px 16px;
+    font-size: 18px;
+  }
+  body[data-page="home"] .about-values {
+    gap: 16px;
+    padding-left: 0;
+  }
+  body[data-page="home"] .about-value {
+    grid-template-columns: 64px 1fr;
+    gap: 14px;
+    align-items: center;
+  }
+  body[data-page="home"] .about-value-icon {
+    width: 64px;
+    height: 64px;
+  }
+  body[data-page="home"] .about-value-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+  body[data-page="home"] .about-value h3 {
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+  body[data-page="home"] .about-value p {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+
+  /* Lines — less cramped marks & category icons */
+  body[data-page="home"] .lines-inner {
+    padding: 14px 0 10px;
+  }
+  body[data-page="home"] .lines-heading {
+    margin: 0 auto 10px;
+  }
+  body[data-page="home"] .lines-heading .home-light-kicker {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+  }
+  body[data-page="home"] .lines-heading h2 {
+    font-size: clamp(1.45rem, 6vw, 1.85rem);
+    line-height: 1.1;
+  }
+  body[data-page="home"] .lines-heading p {
+    max-width: 36ch;
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  body[data-page="home"] .line-worlds {
+    gap: 10px;
+  }
+  body[data-page="home"] .line-world {
+    border-radius: 18px;
+    box-shadow: 0 8px 22px rgba(83, 52, 28, 0.1);
+  }
+  body[data-page="home"] .line-world-copy {
+    padding: 12px 10px 8px;
+  }
+  body[data-page="home"] .line-number {
+    left: 10px;
+    top: 10px;
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+  body[data-page="home"] .line-mark {
+    width: 72px;
+    height: 54px;
+    margin: 0 auto 4px;
+  }
+  body[data-page="home"] .line-function {
+    font-size: 15px;
+    letter-spacing: 0.06em;
+  }
+  body[data-page="home"] .line-world-copy p {
+    font-size: 11.5px;
+    line-height: 1.4;
+  }
+  body[data-page="home"] .line-world-cta {
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  body[data-page="home"] .line-category {
+    gap: 4px;
+    padding: 6px 3px 4px;
+    font-size: 9px;
+    line-height: 1.2;
+  }
+  body[data-page="home"] .line-category-icon,
+  body[data-page="home"] .line-category-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  /* Closing cards — larger icons, clearer hierarchy */
+  body[data-page="home"] .closing-card-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 6px;
+  }
+  body[data-page="home"] .closing-card-icon svg {
+    width: 56px;
+    height: 56px;
+  }
+  body[data-page="home"] .closing-card-kicker {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+  }
+  body[data-page="home"] .closing-card h3 {
+    font-size: clamp(1.35rem, 5.5vw, 1.7rem);
+    line-height: 1.08;
+  }
+  body[data-page="home"] .closing-card p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  body[data-page="home"] .closing-cta {
+    font-size: 12px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  body[data-page="home"] .closing-lead-copy h2 {
+    font-size: clamp(1.7rem, 7vw, 2.2rem);
+  }
+  body[data-page="home"] .closing-lead-copy p {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* Light kickers more readable */
+  body[data-page="home"] .home-light-kicker {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+  }
+}
+
+/* Extra-small phones: keep luxury, tighten only where needed */
+@media (max-width: 380px) {
+  body[data-page="home"] .about-value {
+    grid-template-columns: 56px 1fr;
+    gap: 12px;
+  }
+  body[data-page="home"] .about-value-icon {
+    width: 56px;
+    height: 56px;
+  }
+  body[data-page="home"] .about-value-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+  body[data-page="home"] .line-mark {
+    width: 64px;
+    height: 48px;
+  }
+}
