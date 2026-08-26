@@ -113,7 +113,7 @@
       const signatures = document.createElement("div");
       signatures.className = "home-mobile-line-signatures";
       signatures.setAttribute("aria-label", "Tiga lini AYA");
-      signatures.innerHTML = '<div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-farm.png" alt="" width="48" height="48" decoding="async"/><strong>FARM</strong><small>TUMBUH</small></div><div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-spice.png" alt="" width="48" height="48" decoding="async"/><strong>AYA SPICE HAVEN</strong><small>DIOLAH</small></div><div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-snack.png" alt="" width="48" height="48" decoding="async"/><strong>AYA SNACKS &amp; DRINKS</strong><small>DINIKMATI</small></div>';
+      signatures.innerHTML = '<div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-farm.png" alt="AYA Farm" width="48" height="48" decoding="async"/><small>TUMBUH</small></div><div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-spice.png" alt="AYA Spice Haven" width="48" height="48" decoding="async"/><small>DIOLAH</small></div><div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-snack.png" alt="AYA Snacks &amp; Drinks" width="48" height="48" decoding="async"/><small>DINIKMATI</small></div>';
       heroCopy.append(signatures);
     }
     const aboutCopy = document.querySelector(".home-about .about-copy");
