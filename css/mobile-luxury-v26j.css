@@ -14,7 +14,13 @@
   body[data-page="home"] #main {
     height: var(--aya-mobile-vp) !important;
     max-height: var(--aya-mobile-vp) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
     scroll-snap-type: y mandatory !important;
+    scroll-snap-stop: always !important;
+    scroll-padding: 0 !important;
+    overscroll-behavior-y: contain !important;
   }
 
   body[data-page="home"] .live-home-right,
@@ -57,11 +63,10 @@
     object-position: center !important;
     margin: 0 auto 8px !important;
     display: block !important;
-    /* crop accidental left divider in asset */
     clip-path: inset(0 0 0 6%) !important;
   }
   body[data-page="home"] .home-mobile-line-signatures strong {
-    display: none !important; /* name already on mark */
+    display: none !important;
   }
   body[data-page="home"] .home-mobile-line-signatures small {
     display: block !important;
@@ -134,7 +139,7 @@
     max-width: 28ch !important;
   }
   body[data-page="home"] .line-tags {
-    display: none !important; /* save vertical space on mobile */
+    display: none !important;
   }
   body[data-page="home"] .line-world-cta {
     display: inline-flex !important;
@@ -294,5 +299,18 @@
     font-size: 9.5px !important;
     text-align: center !important;
     justify-content: center !important;
+  }
+}
+
+/* Root scroll architecture fix — the page itself is the snap viewport. */
+@media (max-width: 900px) {
+  body[data-page="home"] #main {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: y mandatory !important;
+    scroll-snap-stop: always !important;
+    scroll-padding-top: 0 !important;
+    overscroll-behavior-y: contain !important;
   }
 }
