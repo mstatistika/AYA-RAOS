@@ -1,8 +1,8 @@
-/* AYA RAOS — Homepage mobile VP4/VP5 parity v31
+/* AYA RAOS — Homepage mobile VP4/VP5 parity v32
    Scope: homepage mobile only, <=900px.
    Actual homepage source only. Desktop untouched.
    VP4 = Lini AYA. VP5 = Mulai dari AYA.
-   v31: preserve VP5 internals; align its outer stage rhythm with the other homepage VPs.
+   v32: equalize VP5 destination-card header budgets so both images start on the same line.
 */
 @media (max-width:900px){
   :root{--aya-mobile-header-h:62px;--aya-mobile-vp:calc(100svh - var(--aya-mobile-header-h));}
@@ -56,12 +56,12 @@
   body[data-page="home"] .closing-lead-copy>p{max-width:33ch!important;margin:0!important;color:#4d3328!important;font-size:11.5px!important;line-height:1.32!important;text-shadow:0 1px 0 rgba(255,250,240,.45)!important;}
   body[data-page="home"] .closing-brand-note{display:none!important;}
   body[data-page="home"] .closing-card-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;height:100%!important;min-height:0!important;}
-  body[data-page="home"] .closing-card{display:grid!important;grid-template-rows:auto auto auto auto minmax(0,1fr) auto!important;height:100%!important;min-height:0!important;overflow:hidden!important;padding:9px 7px 0!important;border-radius:16px!important;border:1px solid rgba(190,142,72,.4)!important;background:#fffaf0!important;}
-  body[data-page="home"] .closing-card-icon{width:38px!important;height:38px!important;margin:0 auto 2px!important;}
+  body[data-page="home"] .closing-card{display:grid!important;grid-template-rows:40px 22px 64px 14px minmax(0,1fr) auto!important;height:100%!important;min-height:0!important;overflow:hidden!important;padding:9px 7px 0!important;border-radius:16px!important;border:1px solid rgba(190,142,72,.4)!important;background:#fffaf0!important;}
+  body[data-page="home"] .closing-card-icon{width:38px!important;height:38px!important;margin:0 auto!important;align-self:center!important;}
   body[data-page="home"] .closing-card-icon svg{width:31px!important;height:31px!important;}
-  body[data-page="home"] .closing-card-kicker{font-size:8.2px!important;letter-spacing:.12em!important;text-align:center!important;}
-  body[data-page="home"] .closing-card h3{margin:3px 0 0!important;font-size:1.08rem!important;line-height:1.02!important;text-align:center!important;}
-  body[data-page="home"] .closing-card .value-rule{width:70px!important;height:9px!important;margin:4px auto 3px!important;}
+  body[data-page="home"] .closing-card-kicker{min-height:22px!important;margin:0!important;font-size:8.2px!important;letter-spacing:.12em!important;text-align:center!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+  body[data-page="home"] .closing-card h3{min-height:64px!important;margin:0!important;padding:0 6px!important;font-size:1.08rem!important;line-height:1.02!important;text-align:center!important;display:flex!important;align-items:center!important;justify-content:center!important;}
+  body[data-page="home"] .closing-card .value-rule{width:70px!important;height:9px!important;margin:0 auto!important;align-self:center!important;}
   body[data-page="home"] .closing-card>p{display:none!important;}
   body[data-page="home"] .closing-card-image{position:relative!important;width:calc(100% + 14px)!important;height:100%!important;min-height:0!important;margin:2px -7px 0!important;overflow:hidden!important;align-self:stretch!important;}
   body[data-page="home"] .closing-card-image img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;display:block!important;}
