@@ -1,11 +1,12 @@
-/* AYA RAOS — Homepage mobile VP4/VP5 parity v32
+/* AYA RAOS — Homepage mobile VP3/VP4/VP5 parity v33
    Scope: homepage mobile only, <=900px.
    Actual homepage source only. Desktop untouched.
-   VP4 = Lini AYA. VP5 = Mulai dari AYA.
-   v32: equalize VP5 destination-card header budgets so both images start on the same line.
+   VP3 = Tentang AYA. VP4 = Lini AYA. VP5 = Mulai dari AYA.
+   v33: remove inherited VP3 scroll-margin so Tentang AYA starts directly below the header.
 */
 @media (max-width:900px){
   :root{--aya-mobile-header-h:62px;--aya-mobile-vp:calc(100svh - var(--aya-mobile-header-h));}
+  body[data-page="home"] .home-about{scroll-margin-top:0!important;}
   body[data-page="home"] .home-lines{height:var(--aya-mobile-vp)!important;min-height:var(--aya-mobile-vp)!important;max-height:var(--aya-mobile-vp)!important;overflow:hidden!important;scroll-snap-align:start!important;scroll-snap-stop:always!important;scroll-margin-top:0!important;}
   body[data-page="home"] .home-lines .home-section-inner{width:100%!important;height:100%!important;min-height:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) 70px!important;grid-template-rows:auto minmax(0,1fr)!important;gap:8px!important;padding:10px 10px 10px!important;}
   body[data-page="home"] .home-lines .lines-heading{display:none!important;}
