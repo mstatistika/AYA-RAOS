@@ -46,7 +46,7 @@
   body[data-page="home"] .home-mobile-line-signatures>div{border:0!important;box-shadow:none!important;background:transparent!important;}
   body[data-page="home"] .home-mobile-line-signatures>div::before,
   body[data-page="home"] .home-mobile-line-signatures>div::after{content:none!important;display:none!important;}
-  body[data-page="home"] .home-mobile-line-signatures img{width:52px!important;height:52px!important;object-fit:contain!important;clip-path:none!important;}
+  body[data-page="home"] .home-mobile-line-signatures img{width:60px!important;height:60px!important;object-fit:contain!important;clip-path:none!important;}
   body[data-page="home"] .home-mobile-line-signatures>div:nth-child(1) img{content:url("../assets/brand/aya-farm/mark.png")!important;}
   body[data-page="home"] .home-mobile-line-signatures>div:nth-child(2) img{content:url("../assets/brand/aya-spice-haven/mark.png")!important;}
   body[data-page="home"] .home-mobile-line-signatures>div:nth-child(3) img{content:url("../assets/brand/aya-snacks-drinks/mark.png")!important;}
