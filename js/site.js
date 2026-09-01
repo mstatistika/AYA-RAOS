@@ -113,7 +113,7 @@
       const signatures = document.createElement("div");
       signatures.className = "home-mobile-line-signatures";
       signatures.setAttribute("aria-label", "Tiga lini AYA");
-      signatures.innerHTML = '<div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-farm.png" alt="AYA Farm" width="48" height="48" decoding="async"/><small>TUMBUH</small></div><div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-spice.png" alt="AYA Spice Haven" width="48" height="48" decoding="async"/><small>DIOLAH</small></div><div><img class="home-mobile-sig-mark" src="assets/visual/home-lock/mark-snack.png" alt="AYA Snacks &amp; Drinks" width="48" height="48" decoding="async"/><small>DINIKMATI</small></div>';
+      signatures.innerHTML = '<div><img class="home-mobile-sig-mark" src="assets/brand/aya-farm/mark.png" alt="AYA Farm" width="48" height="48" decoding="async"/><small>TUMBUH</small></div><div><img class="home-mobile-sig-mark" src="assets/brand/aya-spice-haven/mark.png" alt="AYA Spice Haven" width="48" height="48" decoding="async"/><small>DIOLAH</small></div><div><img class="home-mobile-sig-mark" src="assets/brand/aya-snacks-drinks/mark.png" alt="AYA Snacks &amp; Drinks" width="48" height="48" decoding="async"/><small>DINIKMATI</small></div>';
       heroCopy.append(signatures);
     }
     const aboutCopy = document.querySelector(".home-about .about-copy");
@@ -128,7 +128,7 @@
     if (!lines.querySelector(".home-mobile-lines-heading")) { const heading = document.createElement("div"); heading.className = "home-mobile-lines-heading"; heading.innerHTML = '<span>LINI AYA</span><h2>Tiga dunia.<br><em>Satu rasa.</em></h2><p>Tumbuh. Diolah. Dinikmati.</p>'; worlds.insertAdjacentElement("beforebegin", heading); }
     if (lines.querySelector(".home-mobile-line-rail")) return;
     const cards = [...worlds.querySelectorAll(".line-world")]; if (!cards.length) return;
-    const meta = [{key:"farm",label:"FARM",mark:"assets/visual/home-lock/mark-farm.png"},{key:"spice",label:"SPICE",mark:"assets/visual/home-lock/mark-spice.png"},{key:"snack",label:"SNACKS",mark:"assets/visual/home-lock/mark-snack.png"}];
+    const meta = [{key:"farm",label:"FARM",mark:"assets/brand/aya-farm/micro.png"},{key:"spice",label:"SPICE",mark:"assets/brand/aya-spice-haven/micro.png"},{key:"snack",label:"SNACKS",mark:"assets/brand/aya-snacks-drinks/micro.png"}];
     const rail = document.createElement("nav"); rail.className = "home-mobile-line-rail"; rail.setAttribute("aria-label", "Pilih lini AYA");
     const activate = (index) => { cards.forEach((card, cardIndex) => { const active = cardIndex === index; card.classList.toggle("mobile-active", active); card.setAttribute("aria-hidden", String(!active)); }); [...rail.querySelectorAll("button")].forEach((button, buttonIndex) => { const active = buttonIndex === index; button.classList.toggle("active", active); button.setAttribute("aria-pressed", String(active)); }); };
     meta.forEach((item,index)=>{const button=document.createElement("button");button.type="button";button.dataset.homeLine=item.key;button.innerHTML=`<span aria-hidden="true" class="home-mobile-rail-mark"><img src="${item.mark}" alt="" width="28" height="28" decoding="async"/></span><strong>${item.label}</strong>`;button.addEventListener("click",()=>activate(index));rail.append(button);});
