@@ -107,33 +107,25 @@
   body[data-page="home"] .closing-lead-copy>p{font-size:11px!important;line-height:1.25!important;max-width:48ch!important;width:100%!important;text-wrap:balance!important;}
 }
 
-/* PREVIEW ONLY — merged VP2 compact brand map V7. */
+/* PREVIEW ONLY — merged VP2 compact brand map V8. */
 @media (max-width:900px){
   body[data-page="home"] .live-home-left{
     position:relative!important;
-    height:66%!important;min-height:66%!important;max-height:66%!important;
-    scroll-snap-align:start!important;scroll-snap-stop:always!important;
-    background:#fff8ec!important;
-    overflow:hidden!important;
+    height:var(--aya-mobile-vp)!important;min-height:var(--aya-mobile-vp)!important;max-height:var(--aya-mobile-vp)!important;
+    scroll-snap-align:start!important;scroll-snap-stop:always!important;scroll-margin-top:0!important;
+    background:#fff8ec!important;overflow:hidden!important;
   }
   body[data-page="home"] .live-home-left::before{content:none!important;display:none!important;}
-  body[data-page="home"] .home-about{
-    position:relative!important;
-    height:34%!important;min-height:34%!important;max-height:34%!important;
-    scroll-snap-align:none!important;scroll-snap-stop:normal!important;
-    background:#fff8ec!important;overflow:hidden!important;border:0!important;box-shadow:none!important;
-  }
-  body[data-page="home"] .home-about::before,
-  body[data-page="home"] .home-about::after{content:none!important;display:none!important;}
+  body[data-page="home"] .home-about{display:none!important;height:0!important;min-height:0!important;max-height:0!important;overflow:hidden!important;}
   body[data-page="home"] .home-copy-stage{
     position:relative!important;z-index:2!important;width:100%!important;max-width:none!important;height:100%!important;margin:0!important;
-    padding:18px 20px 12px!important;display:flex!important;justify-content:center!important;align-items:center!important;text-align:center!important;
+    padding:20px 20px 18px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;text-align:center!important;
   }
   body[data-page="home"] .home-copy-stage .home-kicker{font-size:10px!important;letter-spacing:.2em!important;color:#a87528!important;}
   body[data-page="home"] .home-copy-stage .ornament-rule{display:none!important;}
-  body[data-page="home"] .home-copy-stage h1{margin:10px 0 0!important;color:#5c1618!important;font-size:clamp(2.45rem,10.5vw,3rem)!important;line-height:.9!important;}
+  body[data-page="home"] .home-copy-stage h1{margin:12px 0 0!important;color:#5c1618!important;font-size:clamp(2.45rem,10.5vw,3rem)!important;line-height:.9!important;}
   body[data-page="home"] .home-copy-stage h1 em{margin-top:8px!important;color:#b77a22!important;font-size:.74em!important;}
-  body[data-page="home"] .home-mobile-semesta{position:relative!important;max-width:320px!important;margin:18px auto 0!important;padding:0!important;font-size:0!important;line-height:1!important;color:#5a4338!important;}
+  body[data-page="home"] .home-mobile-semesta{position:relative!important;max-width:320px!important;margin:19px auto 0!important;padding:0!important;font-size:0!important;line-height:1!important;color:#5a4338!important;}
   body[data-page="home"] .home-mobile-semesta p{display:none!important;}
   body[data-page="home"] .home-mobile-semesta::before{
     content:"Rasa yang dekat dengan\A keseharian."!important;white-space:pre-line!important;display:block!important;position:static!important;
@@ -142,11 +134,11 @@
   }
   body[data-page="home"] .home-mobile-semesta::after{
     content:"Dari yang tumbuh, diolah,\A hingga dinikmati."!important;white-space:pre-line!important;display:block!important;position:static!important;
-    width:auto!important;height:auto!important;transform:none!important;margin:13px auto 0!important;background:none!important;border:0!important;box-shadow:none!important;
+    width:auto!important;height:auto!important;transform:none!important;margin:14px auto 0!important;background:none!important;border:0!important;box-shadow:none!important;
     color:#69564c!important;font:500 11.5px/1.45 var(--sans)!important;letter-spacing:.01em!important;
   }
   body[data-page="home"] .home-mobile-line-signatures{
-    width:min(100%,330px)!important;margin:19px auto 0!important;padding:0!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;
+    width:min(100%,330px)!important;margin:21px auto 0!important;padding:0!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;
     align-items:start!important;
   }
   body[data-page="home"] .home-mobile-line-signatures>div{min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:7px!important;}
@@ -156,24 +148,10 @@
   body[data-page="home"] .home-mobile-line-signatures>div:nth-child(1) small::after{content:"AYA FARM"!important;}
   body[data-page="home"] .home-mobile-line-signatures>div:nth-child(2) small::after{content:"AYA SPICE HAVEN"!important;}
   body[data-page="home"] .home-mobile-line-signatures>div:nth-child(3) small::after{content:"AYA SNACKS & DRINKS"!important;}
+  body[data-page="home"] .home-mobile-line-signatures::after{
+    content:"Kami menghadirkan rasa lewat\A bahan, proses, dan momen\A kebersamaan—sederhana, jelas,\A dan dekat dengan keseharian."!important;
+    grid-column:1/-1!important;display:block!important;width:100%!important;max-width:330px!important;margin:19px auto 0!important;
+    color:#5a4338!important;font:500 11.5px/1.52 var(--sans)!important;letter-spacing:0!important;white-space:pre-line!important;text-align:center!important;
+  }
   body[data-page="home"] .mobile-copy-cue{display:none!important;}
-
-  body[data-page="home"] .home-about .home-section-inner{
-    position:relative!important;z-index:2!important;width:100%!important;height:100%!important;margin:0!important;padding:22px 18px 14px!important;
-    display:flex!important;align-items:flex-start!important;justify-content:center!important;text-align:center!important;border:0!important;box-shadow:none!important;
-  }
-  body[data-page="home"] .home-about .home-section-inner::before,
-  body[data-page="home"] .home-about .home-section-inner::after{content:none!important;display:none!important;}
-  body[data-page="home"] .home-about .about-copy{display:none!important;}
-  body[data-page="home"] .home-about .about-values{
-    width:min(100%,360px)!important;margin:0 auto!important;padding:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;text-align:center!important;border:0!important;box-shadow:none!important;
-  }
-  body[data-page="home"] .home-about .about-values::before{content:none!important;display:none!important;}
-  body[data-page="home"] .home-about .about-values::after{
-    content:"Bagi kami, yang penting sederhana:\A bahan yang baik, proses yang baik,\A dan rasa yang enak dinikmati bersama."!important;
-    display:block!important;width:100%!important;max-width:360px!important;margin:0 auto!important;color:#5a4338!important;font:500 11.5px/1.55 var(--sans)!important;letter-spacing:0!important;white-space:pre-line!important;text-wrap:balance!important;
-  }
-  body[data-page="home"] .home-about .about-value-rail,
-  body[data-page="home"] .home-about .about-value,
-  body[data-page="home"] .home-about .home-scroll-cue{display:none!important;}
 }
