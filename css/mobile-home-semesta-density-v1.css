@@ -154,4 +154,10 @@
     color:#5a4338!important;font:500 11.5px/1.52 var(--sans)!important;letter-spacing:0!important;white-space:pre-line!important;text-align:center!important;
   }
   body[data-page="home"] .mobile-copy-cue{display:none!important;}
+
+  /* VP5 copy refinement — mobile preview only. */
+  body[data-page="home"] .closing-lead h2{font-size:0!important;line-height:0!important;}
+  body[data-page="home"] .closing-lead h2::before{content:"Mulai Perjalanan Rasa"!important;display:block!important;color:#4f0c0e!important;font:600 clamp(29px,8.3vw,38px)/.96 var(--serif)!important;}
+  body[data-page="home"] .closing-lead-copy>p{font-size:0!important;line-height:0!important;}
+  body[data-page="home"] .closing-lead-copy>p::before{content:"Sudah tahu yang ingin dicoba?\A Atau masih ingin kenal lebih dekat lewat cerita mereka yang sudah mencoba."!important;display:block!important;white-space:pre-line!important;color:#4d3328!important;font:400 9.4px/1.35 var(--sans)!important;letter-spacing:-.01em!important;text-wrap:balance!important;text-shadow:0 1px 0 rgba(255,250,240,.45)!important;}
 }
