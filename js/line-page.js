@@ -26,6 +26,26 @@
     document.querySelectorAll(
       ".farm-master-btn>span,.spice-master-btn>span,.snacks-master-btn>span"
     ).forEach((arrow) => arrow.remove());
+
+    document.querySelectorAll(
+      ".farm-master-vp3-media,.spice-master-vp3-media,.snacks-master-vp3-media"
+    ).forEach((media) => {
+      if (media.querySelector(".aya-vp3-image-feather")) return;
+      const feather = document.createElement("span");
+      feather.className = "aya-vp3-image-feather";
+      feather.setAttribute("aria-hidden", "true");
+      Object.assign(feather.style, {
+        position: "absolute",
+        zIndex: "2",
+        left: "0",
+        right: "0",
+        bottom: "0",
+        height: "76px",
+        pointerEvents: "none",
+        background: "linear-gradient(180deg, rgba(255,250,241,0) 0%, rgba(255,250,241,.12) 26%, rgba(255,250,241,.48) 58%, rgba(255,250,241,.84) 82%, #fffaf1 100%)"
+      });
+      media.append(feather);
+    });
   };
 
   document.addEventListener("DOMContentLoaded", () => {
