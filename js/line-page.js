@@ -81,7 +81,7 @@
       padding: "0",
       objectFit: "contain",
       objectPosition: "50% 50%",
-      transform: "none"
+      transform: document.body.dataset.lineKey === "spice" ? "translate(-3px, -6px)" : "none"
     });
 
     medallion.append(mark);
