@@ -27,7 +27,9 @@
 
         const [heroSelector, asset, alt] = config;
         const hero = document.querySelector(heroSelector);
-        if (!hero || hero.querySelector(".aya-vp1-line-medallion")) return;
+        if (!hero) return;
+        hero.querySelector(":scope > p")?.remove();
+        if (hero.querySelector(".aya-vp1-line-medallion")) return;
 
         const compact = window.matchMedia("(max-width: 370px)").matches;
         const medallion = document.createElement("span");
