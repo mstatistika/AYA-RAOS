@@ -27,6 +27,17 @@
       ".farm-master-btn>span,.spice-master-btn>span,.snacks-master-btn>span"
     ).forEach((arrow) => arrow.remove());
 
+    const productTitleMap = {
+      farm: [".farm-master-featured-copy h2", "Beras"],
+      spice: [".spice-master-featured-copy h2", "Sambal Bawang"]
+    };
+    const productTitleConfig = productTitleMap[document.body.dataset.lineKey];
+    if (productTitleConfig) {
+      const [selector, label] = productTitleConfig;
+      const title = document.querySelector(selector);
+      if (title) title.textContent = label;
+    }
+
     document.querySelectorAll(
       ".farm-master-vp3-media,.spice-master-vp3-media,.snacks-master-vp3-media"
     ).forEach((media) => {
