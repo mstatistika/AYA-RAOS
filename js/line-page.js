@@ -1,6 +1,14 @@
 (() => {
   "use strict";
 
+  if (window.matchMedia("(max-width: 900px)").matches && document.body?.dataset.page === "line") {
+    const previewStyle = document.createElement("link");
+    previewStyle.rel = "stylesheet";
+    previewStyle.href = "css/mobile-lines-vp123-preview.css?v=20260902-v1";
+    previewStyle.dataset.ayaMobileLinesVp123 = "true";
+    document.head.append(previewStyle);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     if (!window.AYA) return;
     const lineKey = document.body.dataset.lineKey;
