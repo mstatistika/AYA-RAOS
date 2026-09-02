@@ -122,21 +122,21 @@
     const cfg = {
       farm: {
         section: ".farm-master-vp2", layout: ".farm-master-understand-layout", intro: ".farm-master-intro", domains: ".farm-master-domains", when: ".farm-master-when",
-        line: "AYA FARM", title: "Sumber alami pilihan, untuk hidup yang seimbang.", introCopy: "Kami menghadirkan hasil bumi dan peternakan terpercaya untuk kebutuhan sehari-hari.",
+        line: "AYA FARM", title: "Pilihan dari bumi dan peternakan, dekat dengan keseharian di rumah.", introCopy: "Hasil pertanian, peternakan, produk primer, dan kebutuhan yang melengkapi keseharian.",
         order: [0,1,2,4,3], labels: ["HASIL PERTANIAN","HASIL PETERNAKAN","PRODUK PRIMER","BIBIT & PERLENGKAPAN","KEBUTUHAN SEHARI-HARI"],
         icons: ["farm-agri","farm-livestock","farm-primary","farm-seed","farm-home"], center: "farm-center",
         art: "assets/visual/line-pages/farm-vp1-master.webp", artPos: "center 73%"
       },
       spice: {
         section: ".spice-master-vp2", layout: ".spice-master-understand-layout", intro: ".spice-master-intro", domains: ".spice-master-domains", when: ".spice-master-when",
-        line: "AYA SPICE HAVEN", title: "Rasa autentik, warisan rempah Nusantara.", introCopy: "Rempah terbaik diolah dengan teliti untuk rasa yang kaya dan berkarakter.",
+        line: "AYA SPICE HAVEN", title: "Rasa Nusantara yang memberi karakter pada setiap hidangan.", introCopy: "Sambal, bumbu, rempah, dan olahan yang membawa rasa lebih jauh di meja makan.",
         order: [1,0,2,3,4], labels: ["BUMBU DASAR","SAMBAL NUSANTARA","REMPAH UTUH","OLAHAN REMPAH","PAKET & HAMPERS"],
         icons: ["spice-base","spice-sambal","spice-whole","spice-processed","gift"], center: "spice-center",
         art: "assets/visual/line-pages/spice-vp3-master.webp", artPos: "center 62%"
       },
       snack: {
         section: ".snacks-master-vp2", layout: ".snacks-master-understand-layout", intro: ".snacks-master-intro", domains: ".snacks-master-domains", when: ".snacks-master-when",
-        line: "AYA SNACKS & DRINKS", title: "Teman santai, setiap waktu berharga.", introCopy: "Camilan dan minuman pilihan untuk menemani momen terbaik Anda.",
+        line: "AYA SNACKS & DRINKS", title: "Teman santai, untuk momen yang dinikmati bersama.", introCopy: "Camilan dan minuman untuk menemani waktu santai, berbagi, dan berkumpul.",
         order: [3,0,1,2,4], labels: ["MINUMAN SEGAR","CAMILAN MANIS","CAMILAN GURIH","SNACK PRAKTIS","PAKET HADIAH"],
         icons: ["snack-drink","snack-sweet","snack-savory","snack-practical","snack-box"], center: "snack-center",
         art: "assets/visual/line-pages/snacks-vp3-master.webp", artPos: "center 62%"
