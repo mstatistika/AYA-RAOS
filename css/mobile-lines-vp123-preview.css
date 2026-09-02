@@ -1,0 +1,636 @@
+/* AYA RAOS — Dedicated Lines Mobile VP1–VP3 LOCK preview translation
+   Scope: body[data-page="line"] only, max-width:900px.
+   Provisional preview override; consolidate into css/site.css before release. */
+@media (max-width:900px){
+  body[data-page="line"]{
+    --line-mobile-accent:#74171a;
+    --line-mobile-accent-deep:#611216;
+    --line-mobile-soft:rgba(116,23,26,.22);
+    overflow:hidden;
+  }
+  body[data-page="line"].line-page-farm{
+    --line-mobile-accent:#18553a;
+    --line-mobile-accent-deep:#144a32;
+    --line-mobile-soft:rgba(24,85,58,.22);
+  }
+  body[data-page="line"].line-page-spice{
+    --line-mobile-accent:#74171a;
+    --line-mobile-accent-deep:#651216;
+    --line-mobile-soft:rgba(116,23,26,.22);
+  }
+  body[data-page="line"].line-page-snack{
+    --line-mobile-accent:#c65f18;
+    --line-mobile-accent-deep:#ad4d10;
+    --line-mobile-soft:rgba(198,95,24,.22);
+  }
+
+  body[data-page="line"] #main{
+    height:calc(100dvh - var(--aya-mobile-header-h));
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    overscroll-behavior-y:contain;
+    scrollbar-width:none;
+  }
+  body[data-page="line"] #main::-webkit-scrollbar{display:none}
+
+  body[data-page="line"] .farm-master-vp,
+  body[data-page="line"] .spice-master-vp,
+  body[data-page="line"] .snacks-master-vp{
+    box-sizing:border-box;
+    height:calc(100dvh - var(--aya-mobile-header-h));
+    min-height:calc(100dvh - var(--aya-mobile-header-h));
+    max-height:calc(100dvh - var(--aya-mobile-header-h));
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    overflow:hidden;
+  }
+
+  body[data-page="line"] [class$="-master-stage-label"],
+  body[data-page="line"] [class$="-master-scroll"],
+  body[data-page="line"] [class*="-master-ornament"],
+  body[data-page="line"] [class$="-master-corner-signature"]{display:none}
+
+  body[data-page="line"] .farm-master-inner,
+  body[data-page="line"] .spice-master-inner,
+  body[data-page="line"] .snacks-master-inner{
+    position:relative;
+    z-index:3;
+    width:100%;
+    max-width:none;
+    height:100%;
+    margin:0;
+    padding:0;
+  }
+
+  /* VP1 — FEEL: canonical logo medallion + TUMBUH / DIOLAH / DINIKMATI */
+  body[data-page="line"] .farm-master-vp1,
+  body[data-page="line"] .spice-master-vp1,
+  body[data-page="line"] .snacks-master-vp1{
+    position:relative;
+    display:flex;
+    align-items:flex-end;
+    padding:0;
+    text-align:center;
+  }
+  body[data-page="line"] .farm-master-photo,
+  body[data-page="line"] .spice-master-photo,
+  body[data-page="line"] .snacks-master-photo{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+  body[data-page="line"] .farm-master-photo img,
+  body[data-page="line"] .spice-master-photo img,
+  body[data-page="line"] .snacks-master-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  body[data-page="line"] .farm-master-photo img{object-position:60% center}
+  body[data-page="line"] .spice-master-photo img{object-position:58% center}
+  body[data-page="line"] .snacks-master-photo img{object-position:60% center}
+
+  body[data-page="line"] .farm-master-vp-wash,
+  body[data-page="line"] .spice-master-vp-wash,
+  body[data-page="line"] .snacks-master-vp-wash{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    background:linear-gradient(180deg,rgba(255,248,236,.01) 0%,rgba(255,248,236,.05) 39%,rgba(249,236,216,.72) 68%,rgba(247,234,215,.98) 100%);
+  }
+
+  body[data-page="line"] .farm-master-hero-inner,
+  body[data-page="line"] .spice-master-hero-inner,
+  body[data-page="line"] .snacks-master-hero-inner{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    padding:0 20px 31px;
+  }
+
+  body[data-page="line"] .farm-master-hero-copy,
+  body[data-page="line"] .spice-master-hero-copy,
+  body[data-page="line"] .snacks-master-hero-copy{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+    margin:0;
+    padding:0;
+    text-align:center;
+    color:var(--line-mobile-accent);
+    text-shadow:0 1px 16px rgba(255,250,241,.84);
+  }
+
+  body[data-page="line"] .farm-master-hero-copy::before,
+  body[data-page="line"] .spice-master-hero-copy::before,
+  body[data-page="line"] .snacks-master-hero-copy::before{
+    content:"";
+    order:1;
+    width:130px;
+    height:130px;
+    display:block;
+    margin:0 auto 13px;
+    border:1px solid rgba(181,133,60,.74);
+    border-radius:50%;
+    background-color:rgba(255,249,237,.95);
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:96px auto;
+    box-shadow:0 10px 27px rgba(66,33,18,.10),inset 0 0 0 5px rgba(255,252,245,.72);
+  }
+  body[data-page="line"].line-page-farm .farm-master-hero-copy::before{background-image:url("../assets/brand/aya-farm/primary.png")}
+  body[data-page="line"].line-page-spice .spice-master-hero-copy::before{background-image:url("../assets/brand/aya-spice-haven/primary.png")}
+  body[data-page="line"].line-page-snack .snacks-master-hero-copy::before{background-image:url("../assets/brand/aya-snacks-drinks/primary.png")}
+
+  body[data-page="line"] .farm-master-hero-copy>.farm-master-kicker,
+  body[data-page="line"] .spice-master-hero-copy>.spice-master-kicker,
+  body[data-page="line"] .snacks-master-hero-copy>.snacks-master-kicker,
+  body[data-page="line"] .farm-master-hero-copy>h1,
+  body[data-page="line"] .spice-master-hero-copy>h1,
+  body[data-page="line"] .snacks-master-hero-copy>h1,
+  body[data-page="line"] .farm-master-hero-copy>.farm-master-short-rule,
+  body[data-page="line"] .spice-master-hero-copy>.spice-master-short-rule,
+  body[data-page="line"] .snacks-master-hero-copy>.snacks-master-short-rule,
+  body[data-page="line"] .farm-master-word small,
+  body[data-page="line"] .spice-master-word small,
+  body[data-page="line"] .snacks-master-word small{display:none}
+
+  body[data-page="line"] .farm-master-word,
+  body[data-page="line"] .spice-master-word,
+  body[data-page="line"] .snacks-master-word{
+    order:2;
+    margin:0;
+    text-transform:none;
+  }
+  body[data-page="line"] .farm-master-word span,
+  body[data-page="line"] .spice-master-word span,
+  body[data-page="line"] .snacks-master-word span{
+    display:block;
+    margin:0;
+    color:var(--line-mobile-accent);
+    font:600 clamp(40px,11.2vw,47px)/.9 var(--serif);
+    letter-spacing:-.025em;
+  }
+  body[data-page="line"] .farm-master-hero-copy>h2,
+  body[data-page="line"] .spice-master-hero-copy>h2,
+  body[data-page="line"] .snacks-master-hero-copy>h2{
+    order:3;
+    max-width:322px;
+    margin:12px auto 0;
+    color:#493a32;
+    font:500 clamp(14px,4vw,17px)/1.32 var(--serif);
+    letter-spacing:0;
+    text-wrap:balance;
+  }
+
+  /* VP2 — UNDERSTAND: four boards around icon-only center */
+  body[data-page="line"] .farm-master-vp2,
+  body[data-page="line"] .spice-master-vp2,
+  body[data-page="line"] .snacks-master-vp2{
+    padding:0;
+    background:radial-gradient(circle at 50% -8%,rgba(255,255,255,.96),transparent 43%),linear-gradient(180deg,#fffaf1 0%,#f7ead7 100%);
+    color:var(--line-mobile-accent);
+  }
+  body[data-page="line"] .farm-master-understand-layout,
+  body[data-page="line"] .spice-master-understand-layout,
+  body[data-page="line"] .snacks-master-understand-layout{
+    height:100%;
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr) auto;
+    align-content:stretch;
+    gap:0;
+    padding:21px 18px 20px;
+  }
+  body[data-page="line"] .farm-master-understand-top,
+  body[data-page="line"] .spice-master-understand-top,
+  body[data-page="line"] .snacks-master-understand-top{display:contents}
+
+  body[data-page="line"] .farm-master-intro,
+  body[data-page="line"] .spice-master-intro,
+  body[data-page="line"] .snacks-master-intro{
+    grid-row:1;
+    padding:0;
+    text-align:center;
+  }
+  body[data-page="line"] .farm-master-intro>.farm-master-kicker,
+  body[data-page="line"] .spice-master-intro>.spice-master-kicker,
+  body[data-page="line"] .snacks-master-intro>.snacks-master-kicker{
+    display:block;
+    margin:0;
+    color:var(--line-mobile-accent);
+    font-size:0;
+    line-height:1;
+    letter-spacing:0;
+  }
+  body[data-page="line"] .farm-master-intro>.farm-master-kicker::after,
+  body[data-page="line"] .spice-master-intro>.spice-master-kicker::after,
+  body[data-page="line"] .snacks-master-intro>.snacks-master-kicker::after{
+    display:block;
+    font:700 9px/1.2 var(--sans);
+    letter-spacing:.15em;
+    text-transform:uppercase;
+  }
+  body[data-page="line"].line-page-farm .farm-master-intro>.farm-master-kicker::after{content:"AYA FARM"}
+  body[data-page="line"].line-page-spice .spice-master-intro>.spice-master-kicker::after{content:"AYA SPICE HAVEN"}
+  body[data-page="line"].line-page-snack .snacks-master-intro>.snacks-master-kicker::after{content:"AYA SNACKS & DRINKS"}
+
+  body[data-page="line"] .farm-master-intro h2,
+  body[data-page="line"] .spice-master-intro h2,
+  body[data-page="line"] .snacks-master-intro h2{
+    max-width:340px;
+    margin:9px auto 0;
+    color:var(--line-mobile-accent);
+    font-size:0;
+    line-height:1;
+  }
+  body[data-page="line"] .farm-master-intro h2::after,
+  body[data-page="line"] .spice-master-intro h2::after,
+  body[data-page="line"] .snacks-master-intro h2::after{
+    display:block;
+    font:600 clamp(28px,7.7vw,33px)/.96 var(--serif);
+    letter-spacing:-.025em;
+    text-wrap:balance;
+  }
+  body[data-page="line"].line-page-farm .farm-master-intro h2::after{content:"Hasil bumi, peternakan, dan produk primer."}
+  body[data-page="line"].line-page-spice .spice-master-intro h2::after{content:"Sambal, bumbu, pendamping, dan lauk berbumbu."}
+  body[data-page="line"].line-page-snack .snacks-master-intro h2::after{content:"Camilan, frozen snack, sajian ringan, dan minuman."}
+
+  body[data-page="line"] .farm-master-intro>p,
+  body[data-page="line"] .spice-master-intro>p,
+  body[data-page="line"] .snacks-master-intro>p,
+  body[data-page="line"] .farm-master-intro>.farm-master-short-rule,
+  body[data-page="line"] .spice-master-intro>.spice-master-short-rule,
+  body[data-page="line"] .snacks-master-intro>.snacks-master-short-rule{display:none}
+
+  body[data-page="line"] .farm-master-domains,
+  body[data-page="line"] .spice-master-domains,
+  body[data-page="line"] .snacks-master-domains{
+    grid-row:2;
+    position:relative;
+    width:min(100%,356px);
+    height:min(49dvh,390px);
+    min-height:330px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+    gap:54px 34px;
+    align-self:center;
+    justify-self:center;
+    margin:8px auto 4px;
+    padding:0;
+  }
+  body[data-page="line"] .farm-master-domains::before,
+  body[data-page="line"] .spice-master-domains::before,
+  body[data-page="line"] .snacks-master-domains::before{
+    content:"";
+    position:absolute;
+    z-index:0;
+    left:17%;
+    right:17%;
+    top:50%;
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--line-mobile-soft) 18%,var(--line-mobile-soft) 82%,transparent);
+  }
+  body[data-page="line"] .farm-master-domains::after,
+  body[data-page="line"] .spice-master-domains::after,
+  body[data-page="line"] .snacks-master-domains::after{
+    content:"";
+    position:absolute;
+    z-index:5;
+    left:50%;
+    top:50%;
+    width:86px;
+    height:86px;
+    transform:translate(-50%,-50%);
+    border:1px solid rgba(179,132,65,.55);
+    border-radius:50%;
+    background-color:#fff9ef;
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:52px auto;
+    box-shadow:0 10px 25px rgba(65,31,17,.10),0 0 0 5px rgba(255,249,239,.78);
+  }
+  body[data-page="line"].line-page-farm .farm-master-domains::after{background-image:url("../assets/brand/aya-farm/mark.png")}
+  body[data-page="line"].line-page-spice .spice-master-domains::after{background-image:url("../assets/brand/aya-spice-haven/mark.png")}
+  body[data-page="line"].line-page-snack .snacks-master-domains::after{background-image:url("../assets/brand/aya-snacks-drinks/mark.png")}
+
+  body[data-page="line"] .farm-master-domains article,
+  body[data-page="line"] .spice-master-domains article,
+  body[data-page="line"] .snacks-master-domains article{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-width:0;
+    min-height:0;
+    padding:12px 8px;
+    border:1px solid rgba(179,132,65,.31);
+    border-radius:22px;
+    background:rgba(255,250,241,.92);
+    box-shadow:0 8px 20px rgba(63,31,17,.045);
+    text-align:center;
+  }
+  body[data-page="line"] .farm-master-domains article+article::before,
+  body[data-page="line"] .spice-master-domains article+article::before,
+  body[data-page="line"] .snacks-master-domains article+article::before{display:none}
+
+  body[data-page="line"] .farm-master-domain-icon,
+  body[data-page="line"] .spice-master-domain-icon,
+  body[data-page="line"] .snacks-master-domain-icon{
+    width:47px;
+    height:47px;
+    display:grid;
+    place-items:center;
+    margin:0 auto 7px;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    color:var(--line-mobile-accent);
+  }
+  body[data-page="line"] .farm-master-domain-icon svg,
+  body[data-page="line"] .spice-master-domain-icon svg,
+  body[data-page="line"] .snacks-master-domain-icon svg{
+    width:43px;
+    height:43px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.6;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  body[data-page="line"] .farm-master-domains h3,
+  body[data-page="line"] .spice-master-domains h3,
+  body[data-page="line"] .snacks-master-domains h3{
+    min-height:0;
+    max-width:124px;
+    margin:0;
+    color:var(--line-mobile-accent);
+    font:600 15px/1.06 var(--serif);
+    letter-spacing:-.01em;
+    text-wrap:balance;
+  }
+  body[data-page="line"] .farm-master-domains p,
+  body[data-page="line"] .spice-master-domains p,
+  body[data-page="line"] .snacks-master-domains p{display:none}
+
+  body[data-page="line"].line-page-farm .farm-master-domains article:first-child h3,
+  body[data-page="line"].line-page-spice .spice-master-domains article:nth-child(2) h3{font-size:0}
+  body[data-page="line"].line-page-farm .farm-master-domains article:first-child h3::after{content:"Hasil Bumi";font:600 15px/1.06 var(--serif)}
+  body[data-page="line"].line-page-spice .spice-master-domains article:nth-child(2) h3::after{content:"Bumbu & Rempah Olahan";font:600 15px/1.06 var(--serif)}
+
+  body[data-page="line"] .farm-master-when,
+  body[data-page="line"] .spice-master-when,
+  body[data-page="line"] .snacks-master-when{
+    grid-row:3;
+    width:min(100%,344px);
+    margin:0 auto;
+    padding:10px 0 0;
+    border:0;
+    text-align:center;
+  }
+  body[data-page="line"] .farm-master-when-title,
+  body[data-page="line"] .spice-master-when-title,
+  body[data-page="line"] .snacks-master-when-title{
+    display:block;
+    margin:0;
+    color:var(--line-mobile-accent);
+    text-align:center;
+  }
+  body[data-page="line"] [class$="-master-when-title"]>span{display:none}
+  body[data-page="line"] [class$="-master-when-title"] strong{
+    color:var(--line-mobile-accent);
+    font-size:9px;
+    letter-spacing:.15em;
+  }
+  body[data-page="line"] .farm-master-when-grid,
+  body[data-page="line"] .spice-master-when-grid,
+  body[data-page="line"] .snacks-master-when-grid{display:none}
+  body[data-page="line"] .farm-master-when::after,
+  body[data-page="line"] .spice-master-when::after,
+  body[data-page="line"] .snacks-master-when::after{
+    display:block;
+    max-width:334px;
+    margin:8px auto 0;
+    color:#57483f;
+    font:500 11.5px/1.42 var(--sans);
+    text-wrap:balance;
+  }
+  body[data-page="line"].line-page-farm .farm-master-when::after{content:"Dari hasil bumi dan peternakan, untuk melengkapi kebutuhan rumah sehari-hari."}
+  body[data-page="line"].line-page-spice .spice-master-when::after{content:"Rasa berkarakter yang melengkapi makanan dan membuat hidangan keluarga terasa lebih istimewa."}
+  body[data-page="line"].line-page-snack .snacks-master-when::after{content:"Momen santai dan acara kecil terasa lebih menyenangkan dengan pilihan praktis untuk dinikmati bersama."}
+
+  /* VP3 — DESIRE: product first, plain left label, centered product card */
+  body[data-page="line"] .farm-master-vp3,
+  body[data-page="line"] .spice-master-vp3,
+  body[data-page="line"] .snacks-master-vp3{
+    position:relative;
+    display:grid;
+    grid-template-rows:53% 47%;
+    padding:0;
+    background:#fff8ec;
+  }
+  body[data-page="line"] .farm-master-vp3-media,
+  body[data-page="line"] .spice-master-vp3-media,
+  body[data-page="line"] .snacks-master-vp3-media{
+    position:relative;
+    z-index:1;
+    grid-row:1;
+    inset:auto;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#ead5b7;
+  }
+  body[data-page="line"] [class$="-master-vp3-media"] img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  body[data-page="line"] .farm-master-vp3-media img{object-position:56% center}
+  body[data-page="line"] .spice-master-vp3-media img{object-position:58% center}
+  body[data-page="line"] .snacks-master-vp3-media img{object-position:60% center}
+  body[data-page="line"] [class$="-master-vp3-fade"]{display:none}
+
+  body[data-page="line"] .farm-master-vp3-media::after,
+  body[data-page="line"] .spice-master-vp3-media::after,
+  body[data-page="line"] .snacks-master-vp3-media::after{
+    content:"PRODUK PILIHAN";
+    position:absolute;
+    z-index:4;
+    left:21px;
+    top:19px;
+    color:#fff9ef;
+    font:700 10px/1 var(--sans);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    text-shadow:0 2px 12px rgba(35,16,11,.62);
+  }
+
+  body[data-page="line"] .farm-master-featured-inner,
+  body[data-page="line"] .spice-master-featured-inner,
+  body[data-page="line"] .snacks-master-featured-inner{
+    position:relative;
+    z-index:3;
+    grid-row:2;
+    width:100%;
+    height:calc(100% + 20px);
+    min-height:0;
+    display:block;
+    margin-top:-20px;
+    padding:0;
+    border:0;
+    border-radius:34px 34px 0 0;
+    background:radial-gradient(circle at 50% 0,rgba(255,255,255,.68),transparent 42%),linear-gradient(180deg,#fffaf1,#f7ead7);
+    box-shadow:0 -8px 24px rgba(69,34,18,.07);
+    overflow:hidden;
+  }
+  body[data-page="line"] .farm-master-featured-copy,
+  body[data-page="line"] .spice-master-featured-copy,
+  body[data-page="line"] .snacks-master-featured-copy{
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    margin:0;
+    padding:28px 24px 19px;
+    text-align:center;
+  }
+
+  body[data-page="line"] .farm-master-featured-copy>.farm-master-kicker,
+  body[data-page="line"] .spice-master-featured-copy>.spice-master-kicker,
+  body[data-page="line"] .snacks-master-featured-copy>.snacks-master-kicker,
+  body[data-page="line"] .farm-master-featured-copy>.farm-master-short-rule,
+  body[data-page="line"] .spice-master-featured-copy>.spice-master-short-rule,
+  body[data-page="line"] .snacks-master-featured-copy>.snacks-master-short-rule,
+  body[data-page="line"] .farm-master-featured-facts,
+  body[data-page="line"] .spice-master-featured-facts,
+  body[data-page="line"] .snacks-master-featured-facts{display:none}
+
+  body[data-page="line"] [class$="-master-featured-copy"] h2{
+    max-width:342px;
+    margin:0;
+    color:var(--line-mobile-accent);
+    font:600 clamp(33px,9.8vw,41px)/.94 var(--serif);
+    letter-spacing:-.025em;
+    text-align:center;
+    text-wrap:balance;
+  }
+
+  body[data-page="line"] .farm-master-featured-copy>p,
+  body[data-page="line"] .spice-master-featured-copy>p,
+  body[data-page="line"] .snacks-master-featured-copy>p{
+    max-width:324px;
+    margin:15px auto 0;
+    color:#5d4d43;
+    font-size:0;
+    line-height:1;
+    text-align:center;
+  }
+  body[data-page="line"] .farm-master-featured-copy>p::after,
+  body[data-page="line"] .spice-master-featured-copy>p::after,
+  body[data-page="line"] .snacks-master-featured-copy>p::after{
+    display:block;
+    font:500 13px/1.48 var(--sans);
+    text-wrap:balance;
+  }
+  body[data-page="line"].line-page-farm .farm-master-featured-copy>p::after{content:"Nasi yang baik dimulai dari beras yang dipilih dengan baik."}
+  body[data-page="line"].line-page-spice .spice-master-featured-copy>p::after{content:"Pedasnya berani dan gurihnya bikin nagih, dibuat untuk pencinta pedas."}
+  body[data-page="line"].line-page-snack .snacks-master-featured-copy>p::after{content:"Gurihnya dimsum bertemu dengan chili oil yang bikin satu gigitan terasa belum cukup."}
+
+  body[data-page="line"] .farm-master-actions,
+  body[data-page="line"] .spice-master-actions,
+  body[data-page="line"] .snacks-master-actions{
+    width:min(100%,318px);
+    display:grid;
+    grid-template-columns:1fr;
+    gap:9px;
+    margin:22px auto 0;
+  }
+  body[data-page="line"] .farm-master-btn,
+  body[data-page="line"] .spice-master-btn,
+  body[data-page="line"] .snacks-master-btn{
+    width:100%;
+    min-width:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:0;
+    text-align:center;
+  }
+  body[data-page="line"] [class$="-master-btn"]>span{display:none}
+  body[data-page="line"] .farm-master-btn-primary,
+  body[data-page="line"] .spice-master-btn-primary,
+  body[data-page="line"] .snacks-master-btn-primary{
+    min-height:49px;
+    padding:0 20px;
+    border:0;
+    border-radius:11px;
+    background:var(--line-mobile-accent-deep);
+    color:#fff9ef;
+    box-shadow:0 9px 20px rgba(56,25,17,.09);
+    font:700 12.5px/1 var(--sans);
+  }
+  body[data-page="line"] .farm-master-btn-secondary,
+  body[data-page="line"] .spice-master-btn-secondary,
+  body[data-page="line"] .snacks-master-btn-secondary{
+    min-height:34px;
+    padding:0;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    color:var(--line-mobile-accent);
+    font:700 11.5px/1 var(--sans);
+    text-decoration:underline;
+    text-decoration-thickness:1px;
+    text-underline-offset:3px;
+    box-shadow:none;
+  }
+
+  @media (max-width:370px){
+    body[data-page="line"] .farm-master-hero-copy::before,
+    body[data-page="line"] .spice-master-hero-copy::before,
+    body[data-page="line"] .snacks-master-hero-copy::before{
+      width:116px;
+      height:116px;
+      background-size:86px auto;
+    }
+    body[data-page="line"] .farm-master-understand-layout,
+    body[data-page="line"] .spice-master-understand-layout,
+    body[data-page="line"] .snacks-master-understand-layout{padding-inline:13px}
+    body[data-page="line"] .farm-master-domains,
+    body[data-page="line"] .spice-master-domains,
+    body[data-page="line"] .snacks-master-domains{
+      height:min(47dvh,360px);
+      min-height:318px;
+      gap:50px 28px;
+    }
+    body[data-page="line"] .farm-master-domains article,
+    body[data-page="line"] .spice-master-domains article,
+    body[data-page="line"] .snacks-master-domains article{border-radius:19px}
+    body[data-page="line"] .farm-master-domains h3,
+    body[data-page="line"] .spice-master-domains h3,
+    body[data-page="line"] .snacks-master-domains h3{font-size:14px}
+    body[data-page="line"].line-page-farm .farm-master-domains article:first-child h3::after,
+    body[data-page="line"].line-page-spice .spice-master-domains article:nth-child(2) h3::after{font-size:14px}
+    body[data-page="line"] .farm-master-domains::after,
+    body[data-page="line"] .spice-master-domains::after,
+    body[data-page="line"] .snacks-master-domains::after{
+      width:78px;
+      height:78px;
+      background-size:47px auto;
+    }
+    body[data-page="line"] .farm-master-featured-copy>p::after,
+    body[data-page="line"] .spice-master-featured-copy>p::after,
+    body[data-page="line"] .snacks-master-featured-copy>p::after{font-size:12px}
+    body[data-page="line"] .farm-master-actions,
+    body[data-page="line"] .spice-master-actions,
+    body[data-page="line"] .snacks-master-actions{margin-top:17px}
+  }
+}
