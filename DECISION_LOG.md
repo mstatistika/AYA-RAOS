@@ -71,6 +71,7 @@ This file contains only decisions that remain active for the current development
 | AD-063 | Active B2B shipping configuration observed in Supabase is Rp5.187/km motor and Rp10.021/km mobil. These are backend configuration facts and do not reopen B2C shipping authority. |
 | AD-064 | Payment architecture is implemented as foundation, but live payment activation remains disabled. DOKU remains primary and Midtrans fallback by approved architecture; `Paid != Settled` remains mandatory. |
 | AD-065 | No public visual scope is reopened by this governance sync. Post-release parity/polish remains available only when the user explicitly reopens a region. |
+| AD-066 | B2B Partner Portal v1 at `/pasokan/partner`: email OTP primary auth, activation form → company draft + primary member, read-only dashboard (relationship / commercial summary / deliveries / Kredit Pasokan). Dedicated `pasokan/partner/css/partner.css` (operational Semesta AYA); does not touch public `site.css`. Customer RLS + RPCs `aya_b2b_partner_bootstrap_v1` / `activate_v1` / `snapshot_v1` in migration `20260823220000_aya_b2b_partner_portal_foundation.sql`. No fabrication of commercial truth; empty states when no relationship. |
 
 ## Canonical supplements
 
@@ -79,6 +80,7 @@ This file contains only decisions that remain active for the current development
 - `AYA-RAOS-TESTIMONIALS-SHARE-CANONICAL-SUPPLEMENT-v1.md`
 - `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md`
 - `AYA-RAOS-CART-B2C-CANONICAL-SUPPLEMENT-v1.md`
+- `docs/AYA-RAOS-B2B-PARTNER-PORTAL-v1.md`
 
 The broader B2B commercial/account/admin architecture remains governed by the active Project Resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md`; repository governance now records its actual platform-foundation/hardening state rather than treating the entire platform as nonexistent.
 

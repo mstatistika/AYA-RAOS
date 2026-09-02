@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#4b090d">
+  <title>Portal Mitra Pasokan — AYA RAOS</title>
+  <meta name="description" content="Portal mitra Pasokan Usaha AYA RAOS. Masuk untuk melihat relationship, commercial summary, pengiriman, dan Kredit Pasokan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/partner.css?v=20260824-partner-v1-callback">
+</head>
+<body>
+  <!-- ========== LOGIN ========== -->
+  <div id="loginView" class="login-shell">
+    <section class="login-card">
+      <div class="brand-lockup">
+        <span class="brand-mark">A</span>
+        <div>
+          <strong>AYA RAOS</strong>
+          <small>Portal Mitra Pasokan</small>
+        </div>
+      </div>
+      <p class="eyebrow">B2B Partner Access</p>
+      <h1>Masuk ke ruang mitra pasokan.</h1>
+      <p class="muted">Untuk akun usaha yang sudah atau sedang dalam proses hubungan pasokan dengan AYA.</p>
+
+      <div class="auth-tabs" role="tablist">
+        <button type="button" data-auth-tab="email" class="active" role="tab">Email</button>
+        <button type="button" data-auth-tab="wa" role="tab">WhatsApp</button>
+      </div>
+
+      <div id="emailAuthPanel">
+        <form id="emailOtpForm" class="stack">
+          <label>
+            Email usaha / PIC
+            <input id="loginEmail" type="email" autocomplete="username" required placeholder="nama@usaha.co.id">
+          </label>
+          <button id="emailOtpBtn" class="btn primary block" type="submit">Kirim tautan masuk</button>
+          <p class="auth-hint">Kami kirim tautan masuk ke email Anda. Klik Sign in di email — tidak perlu password.</p>
+          <p id="loginError" class="form-error" role="alert"></p>
+        </form>
+      </div>
+
+      <div id="waAuthPanel" hidden>
+        <form id="waAuthForm" class="stack">
+          <label>
+            Nomor WhatsApp
+            <input id="loginPhone" type="tel" autocomplete="tel" placeholder="0812… atau +62812…">
+          </label>
+          <button class="btn primary block" type="submit">Lanjut dengan WhatsApp</button>
+          <p class="auth-hint">Jika provider phone belum aktif di staging, sistem akan mengarahkan ke email OTP. Nomor WA tetap bisa dilengkapi saat aktivasi.</p>
+          <p id="waError" class="form-error" role="alert"></p>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========== OTP VERIFY ========== -->
+  <div id="otpView" class="login-shell" hidden>
+    <section class="login-card">
+      <div class="brand-lockup">
+        <span class="brand-mark">A</span>
+        <div>
+          <strong>AYA RAOS</strong>
+          <small>Portal Mitra Pasokan</small>
+        </div>
+      </div>
+      <p class="eyebrow">Verifikasi</p>
+      <h1>Cek email Anda.</h1>
+      <p class="muted">Tautan masuk dikirim ke <strong id="otpEmailHint">—</strong>. Klik <em>Sign in</em> di email, atau masukkan kode 6 digit jika tersedia.</p>
+      <form id="otpForm" class="stack">
+        <label>
+          Kode 6 digit (opsional)
+          <input id="otpCode" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="8" placeholder="••••••">
+        </label>
+        <button class="btn primary block" type="submit">Verifikasi & masuk</button>
+        <button id="backToLoginBtn" class="btn ghost block" type="button">Kembali</button>
+        <p id="otpError" class="form-error" role="alert"></p>
+      </form>
+    </section>
+  </div>
+
+  <!-- ========== ACTIVATE (Phase 2) ========== -->
+  <div id="activateView" hidden>
+    <div class="app">
+      <header class="topbar">
+        <div class="topbar-brand">
+          <span class="brand-mark">A</span>
+          <div>
+            <strong>AYA RAOS</strong>
+            <small>Aktivasi Mitra</small>
+          </div>
+        </div>
+        <div class="top-actions">
+          <span id="sessionLabel" class="session-label"></span>
+          <button id="logoutBtn" class="btn ghost" type="button">Keluar</button>
+        </div>
+      </header>
+      <div class="content">
+        <div class="activate-card">
+          <div class="page-head">
+            <p class="eyebrow">Aktivasi akun</p>
+            <h1>Lengkapi identitas usaha.</h1>
+            <p>Data ini menautkan akun Anda ke company record B2B. Relationship komersial tetap dibuat oleh AYA setelah kualifikasi.</p>
+          </div>
+          <form id="activateForm" class="card form-grid">
+            <label>
+              Nama lengkap PIC
+              <input id="fullName" type="text" required minlength="2" maxlength="160" autocomplete="name" placeholder="Nama penanggung jawab">
+            </label>
+            <label>
+              Nama usaha / company
+              <input id="companyName" type="text" required minlength="2" maxlength="200" placeholder="PT / CV / nama usaha">
+            </label>
+            <label>
+              Nomor WhatsApp (E.164)
+              <input id="activatePhone" type="tel" placeholder="+62812… atau 0812…">
+            </label>
+            <label>
+              Konteks usaha
+              <textarea id="businessContext" maxlength="800" placeholder="Bagaimana produk AYA dipakai dalam operasional usaha Anda"></textarea>
+            </label>
+            <div>
+              <span style="font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)">Tanggung jawab</span>
+              <div class="check-row">
+                <label><input type="checkbox" name="responsibility" value="primary_owner_pic"> Owner / PIC utama</label>
+                <label><input type="checkbox" name="responsibility" value="finance"> Finance</label>
+                <label><input type="checkbox" name="responsibility" value="purchasing"> Purchasing</label>
+                <label><input type="checkbox" name="responsibility" value="operational_delivery_pic"> Operasional & delivery</label>
+              </div>
+            </div>
+            <button id="activateSubmit" class="btn primary block" type="submit">Aktifkan akun mitra</button>
+            <p id="activateError" class="form-error" role="alert"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== DASHBOARD (Phase 3) ========== -->
+  <div id="dashboardView" hidden>
+    <div class="app">
+      <header class="topbar">
+        <div class="topbar-brand">
+          <span class="brand-mark">A</span>
+          <div>
+            <strong>AYA RAOS</strong>
+            <small>Portal Mitra</small>
+          </div>
+        </div>
+        <div class="top-actions">
+          <span class="session-label" data-session-mirror></span>
+          <button class="btn ghost" type="button" onclick="document.getElementById('logoutBtn')?.click()">Keluar</button>
+        </div>
+      </header>
+      <div class="content">
+        <div id="dashboardRoot">
+          <div class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Memuat ringkasan mitra…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== LOADING ========== -->
+  <div id="loadingView" class="login-shell" hidden>
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Menyiapkan sesi mitra…</p>
+    </div>
+  </div>
+
+  <script src="../../js/config.js?v=20260824-partner-v1-callback"></script>
+  <script>
+    if (!window.AYA_CONFIG) {
+      console.warn("[partner] js/config.js missing — using embedded staging fallback");
+      window.AYA_CONFIG = Object.freeze({
+        whatsappNumber: "628562646444",
+        businessName: "AYA RAOS",
+        environment: "staging",
+        supabase: Object.freeze({
+          url: "https://zysxhtlbfgqaymgwbjaq.supabase.co",
+          publishableKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp5c3hodGxiZmdxYXltZ3diamFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1MTI3MjksImV4cCI6MjEwMDA4ODcyOX0.k0tYhGuJkWH67ByfdQDwz6rzSUAE2prpg09DpF8Mw0Q",
+          environment: "staging",
+          timeoutMs: 20000
+        })
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.js"></script>
+  <script src="./js/partner-auth.js?v=20260824-partner-v1-callback"></script>
+  <script src="./js/partner-app.js?v=20260824-partner-v1-callback"></script>
+  <script>
+    window.setTimeout(function () {
+      var ids = ["loginView", "otpView", "activateView", "dashboardView", "loadingView"];
+      var anyVisible = ids.some(function (id) {
+        var el = document.getElementById(id);
+        return el && !el.hidden;
+      });
+      if (!anyVisible) {
+        var login = document.getElementById("loginView");
+        if (login) login.hidden = false;
+        console.warn("[partner] forced loginView visible after boot timeout");
+      }
+    }, 2500);
+  </script>
+  <script>
+    const obs = new MutationObserver(() => {
+      const src = document.getElementById("sessionLabel");
+      document.querySelectorAll("[data-session-mirror]").forEach((el) => {
+        if (src) el.textContent = src.textContent;
+      });
+    });
+    const src = document.getElementById("sessionLabel");
+    if (src) obs.observe(src, { childList: true, characterData: true, subtree: true });
+  </script>
+</body>
+</html>
