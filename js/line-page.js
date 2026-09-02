@@ -90,28 +90,28 @@
 
   const staticSvg = (kind) => {
     const drawings = {
-      "farm-agri": '<path d="M22 55V17M22 28c-8-3-11-8-10-14 7 1 11 6 10 14Zm0 8c8-3 11-8 10-14-7 1-11 6-10 14ZM42 55V12M42 25c-8-3-11-8-10-14 7 1 11 6 10 14Zm0 9c8-3 11-8 10-14-7 1-11 6-10 14Z"/>',
-      "farm-livestock": '<path d="M18 42c0-10 7-17 17-17 6 0 11 3 14 8l7-2-3 7-6 2v7c0 7-5 11-12 11H24c-7 0-12-4-12-11v-3l6-2Z"/><path d="M25 58v4m14-4v4M20 28l-6-7m3 0-7 2"/>',
-      "farm-primary": '<path d="M32 55V21m0 9c-9-3-13-8-12-15 8 1 13 6 12 15Zm0 10c9-3 13-8 12-15-8 1-13 6-12 15Z"/><path d="M20 47c-6-1-10-5-10-11 7 0 12 4 12 10m22 1c6-1 10-5 10-11-7 0-12 4-12 10"/>',
-      "farm-seed": '<path d="M13 34h38c-2 13-8 20-19 20S15 47 13 34Z"/><path d="M20 34c2-5 6-8 12-8s10 3 12 8M24 23c-3-4 3-6 0-10m9 10c-3-4 3-6 0-10m9 10c-3-4 3-6 0-10"/>',
+      "farm-agri": '<path d="M32 56V15"/><path d="M32 26c-7-2-11-7-10-13 7 1 11 6 10 13Zm0 11c7-2 11-7 10-13-7 1-11 6-10 13Z"/><path d="M32 47c-6-2-9-6-8-11 6 1 9 5 8 11Z"/>',
+      "farm-livestock": '<ellipse cx="32" cy="31" rx="12" ry="16"/><path d="M15 49c6-5 12-7 17-7s11 2 17 7M18 54h28"/>',
+      "farm-primary": '<path d="M21 22h22l4 33H17l4-33Z"/><path d="M24 22v-7h16v7"/><path d="M32 43V31m0 5c-5-2-7-5-6-9 4 1 7 4 6 9Zm0 0c5-2 7-5 6-9-4 1-7 4-6 9Z"/>',
+      "farm-seed": '<path d="M19 39h26l-3 16H22l-3-16Z"/><path d="M32 39V19m0 8c-6-2-9-6-8-11 5 1 8 5 8 11Zm0 0c6-2 9-6 8-11-5 1-8 5-8 11Z"/>',
       "farm-home": '<path d="M10 31 32 12l22 19v24H10V31Z"/><path d="M24 55V37h16v18"/>',
       "farm-center": '<path d="M12 33h40l-4 23H16l-4-23Z"/><path d="M20 33c2-8 6-13 12-13s10 5 12 13"/><path d="M32 20V8m0 8c-6-2-9-5-8-10 5 1 8 4 8 10Zm0 0c6-2 9-5 8-10-5 1-8 4-8 10Z"/>',
 
-      "spice-base": '<path d="M14 41c9 1 18-3 26-13 3 10-2 20-11 24-7 3-13 1-15-4"/><path d="M39 28c2-7 7-12 14-13-1 7-5 11-11 13"/>',
-      "spice-sambal": '<path d="M11 41c8 1 16-2 23-11 3 8-1 17-9 21-6 3-11 1-13-3"/><path d="M33 35c8 0 14-4 19-12 3 8-1 16-8 20-5 2-10 1-12-2"/><path d="M34 30c1-5 5-9 10-10M51 23c1-5 4-8 8-9"/>',
-      "spice-whole": '<path d="M13 35h38c-1 12-8 19-19 19S14 47 13 35Z"/><path d="M21 35c1-7 5-11 11-11s10 4 11 11M41 24 53 10M45 20l7 6"/>',
-      "spice-processed": '<path d="M20 17h24l3 38H17l3-38Z"/><path d="M23 17V9h18v8M24 30h16M27 40h10"/>',
+      "spice-base": '<path d="M15 35h34c-1 12-7 19-17 19S16 47 15 35Z"/><path d="M22 35c2-6 5-10 10-10s8 4 10 10M40 24 53 10M44 20l6 5"/>',
+      "spice-sambal": '<path d="M12 42c9 1 18-3 26-14 3 10-1 20-10 25-7 4-13 2-16-3"/><path d="M38 28c2-6 7-10 13-11"/>',
+      "spice-whole": '<circle cx="24" cy="29" r="5"/><circle cx="39" cy="25" r="5"/><circle cx="34" cy="40" r="5"/><path d="M42 20 53 9M48 14l5 5"/>',
+      "spice-processed": '<path d="M20 18h24l3 37H17l3-37Z"/><path d="M23 18V10h18v8M24 31h16M28 41h8"/>',
       "gift": '<path d="M13 28h38v27H13V28Z"/><path d="M32 28v27M13 36h38M32 28c-7 0-11-4-11-8 0-4 3-7 7-7 4 0 7 5 4 15Zm0 0c7 0 11-4 11-8 0-4-3-7-7-7-4 0-7 5-4 15Z"/>',
       "spice-center": '<path d="M14 31h36c0 14-7 23-18 23S14 45 14 31Z"/><path d="M22 31c2-8 5-12 10-12s8 4 10 12M38 20l13-11M42 17l7 6"/><path d="M18 55h28"/>',
 
-      "snack-drink": '<path d="M20 18h26l-4 37H24l-4-37Z"/><path d="M38 18 45 6M25 31h15M25 40h14"/>',
-      "snack-sweet": '<path d="M45 18c-4 2-5 7-2 10 3 3 8 2 10-1 1 3 1 6 0 9-3 11-13 18-24 18S9 45 9 34s9-20 20-20c6 0 11 2 16 4Z"/><path d="M21 25h1m10 1h1m-13 12h1m14 7h1"/>',
-      "snack-savory": '<circle cx="25" cy="30" r="13"/><circle cx="40" cy="34" r="13"/><path d="M20 26h1m9 4h1m8-5h1m6 12h1M28 40h1M42 42h1"/>',
-      "snack-practical": '<path d="M17 27h30v28H17V27Z"/><path d="M32 27v28M17 36h30M32 27c-6 0-10-4-10-8 0-3 3-6 6-6 4 0 6 5 4 14Zm0 0c6 0 10-4 10-8 0-3-3-6-6-6-4 0-6 5-4 14Z"/>',
+      "snack-drink": '<path d="M21 18h24l-4 37H25l-4-37Z"/><path d="M38 18 45 7M26 32h14M26 41h13"/>',
+      "snack-sweet": '<circle cx="32" cy="33" r="18"/><circle cx="25" cy="27" r="1.4"/><circle cx="38" cy="25" r="1.4"/><circle cx="28" cy="39" r="1.4"/><circle cx="40" cy="41" r="1.4"/>',
+      "snack-savory": '<rect x="15" y="19" width="27" height="27" rx="7"/><rect x="25" y="27" width="24" height="24" rx="6"/><circle cx="25" cy="29" r="1.2"/><circle cx="34" cy="37" r="1.2"/><circle cx="41" cy="42" r="1.2"/>',
+      "snack-practical": '<path d="M20 16h24l4 39H16l4-39Z"/><path d="M22 24h20M25 38h14M28 44h8"/>',
       "snack-box": '<path d="M12 25 32 15l20 10-20 10-20-10Z"/><path d="M12 25v22l20 10 20-10V25M32 35v22"/>',
       "snack-center": '<path d="M12 37h25c-1 11-5 17-12 17s-12-6-13-17Z"/><path d="M36 16h16l-2 27H39l-3-27Z"/><path d="M45 16 51 6M19 33c2-5 5-8 8-8 4 0 7 3 9 8"/>'
     };
-    return `<svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${drawings[kind] || drawings.gift}</svg>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${drawings[kind] || drawings.gift}</svg>`;
   };
 
   const prepareLockedVp2 = () => {
@@ -177,8 +177,8 @@
     const cardHeight = compact ? 88 : 100;
     const positions = [
       {left:"50%",top:"0",transform:"translateX(-50%)"},
-      {left:"0",top:`calc(54% - ${cardHeight / 2}px)`,transform:"none"},
-      {right:"0",top:`calc(54% - ${cardHeight / 2}px)`,transform:"none"},
+      {left:"0",top:`calc(49% - ${cardHeight / 2}px)`,transform:"none"},
+      {right:"0",top:`calc(49% - ${cardHeight / 2}px)`,transform:"none"},
       {left:"14%",bottom:"0",transform:"none"},
       {right:"14%",bottom:"0",transform:"none"}
     ];
@@ -206,7 +206,7 @@
       const icon = article.querySelector(".farm-master-domain-icon,.spice-master-domain-icon,.snacks-master-domain-icon");
       if (icon) {
         icon.innerHTML = staticSvg(cfg.icons[index]);
-        Object.assign(icon.style,{width:compact?"34px":"39px",height:compact?"34px":"39px",margin:"0 auto 5px",display:"grid",placeItems:"center"});
+        Object.assign(icon.style,{width:compact?"32px":"37px",height:compact?"32px":"37px",margin:"0 auto 6px",display:"grid",placeItems:"center"});
         const svg = icon.querySelector("svg");
         if (svg) Object.assign(svg.style,{width:"100%",height:"100%",display:"block"});
       }
@@ -214,7 +214,7 @@
       const label = document.createElement("div");
       label.textContent = cfg.labels[index];
       Object.assign(label.style, {
-        maxWidth:"98px",font:"700 10.5px/1.16 var(--sans)",letterSpacing:".01em",textTransform:"uppercase",
+        maxWidth:"98px",font:`700 ${compact ? "8.8px" : "9.4px"}/1.14 var(--sans)`,letterSpacing:".015em",textTransform:"uppercase",
         textAlign:"center",whiteSpace:"normal",textWrap:"balance"
       });
       article.append(label);
