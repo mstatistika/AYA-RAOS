@@ -12,14 +12,8 @@
     document.head.append(previewStyle);
   }
 
-  const applyCanonicalVp1Marks = () => {
+  const hideVp1PseudoMedallion = () => {
     if (!isMobileLine || !previewStyle?.sheet) return;
-    const markSize = window.matchMedia("(max-width: 370px)").matches ? "92px auto" : "102px auto";
-    const markBySelector = [
-      [".line-page-farm .farm-master-hero-copy::before", "/assets/brand/aya-farm/mark.png"],
-      [".line-page-spice .spice-master-hero-copy::before", "/assets/brand/aya-spice-haven/mark.png"],
-      [".line-page-snack .snacks-master-hero-copy::before", "/assets/brand/aya-snacks-drinks/mark.png"]
-    ];
 
     const walkRules = (rules) => {
       for (const rule of Array.from(rules || [])) {
@@ -28,15 +22,8 @@
           rule.selectorText?.includes(".spice-master-hero-copy::before") &&
           rule.selectorText?.includes(".snacks-master-hero-copy::before")
         ) {
-          rule.style.backgroundSize = markSize;
+          rule.style.display = "none";
         }
-
-        for (const [selectorFragment, asset] of markBySelector) {
-          if (rule.selectorText?.includes(selectorFragment)) {
-            rule.style.backgroundImage = `url("${asset}")`;
-          }
-        }
-
         if (rule.cssRules) walkRules(rule.cssRules);
       }
     };
@@ -44,12 +31,75 @@
     try { walkRules(previewStyle.sheet.cssRules); } catch { /* same-origin preview CSS only */ }
   };
 
-  if (previewStyle) previewStyle.addEventListener("load", applyCanonicalVp1Marks, { once: true });
+  const renderCanonicalVp1Mark = () => {
+    if (!isMobileLine) return;
+
+    const config = {
+      farm: [".farm-master-hero-copy", "assets/brand/aya-farm/mark.png", "AYA Farm"],
+      spice: [".spice-master-hero-copy", "assets/brand/aya-spice-haven/mark.png", "AYA Spice Haven"],
+      snack: [".snacks-master-hero-copy", "assets/brand/aya-snacks-drinks/mark.png", "AYA Snacks & Drinks"]
+    }[document.body.dataset.lineKey];
+
+    if (!config) return;
+    const [heroSelector, asset, alt] = config;
+    const hero = document.querySelector(heroSelector);
+    if (!hero || hero.querySelector(".aya-vp1-line-medallion")) return;
+
+    const compact = window.matchMedia("(max-width: 370px)").matches;
+    const medallion = document.createElement("span");
+    medallion.className = "aya-vp1-line-medallion";
+    medallion.setAttribute("aria-hidden", "true");
+    Object.assign(medallion.style, {
+      order: "1",
+      width: compact ? "116px" : "130px",
+      height: compact ? "116px" : "130px",
+      flex: "0 0 auto",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      margin: "0 auto 13px",
+      padding: "0",
+      boxSizing: "border-box",
+      border: "1px solid rgba(181,133,60,.74)",
+      borderRadius: "50%",
+      background: "rgba(255,249,237,.95)",
+      boxShadow: "0 10px 27px rgba(66,33,18,.10), inset 0 0 0 5px rgba(255,252,245,.72)",
+      lineHeight: "0"
+    });
+
+    const mark = document.createElement("img");
+    mark.src = asset;
+    mark.alt = alt;
+    mark.draggable = false;
+    Object.assign(mark.style, {
+      display: "block",
+      width: compact ? "92px" : "102px",
+      height: compact ? "92px" : "102px",
+      maxWidth: "none",
+      maxHeight: "none",
+      margin: "0",
+      padding: "0",
+      objectFit: "contain",
+      objectPosition: "50% 50%",
+      transform: "none"
+    });
+
+    medallion.append(mark);
+    hero.prepend(medallion);
+  };
+
+  if (previewStyle) {
+    previewStyle.addEventListener("load", () => {
+      hideVp1PseudoMedallion();
+      renderCanonicalVp1Mark();
+    }, { once: true });
+  }
 
   const polishLockedMobileLine = () => {
     if (!isMobileLine) return;
 
-    applyCanonicalVp1Marks();
+    hideVp1PseudoMedallion();
+    renderCanonicalVp1Mark();
 
     const main = document.querySelector("#main");
     if (main) main.style.scrollPaddingTop = "0px";
@@ -131,5 +181,4 @@
   });
 
   window.addEventListener("load", polishLockedMobileLine, { once: true });
-  window.addEventListener("resize", applyCanonicalVp1Marks, { passive: true });
 })();
