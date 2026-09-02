@@ -1,7 +1,9 @@
 (() => {
   "use strict";
 
-  if (window.matchMedia("(max-width: 900px)").matches && document.body?.dataset.page === "line") {
+  const isMobileLine = window.matchMedia("(max-width: 900px)").matches && document.body?.dataset.page === "line";
+
+  if (isMobileLine) {
     const previewStyle = document.createElement("link");
     previewStyle.rel = "stylesheet";
     previewStyle.href = "css/mobile-lines-vp123-preview.css?v=20260902-v1";
@@ -9,7 +11,26 @@
     document.head.append(previewStyle);
   }
 
+  const polishLockedMobileLine = () => {
+    if (!isMobileLine) return;
+
+    const main = document.querySelector("#main");
+    if (main) main.style.scrollPaddingTop = "0px";
+
+    document.querySelectorAll(
+      ".farm-master-vp,.spice-master-vp,.snacks-master-vp"
+    ).forEach((section) => {
+      section.style.scrollMarginTop = "0px";
+    });
+
+    document.querySelectorAll(
+      ".farm-master-btn>span,.spice-master-btn>span,.snacks-master-btn>span"
+    ).forEach((arrow) => arrow.remove());
+  };
+
   document.addEventListener("DOMContentLoaded", () => {
+    polishLockedMobileLine();
+
     if (!window.AYA) return;
     const lineKey = document.body.dataset.lineKey;
     const valid = new Set(["spice", "farm", "snack"]);
@@ -40,4 +61,6 @@
       }
     }
   });
+
+  window.addEventListener("load", polishLockedMobileLine, { once: true });
 })();
