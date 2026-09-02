@@ -1,0 +1,201 @@
+name: AYA Mobile Lines Canonicalize
+
+on:
+  push:
+    branches:
+      - release/mobile-lines-canonical-work-20260903
+
+permissions:
+  contents: write
+
+jobs:
+  canonicalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build canonical locked mobile lines
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git fetch origin preview/mobile-lines-vp123-polish-from-v1:refs/remotes/origin/preview/mobile-lines-vp123-polish-from-v1
+          python3 <<'PY'
+          from pathlib import Path
+          import re, subprocess
+
+          PREVIEW_REF = 'origin/preview/mobile-lines-vp123-polish-from-v1'
+
+          def git_show(path):
+              return subprocess.check_output(['git','show',f'{PREVIEW_REF}:{path}'], text=True)
+
+          def matching_brace(text, open_idx):
+              depth = 0
+              quote = None
+              escaped = False
+              comment = False
+              i = open_idx
+              while i < len(text):
+                  ch = text[i]
+                  nxt = text[i+1] if i + 1 < len(text) else ''
+                  if comment:
+                      if ch == '*' and nxt == '/':
+                          comment = False
+                          i += 2
+                          continue
+                      i += 1
+                      continue
+                  if quote:
+                      if escaped:
+                          escaped = False
+                      elif ch == '\\':
+                          escaped = True
+                      elif ch == quote:
+                          quote = None
+                      i += 1
+                      continue
+                  if ch == '/' and nxt == '*':
+                      comment = True
+                      i += 2
+                      continue
+                  if ch in ('"', "'"):
+                      quote = ch
+                  elif ch == '{':
+                      depth += 1
+                  elif ch == '}':
+                      depth -= 1
+                      if depth == 0:
+                          return i
+                  i += 1
+              raise RuntimeError('Unbalanced braces')
+
+          def extract_braced_statement(source, marker):
+              start = source.index(marker)
+              open_idx = source.index('{', start)
+              close_idx = matching_brace(source, open_idx)
+              end = close_idx + 1
+              if end < len(source) and source[end] == ';':
+                  end += 1
+              return source[start:end]
+
+          def replace_function(source, marker, replacement):
+              start = source.index(marker)
+              open_idx = source.index('{', start)
+              close_idx = matching_brace(source, open_idx)
+              return source[:start] + replacement + source[close_idx+1:]
+
+          def remove_rule_blocks(css, selector_fragment, expected_min=1):
+              pattern = re.compile(r'(?ms)^\s*([^{}]*' + re.escape(selector_fragment) + r'[^{}]*)\{[^{}]*\}\s*')
+              out, count = pattern.subn('', css)
+              if count < expected_min:
+                  raise RuntimeError(f'Expected at least {expected_min} CSS rule(s) containing {selector_fragment!r}, found {count}')
+              return out, count
+
+          preview_css = git_show('css/mobile-lines-vp123-preview.css')
+          media_marker = '@media (max-width:900px)'
+          media_start = preview_css.index(media_marker)
+          media_open = preview_css.index('{', media_start)
+          media_close = matching_brace(preview_css, media_open)
+          line_css = preview_css[media_open+1:media_close].strip('\n')
+
+          # Remove preview-only generated/pseudo visuals. Their final canonical equivalents are real DOM/runtime elements.
+          for fragment, minimum in [
+              ('.farm-master-hero-copy::before', 2),
+              ('.line-page-farm .farm-master-hero-copy::before', 1),
+              ('.line-page-spice .spice-master-hero-copy::before', 1),
+              ('.line-page-snack .snacks-master-hero-copy::before', 1),
+              ('.farm-master-domains::before', 1),
+              ('.farm-master-domains::after', 2),
+              ('.line-page-farm .farm-master-domains::after', 1),
+              ('.line-page-spice .spice-master-domains::after', 1),
+              ('.line-page-snack .snacks-master-domains::after', 1),
+              ('.farm-master-vp3-media::after', 1),
+          ]:
+              line_css, _ = remove_rule_blocks(line_css, fragment, minimum)
+
+          site_path = Path('css/site.css')
+          site = site_path.read_text()
+          start_anchor = '  body[data-page="line"]{overflow:hidden}'
+          end_anchor = '  body[data-page="products"]{overflow:hidden'
+          if site.count(start_anchor) != 1:
+              raise RuntimeError(f'Canonical line CSS start anchor count != 1: {site.count(start_anchor)}')
+          start = site.index(start_anchor)
+          end = site.index(end_anchor, start)
+          canonical_line_css = '  /* Dedicated Lines Mobile — final LOCK 2026-09-03 */\n' + line_css.rstrip() + '\n\n'
+          site = site[:start] + canonical_line_css + site[end:]
+
+          # Remove superseded line-only compact rules from the previous canonical implementation.
+          old_compact_rules = [
+              'body[data-page="line"] .farm-master-hero-copy h1,body[data-page="line"] .spice-master-hero-copy h1{font-size:43px}',
+              'body[data-page="line"] .snacks-master-hero-copy h1{font-size:39px}',
+              'body[data-page="line"] .farm-master-intro h2,body[data-page="line"] .spice-master-intro h2,body[data-page="line"] .snacks-master-intro h2{font-size:32px}',
+          ]
+          for rule in old_compact_rules:
+              if site.count(rule) != 1:
+                  raise RuntimeError(f'Superseded compact rule count != 1: {rule[:70]}')
+              site = site.replace(rule, '', 1)
+
+          if 'mobile-lines-vp123-preview.css' in site:
+              raise RuntimeError('Preview stylesheet reference leaked into canonical CSS')
+          new_line_end = site.index(end_anchor, site.index('/* Dedicated Lines Mobile — final LOCK 2026-09-03 */'))
+          new_line_block = site[site.index('/* Dedicated Lines Mobile — final LOCK 2026-09-03 */'):new_line_end]
+          for forbidden in ['.farm-master-hero-copy::before', '.farm-master-domains::before', '.farm-master-domains::after', '.farm-master-vp3-media::after']:
+              if forbidden in new_line_block:
+                  raise RuntimeError(f'Preview-only pseudo selector remains: {forbidden}')
+          site_path.write_text(site)
+
+          preview_js = git_show('js/line-page.js')
+          render_mark = extract_braced_statement(preview_js, 'const renderCanonicalVp1Mark = () => {')
+          render_mark = render_mark.replace('    if (!isMobileLine) return;\n', '', 1)
+          static_svg = extract_braced_statement(preview_js, 'const staticSvg = (kind) => {')
+          icon_tuning = extract_braced_statement(preview_js, 'const iconTuning = {')
+          prepare_vp2 = extract_braced_statement(preview_js, 'const prepareLockedVp2 = () => {')
+          prepare_vp2 = prepare_vp2.replace('    if (!isMobileLine) return;\n    neutralizeVp2BasePseudo();\n\n', '', 1)
+          polish = extract_braced_statement(preview_js, 'const polishLockedMobileLine = () => {')
+          polish_open = polish.index('{')
+          polish_body = polish[polish_open+1:polish.rfind('}')]
+          for line in [
+              '    if (!isMobileLine) return;\n',
+              '    hideVp1PseudoMedallion();\n',
+              '    neutralizeVp2BasePseudo();\n',
+              '    renderCanonicalVp1Mark();\n',
+              '    prepareLockedVp2();\n',
+          ]:
+              if line not in polish_body:
+                  raise RuntimeError(f'Expected preview polish line missing: {line.strip()}')
+              polish_body = polish_body.replace(line, '', 1)
+          polish_body = polish_body.strip('\n')
+
+          def indent(text, spaces=4):
+              pad = ' ' * spaces
+              return '\n'.join(pad + line if line else '' for line in text.splitlines())
+
+          final_init = '''function initLineMobile() {\n    if (page !== "line") return;\n    document.body.classList.add("aya-mobile-line-active");\n\n''' + indent(render_mark, 4) + '\n\n' + indent(static_svg, 4) + '\n\n' + indent(icon_tuning, 4) + '\n\n' + indent(prepare_vp2, 4) + '''\n\n    renderCanonicalVp1Mark();\n    prepareLockedVp2();\n\n''' + indent(polish_body, 4) + '''\n\n    document.body.dataset.mobileLineFinal = "true";\n  }'''
+
+          mobile_path = Path('js/mobile-public-ui.js')
+          mobile = mobile_path.read_text()
+          if mobile.count('function initLineMobile() {') != 1:
+              raise RuntimeError('Canonical initLineMobile anchor count != 1')
+          mobile = replace_function(mobile, 'function initLineMobile() {', final_init)
+          if 'mobile-lines-vp123-preview.css' in mobile or 'neutralizeVp2BasePseudo' in mobile or 'hideVp1PseudoMedallion' in mobile:
+              raise RuntimeError('Preview loader/CSSOM hack leaked into canonical mobile runtime')
+          for required in ['aya-vp1-line-medallion','aya-vp2-center','PRODUK PILIHAN','aya-vp3-image-feather','Sambal Bawang','Dimsum + Chili Oil']:
+              if required not in mobile:
+                  raise RuntimeError(f'Locked runtime invariant missing: {required}')
+          mobile_path.write_text(mobile)
+          PY
+
+          node --check js/mobile-public-ui.js
+          git diff --check
+          test "$(git diff --name-only | sort | tr '\n' ' ')" = "css/site.css js/mobile-public-ui.js "
+          ! grep -q 'mobile-lines-vp123-preview.css' css/site.css js/mobile-public-ui.js
+          ! grep -q 'farm-master-vp3-media::after' css/site.css
+
+          rm .github/workflows/aya-mobile-lines-canonicalize.yml
+          git config user.name "AYA RAOS Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add css/site.css js/mobile-public-ui.js .github/workflows/aya-mobile-lines-canonicalize.yml
+          git diff --cached --check
+          git commit -m "work: canonicalize dedicated line mobile lock"
+          git push origin HEAD:release/mobile-lines-canonical-work-20260903
