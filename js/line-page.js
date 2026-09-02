@@ -12,9 +12,14 @@
     document.head.append(previewStyle);
   }
 
-  const enlargeCanonicalVp1Assets = () => {
+  const applyCanonicalVp1Marks = () => {
     if (!isMobileLine || !previewStyle?.sheet) return;
-    const logoSize = window.matchMedia("(max-width: 370px)").matches ? "96px auto" : "108px auto";
+    const markSize = window.matchMedia("(max-width: 370px)").matches ? "92px auto" : "102px auto";
+    const markBySelector = [
+      [".line-page-farm .farm-master-hero-copy::before", "/assets/brand/aya-farm/mark.png"],
+      [".line-page-spice .spice-master-hero-copy::before", "/assets/brand/aya-spice-haven/mark.png"],
+      [".line-page-snack .snacks-master-hero-copy::before", "/assets/brand/aya-snacks-drinks/mark.png"]
+    ];
 
     const walkRules = (rules) => {
       for (const rule of Array.from(rules || [])) {
@@ -23,23 +28,28 @@
           rule.selectorText?.includes(".spice-master-hero-copy::before") &&
           rule.selectorText?.includes(".snacks-master-hero-copy::before")
         ) {
-          rule.style.backgroundSize = logoSize;
-          return true;
+          rule.style.backgroundSize = markSize;
         }
-        if (rule.cssRules && walkRules(rule.cssRules)) return true;
+
+        for (const [selectorFragment, asset] of markBySelector) {
+          if (rule.selectorText?.includes(selectorFragment)) {
+            rule.style.backgroundImage = `url("${asset}")`;
+          }
+        }
+
+        if (rule.cssRules) walkRules(rule.cssRules);
       }
-      return false;
     };
 
     try { walkRules(previewStyle.sheet.cssRules); } catch { /* same-origin preview CSS only */ }
   };
 
-  if (previewStyle) previewStyle.addEventListener("load", enlargeCanonicalVp1Assets, { once: true });
+  if (previewStyle) previewStyle.addEventListener("load", applyCanonicalVp1Marks, { once: true });
 
   const polishLockedMobileLine = () => {
     if (!isMobileLine) return;
 
-    enlargeCanonicalVp1Assets();
+    applyCanonicalVp1Marks();
 
     const main = document.querySelector("#main");
     if (main) main.style.scrollPaddingTop = "0px";
@@ -121,5 +131,5 @@
   });
 
   window.addEventListener("load", polishLockedMobileLine, { once: true });
-  window.addEventListener("resize", enlargeCanonicalVp1Assets, { passive: true });
+  window.addEventListener("resize", applyCanonicalVp1Marks, { passive: true });
 })();
