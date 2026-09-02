@@ -2,17 +2,44 @@
   "use strict";
 
   const isMobileLine = window.matchMedia("(max-width: 900px)").matches && document.body?.dataset.page === "line";
+  let previewStyle = null;
 
   if (isMobileLine) {
-    const previewStyle = document.createElement("link");
+    previewStyle = document.createElement("link");
     previewStyle.rel = "stylesheet";
     previewStyle.href = "css/mobile-lines-vp123-preview.css?v=20260902-v1";
     previewStyle.dataset.ayaMobileLinesVp123 = "true";
     document.head.append(previewStyle);
   }
 
+  const enlargeCanonicalVp1Assets = () => {
+    if (!isMobileLine || !previewStyle?.sheet) return;
+    const logoSize = window.matchMedia("(max-width: 370px)").matches ? "96px auto" : "108px auto";
+
+    const walkRules = (rules) => {
+      for (const rule of Array.from(rules || [])) {
+        if (
+          rule.selectorText?.includes(".farm-master-hero-copy::before") &&
+          rule.selectorText?.includes(".spice-master-hero-copy::before") &&
+          rule.selectorText?.includes(".snacks-master-hero-copy::before")
+        ) {
+          rule.style.backgroundSize = logoSize;
+          return true;
+        }
+        if (rule.cssRules && walkRules(rule.cssRules)) return true;
+      }
+      return false;
+    };
+
+    try { walkRules(previewStyle.sheet.cssRules); } catch { /* same-origin preview CSS only */ }
+  };
+
+  if (previewStyle) previewStyle.addEventListener("load", enlargeCanonicalVp1Assets, { once: true });
+
   const polishLockedMobileLine = () => {
     if (!isMobileLine) return;
+
+    enlargeCanonicalVp1Assets();
 
     const main = document.querySelector("#main");
     if (main) main.style.scrollPaddingTop = "0px";
@@ -94,4 +121,5 @@
   });
 
   window.addEventListener("load", polishLockedMobileLine, { once: true });
+  window.addEventListener("resize", enlargeCanonicalVp1Assets, { passive: true });
 })();
