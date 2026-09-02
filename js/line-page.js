@@ -4,9 +4,14 @@
   if (window.matchMedia("(max-width: 900px)").matches && document.body?.dataset.page === "line") {
     const previewStyle = document.createElement("link");
     previewStyle.rel = "stylesheet";
-    previewStyle.href = "css/mobile-lines-vp123-preview.css?v=20260902-v1";
+    previewStyle.href = "css/mobile-lines-vp123-preview.css?v=20260902-v2";
     previewStyle.dataset.ayaMobileLinesVp123 = "true";
     document.head.append(previewStyle);
+
+    const previewScript = document.createElement("script");
+    previewScript.src = "js/mobile-lines-vp123-preview.js?v=20260902-v2";
+    previewScript.dataset.ayaMobileLinesVp123 = "true";
+    document.head.append(previewScript);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
