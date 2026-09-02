@@ -38,7 +38,7 @@
     if (!isMobileLine) return;
     walkPreviewRules((rule) => {
       const selector = rule.selectorText || "";
-      if (selector.includes("-master-domains::before") || selector.includes("-master-domains::after")) {
+      if (selector.includes("-master-domains::before") || selector.includes("-master-domains::after") || selector.includes("-master-vp3-media::after")) {
         rule.style.display = "none";
         rule.style.visibility = "hidden";
         rule.style.opacity = "0";
