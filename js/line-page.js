@@ -309,6 +309,17 @@
       if (title) title.textContent = label;
     }
 
+    const featuredKicker = document.querySelector(
+      ".farm-master-featured-copy>.farm-master-kicker,.spice-master-featured-copy>.spice-master-kicker,.snacks-master-featured-copy>.snacks-master-kicker"
+    );
+    if (featuredKicker) {
+      featuredKicker.textContent = "PRODUK PILIHAN";
+      Object.assign(featuredKicker.style, {
+        display:"block",margin:"0 0 6px",color:"var(--line-mobile-accent)",
+        font:"700 8.8px/1.2 var(--sans)",letterSpacing:".14em",textTransform:"uppercase"
+      });
+    }
+
     document.querySelectorAll(".farm-master-vp3-media,.spice-master-vp3-media,.snacks-master-vp3-media").forEach((media) => {
       if (media.querySelector(".aya-vp3-image-feather")) return;
       const feather = document.createElement("span");
