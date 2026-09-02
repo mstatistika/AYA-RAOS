@@ -1,0 +1,54 @@
+name: AYA Mobile Lines Canonicalize v4
+
+on:
+  push:
+    branches:
+      - release/mobile-lines-canonical-work-20260903
+
+permissions:
+  contents: write
+
+jobs:
+  canonicalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebuild isolated canonical candidate
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git checkout origin/main -- css/site.css js/mobile-public-ui.js
+          python3 <<'PY'
+          from pathlib import Path
+          import subprocess
+          src = subprocess.check_output([
+              'git','show','e9fbd32f93f31454f2aea1bbcfe4c72a1fb674b4:.github/workflows/aya-mobile-lines-canonicalize.yml'
+          ], text=True)
+          marker = '        run: |\n'
+          if marker not in src:
+              raise SystemExit('Canonicalization source run block not found')
+          raw = src.split(marker, 1)[1]
+          script = '\n'.join((line[10:] if line.startswith('          ') else line) for line in raw.splitlines()) + '\n'
+          script = script.replace("'Sambal Bawang','Dimsum + Chili Oil'", "'Sambal Bawang'")
+          script = script.replace(
+              'node --check js/mobile-public-ui.js\ngit diff --check',
+              "node --check js/mobile-public-ui.js\nsed -i 's/[[:space:]]\\+$//' js/mobile-public-ui.js\ngit diff --check"
+          )
+          script = script.replace(
+              'rm .github/workflows/aya-mobile-lines-canonicalize.yml',
+              'rm .github/workflows/aya-mobile-lines-canonicalize-v4.yml'
+          )
+          script = script.replace(
+              'git add css/site.css js/mobile-public-ui.js .github/workflows/aya-mobile-lines-canonicalize.yml',
+              'git add css/site.css js/mobile-public-ui.js .github/workflows/aya-mobile-lines-canonicalize-v4.yml'
+          )
+          if 'Dimsum + Chili Oil' in script:
+              raise SystemExit('Validator correction did not apply')
+          if "sed -i 's/[[:space:]]\\+$//' js/mobile-public-ui.js" not in script:
+              raise SystemExit('Scoped whitespace normalization did not apply')
+          Path('/tmp/aya-canonicalize.sh').write_text(script)
+          PY
+          bash /tmp/aya-canonicalize.sh
