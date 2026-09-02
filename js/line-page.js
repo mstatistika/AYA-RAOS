@@ -90,28 +90,46 @@
 
   const staticSvg = (kind) => {
     const drawings = {
-      "farm-agri": '<path d="M32 56V15"/><path d="M32 26c-7-2-11-7-10-13 7 1 11 6 10 13Zm0 11c7-2 11-7 10-13-7 1-11 6-10 13Z"/><path d="M32 47c-6-2-9-6-8-11 6 1 9 5 8 11Z"/>',
-      "farm-livestock": '<ellipse cx="32" cy="31" rx="12" ry="16"/><path d="M15 49c6-5 12-7 17-7s11 2 17 7M18 54h28"/>',
-      "farm-primary": '<path d="M21 22h22l4 33H17l4-33Z"/><path d="M24 22v-7h16v7"/><path d="M32 43V31m0 5c-5-2-7-5-6-9 4 1 7 4 6 9Zm0 0c5-2 7-5 6-9-4 1-7 4-6 9Z"/>',
-      "farm-seed": '<path d="M19 39h26l-3 16H22l-3-16Z"/><path d="M32 39V19m0 8c-6-2-9-6-8-11 5 1 8 5 8 11Zm0 0c6-2 9-6 8-11-5 1-8 5-8 11Z"/>',
-      "farm-home": '<path d="M10 31 32 12l22 19v24H10V31Z"/><path d="M24 55V37h16v18"/>',
+      "farm-agri": '<path d="M31.5 55V16"/><path d="M31.5 27c-6.4-1.7-10.2-6.1-9.4-11.2 6.1.8 9.9 5.2 9.4 11.2Zm0 9.8c6.5-1.8 10.4-6.2 9.6-11.4-6.2.8-10 5.2-9.6 11.4Z"/><path d="M24.4 50.5c-3.8-4.9-5.2-9.7-4.1-14.6m22.6 14.6c3.8-4.9 5.2-9.7 4.1-14.6"/><circle cx="20.1" cy="34.2" r="1.25" fill="currentColor" stroke="none"/><circle cx="43" cy="34.2" r="1.25" fill="currentColor" stroke="none"/>',
+      "farm-livestock": '<path d="M22.5 33.3c0-8.2 4.2-14.6 9.5-14.6s9.5 6.4 9.5 14.6-4.2 15-9.5 15-9.5-6.8-9.5-15Z"/><path d="M17 50.7c4.8-3.8 9.8-5.7 15-5.7s10.2 1.9 15 5.7M20 55h24"/><path d="M27 21.1c1.2-3.7 3-6.4 5-8.1 2 1.7 3.8 4.4 5 8.1"/><circle cx="32" cy="35" r="1.2" fill="currentColor" stroke="none"/>',
+      "farm-primary": '<path d="M21 23h22l3.5 31H17.5L21 23Z"/><path d="M24.2 23v-6.2h15.6V23M23 30h18"/><path d="M32 47.2V34.5m0 5.1c-4.8-1.6-7.3-4.6-6.7-8.4 4.6.5 7.2 3.7 6.7 8.4Zm0 0c4.8-1.6 7.3-4.6 6.7-8.4-4.6.5-7.2 3.7-6.7 8.4Z"/><circle cx="32" cy="50.6" r="1.25" fill="currentColor" stroke="none"/>',
+      "farm-seed": '<path d="M18.5 41.5h27l-3.1 13.3H21.6l-3.1-13.3Z"/><path d="M32 41.5V19.4m0 8.6c-5.7-1.6-8.7-5.1-8-9.6 5.3.6 8.4 4.2 8 9.6Zm0 0c5.7-1.6 8.7-5.1 8-9.6-5.3.6-8.4 4.2-8 9.6Z"/><path d="M45.2 33.8 51 28m-7.2 8.6 4.2 4.2"/><circle cx="32" cy="33.7" r="1.2" fill="currentColor" stroke="none"/>',
+      "farm-home": '<path d="M12.5 31.5 32 14.8l19.5 16.7v22H12.5v-22Z"/><path d="M25.2 53.5V38h13.6v15.5M20.2 33.5h23.6"/><path d="M45.2 22.8c2-2.8 4.1-4.4 6.3-4.8"/><circle cx="32" cy="29.6" r="1.25" fill="currentColor" stroke="none"/>',
       "farm-center": '<path d="M12 33h40l-4 23H16l-4-23Z"/><path d="M20 33c2-8 6-13 12-13s10 5 12 13"/><path d="M32 20V8m0 8c-6-2-9-5-8-10 5 1 8 4 8 10Zm0 0c6-2 9-5 8-10-5 1-8 4-8 10Z"/>',
 
-      "spice-base": '<path d="M15 35h34c-1 12-7 19-17 19S16 47 15 35Z"/><path d="M22 35c2-6 5-10 10-10s8 4 10 10M40 24 53 10M44 20l6 5"/>',
-      "spice-sambal": '<path d="M12 42c9 1 18-3 26-14 3 10-1 20-10 25-7 4-13 2-16-3"/><path d="M38 28c2-6 7-10 13-11"/>',
-      "spice-whole": '<circle cx="24" cy="29" r="5"/><circle cx="39" cy="25" r="5"/><circle cx="34" cy="40" r="5"/><path d="M42 20 53 9M48 14l5 5"/>',
-      "spice-processed": '<path d="M20 18h24l3 37H17l3-37Z"/><path d="M23 18V10h18v8M24 31h16M28 41h8"/>',
-      "gift": '<path d="M13 28h38v27H13V28Z"/><path d="M32 28v27M13 36h38M32 28c-7 0-11-4-11-8 0-4 3-7 7-7 4 0 7 5 4 15Zm0 0c7 0 11-4 11-8 0-4-3-7-7-7-4 0-7 5-4 15Z"/>',
+      "spice-base": '<path d="M15 36.5h34c-1.1 11.4-7.3 18-17 18s-15.9-6.6-17-18Z"/><path d="M21.5 36.5c1.6-7 5.2-11 10.5-11s8.9 4 10.5 11M40.5 25.1 52 13.6M44.2 21.4l5.9 5.9"/><path d="M24 31.3c2.6-2.7 5.3-4.1 8-4.1s5.4 1.4 8 4.1"/><circle cx="32" cy="43.2" r="1.25" fill="currentColor" stroke="none"/>',
+      "spice-sambal": '<path d="M12.5 43.8c9 .5 18.3-4 27.1-15.4 2.4 9.7-1.4 18.9-10.2 23.8-6.8 3.8-13.1 2.2-16.9-2.9"/><path d="M39.5 28.3c2.4-6 7-9.6 12.8-10.2"/><path d="M19.2 45.2c4.5-.8 9.4-3.3 14.5-7.6"/><circle cx="43.7" cy="24.1" r="1.3" fill="currentColor" stroke="none"/>',
+      "spice-whole": '<path d="m31.8 14.5 3.1 7.2 7.8-1-5.9 5.2 2.3 7.5-6.8-4-6.6 4.4 1.8-7.7-6.2-4.8 7.9.5 2.6-7.3Z"/><path d="M42.7 39.2 52 29.9m-7 4.7 7.1 7.1M19 43.3c3.2-4 6.2-6 9-6 2.4 0 4.8 1.2 7.2 3.6"/><circle cx="19" cy="43.3" r="1.3" fill="currentColor" stroke="none"/>',
+      "spice-processed": '<path d="M20.5 19h23l3 35.5h-29L20.5 19Z"/><path d="M23.5 19v-6.2h17V19M23.3 30.2h17.4M27.2 40.8h9.6"/><path d="M28 47.4c2.7-2.3 5.3-2.3 8 0"/><circle cx="32" cy="34.5" r="1.2" fill="currentColor" stroke="none"/>',
+      "gift": '<path d="M13.5 29h37v25.5h-37V29Z"/><path d="M32 29v25.5M13.5 37h37"/><path d="M32 29c-6.2 0-10-3.6-10-7.5 0-3.5 2.6-6 6-6 3.6 0 6.1 4.4 4 13.5Zm0 0c6.2 0 10-3.6 10-7.5 0-3.5-2.6-6-6-6-3.6 0-6.1 4.4-4 13.5Z"/><circle cx="32" cy="37" r="1.25" fill="currentColor" stroke="none"/>',
       "spice-center": '<path d="M14 31h36c0 14-7 23-18 23S14 45 14 31Z"/><path d="M22 31c2-8 5-12 10-12s8 4 10 12M38 20l13-11M42 17l7 6"/><path d="M18 55h28"/>',
 
-      "snack-drink": '<path d="M21 18h24l-4 37H25l-4-37Z"/><path d="M38 18 45 7M26 32h14M26 41h13"/>',
-      "snack-sweet": '<circle cx="32" cy="33" r="18"/><circle cx="25" cy="27" r="1.4"/><circle cx="38" cy="25" r="1.4"/><circle cx="28" cy="39" r="1.4"/><circle cx="40" cy="41" r="1.4"/>',
-      "snack-savory": '<rect x="15" y="19" width="27" height="27" rx="7"/><rect x="25" y="27" width="24" height="24" rx="6"/><circle cx="25" cy="29" r="1.2"/><circle cx="34" cy="37" r="1.2"/><circle cx="41" cy="42" r="1.2"/>',
-      "snack-practical": '<path d="M20 16h24l4 39H16l4-39Z"/><path d="M22 24h20M25 38h14M28 44h8"/>',
-      "snack-box": '<path d="M12 25 32 15l20 10-20 10-20-10Z"/><path d="M12 25v22l20 10 20-10V25M32 35v22"/>',
+      "snack-drink": '<path d="M21.5 19h23l-3.7 35.5H25.2L21.5 19Z"/><path d="M38.6 19 45 8.4M25 31.5h16M26 41h14"/><path d="M42.7 24.3c3.8-2.7 7.2-3.1 10.3-1.2"/><circle cx="31.8" cy="47.3" r="1.2" fill="currentColor" stroke="none"/>',
+      "snack-sweet": '<path d="M16.5 36.5c0-9.2 7-16.5 15.5-16.5s15.5 7.3 15.5 16.5S40.5 53 32 53s-15.5-7.3-15.5-16.5Z"/><path d="M22.5 30.2c6.3 3.2 12.7 3.2 19 0M25.3 42.2c4.5 2.1 9 2.1 13.5 0"/><circle cx="32" cy="36.4" r="1.35" fill="currentColor" stroke="none"/>',
+      "snack-savory": '<rect x="14.5" y="20" width="25" height="25" rx="6.5"/><rect x="25" y="28" width="24.5" height="24.5" rx="6"/><path d="M20.5 31h13M31 39h12"/><circle cx="22.5" cy="26.5" r="1.25" fill="currentColor" stroke="none"/><circle cx="42.5" cy="45" r="1.25" fill="currentColor" stroke="none"/>',
+      "snack-practical": '<path d="M20.5 17.5h23l3.8 37h-30.6l3.8-37Z"/><path d="M22.3 25.5h19.4M25.5 38.5h13M28.3 45h7.4"/><path d="M25 17.5c1.8-3.1 4.1-4.7 7-4.7s5.2 1.6 7 4.7"/><circle cx="32" cy="31.8" r="1.25" fill="currentColor" stroke="none"/>',
+      "snack-box": '<path d="M13 26 32 16l19 10-19 10-19-10Z"/><path d="M13 26v20.5L32 57l19-10.5V26M32 36v21"/><path d="M23.3 21.1 42 31.2M40.7 21.3 22 31.4"/><circle cx="32" cy="36" r="1.25" fill="currentColor" stroke="none"/>',
       "snack-center": '<path d="M12 37h25c-1 11-5 17-12 17s-12-6-13-17Z"/><path d="M36 16h16l-2 27H39l-3-27Z"/><path d="M45 16 51 6M19 33c2-5 5-8 8-8 4 0 7 3 9 8"/>'
     };
-    return `<svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${drawings[kind] || drawings.gift}</svg>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">${drawings[kind] || drawings.gift}</svg>`;
+  };
+
+  const iconTuning = {
+    "farm-agri": "translateY(-1px)",
+    "farm-livestock": "translateY(-1px)",
+    "farm-primary": "translateY(-1px)",
+    "farm-seed": "translateY(-1px)",
+    "farm-home": "translateY(-1px)",
+    "spice-base": "translateY(-1px)",
+    "spice-sambal": "translateY(-1px)",
+    "spice-whole": "translateY(-1px)",
+    "spice-processed": "translateY(-1px)",
+    "gift": "translateY(-1px)",
+    "snack-drink": "translateY(-1px)",
+    "snack-sweet": "translateY(-1px)",
+    "snack-savory": "translateY(-1px)",
+    "snack-practical": "translateY(-1px)",
+    "snack-box": "translateY(-1px)"
   };
 
   const prepareLockedVp2 = () => {
@@ -208,7 +226,7 @@
         icon.innerHTML = staticSvg(cfg.icons[index]);
         Object.assign(icon.style,{width:compact?"32px":"37px",height:compact?"32px":"37px",margin:"0 auto 6px",display:"grid",placeItems:"center"});
         const svg = icon.querySelector("svg");
-        if (svg) Object.assign(svg.style,{width:"100%",height:"100%",display:"block"});
+        if (svg) Object.assign(svg.style,{width:"100%",height:"100%",display:"block",transform:iconTuning[cfg.icons[index]] || "none",transformOrigin:"50% 50%"});
       }
 
       const label = document.createElement("div");
