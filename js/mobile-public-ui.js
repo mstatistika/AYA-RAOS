@@ -251,6 +251,7 @@
         });
 
         document.querySelectorAll(".farm-master-btn>span,.spice-master-btn>span,.snacks-master-btn>span").forEach((arrow) => arrow.remove());
+        document.querySelectorAll(".farm-master-featured-copy [data-line-catalog],.spice-master-featured-copy [data-line-catalog],.snacks-master-featured-copy [data-line-catalog]").forEach((cta) => cta.remove());
 
         const productTitleMap = {
           farm: [".farm-master-featured-copy h2", "Beras"],
