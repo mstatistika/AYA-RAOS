@@ -1,0 +1,47 @@
+name: AYA Mobile Line CTA Cleanup
+
+on:
+  push:
+    branches:
+      - fix/mobile-line-remove-secondary-cta-20260903
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Remove mobile secondary product CTA
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 <<'PY'
+          from pathlib import Path
+          path = Path('js/mobile-public-ui.js')
+          text = path.read_text()
+          old = '''        document.querySelectorAll(".farm-master-btn>span,.spice-master-btn>span,.snacks-master-btn>span").forEach((arrow) => arrow.remove());\n\n        const productTitleMap = {\n'''
+          new = '''        document.querySelectorAll(".farm-master-btn>span,.spice-master-btn>span,.snacks-master-btn>span").forEach((arrow) => arrow.remove());\n        document.querySelectorAll(".farm-master-featured-copy [data-line-catalog],.spice-master-featured-copy [data-line-catalog],.snacks-master-featured-copy [data-line-catalog]").forEach((cta) => cta.remove());\n\n        const productTitleMap = {\n'''
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exact CTA anchor once, found {text.count(old)}')
+          text = text.replace(old, new, 1)
+          invariant = 'document.querySelectorAll(".farm-master-featured-copy [data-line-catalog],.spice-master-featured-copy [data-line-catalog],.snacks-master-featured-copy [data-line-catalog]").forEach((cta) => cta.remove());'
+          if text.count(invariant) != 1:
+              raise SystemExit('CTA removal invariant failed')
+          path.write_text(text)
+          PY
+
+          node --check js/mobile-public-ui.js
+          git diff --check
+          test "$(git diff --name-only)" = "js/mobile-public-ui.js"
+          rm .github/workflows/aya-mobile-line-remove-secondary-cta.yml
+          git config user.name "AYA RAOS Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add js/mobile-public-ui.js .github/workflows/aya-mobile-line-remove-secondary-cta.yml
+          git diff --cached --check
+          git commit -m "fix: remove mobile line secondary product CTA"
+          git push origin HEAD:fix/mobile-line-remove-secondary-cta-20260903
