@@ -6,6 +6,7 @@
 **Implementation checkpoint:** `ae52958a4408d9da95464e2f7b07de1544015457` — `refactor: consolidate locked public mobile UI`  
 **Status:** **FINAL MOBILE VISUAL / UX LOCK — staging / noindex**
 **Product Catalog amendment approved:** 5 September 2026 — **Mobile Product Book V24 FINAL LOCK**
+**Testimonial Share parity correction approved:** 5 September 2026 — **Foto/Video media modal viewport-fit correction**
 
 ## 1. Authority and boundary
 
@@ -173,6 +174,12 @@ Required truth remains governed by the Testimonials + Share canonical supplement
 - media upload/link behavior must remain truthful;
 - final canonical submission/moderation flow is preserved.
 
+Post-release parity correction approved on 5 September 2026:
+- the Foto/Video media modal must fit the standard mobile viewport without a mandatory small follow-up scroll merely to reach the normal action row;
+- normal composition keeps header, media stage, optional link field, and `KEMBALI / SIMPAN` actions reachable in the opened modal;
+- internal modal scrolling remains a truthful fallback for genuinely constrained short viewports or expanded states such as media metadata/progress;
+- typography, media-stage visual treatment, upload/link behavior, consent, submission flow, and testimonial backend contracts are unchanged.
+
 Preview-only fake submission behavior from standalone HTML references is **not** production behavior and is not authorized by this supplement.
 
 ## 11. Protection / zero-regression boundary
@@ -208,6 +215,8 @@ Validation before governance sync:
 - implementation tree compared with prior `main` shows exactly four changed source paths listed above;
 - Vercel implementation deployment for `a68a0d2c8c69d7392e802c891d1fb54318f9cf60` = READY / HTTP 200;
 - staging remains `noindex, nofollow, noarchive`.
+
+The 5 September 2026 Share parity correction is source-scoped to the existing Testimonial Share selector block in `css/site.css`; no new stylesheet, runtime file, backend change, or testimonial data-contract change is introduced.
 
 ## 13. Release discipline
 

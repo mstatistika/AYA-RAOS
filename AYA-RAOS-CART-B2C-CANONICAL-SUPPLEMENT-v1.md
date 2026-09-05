@@ -121,21 +121,26 @@ The Cart implementation checkpoint changes only:
 
 `js/config.js`, `js/data.js`, and `js/site.js` contracts remain unchanged by the implementation checkpoint.
 
-## 8. Known OPEN minor correction after checkpoint
+## 8. Minor correction resolved — 5 September 2026
 
-User approved the coded preview as approximately 95% and explicitly allowed this checkpoint to enter `main` before the remaining minor correction.
+The previously open Cart count correction is resolved by the scoped post-release polish.
 
-Still OPEN:
-- desktop Cart count `3 item` currently appears with a pill/background treatment;
-- target is plain count text aligned naturally with `5 pcs`, without badge-like visual emphasis.
+Resolved:
+- Cart count such as `3 item` is plain text without pill/background treatment and remains visually grouped with `5 pcs`;
+- mobile Cart suppresses the redundant `KERANJANG` eyebrow while preserving the desktop eyebrow;
+- mobile `Keranjang Belanja` title is raised to the approved header position.
 
-This is a narrow Cart visual follow-up. It does not reopen other Cart geometry or any protected scope.
+Source boundary for this correction:
+- `cart.html`;
+- Cart selectors inside `css/site.css`.
+
+This is presentation-only. It does not change Cart storage, product/variant/price/quantity truth, B2C classification, customer form, shipping fallback, payment foundation, or the Cart runtime contract.
 
 ## 9. Release discipline
 
 This checkpoint is released through staged governance:
 1. implementation preview already verified;
-2. this canonical supplement records the released boundary and known open item;
+2. this canonical supplement records the released boundary and resolved minor correction;
 3. canonical `main` may fast-forward only after governance remote verification;
 4. housekeeping of preview/automation branches remains a separate later operation.
 
