@@ -1,0 +1,8 @@
+:root{--bg:#ddcbb4;--canvas-top:#e6d7c4;--canvas-bottom:#d7c1a6;--paper:#17110e;--paper2:#211713;--ivory:#fff7e8;--gold:#c49a57;--maroon:#7d1118;--green:#235a3b;--snack:#a05e2d}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#cdb89c;color:var(--ivory);font-family:"Montserrat",Arial,sans-serif}
+body{display:flex;justify-content:center}
+.shell{width:min(430px,100vw);height:100dvh;display:grid;grid-template-rows:64px 1fr;background:var(--bg);overflow:hidden}
+.site-head{height:64px;background:linear-gradient(180deg,#efe2d0 0%,#e7d5bd 100%);display:flex;align-items:center;justify-content:space-between;padding:0 15px 0 16px;border-bottom:1px solid rgba(137,98,43,.12)}
+.logo{width:176px;height:44px;object-fit:contain;object-position:left center;display:block}.actions{display:flex;align-items:center;gap:7px}.icon-btn{position:relative;width:42px;height:42px;border:0;background:transparent;color:#b0884d;padding:0}.bag svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.count{position:absolute;top:-1px;right:-1px;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;background:#17613f;color:#fff;font-size:9px}.menu{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px}.menu i{width:26px;height:2px;border-radius:999px;background:#c49a57;display:block}
+.stage{min-height:0;position:relative;padding:4px 10px 38px;background:radial-gradient(circle at 52% 0,rgba(101,17,22,.045),transparent 31%),linear-gradient(180deg,var(--canvas-top) 0%,var(--canvas-bottom) 100%)}
