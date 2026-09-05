@@ -1,0 +1,25 @@
+/* V22 restores R5.13 handoff polish for the V14 dark leaf without altering the settled visual. */
+.reverse-current-coverage{--aya-handoff:0}
+.reverse-current-coverage .product-title,
+.reverse-current-coverage .lead,
+.reverse-current-coverage .fact,
+.reverse-current-coverage .page-commerce{
+  opacity:calc(1 - (var(--aya-handoff) * .58));
+  filter:blur(calc(var(--aya-handoff) * .45px));
+}
+.reverse-current-coverage .content{isolation:isolate}
+.reverse-current-coverage .content:after{
+  content:"";position:absolute;inset:0;z-index:20;pointer-events:none;
+  opacity:var(--aya-handoff);
+  background:linear-gradient(90deg,
+    rgba(255,247,232,.02) 0 18%,
+    rgba(255,247,232,.10) 36%,
+    rgba(255,247,232,.22) 53%,
+    rgba(255,247,232,.15) 70%,
+    rgba(255,247,232,.03) 91%,transparent 100%);
+}
+.reverse-current-coverage .photo:before{
+  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  opacity:var(--aya-handoff);
+  background:linear-gradient(90deg,transparent 0 28%,rgba(92,13,16,.12) 42%,rgba(92,13,16,.34) 57%,rgba(92,13,16,.20) 72%,transparent 90%);
+}
