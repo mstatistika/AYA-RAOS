@@ -294,39 +294,749 @@
   function initMobileCatalog() {
     if (page !== "products") return;
     const sourceMain = document.querySelector("main#main");
-    if (!sourceMain || document.querySelector(".aya-mobile-catalog")) return;
-    const products = visibleProducts().filter((product) => Array.isArray(product.variants) && product.variants.some((variant) => Number(variant?.price) > 0));
+    if (!sourceMain || document.querySelector(".aya-mobile-product-book")) return;
+
+    const validVariants = (product) => Array.isArray(product?.variants)
+      ? product.variants.filter((variant) => variant?.name && Number(variant.price) > 0)
+      : [];
+    const normalizeLine = (product) => product?.lineKey === "snacks" ? "snack" : product?.lineKey;
+    const lineMeta = {
+      farm: { title: "FARM", ribbon: "FARM", mark: "assets/brand/aya-farm/mark.png" },
+      spice: { title: "SPICE HAVEN", ribbon: "SPICE", mark: "assets/brand/aya-spice-haven/mark.png" },
+      snack: { title: "SNACKS & DRINKS", ribbon: "SNACKS", mark: "assets/brand/aya-snacks-drinks/mark.png" }
+    };
+    const lineOrder = ["farm", "spice", "snack"];
+    const products = visibleProducts()
+      .filter((product) => lineOrder.includes(normalizeLine(product)) && (product.image || product.placeholder))
+      .sort((a, b) => (Number(a.catalogOrder) || 999) - (Number(b.catalogOrder) || 999));
+    const sets = Object.fromEntries(lineOrder.map((line) => [line, products.filter((product) => normalizeLine(product) === line)]));
     if (!products.length) return;
-    const lineMeta = {farm:{label:"AYA FARM",short:"FARM",mark:"⌁"},spice:{label:"AYA SPICE HAVEN",short:"SPICE HAVEN",mark:"✦"},snack:{label:"AYA SNACKS & DRINKS",short:"SNACKS & DRINKS",mark:"◌"}};
-    const normalizeLine = (product) => product.lineKey === "snacks" ? "snack" : product.lineKey;
-    const validLines = ["farm","spice","snack"];
-    const urlLine = new URLSearchParams(location.search).get("line");
-    let activeLine = validLines.includes(urlLine) ? urlLine : (products.some((p) => normalizeLine(p) === "spice") ? "spice" : normalizeLine(products[0]));
-    let activeIndex = 0;
+
+    const params = new URLSearchParams(location.search);
+    const requestedLine = params.get("line") === "snacks" ? "snack" : params.get("line");
+    let activeLine = lineOrder.includes(requestedLine) && sets[requestedLine]?.length
+      ? requestedLine
+      : (sets.spice.length ? "spice" : lineOrder.find((line) => sets[line].length));
+    let currentPage = 0;
+    let pageFlip = null;
+    let activeBookEl = null;
     const selectedVariant = new Map();
+
+    let gestureActive = false;
+    let gesturePointerId = null;
+    let gestureAnchorSide = "right";
+    let gestureAnchorY = "bottom";
+    let gestureStartRaw = null;
+    let gestureDragging = false;
+    const DRAG_THRESHOLD = 10;
+
+    let reverseActive = false;
+    let reversePrevIndex = -1;
+    let reverseOriginIndex = -1;
+    let reverseProgress = 0;
+    let reverseRAF = 0;
+    let reverseCommitPending = false;
+    let reverseCancelPending = false;
+    let reverseOriginalTurnNext = null;
+    let reverseCoverageEl = null;
+    let reverseCoveragePreviousTemplate = null;
+    let reverseCoverageCurrentTemplate = null;
+    let reverseCoverageMode = "current";
+    const REVERSE_OCCLUDED_SWAP_IN = .60;
+    const REVERSE_OCCLUDED_SWAP_OUT = .54;
+
+    let v24ReverseOverride = false;
+    let v24ReversePointerId = null;
+    let v24CartPointerId = null;
+    let v24CartStart = null;
+    let v24LastCartActivation = 0;
+    let v24NonReadSince = 0;
+    let v24GuardTimer = 0;
+    let v24HookedFlip = null;
+
     const root = document.createElement("section");
-    root.className = "aya-mobile-catalog";
-    root.innerHTML = `<div class="aya-mobile-catalog-stage"><header class="aya-mobile-catalog-heading"><span>PRODUK AYA</span><h1>Temukan yang ingin Anda rasa.</h1></header><nav class="aya-mobile-product-nav" aria-label="Navigasi produk"><button type="button" data-mobile-product-prev aria-label="Produk sebelumnya">‹</button><button type="button" data-mobile-product-next aria-label="Produk berikutnya">›</button></nav><div class="aya-mobile-product-stage" data-mobile-product-stage aria-live="polite"></div><nav class="aya-mobile-line-filter" aria-label="Filter lini AYA">${validLines.map((line)=>`<button type="button" data-mobile-line="${line}"><span aria-hidden="true">${lineMeta[line].mark}</span><strong>${lineMeta[line].short}</strong></button>`).join("")}</nav></div><div class="aya-mobile-variant-backdrop" data-mobile-variant-backdrop aria-hidden="true"><section class="aya-mobile-variant-picker" role="dialog" aria-modal="true" aria-label="Pilih varian"><header><span>PILIH VARIAN</span><h2 data-mobile-variant-title>Varian</h2></header><div data-mobile-variant-options></div><button type="button" data-mobile-variant-close>TUTUP</button></section></div><div class="aya-mobile-photo-lightbox" data-mobile-photo-lightbox aria-hidden="true"><div class="aya-mobile-photo-frame"><div class="aya-mobile-photo-brand"><span data-mobile-photo-mark></span><strong data-mobile-photo-line></strong></div><button type="button" data-mobile-photo-close aria-label="Tutup foto">×</button><img data-mobile-photo-image alt=""><h2 data-mobile-photo-title></h2></div></div>`;
-    sourceMain.insertAdjacentElement("beforebegin", root); sourceMain.setAttribute("data-mobile-source-hidden", "true");
-    const stage=root.querySelector("[data-mobile-product-stage]"),prev=root.querySelector("[data-mobile-product-prev]"),next=root.querySelector("[data-mobile-product-next]"),lineButtons=[...root.querySelectorAll("[data-mobile-line]")],pickerBackdrop=root.querySelector("[data-mobile-variant-backdrop]"),pickerTitle=root.querySelector("[data-mobile-variant-title]"),pickerOptions=root.querySelector("[data-mobile-variant-options]");
-    const productsForLine=()=>products.filter((product)=>normalizeLine(product)===activeLine);
-    const variantsFor=(product)=>product.variants.filter((variant)=>variant?.name&&Number(variant.price)>0);
-    const selectedFor=(product)=>{const variants=variantsFor(product),stored=selectedVariant.get(product.id);return variants.find((variant)=>variant.name===stored)||variants[0];};
-    const factText=(value,fallback)=>String(value||fallback||"").trim();
-    function productMarkup(product){const line=normalizeLine(product),meta=lineMeta[line]||lineMeta.spice,variant=selectedFor(product),image=product.image||product.placeholder||"assets/visual/aya-mark.svg",character=factText(product.flavorProfile,product.category||"Karakter rasa AYA."),suitable=factText(product.suitableUse,product.description||"Untuk dinikmati sesuai kebutuhan sehari-hari."),orderable=product.orderable===true;return `<article class="aya-mobile-product-card" data-mobile-product-id="${escapeHTML(product.id)}"><button class="aya-mobile-product-image" type="button" data-mobile-photo-open aria-label="Lihat foto ${escapeHTML(product.name)} lebih besar"><img src="${escapeHTML(image)}" alt="${escapeHTML(product.name)}" data-image-fallback="${escapeHTML(product.id)}"></button><div class="aya-mobile-product-identity">${escapeHTML(meta.label)}</div><div class="aya-mobile-product-body"><div><h2>${escapeHTML(product.name)}</h2><p>${escapeHTML(product.description||"Produk AYA untuk menemani keseharian.")}</p><dl><div><dt>Karakter</dt><dd>${escapeHTML(character)}</dd></div><div><dt>Cocok</dt><dd>${escapeHTML(suitable)}</dd></div></dl></div><div class="aya-mobile-commerce">${orderable?`<button class="aya-mobile-variant-trigger" type="button" data-mobile-variant-open>${escapeHTML(variant?.name||"Pilih varian")}</button>`:`<div class="aya-mobile-unavailable">Belum dapat ditambahkan ke keranjang</div>`}<div class="aya-mobile-buy">${variant?`<strong>${escapeHTML(formatPrice(variant.price).replace(/\s/g,""))}</strong>`:""}${orderable?`<button type="button" data-mobile-add-cart aria-label="Tambah ${escapeHTML(product.name)} ke keranjang"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 5h2.2l1.7 9.1h9.5l2-6.3H7.2"/><circle cx="9.2" cy="18.2" r="1.15"/><circle cx="16.4" cy="18.2" r="1.15"/></svg></button>`:""}</div></div></div></article>`;}
-    function render(){const list=productsForLine();activeIndex=list.length?((activeIndex%list.length)+list.length)%list.length:0;stage.innerHTML=list.length?productMarkup(list[activeIndex]):'<div class="aya-mobile-catalog-empty"><strong>Belum ada produk di lini ini.</strong><span>Coba lini AYA lainnya.</span></div>';prev.disabled=list.length<2;next.disabled=list.length<2;lineButtons.forEach((button)=>{const active=button.dataset.mobileLine===activeLine;button.classList.toggle("active",active);button.setAttribute("aria-pressed",String(active));});bindCard();}
-    function bindCard(){const card=stage.querySelector(".aya-mobile-product-card");if(!card)return;const product=products.find((item)=>item.id===card.dataset.mobileProductId);card.querySelector("[data-mobile-variant-open]")?.addEventListener("click",()=>openPicker(product));card.querySelector("[data-mobile-add-cart]")?.addEventListener("click",()=>{const variant=selectedFor(product);if(variant)AYA?.addToCart?.(product.id,variant.name,product.minQuantity||1);});card.querySelector("[data-mobile-photo-open]")?.addEventListener("click",()=>openPhoto(product));}
-    function move(direction){const list=productsForLine();if(list.length<2)return;activeIndex=(activeIndex+direction+list.length)%list.length;render();}
-    prev.addEventListener("click",()=>move(-1));next.addEventListener("click",()=>move(1));lineButtons.forEach((button)=>button.addEventListener("click",()=>{activeLine=button.dataset.mobileLine;activeIndex=0;render();}));
-    let startX=0,startY=0;stage.addEventListener("touchstart",(event)=>{const touch=event.changedTouches[0];startX=touch.clientX;startY=touch.clientY;},{passive:true});stage.addEventListener("touchend",(event)=>{const touch=event.changedTouches[0],dx=touch.clientX-startX,dy=touch.clientY-startY;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.2)move(dx<0?1:-1);},{passive:true});
-    function openPicker(product){pickerTitle.textContent=product.name;const selected=selectedFor(product);pickerOptions.innerHTML=variantsFor(product).map((variant)=>`<button type="button" data-mobile-variant="${escapeHTML(variant.name)}" class="${variant.name===selected?.name?"active":""}"><span>${escapeHTML(variant.name)}</span><i>✓</i></button>`).join("");pickerOptions.querySelectorAll("[data-mobile-variant]").forEach((button)=>button.addEventListener("click",()=>{selectedVariant.set(product.id,button.dataset.mobileVariant);closePicker();render();}));pickerBackdrop.classList.add("open");pickerBackdrop.setAttribute("aria-hidden","false");}
-    function closePicker(){pickerBackdrop.classList.remove("open");pickerBackdrop.setAttribute("aria-hidden","true");}
-    root.querySelector("[data-mobile-variant-close]").addEventListener("click",closePicker);pickerBackdrop.addEventListener("click",(event)=>{if(event.target===pickerBackdrop)closePicker();});
-    const lightbox=root.querySelector("[data-mobile-photo-lightbox]");
-    function openPhoto(product){const line=normalizeLine(product),meta=lineMeta[line]||lineMeta.spice,img=lightbox.querySelector("[data-mobile-photo-image]");img.src=product.image||product.placeholder||"assets/visual/aya-mark.svg";img.alt=product.name;lightbox.querySelector("[data-mobile-photo-title]").textContent=product.name;lightbox.querySelector("[data-mobile-photo-line]").textContent=meta.label;lightbox.querySelector("[data-mobile-photo-mark]").textContent=meta.mark;lightbox.classList.add("open");lightbox.setAttribute("aria-hidden","false");}
-    function closePhoto(){lightbox.classList.remove("open");lightbox.setAttribute("aria-hidden","true");}
-    root.querySelector("[data-mobile-photo-close]").addEventListener("click",closePhoto);lightbox.addEventListener("click",(event)=>{if(event.target===lightbox)closePhoto();});document.addEventListener("keydown",(event)=>{if(event.key==="Escape"){closePicker();closePhoto();}});render();
+    root.className = "aya-mobile-product-book";
+    root.setAttribute("aria-label", "Katalog produk AYA RAOS");
+    root.innerHTML = `<div class="aya-book-stage">
+      <div class="aya-book-top-edge" aria-hidden="true"></div>
+      <div class="aya-book-underlay" data-aya-book-underlay aria-hidden="true"></div>
+      <div class="aya-book-wrap" data-aya-book-wrap><div class="aya-book-host"><div class="aya-book" data-aya-book></div></div></div>
+      <div class="aya-book-binding-frame" aria-hidden="true"><div class="aya-book-spine-binding"><i></i><i></i><i></i></div><div class="aya-book-binding-gutter"></div></div>
+      <div class="aya-book-control-shield"><button class="aya-book-variant-hit" data-aya-book-variant-hit type="button" aria-label="Pilih varian"></button><button class="aya-book-cart-hit" data-aya-book-cart-hit type="button" aria-label="Tambah ke keranjang"></button></div>
+      <div class="aya-book-variant-pop" data-aya-book-variant-pop></div>
+      <nav class="aya-book-bookmarks" aria-label="Filter lini AYA">${lineOrder.map((line) => `<button class="aya-book-ribbon ${line}" data-aya-book-line="${line}" type="button"><span><img src="${lineMeta[line].mark}" alt=""><b>${lineMeta[line].ribbon}</b></span></button>`).join("")}</nav>
+    </div>`;
+    sourceMain.insertAdjacentElement("beforebegin", root);
+    sourceMain.setAttribute("data-mobile-source-hidden", "true");
+
+    const stage = root.querySelector(".aya-book-stage");
+    const book = root.querySelector("[data-aya-book]");
+    const bookWrap = root.querySelector("[data-aya-book-wrap]");
+    const bookUnderlay = root.querySelector("[data-aya-book-underlay]");
+    const variantHit = root.querySelector("[data-aya-book-variant-hit]");
+    const cartHit = root.querySelector("[data-aya-book-cart-hit]");
+    const variantPop = root.querySelector("[data-aya-book-variant-pop]");
+    const lineButtons = [...root.querySelectorAll("[data-aya-book-line]")];
+
+    const money = (value) => formatPrice(Number(value)).replace(/\s/g, "");
+    const escape = (value) => escapeHTML(String(value ?? ""));
+    const variantsFor = (product) => validVariants(product);
+    const selectedVariantIndex = (product) => {
+      const variants = variantsFor(product);
+      if (!variants.length) return -1;
+      const stored = selectedVariant.get(product.id);
+      const index = variants.findIndex((variant) => variant.name === stored);
+      return index >= 0 ? index : 0;
+    };
+    const selectedFor = (product) => {
+      const variants = variantsFor(product);
+      const index = selectedVariantIndex(product);
+      return index >= 0 ? variants[index] : null;
+    };
+    const currentProduct = () => sets[activeLine]?.[Math.max(0, Math.min(currentPage, (sets[activeLine]?.length || 1) - 1))] || null;
+    const productOrderable = (product) => product?.orderable === true && variantsFor(product).length > 0;
+    const fact = (label, value) => String(value || "").trim()
+      ? `<div class="aya-book-fact"><b>${label}</b><span>${escape(value)}</span></div>`
+      : "";
+    const cartIcon = `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="19" r="1"/><circle cx="17" cy="19" r="1"/><path d="M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.9a1 1 0 0 0 1-.8L20 8H7"/></svg>`;
+
+    function productMarkup(product, line, index) {
+      const meta = lineMeta[line];
+      const variants = variantsFor(product);
+      const variant = selectedFor(product);
+      const image = product.image || product.placeholder || "assets/visual/aya-mark.svg";
+      const notes = [fact("KARAKTER", product.flavorProfile), fact("COCOK", product.suitableUse)].filter(Boolean).join("");
+      const commerce = variant
+        ? `<div class="aya-book-commerce"><div><div class="aya-book-variant-label">VARIAN</div><div class="aya-book-variant"><span class="aya-book-page-variant" data-product-index="${index}">${escape(variant.name)}</span>${variants.length > 1 ? '<span class="aya-book-chev">⌄</span>' : ""}</div></div><div class="aya-book-price-cart"><div class="aya-book-price aya-book-page-price" data-product-index="${index}">${escape(money(variant.price))}</div>${productOrderable(product) ? `<div class="aya-book-cart aya-book-page-cart" data-product-index="${index}">${cartIcon}</div>` : ""}</div></div>`
+        : `<div class="aya-book-commerce aya-book-unavailable-commerce"><div><div class="aya-book-variant-label">STATUS</div><div class="aya-book-variant aya-book-status-only">${escape(product.publicStatus || "Belum tersedia")}</div></div></div>`;
+      return `<div class="aya-book-leaf"><div class="aya-book-photo"><img src="${escape(image)}" alt="${escape(product.name)}" data-image-fallback="${escape(product.id)}"></div><div class="aya-book-line-signature"><img src="${meta.mark}" alt=""><span>${meta.title}</span></div><div class="aya-book-content"><h1 class="aya-book-product-title">${escape(product.name)}</h1><p class="aya-book-lead">${escape(product.description || "")}</p><div class="aya-book-notes">${notes}</div>${commerce}</div></div>`;
+    }
+
+    function pageShell(product, line, index) {
+      return `<div class="aya-book-page" data-density="soft" data-product-index="${index}"><div class="aya-book-page-inner">${productMarkup(product, line, index)}</div></div>`;
+    }
+
+    function updateBookmarks() {
+      lineButtons.forEach((button) => {
+        const isActive = button.dataset.ayaBookLine === activeLine;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+        button.disabled = !sets[button.dataset.ayaBookLine]?.length;
+      });
+    }
+
+    function updateControlState() {
+      const product = currentProduct();
+      const variants = variantsFor(product);
+      const orderable = productOrderable(product);
+      variantHit.disabled = variants.length < 2;
+      cartHit.disabled = !orderable;
+      variantHit.setAttribute("aria-label", variants.length > 1 ? `Pilih varian ${product?.name || "produk"}` : "Varian");
+      cartHit.setAttribute("aria-label", orderable ? `Tambah ${product.name} ke keranjang` : "Produk tidak tersedia");
+    }
+
+    function updateRenderedCommerce() {
+      const product = currentProduct();
+      if (!product) return;
+      const variant = selectedFor(product);
+      if (variant) {
+        bookWrap.querySelectorAll(`.aya-book-page-variant[data-product-index="${currentPage}"]`).forEach((node) => { node.textContent = variant.name; });
+        bookWrap.querySelectorAll(`.aya-book-page-price[data-product-index="${currentPage}"]`).forEach((node) => { node.textContent = money(variant.price); });
+      }
+      updateControlState();
+    }
+
+    function buildVariantPop() {
+      variantPop.innerHTML = "";
+      const product = currentProduct();
+      const variants = variantsFor(product);
+      if (!product || variants.length < 2) {
+        variantPop.classList.remove("open");
+        return;
+      }
+      const active = selectedVariantIndex(product);
+      variants.forEach((variant, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `aya-book-variant-opt${index === active ? " active" : ""}`;
+        button.innerHTML = `<span>${escape(variant.name)}</span><span class="aya-book-vprice">${escape(money(variant.price))}</span>`;
+        button.addEventListener("pointerdown", (event) => event.stopPropagation());
+        button.addEventListener("pointerup", (event) => event.stopPropagation());
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          selectedVariant.set(product.id, variant.name);
+          updateRenderedCommerce();
+          buildVariantPop();
+          variantPop.classList.remove("open");
+        });
+        variantPop.append(button);
+      });
+    }
+
+    variantHit.addEventListener("pointerdown", (event) => event.stopPropagation());
+    variantHit.addEventListener("pointerup", (event) => event.stopPropagation());
+    variantHit.addEventListener("click", (event) => {
+      event.stopPropagation();
+      if (variantHit.disabled) return;
+      buildVariantPop();
+      variantPop.classList.toggle("open");
+    });
+    document.addEventListener("pointerdown", (event) => {
+      if (!event.target.closest(".aya-book-variant-pop") && event.target !== variantHit) variantPop.classList.remove("open");
+    }, true);
+
+    function renderUnderlay() {
+      const list = sets[activeLine] || [];
+      if (!list.length) { bookUnderlay.innerHTML = ""; return; }
+      const next = currentPage < list.length - 1 ? currentPage + 1 : currentPage > 0 ? currentPage - 1 : currentPage;
+      const product = list[next];
+      bookUnderlay.innerHTML = product ? `<div class="aya-book-page-inner">${productMarkup(product, activeLine, next)}</div>` : "";
+    }
+
+    function setTurning(on) { stage.classList.toggle("engine-turning", Boolean(on)); }
+
+    function removeReverseCoverage() {
+      if (reverseCoverageEl) { reverseCoverageEl.remove(); reverseCoverageEl = null; }
+      reverseCoveragePreviousTemplate = null;
+      reverseCoverageCurrentTemplate = null;
+      reverseCoverageMode = "current";
+    }
+
+    function mountBook(line) {
+      removeReverseCoverage();
+      cancelAnimationFrame(reverseRAF); reverseRAF = 0;
+      reverseActive = false; reversePrevIndex = -1; reverseOriginIndex = -1; reverseProgress = 0;
+      reverseCommitPending = false; reverseCancelPending = false; reverseOriginalTurnNext = null;
+      activeLine = line; currentPage = 0; gestureActive = false; setTurning(false); variantPop.classList.remove("open");
+      if (pageFlip) { try { pageFlip.destroy(); } catch {} pageFlip = null; }
+      book.innerHTML = (sets[line] || []).map((product, index) => pageShell(product, line, index)).join("");
+      activeBookEl = book;
+      updateBookmarks();
+      if (!book.children.length) return;
+      requestAnimationFrame(initFlip);
+    }
+
+    function initFlip() {
+      const width = Math.floor(bookWrap.clientWidth);
+      const height = Math.floor(bookWrap.clientHeight);
+      if (!width || !height || !window.St?.PageFlip) return;
+      activeBookEl.style.width = `${width}px`;
+      activeBookEl.style.height = `${height}px`;
+      pageFlip = new window.St.PageFlip(activeBookEl, {
+        width, height, size: "fixed", showCover: false, usePortrait: true, mobileScrollSupport: false,
+        maxShadowOpacity: .30, flippingTime: 540, drawShadow: true, autoSize: false, clickEventForward: false,
+        useMouseEvents: false, showPageCorners: true
+      });
+      pageFlip.loadFromHTML(activeBookEl.querySelectorAll(".aya-book-page"));
+      pageFlip.on("flip", (event) => {
+        currentPage = Math.max(0, Math.min((sets[activeLine]?.length || 1) - 1, Number(event.data) || 0));
+        variantPop.classList.remove("open");
+        renderUnderlay(); updateRenderedCommerce(); buildVariantPop();
+      });
+      pageFlip.on("changeState", (event) => {
+        if (event.data !== "read") return;
+        if (reverseOriginalTurnNext) { pageFlip.turnToNextPage = reverseOriginalTurnNext; reverseOriginalTurnNext = null; }
+        if (reverseCommitPending || reverseCancelPending) {
+          const wasCancel = reverseCancelPending;
+          reverseActive = false; reverseCommitPending = false; reverseCancelPending = false;
+          reversePrevIndex = -1; reverseOriginIndex = -1; reverseProgress = 0;
+          buildVariantPop();
+          if (wasCancel) requestAnimationFrame(removeReverseCoverage);
+        }
+        setTurning(false); renderUnderlay(); updateRenderedCommerce(); updateControlState();
+      });
+      v24AttachEngineHooks();
+      renderUnderlay(); updateRenderedCommerce(); buildVariantPop();
+    }
+
+    function rawPagePoint(clientX, clientY) {
+      if (!pageFlip) return null;
+      const dist = pageFlip.getUI().getDistElement();
+      const rect = dist.getBoundingClientRect();
+      return { x: clientX - rect.left, y: clientY - rect.top, w: rect.width, h: rect.height };
+    }
+
+    function anchoredPoint(raw, isStart = false, allowOvertravel = false) {
+      if (!raw) return null;
+      const anchorX = gestureAnchorSide === "right" ? raw.w - 2 : 2;
+      const anchorY = gestureAnchorY === "top" ? 2 : raw.h - 2;
+      if (isStart) return { x: anchorX, y: anchorY };
+      const y = anchorY + (raw.y - anchorY) * .20;
+      const minX = allowOvertravel ? -12 : 1;
+      const maxX = allowOvertravel ? raw.w + 12 : raw.w - 1;
+      return { x: Math.max(minX, Math.min(maxX, raw.x)), y: Math.max(1, Math.min(raw.h - 1, y)) };
+    }
+
+    function createReverseCoverage(index) {
+      removeReverseCoverage();
+      try {
+        const source = pageFlip.getPage(index)?.getElement?.();
+        const parent = source?.parentElement;
+        if (!source || !parent) return null;
+        const clone = source.cloneNode(true);
+        clone.classList.add("aya-book-reverse-coverage");
+        clone.style.cssText = `display:block;position:absolute;inset:0;width:100%;height:100%;transform:none;transform-origin:0 0;clip-path:none;-webkit-clip-path:none;overflow:hidden;pointer-events:none;z-index:${pageFlip.getSettings().startZIndex + 1};`;
+        const currentInner = clone.querySelector?.(".aya-book-page-inner");
+        reverseCoverageCurrentTemplate = currentInner?.cloneNode(true) || null;
+        const previousElement = pageFlip.getPage(index - 1)?.getElement?.();
+        const previousInner = previousElement?.querySelector?.(".aya-book-page-inner");
+        reverseCoveragePreviousTemplate = previousInner?.cloneNode(true) || null;
+        parent.appendChild(clone);
+        reverseCoverageEl = clone;
+        reverseCoverageMode = "current";
+        reverseCoverageEl.style.setProperty("--aya-handoff", "0");
+        return clone;
+      } catch { return null; }
+    }
+
+    function syncTransitionIllusion(progress) {
+      if (!reverseCoverageEl) return;
+      const center = .60, left = .52, right = .69;
+      let strength = 0;
+      if (progress >= left && progress <= center) strength = (progress - left) / (center - left);
+      else if (progress > center && progress <= right) strength = 1 - ((progress - center) / (right - center));
+      strength = Math.max(0, Math.min(1, strength));
+      reverseCoverageEl.style.setProperty("--aya-handoff", strength.toFixed(3));
+    }
+
+    function setCoverageMode(mode) {
+      if (!reverseCoverageEl || mode === reverseCoverageMode) return;
+      const template = mode === "previous" ? reverseCoveragePreviousTemplate : reverseCoverageCurrentTemplate;
+      const currentInner = reverseCoverageEl.querySelector?.(".aya-book-page-inner");
+      if (!template || !currentInner) return;
+      currentInner.replaceWith(template.cloneNode(true));
+      reverseCoverageMode = mode;
+    }
+
+    function syncOccludedCoverage(progress) {
+      syncTransitionIllusion(progress);
+      if (progress >= REVERSE_OCCLUDED_SWAP_IN) setCoverageMode("previous");
+      else if (progress <= REVERSE_OCCLUDED_SWAP_OUT) setCoverageMode("current");
+    }
+
+    function reverseEngineMetrics() {
+      const rect = pageFlip.getRender().getRect();
+      return { w: rect.pageWidth, h: rect.height, globalVisibleLeft: rect.left + rect.width / 2 };
+    }
+
+    function reversePoint(localX, metrics) {
+      const margin = metrics.h / 10;
+      return { x: metrics.globalVisibleLeft + localX, y: gestureAnchorY === "top" ? margin : metrics.h - margin };
+    }
+
+    function prepareVirtualReverse() {
+      if (!pageFlip || currentPage <= 0) return false;
+      const collection = pageFlip.getPageCollection();
+      const controller = pageFlip.getFlipController();
+      const metrics = reverseEngineMetrics();
+      reverseOriginIndex = currentPage;
+      reversePrevIndex = currentPage - 1;
+      reverseProgress = 0;
+      createReverseCoverage(reverseOriginIndex);
+      setCoverageMode("current");
+      const originalSpread = collection.getCurrentSpreadIndex();
+      const originalGetCurrent = pageFlip.getCurrentPageIndex;
+      let started = false;
+      try {
+        collection.setCurrentSpreadIndex(reversePrevIndex);
+        pageFlip.getCurrentPageIndex = () => reversePrevIndex;
+        started = controller.start({ x: metrics.globalVisibleLeft + metrics.w - 2, y: gestureAnchorY === "top" ? 2 : metrics.h - 2 });
+      } finally {
+        pageFlip.getCurrentPageIndex = originalGetCurrent;
+        collection.setCurrentSpreadIndex(originalSpread);
+      }
+      if (!started) {
+        reversePrevIndex = -1; reverseOriginIndex = -1; reverseProgress = 0; removeReverseCoverage();
+        return false;
+      }
+      controller.fold(reversePoint(-metrics.w + 2, metrics));
+      reverseActive = true;
+      setTurning(true);
+      return true;
+    }
+
+    function updateVirtualReverse(raw, start) {
+      if (!reverseActive || !raw || !start) return;
+      const metrics = reverseEngineMetrics();
+      const travel = Math.max(0, raw.x - start.x);
+      reverseProgress = Math.max(0, Math.min(1, travel / (raw.w * .92)));
+      syncOccludedCoverage(reverseProgress);
+      const localX = -metrics.w + (2 * metrics.w * reverseProgress);
+      pageFlip.getFlipController().fold(reversePoint(localX, metrics));
+    }
+
+    function animateVirtualReverse(from, to, onDone) {
+      cancelAnimationFrame(reverseRAF);
+      const controller = pageFlip.getFlipController();
+      const metrics = reverseEngineMetrics();
+      const started = performance.now();
+      const distance = Math.abs(to - from);
+      const duration = Math.max(140, Math.min(420, (pageFlip.getSettings().flippingTime || 540) * distance * .92));
+      function frame(now) {
+        const t = Math.min(1, (now - started) / duration);
+        const ease = 1 - Math.pow(1 - t, 3);
+        reverseProgress = from + (to - from) * ease;
+        syncOccludedCoverage(reverseProgress);
+        const localX = -metrics.w + (2 * metrics.w * reverseProgress);
+        controller.fold(reversePoint(localX, metrics));
+        if (t < 1) reverseRAF = requestAnimationFrame(frame);
+        else onDone?.();
+      }
+      reverseRAF = requestAnimationFrame(frame);
+    }
+
+    function commitVirtualReverse(fromProgress) {
+      animateVirtualReverse(Math.max(.46, fromProgress), 1, () => {
+        const collection = pageFlip.getPageCollection();
+        const controller = pageFlip.getFlipController();
+        const metrics = reverseEngineMetrics();
+        setCoverageMode("previous");
+        syncTransitionIllusion(1);
+        currentPage = reversePrevIndex;
+        collection.show(reversePrevIndex);
+        renderUnderlay(); updateRenderedCommerce(); buildVariantPop();
+        requestAnimationFrame(() => requestAnimationFrame(removeReverseCoverage));
+        controller.fold(reversePoint(metrics.w - 2, metrics));
+        reverseCommitPending = true;
+        requestAnimationFrame(() => controller.stopMove());
+      });
+    }
+
+    function cancelVirtualReverse(fromProgress) {
+      animateVirtualReverse(fromProgress, 0, () => {
+        const controller = pageFlip.getFlipController();
+        const metrics = reverseEngineMetrics();
+        setCoverageMode("current");
+        syncTransitionIllusion(0);
+        controller.fold(reversePoint(-metrics.w + 2, metrics));
+        reverseOriginalTurnNext = pageFlip.turnToNextPage;
+        pageFlip.turnToNextPage = () => {};
+        reverseCancelPending = true;
+        controller.stopMove();
+      });
+    }
+
+    function runVirtualReverseTap() {
+      if (!prepareVirtualReverse()) return;
+      animateVirtualReverse(0, 1, () => {
+        const collection = pageFlip.getPageCollection();
+        const controller = pageFlip.getFlipController();
+        const metrics = reverseEngineMetrics();
+        setCoverageMode("previous");
+        syncTransitionIllusion(1);
+        currentPage = reversePrevIndex;
+        collection.show(reversePrevIndex);
+        renderUnderlay(); updateRenderedCommerce(); buildVariantPop();
+        requestAnimationFrame(() => requestAnimationFrame(removeReverseCoverage));
+        controller.fold(reversePoint(metrics.w - 2, metrics));
+        reverseCommitPending = true;
+        requestAnimationFrame(() => controller.stopMove());
+      });
+    }
+
+    const isBookControl = (target) => Boolean(target.closest(".aya-book-control-shield,.aya-book-variant-pop,.aya-book-bookmarks"));
+
+    bookWrap.addEventListener("pointerdown", (event) => {
+      if (!pageFlip || isBookControl(event.target)) return;
+      const raw = rawPagePoint(event.clientX, event.clientY);
+      if (!raw || raw.x < 0 || raw.y < 0 || raw.x > raw.w || raw.y > raw.h) return;
+      gestureAnchorSide = raw.x < raw.w * .25 ? "left" : "right";
+      gestureAnchorY = raw.y < raw.h * .50 ? "top" : "bottom";
+      variantPop.classList.remove("open");
+      gestureActive = true; gestureDragging = false; gesturePointerId = event.pointerId; gestureStartRaw = raw;
+      bookWrap.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    }, { passive: false });
+
+    bookWrap.addEventListener("pointermove", (event) => {
+      if (!gestureActive || event.pointerId !== gesturePointerId || !pageFlip || !gestureStartRaw) return;
+      const raw = rawPagePoint(event.clientX, event.clientY); if (!raw) return;
+      const dx = raw.x - gestureStartRaw.x, dy = raw.y - gestureStartRaw.y;
+      if (gestureAnchorSide === "left" && currentPage > 0) {
+        if (!gestureDragging && Math.hypot(dx, dy) >= DRAG_THRESHOLD) {
+          if (dx <= 0 && Math.abs(dx) > Math.abs(dy)) return;
+          if (!prepareVirtualReverse()) return;
+          gestureDragging = true;
+        }
+        if (gestureDragging && reverseActive) updateVirtualReverse(raw, gestureStartRaw);
+        event.preventDefault(); return;
+      }
+      if (!gestureDragging && Math.hypot(dx, dy) >= DRAG_THRESHOLD) {
+        gestureDragging = true; setTurning(true);
+        pageFlip.startUserTouch(anchoredPoint(gestureStartRaw, true));
+      }
+      if (gestureDragging) pageFlip.userMove(anchoredPoint(raw, false), true);
+      event.preventDefault();
+    }, { passive: false });
+
+    function finishGesture(event) {
+      if (!gestureActive || event.pointerId !== gesturePointerId || !pageFlip) return;
+      const raw = rawPagePoint(event.clientX, event.clientY);
+      const start = gestureStartRaw;
+      const wasDrag = gestureDragging;
+      const reverseSide = gestureAnchorSide === "left" && currentPage > 0;
+      gestureActive = false; gestureDragging = false; gesturePointerId = null; gestureStartRaw = null;
+      if (!raw || !start) return;
+      if (reverseSide) {
+        if (wasDrag && reverseActive) {
+          const travel = Math.max(0, raw.x - start.x);
+          const commit = travel >= raw.w * .46 || raw.x >= raw.w * .90;
+          if (commit) commitVirtualReverse(reverseProgress); else cancelVirtualReverse(reverseProgress);
+        } else runVirtualReverseTap();
+        event.preventDefault(); return;
+      }
+      if (wasDrag) {
+        const side = gestureAnchorSide;
+        const travel = side === "right" ? (start.x - raw.x) : (raw.x - start.x);
+        const crossedHalf = travel >= raw.w * .46;
+        const reachedOppositeEdge = side === "right" ? raw.x <= raw.w * .10 : raw.x >= raw.w * .90;
+        if (crossedHalf || reachedOppositeEdge) {
+          const finalRaw = { x: side === "right" ? -12 : raw.w + 12, y: raw.y, w: raw.w, h: raw.h };
+          const finalPoint = anchoredPoint(finalRaw, false, true);
+          pageFlip.userMove(finalPoint, true);
+          pageFlip.userStop(finalPoint, false);
+        } else pageFlip.userStop(anchoredPoint(raw, false), false);
+      } else {
+        const corner = raw.y < raw.h * .50 ? "top" : "bottom";
+        setTurning(true);
+        if (raw.x < raw.w * .25) runVirtualReverseTap(); else pageFlip.flipNext(corner);
+      }
+      event.preventDefault();
+    }
+
+    bookWrap.addEventListener("pointerup", finishGesture, { passive: false });
+    bookWrap.addEventListener("pointercancel", (event) => {
+      if (!gestureActive || !pageFlip) return;
+      const raw = rawPagePoint(event.clientX, event.clientY);
+      if (reverseActive) cancelVirtualReverse(reverseProgress);
+      else if (gestureDragging && raw) pageFlip.userStop(anchoredPoint(raw, false), false);
+      gestureActive = false; gestureDragging = false; gesturePointerId = null; gestureStartRaw = null;
+    }, { passive: false });
+
+    function v24SyncCurrentPage() {
+      try {
+        const index = Number(pageFlip?.getCurrentPageIndex?.());
+        if (Number.isFinite(index)) currentPage = Math.max(0, Math.min((sets[activeLine]?.length || 1) - 1, index));
+      } catch {}
+    }
+
+    function v24ResetPointerState() {
+      v24ReverseOverride = false; v24ReversePointerId = null;
+      gestureActive = false; gestureDragging = false; gesturePointerId = null; gestureStartRaw = null;
+    }
+
+    function v24ResetReverseFlags() {
+      cancelAnimationFrame(reverseRAF); reverseRAF = 0;
+      if (reverseOriginalTurnNext) {
+        try { pageFlip.turnToNextPage = reverseOriginalTurnNext; } catch {}
+        reverseOriginalTurnNext = null;
+      }
+      reverseActive = false; reverseCommitPending = false; reverseCancelPending = false;
+      reversePrevIndex = -1; reverseOriginIndex = -1; reverseProgress = 0;
+      removeReverseCoverage();
+    }
+
+    function v24HardRecover() {
+      if (!pageFlip) return;
+      const index = Math.max(0, Math.min((sets[activeLine]?.length || 1) - 1, Number(currentPage) || 0));
+      const controller = pageFlip.getFlipController?.();
+      const render = pageFlip.getRender?.();
+      v24ResetPointerState(); v24ResetReverseFlags();
+      try { controller?.reset?.(); } catch {}
+      try { render?.finishAnimation?.(); } catch {}
+      try { render?.setBottomPage?.(null); } catch {}
+      try { render?.setFlippingPage?.(null); } catch {}
+      try { render?.clearShadow?.(); } catch {}
+      try { controller?.setState?.("read"); } catch {}
+      try { pageFlip.getPageCollection?.().show(index); } catch { try { pageFlip.turnToPage?.(index); } catch {} }
+      currentPage = index;
+      setTurning(false); variantPop.classList.remove("open");
+      renderUnderlay(); updateRenderedCommerce(); buildVariantPop(); updateControlState();
+      v24NonReadSince = 0;
+    }
+
+    function v24ScheduleGuard() {
+      clearTimeout(v24GuardTimer);
+      v24GuardTimer = setTimeout(() => {
+        if (!pageFlip) return;
+        let state = "read";
+        try { state = pageFlip.getState?.() || "read"; } catch {}
+        if (state !== "read" && !gestureActive && !v24ReverseOverride) v24HardRecover();
+      }, 1100);
+    }
+
+    function v24AttachEngineHooks() {
+      if (!pageFlip || pageFlip === v24HookedFlip) return;
+      v24HookedFlip = pageFlip;
+      pageFlip.on("changeState", (event) => {
+        if (event.data === "read") {
+          v24NonReadSince = 0;
+          clearTimeout(v24GuardTimer);
+          v24ResetPointerState();
+          v24SyncCurrentPage();
+          setTurning(false); renderUnderlay(); updateRenderedCommerce(); updateControlState();
+          return;
+        }
+        if (!v24NonReadSince) v24NonReadSince = performance.now();
+        v24ScheduleGuard();
+      });
+    }
+
+    bookWrap.addEventListener("pointerdown", (event) => {
+      if (isBookControl(event.target)) return;
+      if (gestureActive || v24ReverseOverride) v24ResetPointerState();
+      let state = "read";
+      try { state = pageFlip?.getState?.() || "read"; } catch {}
+      if (state !== "read") {
+        const age = v24NonReadSince ? performance.now() - v24NonReadSince : 1200;
+        if (age >= 900) v24HardRecover();
+        else { event.preventDefault(); event.stopImmediatePropagation(); }
+      }
+    }, true);
+
+    bookWrap.addEventListener("pointermove", (event) => {
+      if (v24ReverseOverride) {
+        if (event.pointerId !== v24ReversePointerId || !gestureStartRaw) return;
+        const raw = rawPagePoint(event.clientX, event.clientY);
+        if (raw && reverseActive) updateVirtualReverse(raw, gestureStartRaw);
+        event.preventDefault(); event.stopImmediatePropagation(); return;
+      }
+      if (!gestureActive || gestureDragging || event.pointerId !== gesturePointerId || !pageFlip || !gestureStartRaw) return;
+      const raw = rawPagePoint(event.clientX, event.clientY); if (!raw) return;
+      const dx = raw.x - gestureStartRaw.x, dy = raw.y - gestureStartRaw.y;
+      if (Math.hypot(dx, dy) < DRAG_THRESHOLD) return;
+      if (dx > 0 && Math.abs(dx) >= Math.abs(dy) * .30) {
+        v24SyncCurrentPage();
+        if (currentPage <= 0 || !prepareVirtualReverse()) return;
+        gestureAnchorSide = "left";
+        gestureDragging = true;
+        v24ReverseOverride = true;
+        v24ReversePointerId = event.pointerId;
+        updateVirtualReverse(raw, gestureStartRaw);
+        event.preventDefault(); event.stopImmediatePropagation();
+      }
+    }, true);
+
+    bookWrap.addEventListener("pointerup", (event) => {
+      if (!v24ReverseOverride || event.pointerId !== v24ReversePointerId) return;
+      const raw = rawPagePoint(event.clientX, event.clientY), start = gestureStartRaw;
+      v24ReverseOverride = false; v24ReversePointerId = null;
+      gestureActive = false; gestureDragging = false; gesturePointerId = null; gestureStartRaw = null;
+      if (raw && start && reverseActive) {
+        const travel = Math.max(0, raw.x - start.x);
+        const commit = travel >= raw.w * .46 || raw.x >= raw.w * .90;
+        if (commit) commitVirtualReverse(reverseProgress); else cancelVirtualReverse(reverseProgress);
+        v24ScheduleGuard();
+      }
+      event.preventDefault(); event.stopImmediatePropagation();
+    }, true);
+
+    bookWrap.addEventListener("pointercancel", (event) => {
+      if (v24ReverseOverride && event.pointerId === v24ReversePointerId) {
+        v24ReverseOverride = false; v24ReversePointerId = null;
+        if (reverseActive) cancelVirtualReverse(reverseProgress);
+        v24ResetPointerState(); v24ScheduleGuard();
+        event.preventDefault(); event.stopImmediatePropagation();
+      }
+    }, true);
+
+    bookWrap.addEventListener("lostpointercapture", (event) => {
+      if (gestureActive && event.pointerId === gesturePointerId) { v24ResetPointerState(); v24ScheduleGuard(); }
+    });
+    window.addEventListener("pointerup", () => setTimeout(() => {
+      if (gestureActive || v24ReverseOverride) { v24ResetPointerState(); v24ScheduleGuard(); }
+    }, 0));
+    window.addEventListener("pointercancel", () => setTimeout(() => {
+      if (gestureActive || v24ReverseOverride) { v24ResetPointerState(); v24ScheduleGuard(); }
+    }, 0));
+
+    function v24ActivateCart() {
+      const now = performance.now();
+      if (now - v24LastCartActivation < 300) return;
+      v24LastCartActivation = now;
+      v24SyncCurrentPage();
+      updateControlState();
+      const product = currentProduct();
+      const variant = selectedFor(product);
+      if (!product || !variant || !productOrderable(product)) return;
+      const added = AYA?.addToCart?.(product.id, variant.name, product.minQuantity || 1);
+      if (!added) return;
+      const index = currentPage;
+      bookWrap.querySelectorAll(`.aya-book-page-cart[data-product-index="${index}"]`).forEach((node) => node.classList.add("done"));
+      setTimeout(() => bookWrap.querySelectorAll(`.aya-book-page-cart[data-product-index="${index}"]`).forEach((node) => node.classList.remove("done")), 650);
+    }
+
+    cartHit.style.touchAction = "none";
+    cartHit.addEventListener("pointerdown", (event) => {
+      v24CartPointerId = event.pointerId;
+      v24CartStart = { x: event.clientX, y: event.clientY };
+      try { cartHit.setPointerCapture?.(event.pointerId); } catch {}
+      event.stopImmediatePropagation();
+    }, true);
+    cartHit.addEventListener("pointerup", (event) => {
+      if (event.pointerId !== v24CartPointerId) return;
+      const start = v24CartStart;
+      v24CartPointerId = null; v24CartStart = null;
+      const moved = start ? Math.hypot(event.clientX - start.x, event.clientY - start.y) : 999;
+      if (moved <= 24) v24ActivateCart();
+      event.preventDefault(); event.stopImmediatePropagation();
+    }, true);
+    cartHit.addEventListener("pointercancel", (event) => {
+      if (event.pointerId === v24CartPointerId) { v24CartPointerId = null; v24CartStart = null; }
+      event.stopImmediatePropagation();
+    }, true);
+    cartHit.addEventListener("click", (event) => {
+      if (performance.now() - v24LastCartActivation >= 300) v24ActivateCart();
+      event.preventDefault(); event.stopImmediatePropagation();
+    }, true);
+
+    lineButtons.forEach((button) => button.addEventListener("click", () => {
+      const line = button.dataset.ayaBookLine;
+      if (!sets[line]?.length || line === activeLine) return;
+      mountBook(line);
+      const url = new URL(location.href);
+      url.searchParams.set("line", line);
+      history.replaceState({}, "", url);
+    }));
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (pageFlip) mountBook(activeLine);
+      }, 160);
+    });
+
+    function ensurePageFlip() {
+      if (window.St?.PageFlip) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        const existing = document.querySelector('script[data-aya-page-flip]');
+        if (existing) {
+          existing.addEventListener("load", resolve, { once: true });
+          existing.addEventListener("error", reject, { once: true });
+          return;
+        }
+        const script = document.createElement("script");
+        script.src = "https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js";
+        script.dataset.ayaPageFlip = "";
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.append(script);
+      });
+    }
+
+    ensurePageFlip().then(() => mountBook(activeLine)).catch(() => {
+      root.classList.add("aya-book-engine-unavailable");
+      book.innerHTML = (sets[activeLine] || []).slice(0, 1).map((product, index) => pageShell(product, activeLine, index)).join("");
+      updateBookmarks();
+      currentPage = 0;
+      renderUnderlay();
+      updateRenderedCommerce();
+      buildVariantPop();
+      AYA?.showGlobalState?.("Efek buka halaman tidak dapat dimuat. Produk tetap dapat dilihat dan ditambahkan ke keranjang.", "warning");
+    });
   }
+
 
   function initMobileTestimonials() {
     if (page !== "testimonials") return;
