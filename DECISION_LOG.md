@@ -71,6 +71,11 @@ This file contains only decisions that remain active for the current development
 | AD-063 | Active B2B shipping configuration observed in Supabase is Rp5.187/km motor and Rp10.021/km mobil. These are backend configuration facts and do not reopen B2C shipping authority. |
 | AD-064 | Payment architecture is implemented as foundation, but live payment activation remains disabled. DOKU remains primary and Midtrans fallback by approved architecture; `Paid != Settled` remains mandatory. |
 | AD-065 | No public visual scope is reopened by this governance sync. Post-release parity/polish remains available only when the user explicitly reopens a region. |
+| AD-066 | Mobile Product Catalog was explicitly reopened and re-LOCKED as **Mobile Product Book V24**. For this mobile region only, V24 supersedes the older Catalog V5.31 presentation; settled visual authority is V14, interaction authority is R5.13, and V24 wrapper reliability fixes are approved. |
+| AD-067 | R5.13 remains the Product Book physics authority: one product per physical leaf, fixed LEFT binding/gutter, native forward finger-following, approved reverse occluded swap/transition illusion, and FARM/SPICE/SNACKS physical bookmarks as line filters. Bug fixes may wrap but must not reinterpret those mechanics. |
+| AD-068 | Production Mobile Product Book reads canonical public product data and existing Cart runtime. It may not hardcode preview prices/variants/availability or fabricate missing facts; unavailable/no-valid-variant products remain truthfully unavailable. |
+| AD-069 | Mobile Product Book V24 production implementation checkpoint is `485f7f6e3f3bbfb95776677d5e7a7404f6bd434c`. Its source diff against the prior `main` is exactly `css/site.css`, `js/mobile-public-ui.js`, `js/site.js`, and `products.html`; desktop `js/catalog.js`, Product Detail and Cart/B2C contracts remain unchanged. |
+| AD-070 | Staging remains `noindex, nofollow, noarchive`; releasing Mobile Product Book V24 to `main` does not constitute Production Launch approval. |
 
 ## Canonical supplements
 
