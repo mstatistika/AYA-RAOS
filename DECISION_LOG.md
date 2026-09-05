@@ -76,6 +76,7 @@ This file contains only decisions that remain active for the current development
 | AD-068 | Production Mobile Product Book reads canonical public product data and existing Cart runtime. It may not hardcode preview prices/variants/availability or fabricate missing facts; unavailable/no-valid-variant products remain truthfully unavailable. |
 | AD-069 | Mobile Product Book V24 production implementation checkpoint is `485f7f6e3f3bbfb95776677d5e7a7404f6bd434c`. Its source diff against the prior `main` is exactly `css/site.css`, `js/mobile-public-ui.js`, `js/site.js`, and `products.html`; desktop `js/catalog.js`, Product Detail and Cart/B2C contracts remain unchanged. |
 | AD-070 | Staging remains `noindex, nofollow, noarchive`; releasing Mobile Product Book V24 to `main` does not constitute Production Launch approval. |
+| AD-071 | On mobile Dedicated Line pages (`max-width:900px`), the featured `Lihat Detail` CTA routes into the locked Mobile Product Book for the current line (`products.html?line=farm|spice|snack`). Desktop Dedicated Line CTAs keep their canonical direct `product.html` Product Detail destinations. This is a journey-parity fix only and does not reopen visual locks or Product Detail. |
 
 ## Canonical supplements
 

@@ -243,6 +243,14 @@
     renderCanonicalVp1Mark();
     prepareLockedVp2();
 
+    // Mobile journey parity: the featured CTA opens the locked Product Book
+    // for the current AYA line. Desktop keeps its canonical Product Detail href.
+    const mobileBookLine = document.body.dataset.lineKey;
+    const featuredDetail = document.querySelector('[data-featured-detail]');
+    if (featuredDetail && ['farm', 'spice', 'snack'].includes(mobileBookLine)) {
+      featuredDetail.setAttribute('href', `products.html?line=${mobileBookLine}`);
+    }
+
         const main = document.querySelector("#main");
         if (main) main.style.scrollPaddingTop = "0px";
 
