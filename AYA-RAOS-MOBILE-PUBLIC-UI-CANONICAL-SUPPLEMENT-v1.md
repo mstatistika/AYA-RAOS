@@ -5,6 +5,7 @@
 **Implementation branch:** `feature/mobile-public-ui-locked-20260822`  
 **Implementation checkpoint:** `ae52958a4408d9da95464e2f7b07de1544015457` — `refactor: consolidate locked public mobile UI`  
 **Status:** **FINAL MOBILE VISUAL / UX LOCK — staging / noindex**
+**Product Catalog amendment approved:** 5 September 2026 — **Mobile Product Book V24 FINAL LOCK**
 
 ## 1. Authority and boundary
 
@@ -77,7 +78,7 @@ The 1VP rule is geometry-first. Stable hierarchy, whitespace, legibility, and co
 Final approved mobile preview lineage:
 - Homepage — **V3.7**;
 - Dedicated Line Pages — **V4.9**;
-- Catalog — **V5.31**;
+- Catalog — **Product Book V24** (**visual V14 + R5.13 engine + V24 wrapper fixes**);
 - Testimonials — **V6.5**;
 - Testimonial Share — **V7.23**.
 
@@ -108,26 +109,35 @@ Desktop Dedicated Line locks remain unchanged.
 
 ## 8. Product Catalog mobile — FINAL LOCK
 
-Catalog mobile uses a curated single-product decision stage rather than the desktop three-card/filter composition.
+The previous mobile Catalog V5.31 decision-stage presentation is superseded **for mobile Product Catalog only** by the explicitly approved **Mobile Product Book V24**. Desktop Product Catalog and direct Product Detail remain protected and unchanged.
+
+Current visual / interaction authority:
+- settled visual = **V14**;
+- page-turn engine = **R5.13**;
+- approved reliability fixes = **V24 wrapper** for stale-pointer/deadlock recovery and Android Cart event delivery;
+- bug fixes may wrap the engine but must not reinterpret R5.13 page physics, gesture geometry, transition timing, or reverse illusion.
 
 Approved mobile behavior:
-- one active product display at a time;
-- centered previous/next controls plus horizontal swipe;
-- three AYA line filters;
-- AYA line identity at the photography/detail boundary;
-- product title inside the detail body;
-- concise product lead;
-- editorial `Karakter` and `Cocok` facts;
-- commerce anchored at the bottom;
-- explicit variant picker when needed;
-- price adjacent to the cart action;
-- product photo opens an inspectable lightbox.
+- one product = one full mobile viewport leaf below the global mobile header;
+- the page itself is the book leaf, not a card nested inside a decorative book container;
+- fixed binding/gutter remains on the LEFT; only the leaf turns;
+- bottom physical bookmarks `FARM / SPICE / SNACKS` switch AYA product-line sets and reset to the first available product in that line;
+- the line signature uses the canonical line mark and compact line title at the upper-left of the photography;
+- strong product photography, dark luxury editorial body, restrained typography and warm stone/parchment canvas follow V14;
+- idle state has no fake second sheet and no fake static page-curl corner;
+- forward/reverse page turn follows R5.13, including native finger-following forward motion and the approved reverse occluded-swap / transition-illusion behavior;
+- variant and Cart controls are protected from page gestures;
+- commerce remains visually secondary to product identity and story.
 
-Catalog reads canonical public product data/runtime. It must not invent price, availability, product facts, ratings, popularity, or unsupported claims.
+Production truth rules:
+- Product Book reads canonical public product data at runtime; it does not hardcode preview product prices, variants, availability or unsupported product claims;
+- product lead/facts come from canonical public product fields when present; missing facts are omitted rather than invented;
+- products with no valid/orderable variant remain truthfully unavailable and do not receive fabricated price/variant data;
+- multi-variant products expose explicit variant selection;
+- Cart mutation uses the existing canonical `AYA.addToCart(...)` runtime; no direct WhatsApp purchase path is introduced;
+- failure to load the page-turn library must degrade truthfully to a readable static product state rather than invent capability.
 
-Multi-variant products require an explicit variant choice path; cart mutation uses the existing canonical Cart runtime.
-
-The mobile Catalog functions as a sufficiently complete product decision card. This does **not** delete, rewrite, or claim to supersede the direct `product.html` Product Detail page, which is outside this implementation scope.
+The Mobile Product Book is a sufficiently complete one-viewport product decision experience. It does **not** delete, rewrite, or claim to supersede `product.html`; direct Product Detail remains outside this implementation scope.
 
 ## 9. Testimonials mobile — FINAL LOCK
 
@@ -180,13 +190,24 @@ Shared runtime/CSS changes are scoped by page and breakpoint so non-target pages
 
 ## 12. Verification checkpoint
 
-Before governance sync, the final implementation branch was verified against `main` as:
-- **6 commits ahead / 0 behind**;
-- final source diff only `css/site.css`, `js/site.js`, `js/mobile-public-ui.js`;
-- `git diff --check` clean before implementation commit;
-- JS syntax checks clean;
-- standalone mobile stylesheet removed;
-- Vercel status for implementation checkpoint `ae52958…` = success.
+Mobile Product Book V24 implementation candidate was translated from the LOCK rather than redesigned. The clean implementation checkpoint is `485f7f6e3f3bbfb95776677d5e7a7404f6bd434c`.
+
+Verified implementation boundary relative to the previous canonical `main`:
+- `css/site.css` — replaced the superseded Product-mobile block in place; no parallel public stylesheet and no new `!important` architecture;
+- `js/mobile-public-ui.js` — replaced only `initMobileCatalog()` with the V24/R5.13 Product Book runtime;
+- `js/site.js` — Product-mobile runtime cache-bust only;
+- `products.html` — Product page cache-bust only.
+
+`js/catalog.js`, desktop Product Catalog, direct Product Detail, Cart/B2C semantics, Homepage, Dedicated Lines, Testimonials/Share, Pasokan and Information were not reopened by this implementation.
+
+Validation before governance sync:
+- scoped mutation assertions passed;
+- `node --check js/mobile-public-ui.js` passed;
+- `node --check js/site.js` passed;
+- `git diff --check` and `git diff --cached --check` passed;
+- implementation tree compared with prior `main` shows exactly four changed source paths listed above;
+- Vercel implementation deployment for `a68a0d2c8c69d7392e802c891d1fb54318f9cf60` = READY / HTTP 200;
+- staging remains `noindex, nofollow, noarchive`.
 
 ## 13. Release discipline
 
