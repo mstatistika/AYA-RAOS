@@ -1,0 +1,112 @@
+name: Implement Mobile Product Book V24
+
+on:
+  push:
+    branches:
+      - feature/mobile-product-book-v24-20260905
+
+permissions:
+  contents: write
+
+jobs:
+  implement:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: feature/mobile-product-book-v24-20260905
+      - name: Scoped transactional mutation
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python - <<'PYCODE'
+          from pathlib import Path
+          import base64, gzip
+
+          def payload(path):
+              raw = Path(path).read_text().strip()
+              return gzip.decompress(base64.b64decode(raw)).decode('utf-8')
+
+          js_payload = payload('tmp/v24-prod-function.js.gz.b64').rstrip() + '\n'
+          css_payload = payload('tmp/v24-prod-css.css.gz.b64').rstrip() + '\n'
+          assert '!important' not in css_payload
+
+          p = Path('js/mobile-public-ui.js')
+          s = p.read_text()
+          start = '  function initMobileCatalog() {'
+          end = '\n  function initMobileTestimonials() {'
+          assert s.count(start) == 1, s.count(start)
+          assert s.count(end) == 1, s.count(end)
+          a = s.index(start)
+          b = s.index(end, a)
+          s = s[:a] + js_payload + '\n' + s[b:]
+          p.write_text(s)
+
+          p = Path('css/site.css')
+          s = p.read_text()
+          start = '  body[data-page="products"]{overflow:hidden;background:#f7ead7}'
+          end = '  body[data-page="testimonials"]{overflow:hidden;background:#280304}'
+          assert s.count(start) == 1, s.count(start)
+          assert s.count(end) == 1, s.count(end)
+          a = s.index(start)
+          b = s.index(end, a)
+          s = s[:a] + css_payload + '\n' + s[b:]
+
+          old_start = '.aya-mobile-catalog-stage{grid-template-rows:auto minmax(0,1fr) 40px;padding-top:10px}'
+          old_end = '.aya-mobile-line-filter button strong{font-size:6.8px}'
+          assert s.count(old_start) == 1, s.count(old_start)
+          assert s.count(old_end) == 1, s.count(old_end)
+          a = s.index(old_start)
+          b = s.index(old_end, a) + len(old_end)
+          s = s[:a] + s[b:]
+          p.write_text(s)
+
+          p = Path('js/site.js')
+          s = p.read_text()
+          old = 'js/mobile-public-ui.js?v=20260822-mobile-public-ui-v1'
+          new = 'js/mobile-public-ui.js?v=20260905-product-book-v24'
+          assert s.count(old) == 1, s.count(old)
+          p.write_text(s.replace(old, new, 1))
+
+          p = Path('products.html')
+          s = p.read_text()
+          replacements = {
+              'css/site.css?v=20260815-product-catalog-lock-candidate-v1': 'css/site.css?v=20260905-product-book-v24',
+              'js/site.js?v=20260815-product-catalog-lock-candidate-v1': 'js/site.js?v=20260905-product-book-v24',
+          }
+          for old, new in replacements.items():
+              assert s.count(old) == 1, (old, s.count(old))
+              s = s.replace(old, new, 1)
+          p.write_text(s)
+
+          mobile = Path('js/mobile-public-ui.js').read_text()
+          css = Path('css/site.css').read_text()
+          assert mobile.count('function initMobileCatalog()') == 1
+          assert 'page-flip@2.0.7' in mobile
+          assert 'AYA?.addToCart?.' in mobile
+          assert '.aya-mobile-product-nav' not in mobile
+          assert '.aya-mobile-photo-lightbox' not in mobile
+          assert '.aya-mobile-catalog{' not in css
+          assert '.aya-mobile-product-card' not in css
+          assert '.aya-mobile-product-book' in css
+          assert '.aya-book-wrap' in css
+          PYCODE
+
+          node --check js/mobile-public-ui.js
+          node --check js/site.js
+          git diff --check
+
+          mapfile -t CHANGED < <(git diff --name-only | sort)
+          printf 'Changed source paths:\n%s\n' "${CHANGED[*]}"
+          test "$(printf '%s\n' "${CHANGED[@]}" | grep -Ec '^(css/site.css|js/mobile-public-ui.js|js/site.js|products.html)$')" -eq 4
+          test "${#CHANGED[@]}" -eq 4
+
+          rm -f .github/workflows/mobile-product-book-v24-implement.yml tmp/v24-prod-function.js.gz.b64 tmp/v24-prod-css.css.gz.b64
+          git add -A
+          git diff --cached --check
+          git config user.name 'AYA RAOS Release Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git commit -m 'feat: implement locked mobile product book V24'
+          git push origin HEAD:feature/mobile-product-book-v24-20260905
