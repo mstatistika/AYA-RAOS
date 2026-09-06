@@ -1148,6 +1148,7 @@ body[data-page="business"] .business-mobile-intro,body[data-page="business"] .bu
   body[data-page="business"] .business-mobile-intro strong{font:600 20px/.98 var(--serif);color:#fff7e7}
   body[data-page="business"] .business-mobile-flow{display:block;height:calc(100% - 54px);background:radial-gradient(circle at 10% 0%,rgba(255,255,255,.64),transparent 31%),linear-gradient(180deg,#fbf1df,#f5e4c9);color:#43251d}
   body[data-page="business"] .business-mobile-state{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:9px 12px 10px}
+  body[data-page="business"] .business-mobile-state[hidden]{display:none}
   body[data-page="business"] .business-mobile-state-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:6px;border-bottom:1px solid rgba(174,121,52,.28)}
   body[data-page="business"] .business-mobile-state-head .business-eyebrow{color:#9e621d;font-size:8.5px}
   body[data-page="business"] .business-mobile-state-head h3{margin:4px 0 0;color:#531d18;font:600 25px/.98 var(--serif)}
