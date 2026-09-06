@@ -10,213 +10,27 @@ permissions:
 
 jobs:
   mutate:
-    if: github.event.head_commit.message == 'chore: prepare scoped Pasokan VP1 VP2 mobile release'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout scoped branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.ref_name }}
+          ref: release/pasokan-vp1-vp2-mobile-lock-20260906
 
-      - name: Apply locked VP1 and VP2 translation
+      - name: Apply locked translation
+        run: python3 .github/scripts/pasokan_vp1_vp2_patch.py
+
+      - name: Validate and commit
         shell: bash
         run: |
           set -Eeuo pipefail
-          python3 <<'PY'
-          from pathlib import Path
-          from html.parser import HTMLParser
-
-          html_path = Path('business.html')
-          css_path = Path('css/site.css')
-          workflow_path = Path('.github/workflows/pasokan-vp1-vp2-mobile-release.yml')
-
-          html = html_path.read_text(encoding='utf-8')
-          css = css_path.read_text(encoding='utf-8')
-          original_html = html
-          original_css = css
-
-          def replace_once(text, old, new, label):
-              count = text.count(old)
-              if count != 1:
-                  raise SystemExit(f'{label}: expected 1 match, found {count}')
-              return text.replace(old, new, 1)
-
-          # Cache-bust only this page's stylesheet reference.
-          html = replace_once(
-              html,
-              'css/site.css?v=20260820-pasokan-vnext',
-              'css/site.css?v=20260906-pasokan-mobile-v11-vp2-lock',
-              'business stylesheet version'
-          )
-
-          old_vp1_mobile = '''    <div class="business-vp1-mobile-copy">
-              <div class="business-kicker">Pasokan Usaha</div>
-              <h1>Bangun hubungan pasokan, bukan sekadar pesanan besar.</h1>
-              <p>Untuk kebutuhan produk AYA yang digunakan secara berulang dalam kegiatan usaha—bukan sekadar pembelian besar satu kali.</p>
-              <div class="business-vp1-trust"><span aria-hidden="true">i</span><div>Tahap ini belum menjadi pesanan, penawaran harga, atau jaminan ketersediaan.</div></div>
-            </div>'''
-          new_vp1_mobile = '''    <div class="business-vp1-mobile-copy">
-              <div class="business-kicker">Pasokan Usaha</div>
-              <h1>Saat usaha membutuhkan pasokan yang terjaga.</h1>
-              <span class="business-vp1-mobile-rule" aria-hidden="true"></span>
-              <p>AYA hadir untuk kebutuhan yang terus berjalan.<span class="business-vp1-mobile-note">*Belum menjadi pesanan atau jaminan ketersediaan.</span></p>
-            </div>'''
-          html = replace_once(html, old_vp1_mobile, new_vp1_mobile, 'VP1 mobile copy')
-
-          old_vp2_intro = 'Delapan hal sederhana membantu AYA memahami pola pasokan yang kamu butuhkan sebelum pemeriksaan status Pasokan Usaha.'
-          new_vp2_intro = '<span class="business-vp2-copy-desktop">Delapan hal sederhana membantu AYA memahami pola pasokan yang kamu butuhkan sebelum pemeriksaan status Pasokan Usaha.</span><span class="business-vp2-copy-mobile">Delapan hal sederhana membantu AYA memahami pola kebutuhan yang benar-benar berjalan.</span>'
-          html = replace_once(html, old_vp2_intro, new_vp2_intro, 'VP2 responsive intro')
-
-          cards = [
-              (
-                  'Produk',
-                  'assets/visual/business-lock/medallion-product.jpg',
-                  'Apa yang dibutuhkan berulang.',
-                  ' Produk AYA yang digunakan secara rutin dalam kegiatan usaha.',
-                  'Apa yang dibutuhkan berulang dalam kegiatan usaha.',
-                  '<svg viewBox="0 0 44 44"><path d="M9 15.5 22 8l13 7.5v14L22 37 9 29.5z"/><path d="M9 15.5 22 23l13-7.5M22 23v14"/></svg>'
-              ),
-              (
-                  'Varian',
-                  'assets/visual/business-lock/medallion-variant.jpg',
-                  'Pilihan yang benar-benar digunakan.',
-                  ' Supaya pasokan mengikuti kebutuhan operasional yang nyata.',
-                  'Pilihan yang benar-benar digunakan dalam operasional.',
-                  '<svg viewBox="0 0 44 44"><path d="M22 35V10M22 19c-6-1-9-4-9-9 5 0 8 3 9 9Zm0 7c6-1 9-4 9-9-5 0-8 3-9 9Z"/><path d="M14 35h16"/></svg>'
-              ),
-              (
-                  'Perkiraan jumlah',
-                  'assets/visual/business-lock/medallion-quantity.jpg',
-                  'Besaran kebutuhan pada tiap ritme.',
-                  ' Membantu membaca pola kebutuhan pada setiap pengiriman.',
-                  'Besaran kebutuhan pada setiap ritme pasokan.',
-                  '<svg viewBox="0 0 44 44"><path d="M9 31h26M12 31l4-13h12l4 13"/><path d="M18 18v-5h8v5M16 35h12"/></svg>'
-              ),
-              (
-                  'Frekuensi',
-                  'assets/visual/business-lock/medallion-frequency.jpg',
-                  'Setiap minggu, setiap 2 minggu, setiap bulan, atau setiap 2 bulan.',
-                  ' Pilih ritme yang paling sesuai dengan penggunaan usahamu.',
-                  'Mingguan, 2 mingguan, bulanan, atau 2 bulanan.',
-                  '<svg viewBox="0 0 44 44"><path d="M12 17c4-7 14-9 20-3l3 3"/><path d="m30 11 5 6-6 3"/><path d="M32 27c-4 7-14 9-20 3l-3-3"/><path d="m14 33-5-6 6-3"/></svg>'
-              ),
-              (
-                  'Waktu mulai',
-                  'assets/visual/business-lock/medallion-start.jpg',
-                  'Kapan pasokan perlu berjalan.',
-                  ' Waktu mulai membantu AYA menyusun ritme pasokan sejak awal.',
-                  'Kapan kebutuhan pasokan perlu mulai berjalan.',
-                  '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="12"/><path d="M22 14v9l6 3M22 6v4"/></svg>'
-              ),
-              (
-                  'Lokasi',
-                  'assets/visual/business-lock/medallion-location.jpg',
-                  'Area tujuan pengiriman rutin.',
-                  ' Lokasi membantu membaca kebutuhan pengiriman yang akan berjalan berulang.',
-                  'Area tujuan pengiriman yang digunakan secara rutin.',
-                  '<svg viewBox="0 0 44 44"><path d="M22 36s10-9 10-18a10 10 0 0 0-20 0c0 9 10 18 10 18Z"/><circle cx="22" cy="18" r="3"/></svg>'
-              ),
-              (
-                  'Konteks usaha',
-                  'assets/visual/business-lock/medallion-context.jpg',
-                  'Bagaimana produk dipakai dalam usaha.',
-                  ' Konteks ini membantu AYA memahami fungsi produk dalam operasional sehari-hari.',
-                  'Bagaimana produk AYA dipakai dalam operasional.',
-                  '<svg viewBox="0 0 44 44"><path d="M9 19h26v16H9z"/><path d="M13 19v-6h18v6M15 25h5M24 25h5M15 30h5M24 30h5"/></svg>'
-              ),
-              (
-                  'Catatan kebutuhan',
-                  'assets/visual/business-lock/medallion-notes.jpg',
-                  'Hal penting lain yang perlu dipahami.',
-                  ' Catatan memberi ruang untuk kebutuhan khusus yang belum tercakup di atas.',
-                  'Hal penting lain yang perlu AYA pahami.',
-                  '<svg viewBox="0 0 44 44"><path d="M12 8h20v28H12z"/><path d="M17 16h10M17 22h10M17 28h7"/></svg>'
-              ),
-          ]
-
-          for title, asset, short, more, mobile_copy, icon in cards:
-              old = f'<article class="business-rhythm-card"><img class="business-medallion" src="{asset}" alt="" aria-hidden="true"><div><h3>{title}</h3><p>{short}<span class="business-desktop-more">{more}</span></p></div></article>'
-              new = f'<article class="business-rhythm-card"><img class="business-medallion" src="{asset}" alt="" aria-hidden="true"><span class="business-rhythm-icon" aria-hidden="true">{icon}</span><div><h3>{title}</h3><p><span class="business-rhythm-copy-mobile">{mobile_copy}</span><span class="business-rhythm-copy-desktop">{short}<span class="business-desktop-more">{more}</span></span></p></div></article>'
-              html = replace_once(html, old, new, f'VP2 card {title}')
-
-          # Default responsive visibility helpers: desktop remains unchanged.
-          visibility_anchor = 'body[data-page="business"] .business-desktop-more{display:inline}\n'
-          visibility_add = visibility_anchor + 'body[data-page="business"] .business-rhythm-icon,body[data-page="business"] .business-vp2-copy-mobile,body[data-page="business"] .business-rhythm-copy-mobile{display:none}\n'
-          css = replace_once(css, visibility_anchor, visibility_add, 'VP2 default responsive helpers')
-
-          # Replace the existing mobile VP1 implementation as one canonical block.
-          vp1_start = '  body[data-page="business"] .business-vp1:before{display:none}\n'
-          vp1_end = '  body[data-page="business"] .business-vp1-mobile-copy .business-vp1-trust>span{display:grid;place-items:center;width:22px;height:22px;border:1px solid #c7963d;border-radius:50%;color:#e3b85d;font-size:11px}\n'
-          if css.count(vp1_start) != 1 or css.count(vp1_end) != 1:
-              raise SystemExit('VP1 mobile CSS anchors are not unique')
-          i = css.index(vp1_start)
-          j = css.index(vp1_end, i) + len(vp1_end)
-          vp1_mobile_css = '''  body[data-page="business"] .business-vp1:before{display:none}\n  body[data-page="business"] .business-vp1>.business-live{display:block;position:relative;height:100%;background:#fff8ee;isolation:isolate}\n  body[data-page="business"] .business-vp1>.business-live:after{content:"";position:absolute;z-index:1;left:0;right:0;top:54%;bottom:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,248,238,0) 0%,rgba(255,248,238,.30) 14%,rgba(255,248,238,.76) 27%,#fff8ee 38%,#fff8ee 100%)}\n  body[data-page="business"] .business-vp1-copy{display:none}\n  body[data-page="business"] .business-vp1-mobile-media{display:block;position:absolute;z-index:0;inset:0 0 31%;min-height:0;overflow:hidden;background:#4c1112}\n  body[data-page="business"] .business-vp1-mobile-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%;filter:none}\n  body[data-page="business"] .business-vp1-mobile-media:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,2,4,.05),rgba(36,2,4,.02) 44%,rgba(44,4,7,.08) 70%,rgba(44,4,7,.02) 100%),linear-gradient(90deg,rgba(44,4,7,.06),transparent 34%)}\n  body[data-page="business"] .business-vp1-mobile-copy{display:block;position:absolute;z-index:2;left:18px;right:18px;bottom:52px;min-height:0;padding:18px 20px 16px;border-radius:24px 24px 0 0;background:radial-gradient(circle at 92% 0%,rgba(194,147,68,.055),transparent 31%),#fff8ee;box-shadow:0 -9px 26px rgba(92,41,22,.04),inset 0 1px 0 rgba(255,255,255,.55);color:#3d281f;text-align:center}\n  body[data-page="business"] .business-vp1-mobile-copy:before{content:"";position:absolute;top:0;left:18px;right:18px;height:1px;background:linear-gradient(90deg,rgba(185,130,47,.05),rgba(185,130,47,.40),rgba(185,130,47,.05))}\n  body[data-page="business"] .business-vp1-mobile-copy:after{content:"AYA";position:absolute;right:50%;bottom:12px;transform:translateX(50%);color:rgba(110,42,35,.038);font:700 72px/1 var(--serif);letter-spacing:.03em;pointer-events:none}\n  body[data-page="business"] .business-vp1-mobile-copy>*{position:relative;z-index:1}\n  body[data-page="business"] .business-vp1-mobile-copy .business-kicker{display:block;color:#b9822f;font-size:9px;font-weight:700;letter-spacing:.17em;text-transform:uppercase}\n  body[data-page="business"] .business-vp1-mobile-copy .business-kicker:before{content:none}\n  body[data-page="business"] .business-vp1-mobile-copy h1{max-width:320px;margin:8px auto 0;color:#5a1719;font:600 clamp(33px,8.9vw,40px)/.94 var(--serif);letter-spacing:-.028em;text-shadow:none}\n  body[data-page="business"] .business-vp1-mobile-rule{display:block;width:84px;height:1px;margin:16px auto 18px;background:linear-gradient(90deg,rgba(185,130,47,.10),#b9822f,rgba(185,130,47,.10))}\n  body[data-page="business"] .business-vp1-mobile-copy p{max-width:308px;margin:0 auto;color:#5c493f;font:500 11.1px/1.48 var(--sans)}\n  body[data-page="business"] .business-vp1-mobile-note{display:block;margin-top:4px;color:#7d6657;font-size:9px;line-height:1.45}\n  body[data-page="business"] .business-vp1 .business-scroll-cue{bottom:12px;color:#9b6f36}\n'''
-          css = css[:i] + vp1_mobile_css + css[j:]
-
-          # Replace the mobile VP2 presentation while preserving desktop medallions/copy.
-          vp2_start = '  body[data-page="business"] .business-vp2-content{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) 40px;padding:10px 12px 0}\n'
-          vp2_end = '  body[data-page="business"] .business-vp2 .business-scroll-cue{bottom:8px}\n'
-          if css.count(vp2_start) != 1 or css.count(vp2_end) != 1:
-              raise SystemExit('VP2 mobile CSS anchors are not unique')
-          i = css.index(vp2_start)
-          j = css.index(vp2_end, i) + len(vp2_end)
-          vp2_mobile_css = '''  body[data-page="business"] .business-vp2-content{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) 40px;padding:10px 16px 0}\n  body[data-page="business"] .business-vp2-head{padding:0 3px 10px;text-align:center}\n  body[data-page="business"] .business-vp2-head .business-kicker{font-size:9px}\n  body[data-page="business"] .business-vp2 h2{max-width:354px;margin:5px auto 5px;white-space:normal;font-size:clamp(26px,7.2vw,31px);line-height:.96}\n  body[data-page="business"] .business-vp2 .business-rule{display:none}\n  body[data-page="business"] .business-vp2-head p{max-width:340px;margin:0 auto;white-space:normal;font-size:10.6px;line-height:1.42}\n  body[data-page="business"] .business-vp2-copy-desktop{display:none}\n  body[data-page="business"] .business-vp2-copy-mobile{display:inline}\n  body[data-page="business"] .business-rhythm{height:100%;min-height:0;margin:8px 0 0;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,minmax(0,1fr));column-gap:18px;row-gap:0;padding-bottom:6px}\n  body[data-page="business"] .business-rhythm-card{display:grid;grid-template-columns:46px minmax(0,1fr);column-gap:9px;align-content:center;align-items:center;justify-items:start;padding:7px 0 8px;border:0;border-top:1px solid rgba(155,105,41,.055);border-radius:0;background:transparent;box-shadow:none;text-align:left}\n  body[data-page="business"] .business-rhythm-card:nth-child(-n+2){border-top-color:rgba(155,105,41,.10)}\n  body[data-page="business"] .business-medallion{display:none}\n  body[data-page="business"] .business-rhythm-icon{display:grid;width:44px;height:44px;place-items:center;align-self:center;color:#b9822f}\n  body[data-page="business"] .business-rhythm-icon svg{width:40px;height:40px;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}\n  body[data-page="business"] .business-rhythm-card h3{margin:0;color:#5b1719;font:600 clamp(16px,4.4vw,18px)/1 var(--serif);letter-spacing:-.01em}\n  body[data-page="business"] .business-rhythm-card p{max-width:none;margin:4px 0 0;color:#685449;font:500 9.9px/1.31 var(--sans)}\n  body[data-page="business"] .business-rhythm-copy-desktop{display:none}\n  body[data-page="business"] .business-rhythm-copy-mobile{display:inline}\n  body[data-page="business"] .business-desktop-more{display:none}\n  body[data-page="business"] .business-vp2 .business-scroll-cue{bottom:8px}\n'''
-          css = css[:i] + vp2_mobile_css + css[j:]
-
-          # Tight mobile fallback must remain the same visual system, not revive table padding.
-          css = replace_once(
-              css,
-              '  body[data-page="business"] .business-rhythm-card{padding:4px 7px}\n  body[data-page="business"] .business-rhythm-card h3{font-size:13.8px}\n  body[data-page="business"] .business-rhythm-card p{font-size:8.8px}\n',
-              '  body[data-page="business"] .business-rhythm-card{grid-template-columns:42px minmax(0,1fr);padding:5px 0}\n  body[data-page="business"] .business-rhythm-icon{width:40px;height:40px}\n  body[data-page="business"] .business-rhythm-icon svg{width:36px;height:36px}\n  body[data-page="business"] .business-rhythm-card h3{font-size:15px}\n  body[data-page="business"] .business-rhythm-card p{font-size:9.15px}\n',
-              'short mobile VP2 fallback'
-          )
-
-          # Invariants / zero-regression guards.
-          if original_html.split('<section class="vp business-vp3"', 1)[1] != html.split('<section class="vp business-vp3"', 1)[1]:
-              raise SystemExit('VP3 or later HTML changed unexpectedly')
-          if html.count('Saat usaha membutuhkan pasokan yang terjaga.') != 1:
-              raise SystemExit('Locked VP1 headline missing or duplicated')
-          if html.count('*Belum menjadi pesanan atau jaminan ketersediaan.') != 1:
-              raise SystemExit('Locked VP1 inline note missing or duplicated')
-          if html.count('class="business-rhythm-icon"') != 8:
-              raise SystemExit('Expected exactly 8 mobile VP2 icons')
-          if html.count('class="business-medallion"') != 8:
-              raise SystemExit('Desktop medallions must remain exactly 8')
-          if css.count('business-vp1-mobile-note') != 1:
-              raise SystemExit('VP1 mobile note selector must be unique')
-          if css.count('business-rhythm-icon svg') != 2:
-              raise SystemExit('VP2 icon SVG rules expected in normal + compact mobile blocks')
-          if '!important' in css[len(original_css):]:
-              raise SystemExit('No !important allowed')
-          if css.count('{') != css.count('}'):
-              raise SystemExit('CSS brace balance failed')
-          if html.count('<meta content="noindex, nofollow, noarchive" name="robots"/>') != 1:
-              raise SystemExit('Staging robots contract changed')
-
-          class Parser(HTMLParser):
-              pass
-          Parser().feed(html)
-
-          html_path.write_text(html, encoding='utf-8')
-          css_path.write_text(css, encoding='utf-8')
-
-          # Self-remove so main receives only the two intended source changes.
-          workflow_path.unlink()
-          PY
-
           git diff --check
-          test "$(git diff --name-only | sort | tr '\n' ' ')" = ".github/workflows/pasokan-vp1-vp2-mobile-release.yml business.html css/site.css "
-
-      - name: Commit scoped implementation
-        shell: bash
-        run: |
-          set -Eeuo pipefail
+          test "$(git diff --name-only | sort | tr '\n' ' ')" = ".github/scripts/pasokan_vp1_vp2_patch.py .github/workflows/pasokan-vp1-vp2-mobile-release.yml business.html css/site.css "
           git config user.name "AYA RAOS scoped automation"
           git config user.email "actions@users.noreply.github.com"
-          git add business.html css/site.css .github/workflows/pasokan-vp1-vp2-mobile-release.yml
+          git add business.html css/site.css .github/scripts/pasokan_vp1_vp2_patch.py .github/workflows/pasokan-vp1-vp2-mobile-release.yml
           git diff --cached --check
-          test "$(git diff --cached --name-only | sort | tr '\n' ' ')" = ".github/workflows/pasokan-vp1-vp2-mobile-release.yml business.html css/site.css "
+          test "$(git diff --cached --name-only | sort | tr '\n' ' ')" = ".github/scripts/pasokan_vp1_vp2_patch.py .github/workflows/pasokan-vp1-vp2-mobile-release.yml business.html css/site.css "
           git commit -m "feat: release locked mobile Pasokan VP1 VP2"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          git push origin HEAD:release/pasokan-vp1-vp2-mobile-lock-20260906
