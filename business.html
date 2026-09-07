@@ -17,11 +17,11 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/site.css?v=20260906-pasokan-mobile-v11-vp2-vp3-state-fix" rel="stylesheet"/>
+<link href="css/site.css?v=20260907-pasokan-vp3-mobile-final" rel="stylesheet"/>
 <script defer src="js/config.js?v=20260809-locked-global-v1"></script>
 <script defer src="js/data.js?v=20260820-pasokan-vnext"></script>
 <script defer src="js/site.js?v=20260809-locked-global-v1"></script>
-<script defer src="js/business-inquiry.js?v=20260820-pasokan-vnext"></script>
+<script defer src="js/business-inquiry.js?v=20260907-pasokan-vp3-mobile-final"></script>
 </head><body data-page="business">
 <a class="skip-link" href="#main">Lewati ke konten utama</a><div data-global-header></div><div class="global-state" data-global-state aria-live="polite" hidden></div>
 <main id="main">
@@ -115,34 +115,61 @@
       </div>
     </section>
 
-    <div class="business-mobile-intro"><span>Pasokan Usaha</span><strong>Mulai dari kebutuhan yang benar-benar berjalan.</strong></div>
     <div class="business-mobile-flow">
-      <section class="business-mobile-state" data-business-mobile-state="product">
+      <section class="business-mobile-state business-mobile-state-product" data-business-mobile-state="product">
         <div class="business-mobile-state-head"><div><div class="business-eyebrow">Kebutuhan Pasokan</div><h3>Produk berulang</h3></div></div>
         <div class="business-mobile-content"><div class="business-mobile-products" data-business-product-list="mobile"></div><button class="business-mobile-add" type="button" data-business-add-product>＋ Tambah produk</button><div class="business-data-state" data-business-data-state hidden role="status"></div><div class="business-product-picker" data-business-product-picker hidden></div></div>
         <div class="business-mobile-actions business-mobile-actions-single"><button class="business-primary" type="button" data-business-mobile-next="contact">Lanjut ke Informasi Perusahaan →</button></div>
       </section>
 
-      <section class="business-mobile-state" data-business-mobile-state="contact" hidden>
-        <div class="business-mobile-state-head"><div><div class="business-eyebrow">Informasi Perusahaan</div><h3>Kontak &amp; konteks utama</h3></div></div>
-        <div class="business-mobile-content">
-          <div class="business-mobile-company-grid">
-            <div class="business-contact-pair"><label class="business-field"><span>PIC</span><input autocomplete="name" data-business-field="pic" placeholder="Nama PIC"></label><label class="business-field"><span>WhatsApp *</span><input autocomplete="tel" inputmode="tel" data-business-field="whatsapp" placeholder="08xxxxxxxxxx"></label></div>
-            <div class="business-email-start-row"><label class="business-field"><span>Email <small>(opsional)</small></span><input autocomplete="email" type="email" data-business-field="email" placeholder="email@usaha.id"></label><label class="business-field"><span>Waktu mulai</span><input type="date" data-business-field="neededDate"></label></div>
-            <div class="business-company-context-row"><label class="business-field"><span>Nama Perusahaan / Usaha</span><input autocomplete="organization" data-business-field="company" placeholder="Nama usaha"></label><label class="business-field"><span>Konteks usaha</span><input data-business-field="context" placeholder="Konteks usaha"></label></div>
-            <label class="business-field business-field-full business-mobile-address"><span>Lokasi pengiriman</span><textarea data-business-field="location" placeholder="Area pengiriman&#10;Alamat lengkap / patokan pengiriman"></textarea><span class="business-mobile-location-actions"><button type="button" data-business-use-location>⌖ Lokasi Saya</button><button type="button" data-business-map-point>✦ Titik di Peta</button></span><span class="business-location-state" data-business-location-state hidden></span></label>
-            <label class="business-field business-field-full"><span>Catatan kebutuhan <small>(opsional)</small></span><textarea data-business-field="notes" placeholder="Catatan operasional yang perlu AYA ketahui."></textarea></label>
+      <section class="business-mobile-state business-mobile-state-contact" data-business-mobile-state="contact" hidden>
+        <div class="business-mobile-state-head business-mobile-contact-head">
+          <div><div class="business-eyebrow">Informasi Perusahaan</div><h3 data-business-contact-title>Tentang usaha &amp; pengiriman</h3><p data-business-contact-copy>Lengkapi informasi utama agar kebutuhan pasokan dapat dibaca sesuai konteks usahamu.</p></div>
+          <span class="business-mobile-step" data-business-contact-step>2 dari 3 · 1/2</span>
+        </div>
+        <div class="business-mobile-content business-mobile-contact-content">
+          <div class="business-mobile-contact-page" data-business-contact-page="1">
+            <section class="business-mobile-form-group">
+              <div class="business-mobile-form-group-head"><strong>Identitas usaha</strong><span>Mulai dari siapa usahanya dan bagaimana produk AYA digunakan.</span></div>
+              <div class="business-mobile-company-grid">
+                <label class="business-field"><span>Nama Perusahaan / Usaha</span><input autocomplete="organization" data-business-field="company" placeholder="Nama usaha"></label>
+                <label class="business-field"><span>Konteks usaha</span><input data-business-field="context" placeholder="Contoh: operasional kedai"></label>
+              </div>
+            </section>
+            <section class="business-mobile-form-group">
+              <div class="business-mobile-form-group-head"><strong>Kontak utama</strong><span>Kontak yang dapat mewakili kebutuhan Pasokan Usaha.</span></div>
+              <div class="business-contact-pair"><label class="business-field"><span>PIC</span><input autocomplete="name" data-business-field="pic" placeholder="Nama PIC"></label><label class="business-field"><span>WhatsApp *</span><input autocomplete="tel" inputmode="tel" data-business-field="whatsapp" placeholder="08xxxxxxxxxx"></label></div>
+              <div class="business-email-start-row"><label class="business-field"><span>Email <small>(opsional)</small></span><input autocomplete="email" type="email" data-business-field="email" placeholder="email@usaha.id"></label><label class="business-field"><span>Waktu mulai</span><input type="date" data-business-field="neededDate"></label></div>
+            </section>
           </div>
-          <label class="business-mobile-consent"><input type="checkbox" data-business-field="consent"><span>Saya memahami ini adalah pemeriksaan Pasokan Usaha, bukan pesanan, quotation, atau jaminan ketersediaan.</span></label>
+
+          <div class="business-mobile-contact-page" data-business-contact-page="2" hidden>
+            <section class="business-mobile-form-group business-mobile-destination-group">
+              <div class="business-mobile-form-group-head"><strong>Tujuan pasokan</strong><span>Area yang digunakan secara rutin untuk kebutuhan pengiriman.</span></div>
+              <label class="business-field business-field-full business-mobile-address"><span>Lokasi pengiriman</span><textarea data-business-field="location" placeholder="Area pengiriman&#10;Alamat lengkap / patokan pengiriman"></textarea><span class="business-mobile-location-actions"><button type="button" data-business-use-location>⌖ Lokasi Saya</button><button type="button" data-business-map-point>✦ Titik di Peta</button></span><span class="business-location-state" data-business-location-state hidden></span></label>
+              <label class="business-field business-field-full"><span>Catatan kebutuhan <small>(opsional)</small></span><textarea data-business-field="notes" placeholder="Catatan operasional yang perlu AYA ketahui."></textarea></label>
+              <label class="business-mobile-consent"><input type="checkbox" data-business-field="consent"><span>Saya memahami bahwa pengisian informasi ini belum menjadi pesanan, penawaran harga, atau jaminan ketersediaan.</span></label>
+            </section>
+          </div>
           <div class="business-form-error" data-business-form-error hidden tabindex="-1"></div>
         </div>
-        <div class="business-mobile-actions"><button class="business-secondary" type="button" data-business-mobile-back="product">← Kembali</button><button class="business-primary" type="button" data-business-mobile-next="summary">Ringkasan →</button></div>
+        <div class="business-mobile-contact-footer">
+          <div class="business-mobile-page-indicator" aria-hidden="true"><span class="is-active" data-business-contact-dot="1"></span><span data-business-contact-dot="2"></span></div>
+          <div class="business-mobile-actions" data-business-contact-actions="1"><button class="business-secondary" type="button" data-business-mobile-back="product">Kembali</button><button class="business-primary" type="button" data-business-contact-next>Lanjut →</button></div>
+          <div class="business-mobile-actions" data-business-contact-actions="2" hidden><button class="business-secondary" type="button" data-business-contact-prev>Kembali</button><button class="business-primary" type="button" data-business-mobile-next="summary">Ringkasan →</button></div>
+        </div>
       </section>
 
-      <section class="business-mobile-state" data-business-mobile-state="summary" hidden>
+      <section class="business-mobile-state business-mobile-state-summary" data-business-mobile-state="summary" hidden>
         <div class="business-mobile-state-head"><div><div class="business-eyebrow">Ringkasan &amp; Status Pasokan</div><h3>Apakah kebutuhan ini masuk Pasokan Usaha?</h3></div></div>
-        <div class="business-mobile-content"><div class="business-mobile-review"><div class="business-review-card"><h4>Kebutuhan</h4><div data-business-summary-products="mobile"></div></div><div class="business-review-card"><h4>Perusahaan</h4><div data-business-summary-company="mobile"></div></div><section class="business-mobile-status" data-business-status-panel="mobile" aria-live="polite"></section></div></div>
-        <div class="business-mobile-actions"><button class="business-secondary" type="button" data-business-mobile-back="contact">← Ubah</button><button class="business-primary" type="button" data-business-check-status>Periksa Status Pasokan</button></div>
+        <div class="business-mobile-content">
+          <div class="business-mobile-review">
+            <div class="business-review-card business-review-need"><h4>Kebutuhan</h4><div data-business-summary-products="mobile"></div><small class="business-summary-more" data-business-summary-more hidden>Lebih dari 3 item dapat digulir</small></div>
+            <div class="business-review-card business-review-company"><div class="business-review-card-head"><h4>Perusahaan</h4><small>Informasi utama</small></div><div data-business-summary-company="mobile"></div></div>
+            <section class="business-mobile-status" data-business-status-panel="mobile" aria-live="polite"></section>
+          </div>
+        </div>
+        <div class="business-mobile-actions business-mobile-summary-actions" data-business-mobile-summary-actions><button class="business-secondary" type="button" data-business-mobile-back="contact">Ubah</button><a class="business-primary" data-business-mobile-activate hidden>Aktivasi Akun Pasokan</a></div>
       </section>
     </div>
   </div>

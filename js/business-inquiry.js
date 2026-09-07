@@ -25,6 +25,7 @@
     fields: Object.fromEntries(FIELD_NAMES.map((name) => [name, name === "consent" ? false : ""])),
     desktopStage: "input",
     mobileStage: "product",
+    mobileContactPage: 1,
     status: { kind: "idle", response: null }
   };
 
@@ -273,6 +274,7 @@
     qsa('[data-business-summary-products="mobile"]').forEach((target) => {
       target.innerHTML = rows.map((item) => `<div class="business-review-line"><span>${escapeHtml(item.name)} · ${escapeHtml(item.variant)}</span><b>${item.quantity} · ${escapeHtml(item.cadence.label)}</b></div>`).join("");
     });
+    qsa("[data-business-summary-more]").forEach((element) => { element.hidden = rows.length <= 3; });
 
     const companyRows = [
       ["Usaha", state.fields.company || "—"], ["Konteks", state.fields.context || "—"], ["PIC", state.fields.pic || "—"],
@@ -345,19 +347,32 @@
     if (kind === "checking") return `<${tag} class="business-status-card"><small>Status Pasokan Usaha</small><h4>Sedang memeriksa kebutuhan.</h4><p>Tunggu sebentar. Status hanya ditentukan oleh sistem Pasokan AYA.</p></${tag}>`;
     if (kind === "eligible") {
       const activationUrl = safeActivationUrl(response?.activationUrl);
-      return `<${tag} class="business-status-card business-status-success"><small>Status Pasokan Usaha</small><h4>Bisa dilanjutkan sebagai Pasokan Usaha.</h4><p>${escapeHtml(response?.message || "Kebutuhan yang dimasukkan dapat melanjutkan proses Pasokan Usaha.")}</p>${activationUrl ? `<a class="business-primary business-status-action" href="${escapeHtml(activationUrl)}">Aktivasi Akun Pasokan →</a>` : '<div class="business-status-guidance">Aktivasi akun belum tersedia dari website ini. Tidak ada akun atau komitmen yang dibuat sebelum layanan aktivasi terhubung.</div>'}</${tag}>`;
+      const desktopAction = !mobile && activationUrl ? `<a class="business-primary business-status-action" href="${escapeHtml(activationUrl)}">Aktivasi Akun Pasokan →</a>` : "";
+      const guidance = activationUrl ? "" : '<div class="business-status-guidance">Aktivasi akun belum tersedia dari website ini. Tidak ada akun atau komitmen yang dibuat sebelum layanan aktivasi terhubung.</div>';
+      return `<${tag} class="business-status-card business-status-success"><small>Status Pasokan Usaha</small><h4>Bisa dilanjutkan sebagai Pasokan Usaha.</h4><p>${escapeHtml(response?.message || "Kebutuhan yang dimasukkan dapat melanjutkan proses Pasokan Usaha.")}</p>${desktopAction}${guidance}</${tag}>`;
     }
     if (kind === "adjust") {
       const reasons = Array.isArray(response?.reasons) ? response.reasons.filter(Boolean) : [];
-      return `<${tag} class="business-status-card business-status-adjust"><small>Status Pasokan Usaha</small><h4>Kebutuhan masih perlu disesuaikan.</h4><p>${escapeHtml(response?.message || "Ada bagian kebutuhan yang belum masuk kriteria Pasokan Usaha pada ritme yang dipilih.")}</p>${reasons.length ? `<ul>${reasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>` : ""}<button class="business-secondary business-status-action" type="button" data-business-adjust>Sesuaikan kebutuhan</button></${tag}>`;
+      const action = mobile ? "" : '<button class="business-secondary business-status-action" type="button" data-business-adjust>Sesuaikan kebutuhan</button>';
+      return `<${tag} class="business-status-card business-status-adjust"><small>Status Pasokan Usaha</small><h4>Kebutuhan masih perlu disesuaikan.</h4><p>${escapeHtml(response?.message || "Ada bagian kebutuhan yang belum masuk kriteria Pasokan Usaha pada ritme yang dipilih.")}</p>${reasons.length ? `<ul>${reasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join("")}</ul>` : ""}${action}</${tag}>`;
     }
     if (kind === "error") return `<${tag} class="business-status-card business-status-adjust"><small>Status Pasokan Usaha</small><h4>Status belum bisa diperiksa.</h4><p>${escapeHtml(response?.message || "Sistem pemeriksaan status Pasokan belum dapat dihubungi. Data yang kamu isi tetap dapat diperiksa kembali nanti.")}</p></${tag}>`;
     return `<${tag} class="business-status-card"><small>Status Pasokan Usaha</small><h4>Periksa status kebutuhan.</h4><p>Sistem akan memeriksa apakah kebutuhan ini dapat dilanjutkan sebagai Pasokan Usaha. Hasil tidak dihitung dari browser.</p>${mobile ? "" : '<button class="business-primary business-status-action" type="button" data-business-check-status>Periksa Status Pasokan →</button>'}</${tag}>`;
   }
 
+  function renderMobileSummaryAction() {
+    const activationUrl = state.status.kind === "eligible" ? safeActivationUrl(state.status.response?.activationUrl) : "";
+    qsa("[data-business-mobile-activate]").forEach((link) => {
+      link.hidden = !activationUrl;
+      if (activationUrl) link.href = activationUrl;
+      else link.removeAttribute("href");
+    });
+  }
+
   function renderStatus() {
     qsa('[data-business-status-panel="desktop"]').forEach((target) => { target.innerHTML = statusMarkup(state.status.kind, state.status.response, false); });
     qsa('[data-business-status-panel="mobile"]').forEach((target) => { target.innerHTML = statusMarkup(state.status.kind, state.status.response, true); });
+    renderMobileSummaryAction();
   }
 
   async function checkStatus() {
@@ -401,11 +416,33 @@
     if (name === "summary") { renderSummaries(); renderStatus(); }
   }
 
+  function contactPageOneMessage() {
+    const required = ["company", "context", "pic", "whatsapp", "neededDate"];
+    if (required.some((name) => !String(state.fields[name] || "").trim())) return "Lengkapi identitas usaha dan kontak utama sebelum melanjutkan.";
+    if (!validateEmail(String(state.fields.email || "").trim())) return "Periksa kembali format email yang dimasukkan.";
+    return "";
+  }
+
+  function setMobileContactPage(page) {
+    state.mobileContactPage = page === 2 ? 2 : 1;
+    const second = state.mobileContactPage === 2;
+    qsa("[data-business-contact-page]").forEach((element) => { element.hidden = Number(element.dataset.businessContactPage) !== state.mobileContactPage; });
+    qsa("[data-business-contact-actions]").forEach((element) => { element.hidden = Number(element.dataset.businessContactActions) !== state.mobileContactPage; });
+    qsa("[data-business-contact-dot]").forEach((element) => { element.classList.toggle("is-active", Number(element.dataset.businessContactDot) === state.mobileContactPage); });
+    qsa("[data-business-contact-step]").forEach((element) => { element.textContent = `2 dari 3 · ${state.mobileContactPage}/2`; });
+    qsa("[data-business-contact-copy]").forEach((element) => {
+      element.textContent = second ? "Lengkapi tujuan pasokan sebelum melihat ringkasan kebutuhan." : "Lengkapi informasi utama agar kebutuhan pasokan dapat dibaca sesuai konteks usahamu.";
+    });
+    showFormError("");
+  }
+
   function showMobileStage(name) {
+    const previous = state.mobileStage;
     state.mobileStage = name;
     qsa("[data-business-mobile-state]").forEach((element) => { element.hidden = element.dataset.businessMobileState !== name; });
+    if (name === "contact" && previous !== "contact") setMobileContactPage(1);
     if (name === "summary") { renderSummaries(); renderStatus(); }
-    if (window.matchMedia("(max-width: 900px)").matches) qs("#kebutuhan-pasokan")?.scrollIntoView({ block: "start", behavior: "smooth" });
+    if (window.matchMedia("(max-width: 900px)").matches) qs("#kebutuhan-pasokan")?.scrollIntoView({ block: "start", behavior: "auto" });
   }
 
   function moveToSummary() {
@@ -459,10 +496,18 @@
       }
       if (event.target.closest("[data-business-to-summary]")) { moveToSummary(); return; }
       if (event.target.closest("[data-business-back-input]")) { showDesktopStage("input"); return; }
+      if (event.target.closest("[data-business-contact-next]")) {
+        const message = contactPageOneMessage(); showFormError(message); if (message) return;
+        setMobileContactPage(2); return;
+      }
+      if (event.target.closest("[data-business-contact-prev]")) { setMobileContactPage(1); return; }
       const mobileNext = event.target.closest("[data-business-mobile-next]");
       if (mobileNext) {
         if (mobileNext.dataset.businessMobileNext === "summary") {
           const message = validationMessage(); showFormError(message); if (message) return;
+          showMobileStage("summary");
+          void checkStatus();
+          return;
         }
         showMobileStage(mobileNext.dataset.businessMobileNext); return;
       }
