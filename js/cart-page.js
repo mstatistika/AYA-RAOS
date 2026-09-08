@@ -43,6 +43,7 @@
 
     let activeVariant = null;
     let method = "qris";
+    let updateMobileRuntime = () => {};
 
     const format = (value) => AYA.formatPrice(Number(value) || 0);
     const details = () => AYA.cartDetails();
@@ -99,15 +100,27 @@
 
     const renderItem = ({ product, variant, quantity, subtotal }) => {
       const rules = AYA.quantityRules(product);
-      return `<article class="item" data-product="${AYA.escapeHTML(product.id)}" data-variant="${AYA.escapeHTML(variant.name)}">
-        <div class="product"><div class="thumb"><img src="${AYA.escapeHTML(imageSrc(product))}" alt="${AYA.escapeHTML(product.name)}" data-image-fallback="${AYA.escapeHTML(product.id)}"></div><div><div class="pname">${AYA.escapeHTML(product.name)}</div><div class="pline">${AYA.escapeHTML(product.line)}</div></div></div>
-        <button class="variant-btn" type="button" data-variant-trigger="${AYA.escapeHTML(product.id)}" data-current-variant="${AYA.escapeHTML(variant.name)}">${AYA.escapeHTML(variant.name)}</button>
+      const escapedId = AYA.escapeHTML(product.id);
+      const escapedVariant = AYA.escapeHTML(variant.name);
+      const escapedName = AYA.escapeHTML(product.name);
+      const escapedLine = AYA.escapeHTML(product.line);
+      const image = AYA.escapeHTML(imageSrc(product));
+      const desktop = `<article class="item desktop-item" data-product="${escapedId}" data-variant="${escapedVariant}">
+        <div class="product"><div class="thumb"><img src="${image}" alt="${escapedName}" data-image-fallback="${escapedId}"></div><div><div class="pname">${escapedName}</div><div class="pline">${escapedLine}</div></div></div>
+        <button class="variant-btn" type="button" data-variant-trigger="${escapedId}" data-current-variant="${escapedVariant}">${escapedVariant}</button>
         <div class="unit">${format(variant.price)}</div>
-        <div class="qty"><div class="stepper"><button type="button" data-minus="${AYA.escapeHTML(product.id)}" data-variant="${AYA.escapeHTML(variant.name)}" aria-label="Kurangi jumlah">−</button><span>${quantity}</span><button type="button" data-plus="${AYA.escapeHTML(product.id)}" data-variant="${AYA.escapeHTML(variant.name)}" aria-label="Tambah jumlah">+</button></div></div>
+        <div class="qty"><div class="stepper"><button type="button" data-minus="${escapedId}" data-variant="${escapedVariant}" aria-label="Kurangi jumlah">−</button><span>${quantity}</span><button type="button" data-plus="${escapedId}" data-variant="${escapedVariant}" aria-label="Tambah jumlah">+</button></div></div>
         <div class="subtotal">${format(subtotal)}</div>
-        <button class="trash" type="button" data-remove="${AYA.escapeHTML(product.id)}" data-variant="${AYA.escapeHTML(variant.name)}" aria-label="Hapus ${AYA.escapeHTML(product.name)} ${AYA.escapeHTML(variant.name)}">×</button>
+        <button class="trash" type="button" data-remove="${escapedId}" data-variant="${escapedVariant}" aria-label="Hapus ${escapedName} ${escapedVariant}">×</button>
         <span class="sr-only">Aturan jumlah: minimum ${rules.min}, maksimum ${rules.max}, kelipatan ${rules.step}.</span>
       </article>`;
+      const mobile = `<article class="mobile-cart-item" data-product="${escapedId}" data-variant="${escapedVariant}">
+        <div class="m-cart-thumb"><img src="${image}" alt="${escapedName}" data-image-fallback="${escapedId}"></div>
+        <div class="m-cart-copy"><div class="pline">${escapedLine}</div><div class="pname">${escapedName}</div><div class="m-cart-unit">${format(variant.price)} / unit</div></div>
+        <button class="m-variant-btn" type="button" data-variant-trigger="${escapedId}" data-current-variant="${escapedVariant}"><span>${escapedVariant}</span></button>
+        <div class="m-cart-bottom"><div class="m-stepper"><button type="button" data-minus="${escapedId}" data-variant="${escapedVariant}" aria-label="Kurangi jumlah" ${quantity <= rules.min ? 'disabled' : ''}>−</button><span>${quantity}</span><button type="button" data-plus="${escapedId}" data-variant="${escapedVariant}" aria-label="Tambah jumlah" ${quantity >= rules.max ? 'disabled' : ''}>+</button></div><div class="m-cart-subtotal">${format(subtotal)}</div><button class="m-cart-trash" type="button" data-remove="${escapedId}" data-variant="${escapedVariant}" aria-label="Hapus ${escapedName} ${escapedVariant}">×</button></div>
+      </article>`;
+      return desktop + mobile;
     };
 
     const renderPayment = () => {
@@ -116,6 +129,7 @@
       nodes.paymentBreakdown.innerHTML = `<div class="sum-row"><span>Subtotal Produk</span><strong>${format(money.subtotal)}</strong></div><div class="sum-row"><span>Biaya Pengiriman</span><strong>${format(money.shipping)}</strong></div><div class="benefit"><div><strong>Benefit Ongkir</strong><small>${benefitCopy(money.units)}</small></div><strong>${money.benefit ? `− ${format(money.benefit)}` : format(0)}</strong></div>`;
       nodes.paymentTotalLeft.textContent = format(money.total);
       nodes.paymentTotalMobile.textContent = format(money.total);
+      updateMobileRuntime();
     };
 
     const render = () => {
@@ -213,6 +227,8 @@
       const confirmed = Boolean(draft.shipping?.confirmed && Number.isFinite(Number(draft.shipping?.lat)) && Number.isFinite(Number(draft.shipping?.lng)));
       nodes.locationStatus.textContent = confirmed ? "Lokasi dikonfirmasi" : "Lokasi belum dikonfirmasi";
       nodes.locationStatus.classList.toggle("confirmed", confirmed);
+      const mobileStatus = $("#mLocationStatus");
+      if (mobileStatus) { mobileStatus.textContent = confirmed ? "Lokasi dikonfirmasi" : "Belum dipilih"; mobileStatus.classList.toggle("confirmed", confirmed); }
     };
 
     $("#useLocation").addEventListener("click", () => {
@@ -284,7 +300,160 @@
     $("#showInfo").addEventListener("click", () => nodes.cartGrid.classList.add("info-mode"));
     $("#showCart").addEventListener("click", () => nodes.cartGrid.classList.remove("info-mode"));
 
+
+    const mobileNodes = {
+      panel: $("#mobileDataPanel"), name: $("#mName"), phone: $("#mPhone"), address: $("#mAddress"), notes: $("#mNotes"),
+      eventDate: $("#mEventDate"), eventBox: $("#mEventBox"), dateTrigger: $("#mEventDateTrigger"), dateValue: $("#mEventDateValue"),
+      calendar: $("#mCalendarOverlay"), calendarDays: $("#mCalendarDays"), calendarTitle: $("#mCalendarTitle"), calendarPicked: $("#mCalendarPicked")
+    };
+    const monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    let calendarView = { year: new Date().getFullYear(), month: new Date().getMonth() };
+    let calendarSelection = "";
+
+    const syncValueClass = (field) => field?.classList.toggle("has-value", Boolean(String(field.value || "").trim()));
+    const syncMobileToDesktop = () => {
+      nodes.name.value = mobileNodes.name.value;
+      nodes.phone.value = mobileNodes.phone.value;
+      nodes.address.value = mobileNodes.address.value;
+      nodes.notes.value = mobileNodes.notes.value;
+      nodes.eventDate.value = mobileNodes.eventDate.value;
+      saveDraft();
+    };
+    const syncMobileFromDraft = () => {
+      mobileNodes.name.value = draft.customer.customerName || draft.customer.eventPic || "";
+      mobileNodes.phone.value = draft.customer.whatsapp || draft.customer.eventWhatsapp || "";
+      mobileNodes.address.value = draft.shipping.address || "";
+      mobileNodes.notes.value = draft.notes || "";
+      mobileNodes.eventDate.value = draft.event.eventDate || draft.customer.eventDate || "";
+      [mobileNodes.name,mobileNodes.phone,mobileNodes.address,mobileNodes.notes].forEach(syncValueClass);
+      syncMobileDateTrigger();
+    };
+    const syncMobileContext = () => {
+      $$('[data-mobile-context]').forEach((button) => {
+        const active = (button.dataset.mobileContext === "event") === (draft.context === "event");
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      mobileNodes.eventBox.hidden = draft.context !== "event";
+      const copy = $("#mContextCopy");
+      if (copy) copy.textContent = draft.context === "event" ? "Untuk pesanan yang terkait tanggal acara tertentu." : "Untuk kebutuhan pribadi atau rumah tanpa tanggal acara khusus.";
+      $$('[data-mobile-receive]').forEach((button) => {
+        const active = button.dataset.mobileReceive === (draft.event.beforeEvent === "yes" ? "yes" : "no");
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    };
+    const setMobileError = (field, errorId, invalid) => {
+      field.classList.toggle("invalid", invalid);
+      const error = $(errorId);
+      error?.classList.toggle("show", invalid);
+      return invalid;
+    };
+    const mobileBasicValidate = () => {
+      const errors = [];
+      if (setMobileError(mobileNodes.name, "#mNameError", !mobileNodes.name.value.trim())) errors.push(mobileNodes.name);
+      if (setMobileError(mobileNodes.phone, "#mPhoneError", !validPhone(mobileNodes.phone.value))) errors.push(mobileNodes.phone);
+      if (setMobileError(mobileNodes.address, "#mAddressError", !mobileNodes.address.value.trim())) errors.push(mobileNodes.address);
+      if (errors.length) { errors[0].focus({ preventScroll: true }); errors[0].scrollIntoView({ block: "center", behavior: "smooth" }); return false; }
+      return true;
+    };
+
+    [mobileNodes.name,mobileNodes.phone,mobileNodes.address,mobileNodes.notes].forEach((field) => field?.addEventListener("input", () => { syncValueClass(field); syncMobileToDesktop(); }));
+    $$('[data-mobile-context]').forEach((button) => button.addEventListener("click", () => { syncMobileToDesktop(); setContext(button.dataset.mobileContext); syncMobileContext(); }));
+    $$('[data-mobile-receive]').forEach((button) => button.addEventListener("click", () => {
+      draft.event.beforeEvent = button.dataset.mobileReceive;
+      $$('[data-receive]').forEach((desktopButton) => { const active = desktopButton.dataset.receive === draft.event.beforeEvent; desktopButton.classList.toggle("active", active); desktopButton.setAttribute("aria-pressed", String(active)); });
+      syncMobileContext(); saveDraft();
+    }));
+
+    $("#mUseLocation")?.addEventListener("click", () => $("#useLocation")?.click());
+    $("#mMapLocation")?.addEventListener("click", () => $("#mapLocation")?.click());
+    $("#mShowCart")?.addEventListener("click", () => nodes.cartGrid.classList.remove("info-mode"));
+    $("#mBackData")?.addEventListener("click", () => mobileNodes.panel.classList.remove("confirm-mode"));
+    $("#mBackDataBottom")?.addEventListener("click", () => mobileNodes.panel.classList.remove("confirm-mode"));
+    $("#mEditData")?.addEventListener("click", () => mobileNodes.panel.classList.remove("confirm-mode"));
+    $("#showInfo")?.addEventListener("click", () => { syncMobileFromDraft(); syncMobileContext(); mobileNodes.panel.classList.remove("confirm-mode"); });
+    $("#mToConfirm")?.addEventListener("click", () => {
+      if (!mobileBasicValidate()) return;
+      syncMobileToDesktop();
+      $("#mVp1Status").textContent = "Lengkap";
+      $("#mSummaryName").textContent = mobileNodes.name.value.trim();
+      $("#mSummaryAddress").textContent = mobileNodes.address.value.trim();
+      mobileNodes.panel.classList.add("confirm-mode");
+      updateMobileRuntime();
+    });
+    $("#mOpenPayment")?.addEventListener("click", () => {
+      if (draft.context === "event" && setMobileError(mobileNodes.dateTrigger, "#mEventDateError", !mobileNodes.eventDate.value)) { mobileNodes.dateTrigger.focus(); return; }
+      syncMobileToDesktop();
+      openPayment();
+      setMobilePaymentMethod("qris");
+    });
+
+    const isoDate = (date) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+    const displayDate = (iso) => { if (!iso) return "Pilih tanggal acara"; const [y,m,d] = iso.split("-").map(Number); return `${String(d).padStart(2,"0")} ${monthNames[m-1].slice(0,3)} ${y}`; };
+    const fullDate = (iso) => { if (!iso) return "Pilih tanggal"; const [y,m,d] = iso.split("-").map(Number); return `${d} ${monthNames[m-1]} ${y}`; };
+    function syncMobileDateTrigger() {
+      const hasValue = Boolean(mobileNodes.eventDate.value);
+      mobileNodes.dateTrigger.classList.toggle("empty", !hasValue);
+      mobileNodes.dateTrigger.classList.toggle("has-value", hasValue);
+      mobileNodes.dateValue.textContent = displayDate(mobileNodes.eventDate.value);
+    }
+    const renderCalendar = () => {
+      mobileNodes.calendarTitle.textContent = `${monthNames[calendarView.month]} ${calendarView.year}`;
+      mobileNodes.calendarPicked.textContent = fullDate(calendarSelection);
+      const first = new Date(calendarView.year, calendarView.month, 1);
+      const days = new Date(calendarView.year, calendarView.month + 1, 0).getDate();
+      const cells = [];
+      for (let i=0;i<first.getDay();i++) cells.push('<span aria-hidden="true"></span>');
+      for (let day=1; day<=days; day++) { const iso = isoDate(new Date(calendarView.year, calendarView.month, day)); cells.push(`<button class="${iso === calendarSelection ? 'selected' : ''}" data-calendar-date="${iso}" type="button">${day}</button>`); }
+      mobileNodes.calendarDays.innerHTML = cells.join("");
+      $$('[data-calendar-date]', mobileNodes.calendarDays).forEach((button) => button.addEventListener("click", () => { calendarSelection = button.dataset.calendarDate; renderCalendar(); }));
+    };
+    mobileNodes.dateTrigger?.addEventListener("click", () => { const base = mobileNodes.eventDate.value || isoDate(new Date()); calendarSelection = base; const [y,m] = base.split("-").map(Number); calendarView = { year:y, month:m-1 }; renderCalendar(); mobileNodes.calendar.classList.add("open"); mobileNodes.calendar.setAttribute("aria-hidden","false"); mobileNodes.dateTrigger.setAttribute("aria-expanded","true"); });
+    $("#mCalendarCancel")?.addEventListener("click", () => { mobileNodes.calendar.classList.remove("open"); mobileNodes.calendar.setAttribute("aria-hidden","true"); mobileNodes.dateTrigger.setAttribute("aria-expanded","false"); });
+    $("#mCalendarApply")?.addEventListener("click", () => { mobileNodes.eventDate.value = calendarSelection; nodes.eventDate.value = calendarSelection; draft.event.eventDate = calendarSelection; saveDraft(); syncMobileDateTrigger(); setMobileError(mobileNodes.dateTrigger,"#mEventDateError",false); $("#mCalendarCancel").click(); });
+    $("#mCalendarPrev")?.addEventListener("click", () => { calendarView.month--; if (calendarView.month < 0) { calendarView.month=11; calendarView.year--; } renderCalendar(); });
+    $("#mCalendarNext")?.addEventListener("click", () => { calendarView.month++; if (calendarView.month > 11) { calendarView.month=0; calendarView.year++; } renderCalendar(); });
+    mobileNodes.calendar?.addEventListener("click", (event) => { if (event.target === mobileNodes.calendar) $("#mCalendarCancel").click(); });
+
+    const randomDigits = (length) => Array.from({length}, () => Math.floor(Math.random()*10)).join("");
+    const bankPrefix = (bank) => ({BCA:"014",CIMB:"022",Permata:"013",BRI:"002",Mandiri:"008",BNI:"009"}[bank] || "000");
+    const placeholderVa = (bank) => (bankPrefix(bank) + randomDigits(13)).match(/.{1,4}/g).join(" ");
+    const setMobilePaymentMethod = (value) => {
+      const qris = value !== "va";
+      $$('[data-mobile-method]').forEach((button) => button.classList.toggle("active", (button.dataset.mobileMethod === "qris") === qris));
+      $("#mQrisView").hidden = !qris;
+      $("#mVaView").hidden = qris;
+      $("#mPayHelper").textContent = qris ? "Scan QRIS menggunakan aplikasi pilihan Anda." : "Gunakan nomor Virtual Account sesuai bank pilihan Anda.";
+      $("#mPaySecondary").textContent = qris ? "Download QRIS" : "Salin Nomor";
+    };
+    $$('[data-mobile-method]').forEach((button) => button.addEventListener("click", () => setMobilePaymentMethod(button.dataset.mobileMethod)));
+    $$('[data-mobile-bank]').forEach((button) => button.addEventListener("click", () => { setMobilePaymentMethod("va"); $$('[data-mobile-bank]').forEach((item) => item.classList.toggle("active", item === button)); $("#mVaNumber").textContent = placeholderVa(button.dataset.mobileBank); $("#mVaLabel").textContent = `${button.dataset.mobileBank} · nomor placeholder visual`; }));
+
+    updateMobileRuntime = () => {
+      const entries = details();
+      const money = financials();
+      const countText = `${entries.length} item · ${money.units} pcs`;
+      if ($("#mMiniMeta")) $("#mMiniMeta").textContent = countText;
+      if ($("#mConfirmCount")) $("#mConfirmCount").textContent = countText;
+      if ($("#mConfirmProducts")) $("#mConfirmProducts").textContent = entries.slice(0,2).map((entry) => entry.product.name).join(" + ") || "—";
+      if ($("#mConfirmSubtotal")) $("#mConfirmSubtotal").textContent = format(money.subtotal);
+      if ($("#mConfirmShipping")) $("#mConfirmShipping").textContent = format(money.shipping);
+      if ($("#mConfirmTotal")) $("#mConfirmTotal").textContent = format(money.total);
+      if ($("#mPaymentTotal")) $("#mPaymentTotal").textContent = format(money.total);
+      const benefitRow = $("#mConfirmBenefitRow");
+      if (benefitRow) { benefitRow.hidden = !money.benefit; if ($("#mConfirmBenefit")) $("#mConfirmBenefit").textContent = money.benefit ? `− ${format(money.benefit)}` : format(0); }
+    };
+
+    if (window.visualViewport) {
+      const baseline = Math.max(document.documentElement.clientHeight, window.innerHeight);
+      const syncMobileViewport = () => { const h = window.visualViewport.height; document.documentElement.style.setProperty("--b2c-mobile-h", baseline - h > 120 ? `${Math.round(h)}px` : "100svh"); };
+      window.visualViewport.addEventListener("resize", syncMobileViewport);
+      window.visualViewport.addEventListener("scroll", syncMobileViewport);
+    }
+
     window.addEventListener("aya:cart-change", render);
+    window.addEventListener("aya:cart-change", updateMobileRuntime);
 
     nodes.name.value = draft.customer.customerName || draft.customer.eventPic || "";
     nodes.phone.value = draft.customer.whatsapp || draft.customer.eventWhatsapp || "";
@@ -302,7 +471,11 @@
     setLocationStatus();
     setContext(draft.context, !requestedContext);
     setMethod("qris");
+    syncMobileFromDraft();
+    syncMobileContext();
+    setMobilePaymentMethod("qris");
     render();
+    updateMobileRuntime();
 
     if (config.payment?.enabled) {
       toast("Provider pembayaran belum memiliki client backend aktif pada halaman ini; status pembayaran tetap dinonaktifkan.");
