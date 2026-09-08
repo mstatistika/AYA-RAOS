@@ -47,3 +47,36 @@ jobs:
           Path('/tmp/b2c-builder.py').write_text(script, encoding='utf-8')
           PY
           python /tmp/b2c-builder.py
+          node --check js/cart-page.js
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import subprocess
+          class Parser(HTMLParser):
+              pass
+          Parser().feed(Path('cart.html').read_text(encoding='utf-8'))
+          changed = set(subprocess.check_output(['git','diff','--name-only'], text=True).splitlines())
+          expected = {'cart.html','css/site.css','js/cart-page.js'}
+          assert changed == expected, (changed, expected)
+          css = Path('css/site.css').read_text(encoding='utf-8')
+          html = Path('cart.html').read_text(encoding='utf-8')
+          js = Path('js/cart-page.js').read_text(encoding='utf-8')
+          assert css.count('/* MOBILE */') == 1
+          assert 'id="mobileDataPanel"' in html
+          assert 'class="panel mobile-payment-panel"' in html
+          assert 'Pembayaran online belum aktif pada staging.' in html
+          assert 'visualViewport' in js
+          print('scoped validation ok')
+          PY
+          git diff --check
+      - name: Commit validated scoped implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "AYA RAOS Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git rm .github/workflows/b2c-mobile-lock-builder.yml
+          git add cart.html css/site.css js/cart-page.js
+          git diff --cached --check
+          git commit -m "feat: implement locked B2C mobile flow [b2c-mobile-lock]"
+          git push origin HEAD:build/b2c-mobile-lock
