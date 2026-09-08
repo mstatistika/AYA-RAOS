@@ -31,9 +31,17 @@ jobs:
           start = src.index(marker) + len(marker)
           end = src.index("\n          PY\n", start)
           raw = src[start:end]
-          lines = []
-          for line in raw.splitlines():
-              lines.append(line[10:] if line.startswith('          ') else line)
-          Path('/tmp/b2c-builder.py').write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          lines = [line[10:] if line.startswith('          ') else line for line in raw.splitlines()]
+          script = '\n'.join(lines) + '\n'
+          patch_start = script.index('pattern = re.compile(', script.index("mobile_css = r'''"))
+          patch_end_marker = "css.write_text(css_text, encoding='utf-8')"
+          patch_end = script.index(patch_end_marker, patch_start) + len(patch_end_marker)
+          replacement = """mobile_start = css_text.index('/* MOBILE */')
+mobile_end_marker = '@media (min-width:901px){'
+mobile_end = css_text.index(mobile_end_marker, mobile_start)
+css_text = css_text[:mobile_start] + mobile_css + css_text[mobile_end:]
+css.write_text(css_text, encoding='utf-8')"""
+          script = script[:patch_start] + replacement + script[patch_end:]
+          Path('/tmp/b2c-builder.py').write_text(script, encoding='utf-8')
           PY
           python /tmp/b2c-builder.py
