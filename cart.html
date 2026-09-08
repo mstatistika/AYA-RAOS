@@ -13,11 +13,11 @@
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Montserrat:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="css/site.css?v=20260817-cart-b2c-v16" rel="stylesheet"/>
+<link href="css/site.css?v=20260909-b2c-mobile-lock-v1" rel="stylesheet"/>
 <script defer src="js/config.js?v=20260809-locked-global-v1"></script>
 <script defer src="js/data.js?v=20260809-locked-global-v1"></script>
 <script defer src="js/site.js?v=20260809-locked-global-v1"></script>
-<script defer src="js/cart-page.js?v=20260817-cart-b2c-v16"></script>
+<script defer src="js/cart-page.js?v=20260909-b2c-mobile-lock-v1"></script>
 </head>
 <body data-page="cart">
 <a class="skip-link" href="#main">Lewati ke konten utama</a>
@@ -59,6 +59,62 @@
       </div>
       <div class="mobile-summary" id="mobileSummary"></div>
       <div class="cta-wrap"><button class="primary" id="openPayment" type="button">Lanjut ke Pembayaran</button></div>
+    </aside>
+
+    <aside class="panel mobile-data-panel" id="mobileDataPanel" aria-label="Data pesanan mobile">
+      <section class="mobile-data-vp mobile-data-vp1">
+        <header class="m-step-head">
+<button class="m-back-link" id="mShowCart" type="button">Kembali ke Keranjang</button>
+<div class="m-step-title-row"><h1>Data Pesanan</h1><div class="m-step-note">Langkah 1 dari 2<br><span id="mMiniMeta">0 item · 0 pcs</span></div></div>
+<div class="m-steps"><span class="on"></span><span></span></div>
+        </header>
+        <div class="m-vp-body">
+<div class="m-kicker">Jenis Pesanan</div>
+<div class="m-segment" role="group" aria-label="Jenis pesanan mobile"><button class="active" data-mobile-context="regular" type="button">Belanja Biasa</button><button data-mobile-context="event" type="button">Untuk Acara</button></div>
+<div class="m-context-copy" id="mContextCopy">Untuk kebutuhan pribadi atau rumah tanpa tanggal acara khusus.</div>
+<div class="m-form-block"><label for="mName">Nama Lengkap</label><input class="m-field" id="mName" autocomplete="name" placeholder="Nama penerima pesanan"><div class="m-error" id="mNameError">Nama lengkap wajib diisi.</div></div>
+<div class="m-form-block"><label for="mPhone">WhatsApp</label><input class="m-field" id="mPhone" autocomplete="tel" inputmode="tel" placeholder="Contoh: 0812 3456 7890"><div class="m-error" id="mPhoneError">Masukkan nomor WhatsApp yang valid.</div></div>
+<div class="m-form-block"><label for="mAddress">Alamat Pengiriman</label><textarea class="m-field m-address" id="mAddress" autocomplete="street-address" placeholder="Tulis alamat lengkap penerima"></textarea><div class="m-error" id="mAddressError">Alamat pengiriman wajib diisi.</div></div>
+<div class="m-form-block"><div class="m-label-row"><label for="mNotes">Catatan Pesanan</label><span>Opsional</span></div><textarea class="m-field" id="mNotes" placeholder="Contoh: titip security atau catatan lain"></textarea></div>
+        </div>
+        <footer class="m-step-footer"><div class="m-footer-line"><span>Data pesanan</span><strong id="mVp1Status">Belum lengkap</strong></div><button class="m-primary" id="mToConfirm" type="button">Lanjut ke Konfirmasi</button></footer>
+      </section>
+
+      <section class="mobile-data-vp mobile-data-vp2">
+        <header class="m-step-head">
+<button class="m-back-link" id="mBackData" type="button">Kembali ke Data Pesanan</button>
+<div class="m-step-title-row"><h1>Konfirmasi</h1><div class="m-step-note">Langkah 2 dari 2<br>Sebelum pembayaran</div></div>
+<div class="m-steps"><span class="on"></span><span class="on"></span></div>
+        </header>
+        <div class="m-vp-body">
+<div class="m-kicker">Pengiriman</div>
+<div class="m-address-summary"><div><strong id="mSummaryName">Penerima</strong><p id="mSummaryAddress">Alamat pengiriman akan tampil di sini.</p></div><button id="mEditData" type="button">Ubah</button></div>
+<div class="m-event-box" id="mEventBox" hidden>
+  <div class="m-rule"></div><div class="m-kicker">Detail Acara</div>
+  <div class="m-event-grid">
+    <div><label for="mEventDateTrigger">Tanggal Acara</label><button class="m-date-trigger empty" id="mEventDateTrigger" type="button" aria-haspopup="dialog" aria-expanded="false"><span id="mEventDateValue">Pilih tanggal acara</span><b>⌄</b></button><input id="mEventDate" type="hidden"><div class="m-error" id="mEventDateError">Tanggal acara wajib diisi.</div></div>
+    <div class="m-event-choice"><label>Diterima sebelum?</label><div class="m-receive" role="group" aria-label="Diterima sebelum acara"><button data-mobile-receive="yes" type="button">Ya</button><button class="active" data-mobile-receive="no" type="button">Tidak</button></div></div>
+  </div>
+</div>
+<div class="m-rule"></div>
+<div class="m-location-head"><strong>Titik Pengiriman</strong><span class="m-location-status" id="mLocationStatus">Belum dipilih</span></div>
+<p class="m-location-copy">Tambahkan titik lokasi agar detail pengiriman lebih jelas.</p>
+<div class="m-location-actions"><button id="mUseLocation" type="button">Gunakan Lokasi Saya</button><button id="mMapLocation" type="button">Pilih / Ubah di Peta</button></div>
+<div class="m-rule"></div>
+<div class="m-kicker">Ringkasan</div>
+<div class="m-confirm-summary"><div class="m-summary-head"><strong id="mConfirmCount">0 item · 0 pcs</strong><span id="mConfirmProducts">—</span></div><div class="m-sum-row"><span>Subtotal produk</span><strong id="mConfirmSubtotal">Rp0</strong></div><div class="m-sum-row"><span>Ongkir sementara</span><strong id="mConfirmShipping">Rp0</strong></div><div class="m-sum-row m-benefit-row" id="mConfirmBenefitRow" hidden><span>Benefit ongkir</span><strong id="mConfirmBenefit">Rp0</strong></div><div class="m-sum-row total"><span>Total sementara</span><strong id="mConfirmTotal">Rp0</strong></div></div>
+<div class="m-fallback">Ongkir masih menggunakan fallback saat ini dan bukan tarif live Grab/Gojek.</div>
+        </div>
+        <footer class="m-step-footer"><div class="m-footer-actions"><button class="m-secondary" id="mBackDataBottom" type="button">Kembali</button><button class="m-primary" id="mOpenPayment" type="button">Lanjut ke Pembayaran</button></div></footer>
+      </section>
+
+      <div class="m-calendar-overlay" id="mCalendarOverlay" aria-hidden="true">
+        <div class="m-calendar-sheet" role="dialog" aria-modal="true" aria-labelledby="mCalendarTitle">
+<div class="m-calendar-top"><div class="m-calendar-kicker">Kalender AYA</div><div class="m-calendar-picked" id="mCalendarPicked">Pilih tanggal</div><div class="m-calendar-toolbar"><button id="mCalendarPrev" type="button" aria-label="Bulan sebelumnya">‹</button><div id="mCalendarTitle">Bulan</div><button id="mCalendarNext" type="button" aria-label="Bulan berikutnya">›</button></div></div>
+<div class="m-calendar-body"><div class="m-calendar-weekdays"><span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span></div><div class="m-calendar-days" id="mCalendarDays"></div></div>
+<div class="m-calendar-actions"><button class="m-secondary" id="mCalendarCancel" type="button">Batal</button><button class="m-primary" id="mCalendarApply" type="button">Gunakan Tanggal</button></div>
+        </div>
+      </div>
     </aside>
   </div>
 </section>
@@ -102,6 +158,24 @@
           <div id="vaReady" hidden></div>
         </div>
       </div>
+    </section>
+
+    <section class="panel mobile-payment-panel" aria-label="Pembayaran mobile">
+      <div class="m-pay-content">
+        <div class="m-pay-kicker-row"><div class="m-pay-kicker">Pembayaran</div><div></div></div>
+        <h1>Pilih Cara Pembayaran</h1>
+        <p class="m-pay-lead">Pilih metode yang paling nyaman. Presentasi pembayaran tetap berada di AYA dan belum aktif pada staging.</p>
+        <div class="m-pay-rule"></div>
+        <div class="m-pay-total"><span>Total Pesanan</span><strong id="mPaymentTotal">Rp0</strong></div>
+        <div class="m-pay-methods"><button class="active" data-mobile-method="qris" type="button"><strong>QRIS</strong><span>Bayar dari aplikasi yang mendukung QRIS</span></button><button data-mobile-method="va" type="button"><strong>Virtual Account</strong><span>BCA · CIMB · Permata · BRI · Mandiri</span></button></div>
+        <div class="m-payment-canvas">
+<div class="m-qris-view" id="mQrisView"><div class="m-qr-placeholder" aria-hidden="true"><span></span></div><div class="m-canvas-title">QRIS</div><div class="m-canvas-copy">Placeholder QR untuk melihat ukuran dan komposisi pembayaran.</div></div>
+<div class="m-va-view" id="mVaView" hidden><div class="m-canvas-title">Virtual Account</div><div class="m-bank-title">Pilih bank placeholder</div><div class="m-bank-grid"><button class="active" data-mobile-bank="BCA" type="button">BCA</button><button data-mobile-bank="CIMB" type="button">CIMB</button><button data-mobile-bank="Permata" type="button">Permata</button><button data-mobile-bank="BRI" type="button">BRI</button><button data-mobile-bank="Mandiri" type="button">Mandiri</button><button data-mobile-bank="BNI" type="button">BNI</button></div><div class="m-va-number" id="mVaNumber">0148 7321 5640 2891</div><div class="m-va-label" id="mVaLabel">BCA · nomor placeholder visual</div></div>
+        </div>
+        <div class="m-pay-helper" id="mPayHelper">Scan QRIS menggunakan aplikasi pilihan Anda.</div>
+        <div class="m-pay-actions"><button id="mPaySecondary" type="button" disabled>Download QRIS</button><button type="button" disabled>Periksa Status Pembayaran</button></div>
+      </div>
+      <footer class="m-pay-footer"><div class="m-pay-disclaimer">Pembayaran online belum aktif pada staging. QR dan nomor rekening yang tampil hanya placeholder. Pesanan belum dibuat.</div><button type="button" data-back-payment>Kembali ke Konfirmasi</button></footer>
     </section>
   </div>
 </section>
