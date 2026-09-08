@@ -1,0 +1,540 @@
+name: B2C Mobile Lock Builder
+
+on:
+  push:
+    branches:
+      - build/b2c-mobile-lock
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build/b2c-mobile-lock
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Apply locked mobile B2C implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          cart = Path('cart.html')
+          js = Path('js/cart-page.js')
+          css = Path('css/site.css')
+
+          cart_text = cart.read_text(encoding='utf-8')
+          js_text = js.read_text(encoding='utf-8')
+          css_text = css.read_text(encoding='utf-8')
+
+          assert cart_text.count('id="dataPanel"') == 1
+          assert cart_text.count('class="panel payment-right"') == 1
+          assert js_text.count('const renderItem =') == 1
+          assert css_text.count('/* MOBILE */') == 1
+
+          mobile_data = r'''
+    <aside class="panel mobile-data-panel" id="mobileDataPanel" aria-label="Data pesanan mobile">
+      <section class="mobile-data-vp mobile-data-vp1">
+        <header class="m-step-head">
+          <button class="m-back-link" id="mShowCart" type="button">Kembali ke Keranjang</button>
+          <div class="m-step-title-row"><h1>Data Pesanan</h1><div class="m-step-note">Langkah 1 dari 2<br><span id="mMiniMeta">0 item · 0 pcs</span></div></div>
+          <div class="m-steps"><span class="on"></span><span></span></div>
+        </header>
+        <div class="m-vp-body">
+          <div class="m-kicker">Jenis Pesanan</div>
+          <div class="m-segment" role="group" aria-label="Jenis pesanan mobile"><button class="active" data-mobile-context="regular" type="button">Belanja Biasa</button><button data-mobile-context="event" type="button">Untuk Acara</button></div>
+          <div class="m-context-copy" id="mContextCopy">Untuk kebutuhan pribadi atau rumah tanpa tanggal acara khusus.</div>
+          <div class="m-form-block"><label for="mName">Nama Lengkap</label><input class="m-field" id="mName" autocomplete="name" placeholder="Nama penerima pesanan"><div class="m-error" id="mNameError">Nama lengkap wajib diisi.</div></div>
+          <div class="m-form-block"><label for="mPhone">WhatsApp</label><input class="m-field" id="mPhone" autocomplete="tel" inputmode="tel" placeholder="Contoh: 0812 3456 7890"><div class="m-error" id="mPhoneError">Masukkan nomor WhatsApp yang valid.</div></div>
+          <div class="m-form-block"><label for="mAddress">Alamat Pengiriman</label><textarea class="m-field m-address" id="mAddress" autocomplete="street-address" placeholder="Tulis alamat lengkap penerima"></textarea><div class="m-error" id="mAddressError">Alamat pengiriman wajib diisi.</div></div>
+          <div class="m-form-block"><div class="m-label-row"><label for="mNotes">Catatan Pesanan</label><span>Opsional</span></div><textarea class="m-field" id="mNotes" placeholder="Contoh: titip security atau catatan lain"></textarea></div>
+        </div>
+        <footer class="m-step-footer"><div class="m-footer-line"><span>Data pesanan</span><strong id="mVp1Status">Belum lengkap</strong></div><button class="m-primary" id="mToConfirm" type="button">Lanjut ke Konfirmasi</button></footer>
+      </section>
+
+      <section class="mobile-data-vp mobile-data-vp2">
+        <header class="m-step-head">
+          <button class="m-back-link" id="mBackData" type="button">Kembali ke Data Pesanan</button>
+          <div class="m-step-title-row"><h1>Konfirmasi</h1><div class="m-step-note">Langkah 2 dari 2<br>Sebelum pembayaran</div></div>
+          <div class="m-steps"><span class="on"></span><span class="on"></span></div>
+        </header>
+        <div class="m-vp-body">
+          <div class="m-kicker">Pengiriman</div>
+          <div class="m-address-summary"><div><strong id="mSummaryName">Penerima</strong><p id="mSummaryAddress">Alamat pengiriman akan tampil di sini.</p></div><button id="mEditData" type="button">Ubah</button></div>
+          <div class="m-event-box" id="mEventBox" hidden>
+            <div class="m-rule"></div><div class="m-kicker">Detail Acara</div>
+            <div class="m-event-grid">
+              <div><label for="mEventDateTrigger">Tanggal Acara</label><button class="m-date-trigger empty" id="mEventDateTrigger" type="button" aria-haspopup="dialog" aria-expanded="false"><span id="mEventDateValue">Pilih tanggal acara</span><b>⌄</b></button><input id="mEventDate" type="hidden"><div class="m-error" id="mEventDateError">Tanggal acara wajib diisi.</div></div>
+              <div class="m-event-choice"><label>Diterima sebelum?</label><div class="m-receive" role="group" aria-label="Diterima sebelum acara"><button data-mobile-receive="yes" type="button">Ya</button><button class="active" data-mobile-receive="no" type="button">Tidak</button></div></div>
+            </div>
+          </div>
+          <div class="m-rule"></div>
+          <div class="m-location-head"><strong>Titik Pengiriman</strong><span class="m-location-status" id="mLocationStatus">Belum dipilih</span></div>
+          <p class="m-location-copy">Tambahkan titik lokasi agar detail pengiriman lebih jelas.</p>
+          <div class="m-location-actions"><button id="mUseLocation" type="button">Gunakan Lokasi Saya</button><button id="mMapLocation" type="button">Pilih / Ubah di Peta</button></div>
+          <div class="m-rule"></div>
+          <div class="m-kicker">Ringkasan</div>
+          <div class="m-confirm-summary"><div class="m-summary-head"><strong id="mConfirmCount">0 item · 0 pcs</strong><span id="mConfirmProducts">—</span></div><div class="m-sum-row"><span>Subtotal produk</span><strong id="mConfirmSubtotal">Rp0</strong></div><div class="m-sum-row"><span>Ongkir sementara</span><strong id="mConfirmShipping">Rp0</strong></div><div class="m-sum-row m-benefit-row" id="mConfirmBenefitRow" hidden><span>Benefit ongkir</span><strong id="mConfirmBenefit">Rp0</strong></div><div class="m-sum-row total"><span>Total sementara</span><strong id="mConfirmTotal">Rp0</strong></div></div>
+          <div class="m-fallback">Ongkir masih menggunakan fallback saat ini dan bukan tarif live Grab/Gojek.</div>
+        </div>
+        <footer class="m-step-footer"><div class="m-footer-actions"><button class="m-secondary" id="mBackDataBottom" type="button">Kembali</button><button class="m-primary" id="mOpenPayment" type="button">Lanjut ke Pembayaran</button></div></footer>
+      </section>
+
+      <div class="m-calendar-overlay" id="mCalendarOverlay" aria-hidden="true">
+        <div class="m-calendar-sheet" role="dialog" aria-modal="true" aria-labelledby="mCalendarTitle">
+          <div class="m-calendar-top"><div class="m-calendar-kicker">Kalender AYA</div><div class="m-calendar-picked" id="mCalendarPicked">Pilih tanggal</div><div class="m-calendar-toolbar"><button id="mCalendarPrev" type="button" aria-label="Bulan sebelumnya">‹</button><div id="mCalendarTitle">Bulan</div><button id="mCalendarNext" type="button" aria-label="Bulan berikutnya">›</button></div></div>
+          <div class="m-calendar-body"><div class="m-calendar-weekdays"><span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span></div><div class="m-calendar-days" id="mCalendarDays"></div></div>
+          <div class="m-calendar-actions"><button class="m-secondary" id="mCalendarCancel" type="button">Batal</button><button class="m-primary" id="mCalendarApply" type="button">Gunakan Tanggal</button></div>
+        </div>
+      </div>
+    </aside>'''
+
+          mobile_payment = r'''
+    <section class="panel mobile-payment-panel" aria-label="Pembayaran mobile">
+      <div class="m-pay-content">
+        <div class="m-pay-kicker-row"><div class="m-pay-kicker">Pembayaran</div><div></div></div>
+        <h1>Pilih Cara Pembayaran</h1>
+        <p class="m-pay-lead">Pilih metode yang paling nyaman. Presentasi pembayaran tetap berada di AYA dan belum aktif pada staging.</p>
+        <div class="m-pay-rule"></div>
+        <div class="m-pay-total"><span>Total Pesanan</span><strong id="mPaymentTotal">Rp0</strong></div>
+        <div class="m-pay-methods"><button class="active" data-mobile-method="qris" type="button"><strong>QRIS</strong><span>Bayar dari aplikasi yang mendukung QRIS</span></button><button data-mobile-method="va" type="button"><strong>Virtual Account</strong><span>BCA · CIMB · Permata · BRI · Mandiri</span></button></div>
+        <div class="m-payment-canvas">
+          <div class="m-qris-view" id="mQrisView"><div class="m-qr-placeholder" aria-hidden="true"><span></span></div><div class="m-canvas-title">QRIS</div><div class="m-canvas-copy">Placeholder QR untuk melihat ukuran dan komposisi pembayaran.</div></div>
+          <div class="m-va-view" id="mVaView" hidden><div class="m-canvas-title">Virtual Account</div><div class="m-bank-title">Pilih bank placeholder</div><div class="m-bank-grid"><button class="active" data-mobile-bank="BCA" type="button">BCA</button><button data-mobile-bank="CIMB" type="button">CIMB</button><button data-mobile-bank="Permata" type="button">Permata</button><button data-mobile-bank="BRI" type="button">BRI</button><button data-mobile-bank="Mandiri" type="button">Mandiri</button><button data-mobile-bank="BNI" type="button">BNI</button></div><div class="m-va-number" id="mVaNumber">0148 7321 5640 2891</div><div class="m-va-label" id="mVaLabel">BCA · nomor placeholder visual</div></div>
+        </div>
+        <div class="m-pay-helper" id="mPayHelper">Scan QRIS menggunakan aplikasi pilihan Anda.</div>
+        <div class="m-pay-actions"><button id="mPaySecondary" type="button" disabled>Download QRIS</button><button type="button" disabled>Periksa Status Pembayaran</button></div>
+      </div>
+      <footer class="m-pay-footer"><div class="m-pay-disclaimer">Pembayaran online belum aktif pada staging. QR dan nomor rekening yang tampil hanya placeholder. Pesanan belum dibuat.</div><button type="button" data-back-payment>Kembali ke Konfirmasi</button></footer>
+    </section>'''
+
+          data_pattern = re.compile(r'(    <aside class="panel data-panel" id="dataPanel".*?\n    </aside>)', re.S)
+          cart_text, n = data_pattern.subn(lambda m: m.group(1) + '\n' + mobile_data, cart_text, count=1)
+          assert n == 1
+          payment_pattern = re.compile(r'(    <section class="panel payment-right">.*?\n    </section>)', re.S)
+          cart_text, n = payment_pattern.subn(lambda m: m.group(1) + '\n' + mobile_payment, cart_text, count=1)
+          assert n == 1
+          cart_text = cart_text.replace('css/site.css?v=20260817-cart-b2c-v16', 'css/site.css?v=20260909-b2c-mobile-lock-v1')
+          cart_text = cart_text.replace('js/cart-page.js?v=20260817-cart-b2c-v16', 'js/cart-page.js?v=20260909-b2c-mobile-lock-v1')
+          cart.write_text(cart_text, encoding='utf-8')
+
+          js_text = js_text.replace('    let activeVariant = null;\n    let method = "qris";', '    let activeVariant = null;\n    let method = "qris";\n    let updateMobileRuntime = () => {};', 1)
+
+          render_item = r'''    const renderItem = ({ product, variant, quantity, subtotal }) => {
+      const rules = AYA.quantityRules(product);
+      const escapedId = AYA.escapeHTML(product.id);
+      const escapedVariant = AYA.escapeHTML(variant.name);
+      const escapedName = AYA.escapeHTML(product.name);
+      const escapedLine = AYA.escapeHTML(product.line);
+      const image = AYA.escapeHTML(imageSrc(product));
+      const desktop = `<article class="item desktop-item" data-product="${escapedId}" data-variant="${escapedVariant}">
+        <div class="product"><div class="thumb"><img src="${image}" alt="${escapedName}" data-image-fallback="${escapedId}"></div><div><div class="pname">${escapedName}</div><div class="pline">${escapedLine}</div></div></div>
+        <button class="variant-btn" type="button" data-variant-trigger="${escapedId}" data-current-variant="${escapedVariant}">${escapedVariant}</button>
+        <div class="unit">${format(variant.price)}</div>
+        <div class="qty"><div class="stepper"><button type="button" data-minus="${escapedId}" data-variant="${escapedVariant}" aria-label="Kurangi jumlah">−</button><span>${quantity}</span><button type="button" data-plus="${escapedId}" data-variant="${escapedVariant}" aria-label="Tambah jumlah">+</button></div></div>
+        <div class="subtotal">${format(subtotal)}</div>
+        <button class="trash" type="button" data-remove="${escapedId}" data-variant="${escapedVariant}" aria-label="Hapus ${escapedName} ${escapedVariant}">×</button>
+        <span class="sr-only">Aturan jumlah: minimum ${rules.min}, maksimum ${rules.max}, kelipatan ${rules.step}.</span>
+      </article>`;
+      const mobile = `<article class="mobile-cart-item" data-product="${escapedId}" data-variant="${escapedVariant}">
+        <div class="m-cart-thumb"><img src="${image}" alt="${escapedName}" data-image-fallback="${escapedId}"></div>
+        <div class="m-cart-copy"><div class="pline">${escapedLine}</div><div class="pname">${escapedName}</div><div class="m-cart-unit">${format(variant.price)} / unit</div></div>
+        <button class="m-variant-btn" type="button" data-variant-trigger="${escapedId}" data-current-variant="${escapedVariant}"><span>${escapedVariant}</span></button>
+        <div class="m-cart-bottom"><div class="m-stepper"><button type="button" data-minus="${escapedId}" data-variant="${escapedVariant}" aria-label="Kurangi jumlah" ${quantity <= rules.min ? 'disabled' : ''}>−</button><span>${quantity}</span><button type="button" data-plus="${escapedId}" data-variant="${escapedVariant}" aria-label="Tambah jumlah" ${quantity >= rules.max ? 'disabled' : ''}>+</button></div><div class="m-cart-subtotal">${format(subtotal)}</div><button class="m-cart-trash" type="button" data-remove="${escapedId}" data-variant="${escapedVariant}" aria-label="Hapus ${escapedName} ${escapedVariant}">×</button></div>
+      </article>`;
+      return desktop + mobile;
+    };
+'''
+          js_text, n = re.subn(r'    const renderItem = \(\{ product, variant, quantity, subtotal \}\) => \{.*?\n    \};\n\n    const renderPayment =', render_item + '\n    const renderPayment =', js_text, count=1, flags=re.S)
+          assert n == 1
+
+          js_text = js_text.replace('      nodes.paymentTotalMobile.textContent = format(money.total);\n    };', '      nodes.paymentTotalMobile.textContent = format(money.total);\n      updateMobileRuntime();\n    };', 1)
+
+          js_text = js_text.replace('      nodes.locationStatus.textContent = confirmed ? "Lokasi dikonfirmasi" : "Lokasi belum dikonfirmasi";\n      nodes.locationStatus.classList.toggle("confirmed", confirmed);', '      nodes.locationStatus.textContent = confirmed ? "Lokasi dikonfirmasi" : "Lokasi belum dikonfirmasi";\n      nodes.locationStatus.classList.toggle("confirmed", confirmed);\n      const mobileStatus = $("#mLocationStatus");\n      if (mobileStatus) { mobileStatus.textContent = confirmed ? "Lokasi dikonfirmasi" : "Belum dipilih"; mobileStatus.classList.toggle("confirmed", confirmed); }', 1)
+
+          mobile_js = r'''
+    const mobileNodes = {
+      panel: $("#mobileDataPanel"), name: $("#mName"), phone: $("#mPhone"), address: $("#mAddress"), notes: $("#mNotes"),
+      eventDate: $("#mEventDate"), eventBox: $("#mEventBox"), dateTrigger: $("#mEventDateTrigger"), dateValue: $("#mEventDateValue"),
+      calendar: $("#mCalendarOverlay"), calendarDays: $("#mCalendarDays"), calendarTitle: $("#mCalendarTitle"), calendarPicked: $("#mCalendarPicked")
+    };
+    const monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    let calendarView = { year: new Date().getFullYear(), month: new Date().getMonth() };
+    let calendarSelection = "";
+
+    const syncValueClass = (field) => field?.classList.toggle("has-value", Boolean(String(field.value || "").trim()));
+    const syncMobileToDesktop = () => {
+      nodes.name.value = mobileNodes.name.value;
+      nodes.phone.value = mobileNodes.phone.value;
+      nodes.address.value = mobileNodes.address.value;
+      nodes.notes.value = mobileNodes.notes.value;
+      nodes.eventDate.value = mobileNodes.eventDate.value;
+      saveDraft();
+    };
+    const syncMobileFromDraft = () => {
+      mobileNodes.name.value = draft.customer.customerName || draft.customer.eventPic || "";
+      mobileNodes.phone.value = draft.customer.whatsapp || draft.customer.eventWhatsapp || "";
+      mobileNodes.address.value = draft.shipping.address || "";
+      mobileNodes.notes.value = draft.notes || "";
+      mobileNodes.eventDate.value = draft.event.eventDate || draft.customer.eventDate || "";
+      [mobileNodes.name,mobileNodes.phone,mobileNodes.address,mobileNodes.notes].forEach(syncValueClass);
+      syncMobileDateTrigger();
+    };
+    const syncMobileContext = () => {
+      $$('[data-mobile-context]').forEach((button) => {
+        const active = (button.dataset.mobileContext === "event") === (draft.context === "event");
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      mobileNodes.eventBox.hidden = draft.context !== "event";
+      const copy = $("#mContextCopy");
+      if (copy) copy.textContent = draft.context === "event" ? "Untuk pesanan yang terkait tanggal acara tertentu." : "Untuk kebutuhan pribadi atau rumah tanpa tanggal acara khusus.";
+      $$('[data-mobile-receive]').forEach((button) => {
+        const active = button.dataset.mobileReceive === (draft.event.beforeEvent === "yes" ? "yes" : "no");
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+    };
+    const setMobileError = (field, errorId, invalid) => {
+      field.classList.toggle("invalid", invalid);
+      const error = $(errorId);
+      error?.classList.toggle("show", invalid);
+      return invalid;
+    };
+    const mobileBasicValidate = () => {
+      const errors = [];
+      if (setMobileError(mobileNodes.name, "#mNameError", !mobileNodes.name.value.trim())) errors.push(mobileNodes.name);
+      if (setMobileError(mobileNodes.phone, "#mPhoneError", !validPhone(mobileNodes.phone.value))) errors.push(mobileNodes.phone);
+      if (setMobileError(mobileNodes.address, "#mAddressError", !mobileNodes.address.value.trim())) errors.push(mobileNodes.address);
+      if (errors.length) { errors[0].focus({ preventScroll: true }); errors[0].scrollIntoView({ block: "center", behavior: "smooth" }); return false; }
+      return true;
+    };
+
+    [mobileNodes.name,mobileNodes.phone,mobileNodes.address,mobileNodes.notes].forEach((field) => field?.addEventListener("input", () => { syncValueClass(field); syncMobileToDesktop(); }));
+    $$('[data-mobile-context]').forEach((button) => button.addEventListener("click", () => { syncMobileToDesktop(); setContext(button.dataset.mobileContext); syncMobileContext(); }));
+    $$('[data-mobile-receive]').forEach((button) => button.addEventListener("click", () => {
+      draft.event.beforeEvent = button.dataset.mobileReceive;
+      $$('[data-receive]').forEach((desktopButton) => { const active = desktopButton.dataset.receive === draft.event.beforeEvent; desktopButton.classList.toggle("active", active); desktopButton.setAttribute("aria-pressed", String(active)); });
+      syncMobileContext(); saveDraft();
+    }));
+
+    $("#mUseLocation")?.addEventListener("click", () => $("#useLocation")?.click());
+    $("#mMapLocation")?.addEventListener("click", () => $("#mapLocation")?.click());
+    $("#mShowCart")?.addEventListener("click", () => nodes.cartGrid.classList.remove("info-mode"));
+    $("#mBackData")?.addEventListener("click", () => mobileNodes.panel.classList.remove("confirm-mode"));
+    $("#mBackDataBottom")?.addEventListener("click", () => mobileNodes.panel.classList.remove("confirm-mode"));
+    $("#mEditData")?.addEventListener("click", () => mobileNodes.panel.classList.remove("confirm-mode"));
+    $("#showInfo")?.addEventListener("click", () => { syncMobileFromDraft(); syncMobileContext(); mobileNodes.panel.classList.remove("confirm-mode"); });
+    $("#mToConfirm")?.addEventListener("click", () => {
+      if (!mobileBasicValidate()) return;
+      syncMobileToDesktop();
+      $("#mVp1Status").textContent = "Lengkap";
+      $("#mSummaryName").textContent = mobileNodes.name.value.trim();
+      $("#mSummaryAddress").textContent = mobileNodes.address.value.trim();
+      mobileNodes.panel.classList.add("confirm-mode");
+      updateMobileRuntime();
+    });
+    $("#mOpenPayment")?.addEventListener("click", () => {
+      if (draft.context === "event" && setMobileError(mobileNodes.dateTrigger, "#mEventDateError", !mobileNodes.eventDate.value)) { mobileNodes.dateTrigger.focus(); return; }
+      syncMobileToDesktop();
+      openPayment();
+      setMobilePaymentMethod("qris");
+    });
+
+    const isoDate = (date) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+    const displayDate = (iso) => { if (!iso) return "Pilih tanggal acara"; const [y,m,d] = iso.split("-").map(Number); return `${String(d).padStart(2,"0")} ${monthNames[m-1].slice(0,3)} ${y}`; };
+    const fullDate = (iso) => { if (!iso) return "Pilih tanggal"; const [y,m,d] = iso.split("-").map(Number); return `${d} ${monthNames[m-1]} ${y}`; };
+    function syncMobileDateTrigger() {
+      const hasValue = Boolean(mobileNodes.eventDate.value);
+      mobileNodes.dateTrigger.classList.toggle("empty", !hasValue);
+      mobileNodes.dateTrigger.classList.toggle("has-value", hasValue);
+      mobileNodes.dateValue.textContent = displayDate(mobileNodes.eventDate.value);
+    }
+    const renderCalendar = () => {
+      mobileNodes.calendarTitle.textContent = `${monthNames[calendarView.month]} ${calendarView.year}`;
+      mobileNodes.calendarPicked.textContent = fullDate(calendarSelection);
+      const first = new Date(calendarView.year, calendarView.month, 1);
+      const days = new Date(calendarView.year, calendarView.month + 1, 0).getDate();
+      const cells = [];
+      for (let i=0;i<first.getDay();i++) cells.push('<span aria-hidden="true"></span>');
+      for (let day=1; day<=days; day++) { const iso = isoDate(new Date(calendarView.year, calendarView.month, day)); cells.push(`<button class="${iso === calendarSelection ? 'selected' : ''}" data-calendar-date="${iso}" type="button">${day}</button>`); }
+      mobileNodes.calendarDays.innerHTML = cells.join("");
+      $$('[data-calendar-date]', mobileNodes.calendarDays).forEach((button) => button.addEventListener("click", () => { calendarSelection = button.dataset.calendarDate; renderCalendar(); }));
+    };
+    mobileNodes.dateTrigger?.addEventListener("click", () => { const base = mobileNodes.eventDate.value || isoDate(new Date()); calendarSelection = base; const [y,m] = base.split("-").map(Number); calendarView = { year:y, month:m-1 }; renderCalendar(); mobileNodes.calendar.classList.add("open"); mobileNodes.calendar.setAttribute("aria-hidden","false"); mobileNodes.dateTrigger.setAttribute("aria-expanded","true"); });
+    $("#mCalendarCancel")?.addEventListener("click", () => { mobileNodes.calendar.classList.remove("open"); mobileNodes.calendar.setAttribute("aria-hidden","true"); mobileNodes.dateTrigger.setAttribute("aria-expanded","false"); });
+    $("#mCalendarApply")?.addEventListener("click", () => { mobileNodes.eventDate.value = calendarSelection; nodes.eventDate.value = calendarSelection; draft.event.eventDate = calendarSelection; saveDraft(); syncMobileDateTrigger(); setMobileError(mobileNodes.dateTrigger,"#mEventDateError",false); $("#mCalendarCancel").click(); });
+    $("#mCalendarPrev")?.addEventListener("click", () => { calendarView.month--; if (calendarView.month < 0) { calendarView.month=11; calendarView.year--; } renderCalendar(); });
+    $("#mCalendarNext")?.addEventListener("click", () => { calendarView.month++; if (calendarView.month > 11) { calendarView.month=0; calendarView.year++; } renderCalendar(); });
+    mobileNodes.calendar?.addEventListener("click", (event) => { if (event.target === mobileNodes.calendar) $("#mCalendarCancel").click(); });
+
+    const randomDigits = (length) => Array.from({length}, () => Math.floor(Math.random()*10)).join("");
+    const bankPrefix = (bank) => ({BCA:"014",CIMB:"022",Permata:"013",BRI:"002",Mandiri:"008",BNI:"009"}[bank] || "000");
+    const placeholderVa = (bank) => (bankPrefix(bank) + randomDigits(13)).match(/.{1,4}/g).join(" ");
+    const setMobilePaymentMethod = (value) => {
+      const qris = value !== "va";
+      $$('[data-mobile-method]').forEach((button) => button.classList.toggle("active", (button.dataset.mobileMethod === "qris") === qris));
+      $("#mQrisView").hidden = !qris;
+      $("#mVaView").hidden = qris;
+      $("#mPayHelper").textContent = qris ? "Scan QRIS menggunakan aplikasi pilihan Anda." : "Gunakan nomor Virtual Account sesuai bank pilihan Anda.";
+      $("#mPaySecondary").textContent = qris ? "Download QRIS" : "Salin Nomor";
+    };
+    $$('[data-mobile-method]').forEach((button) => button.addEventListener("click", () => setMobilePaymentMethod(button.dataset.mobileMethod)));
+    $$('[data-mobile-bank]').forEach((button) => button.addEventListener("click", () => { setMobilePaymentMethod("va"); $$('[data-mobile-bank]').forEach((item) => item.classList.toggle("active", item === button)); $("#mVaNumber").textContent = placeholderVa(button.dataset.mobileBank); $("#mVaLabel").textContent = `${button.dataset.mobileBank} · nomor placeholder visual`; }));
+
+    updateMobileRuntime = () => {
+      const entries = details();
+      const money = financials();
+      const countText = `${entries.length} item · ${money.units} pcs`;
+      if ($("#mMiniMeta")) $("#mMiniMeta").textContent = countText;
+      if ($("#mConfirmCount")) $("#mConfirmCount").textContent = countText;
+      if ($("#mConfirmProducts")) $("#mConfirmProducts").textContent = entries.slice(0,2).map((entry) => entry.product.name).join(" + ") || "—";
+      if ($("#mConfirmSubtotal")) $("#mConfirmSubtotal").textContent = format(money.subtotal);
+      if ($("#mConfirmShipping")) $("#mConfirmShipping").textContent = format(money.shipping);
+      if ($("#mConfirmTotal")) $("#mConfirmTotal").textContent = format(money.total);
+      if ($("#mPaymentTotal")) $("#mPaymentTotal").textContent = format(money.total);
+      const benefitRow = $("#mConfirmBenefitRow");
+      if (benefitRow) { benefitRow.hidden = !money.benefit; if ($("#mConfirmBenefit")) $("#mConfirmBenefit").textContent = money.benefit ? `− ${format(money.benefit)}` : format(0); }
+    };
+
+    if (window.visualViewport) {
+      const baseline = Math.max(document.documentElement.clientHeight, window.innerHeight);
+      const syncMobileViewport = () => { const h = window.visualViewport.height; document.documentElement.style.setProperty("--b2c-mobile-h", baseline - h > 120 ? `${Math.round(h)}px` : "100svh"); };
+      window.visualViewport.addEventListener("resize", syncMobileViewport);
+      window.visualViewport.addEventListener("scroll", syncMobileViewport);
+    }
+'''
+          marker = '    window.addEventListener("aya:cart-change", render);'
+          assert js_text.count(marker) == 1
+          js_text = js_text.replace(marker, mobile_js + '\n    window.addEventListener("aya:cart-change", render);\n    window.addEventListener("aya:cart-change", updateMobileRuntime);', 1)
+
+          init_marker = '    setLocationStatus();\n    setContext(draft.context, !requestedContext);\n    setMethod("qris");\n    render();'
+          init_new = '    setLocationStatus();\n    setContext(draft.context, !requestedContext);\n    setMethod("qris");\n    syncMobileFromDraft();\n    syncMobileContext();\n    setMobilePaymentMethod("qris");\n    render();\n    updateMobileRuntime();'
+          assert js_text.count(init_marker) == 1
+          js_text = js_text.replace(init_marker, init_new, 1)
+          js.write_text(js_text, encoding='utf-8')
+
+          base_mobile_hide = 'body[data-page="cart"] main .mobile-cart-item,body[data-page="cart"] main .mobile-data-panel,body[data-page="cart"] main .mobile-payment-panel{display:none}\n'
+          css_text = css_text.replace('/* MOBILE */\n', base_mobile_hide + '/* MOBILE */\n', 1)
+
+          mobile_css = r'''/* MOBILE */
+@media (max-width:900px){
+body[data-page="cart"] main{height:calc(var(--b2c-mobile-h,100svh) - var(--header-h))}
+body[data-page="cart"] main .workspace{height:calc(var(--b2c-mobile-h,100svh) - var(--header-h));padding:8px}
+body[data-page="cart"] main .cart-grid,body[data-page="cart"] main .payment-grid{grid-template-columns:1fr;max-width:560px;gap:0}
+body[data-page="cart"] main .panel{border-radius:15px}
+body[data-page="cart"] main .data-panel,body[data-page="cart"] main .payment-left,body[data-page="cart"] main .payment-right{display:none}
+body[data-page="cart"] main .cart-panel{height:100%;padding:13px 14px 11px;grid-template-rows:auto minmax(0,1fr) auto}
+body[data-page="cart"] main .cart-head{align-items:end}
+body[data-page="cart"] main .cart-head h1{margin:0;font-size:28px}
+body[data-page="cart"] main .cart-count strong{font-size:11px}
+body[data-page="cart"] main .cart-count span{display:inline;margin:0 0 0 4px;font-size:10px}
+body[data-page="cart"] main .cart-count span:before{content:"· ";color:#a49386}
+body[data-page="cart"] main .table-head{display:none}
+body[data-page="cart"] main .items{min-height:0;margin-top:8px;overflow:auto;overflow-x:hidden;scrollbar-width:none}
+body[data-page="cart"] main .items::-webkit-scrollbar{display:none}
+body[data-page="cart"] main .desktop-item{display:none}
+body[data-page="cart"] main .mobile-cart-item{position:relative;display:grid;grid-template-columns:64px minmax(0,1fr);gap:0 12px;min-height:128px;padding:12px 0;border-bottom:1px solid rgba(143,101,52,.16)}
+body[data-page="cart"] main .mobile-cart-item:last-child{border-bottom:0}
+body[data-page="cart"] main .m-cart-thumb{grid-row:1/3;width:64px;height:76px;border:1px solid rgba(143,101,52,.18);border-radius:11px;background:rgba(255,253,248,.72);display:grid;place-items:center;overflow:hidden;box-shadow:0 4px 14px rgba(77,38,19,.03),inset 0 1px 0 rgba(255,255,255,.7)}
+body[data-page="cart"] main .m-cart-thumb img{width:100%;height:100%;object-fit:contain}
+body[data-page="cart"] main .m-cart-copy{min-width:0;padding-right:116px}
+body[data-page="cart"] main .m-cart-copy .pline{margin:0 0 2px;color:#8b7568;font-size:8.6px;line-height:1.2}
+body[data-page="cart"] main .m-cart-copy .pname{color:#4b221b;font:700 19px/.9 var(--serif);letter-spacing:-.015em;margin-bottom:6px}
+body[data-page="cart"] main .m-cart-unit{color:#806c60;font-size:9.6px;line-height:1.15}
+body[data-page="cart"] main .m-variant-btn{position:absolute;right:0;top:23px;width:110px;height:32px;padding:0 9px 0 11px;border:1px solid rgba(143,101,52,.22);border-radius:999px;background:rgba(255,253,248,.75);color:#6a452e;font-size:9.3px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+body[data-page="cart"] main .m-variant-btn span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+body[data-page="cart"] main .m-variant-btn:after{content:"⌄";font-size:11px;color:#9a6929}
+body[data-page="cart"] main .m-cart-bottom{grid-column:2;display:grid;grid-template-columns:auto minmax(0,1fr) 22px;gap:8px;align-items:center;margin-top:12px}
+body[data-page="cart"] main .m-stepper{height:32px;display:grid;grid-template-columns:30px 34px 30px;border:1px solid rgba(143,101,52,.25);border-radius:9px;overflow:hidden;background:rgba(255,253,248,.72)}
+body[data-page="cart"] main .m-stepper button,body[data-page="cart"] main .m-stepper span{border:0;background:transparent;display:grid;place-items:center;color:#7e3d17}
+body[data-page="cart"] main .m-stepper span{border-left:1px solid rgba(143,101,52,.14);border-right:1px solid rgba(143,101,52,.14);color:#4c2a20;font-size:11px;font-weight:700}
+body[data-page="cart"] main .m-stepper button{font-size:15px}
+body[data-page="cart"] main .m-stepper button:disabled{color:#c4b4aa;opacity:1}
+body[data-page="cart"] main .m-cart-subtotal{justify-self:end;color:#a5171b;font-size:12px;font-weight:800;white-space:nowrap}
+body[data-page="cart"] main .m-cart-trash{width:20px;height:20px;border:1px solid rgba(143,101,52,.26);border-radius:50%;background:rgba(255,253,248,.70);color:#a36c32;font-size:12px;display:grid;place-items:center;padding:0}
+body[data-page="cart"] main .cart-summary{display:none}
+body[data-page="cart"] main .mobile-cart-actions{display:grid;grid-template-columns:.42fr .58fr;gap:9px;padding-top:10px;border-top:1px solid rgba(143,101,52,.16)}
+body[data-page="cart"] main .mobile-cart-actions a,body[data-page="cart"] main .mobile-cart-actions button{height:44px;border-radius:10px;font-size:11px;font-weight:800}
+body[data-page="cart"] main .mobile-cart-actions a{border:1px solid rgba(143,101,52,.33);background:rgba(255,253,248,.76);color:#73513d;display:grid;place-items:center}
+body[data-page="cart"] main .mobile-cart-actions button{border:0;background:linear-gradient(180deg,#9f1b1e,#7f1115);color:#fff8ec;box-shadow:0 7px 16px rgba(101,17,22,.12)}
+body[data-page="cart"] main .cart-grid.info-mode .cart-panel{display:none}
+body[data-page="cart"] main .cart-grid.info-mode .mobile-data-panel{display:block}
+body[data-page="cart"] main .mobile-data-panel{position:relative;height:100%;padding:0;overflow:hidden;background:radial-gradient(circle at 12% -6%,rgba(255,255,255,.92),transparent 34%),radial-gradient(circle at 92% 100%,rgba(183,137,72,.055),transparent 28%),linear-gradient(160deg,#fffdf8 0%,#f7eddf 100%)}
+body[data-page="cart"] main .mobile-data-vp{position:absolute;inset:0;display:grid;grid-template-rows:auto minmax(0,1fr) auto;transition:transform .28s ease,opacity .22s ease}
+body[data-page="cart"] main .mobile-data-vp1{transform:translateX(0);opacity:1}
+body[data-page="cart"] main .mobile-data-vp2{transform:translateX(102%);opacity:0}
+body[data-page="cart"] main .mobile-data-panel.confirm-mode .mobile-data-vp1{transform:translateX(-18%);opacity:0;pointer-events:none}
+body[data-page="cart"] main .mobile-data-panel.confirm-mode .mobile-data-vp2{transform:translateX(0);opacity:1}
+body[data-page="cart"] main .m-step-head{padding:10px 16px 8px;border-bottom:1px solid rgba(143,101,52,.085)}
+body[data-page="cart"] main .m-back-link{border:0;background:none;padding:0;color:#8d6443;font-size:9.2px;font-weight:700}
+body[data-page="cart"] main .m-step-title-row{margin-top:4px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+body[data-page="cart"] main .m-step-title-row h1{margin:0;color:#4d1818;font:600 30px/.92 var(--serif);letter-spacing:-.025em}
+body[data-page="cart"] main .m-step-note{padding-bottom:1px;text-align:right;color:#8a776b;font-size:8.1px;line-height:1.3}
+body[data-page="cart"] main .m-steps{display:flex;gap:5px;margin-top:7px}
+body[data-page="cart"] main .m-steps span{height:2px;border-radius:999px;background:rgba(143,101,52,.14);flex:1}
+body[data-page="cart"] main .m-steps span.on{background:#8c2924}
+body[data-page="cart"] main .m-vp-body{min-height:0;padding:10px 16px 8px;overflow:auto;overscroll-behavior:contain;scrollbar-width:none}
+body[data-page="cart"] main .m-vp-body::-webkit-scrollbar{display:none}
+body[data-page="cart"] main .m-kicker{color:#8b7568;font-size:8.2px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+body[data-page="cart"] main .m-segment{margin-top:5px;padding:3px;display:grid;grid-template-columns:1fr 1fr;gap:3px;border:1px solid rgba(143,101,52,.18);border-radius:12px;background:rgba(255,253,248,.52);box-shadow:inset 0 1px 0 rgba(255,255,255,.72)}
+body[data-page="cart"] main .m-segment button{height:33px;border:0;border-radius:8px;background:transparent;color:#7f6658;font-size:9.6px;font-weight:700}
+body[data-page="cart"] main .m-segment button.active{background:rgba(255,253,248,.94);color:#651116;box-shadow:0 2px 9px rgba(83,33,14,.055),inset 0 0 0 1px rgba(143,101,52,.13)}
+body[data-page="cart"] main .m-context-copy{margin-top:5px;color:#8f796c;font-size:8px;line-height:1.35}
+body[data-page="cart"] main .m-form-block{margin-top:9px}
+body[data-page="cart"] main .m-form-block>label,body[data-page="cart"] main .m-label-row label,body[data-page="cart"] main .m-event-grid label{display:block;margin-bottom:4px;color:#665047;font-size:9px;font-weight:700}
+body[data-page="cart"] main .m-label-row{display:flex;align-items:center;justify-content:space-between}
+body[data-page="cart"] main .m-label-row span{color:#a28e81;font-size:7.8px}
+body[data-page="cart"] main .m-field{width:100%;height:38px;border:1px solid rgba(143,101,52,.18);border-radius:9px;background:rgba(255,253,248,.74);color:#4a3027;padding:0 11px;font-size:10.8px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.72)}
+body[data-page="cart"] main textarea.m-field{height:auto;min-height:50px;padding:8px 11px;line-height:1.35;resize:none}
+body[data-page="cart"] main textarea.m-address{min-height:58px}
+body[data-page="cart"] main .m-field.has-value,body[data-page="cart"] main textarea.m-field.has-value{background:rgba(255,252,247,.86)}
+body[data-page="cart"] main .m-field:focus,body[data-page="cart"] main .m-date-trigger:focus{border-color:rgba(101,17,22,.42);box-shadow:0 0 0 2px rgba(101,17,22,.045),inset 0 1px 0 rgba(255,255,255,.72)}
+body[data-page="cart"] main .m-field.invalid,body[data-page="cart"] main .m-date-trigger.invalid{border-color:#9c1b1e}
+body[data-page="cart"] main .m-error{display:none;margin-top:3px;color:#9c1b1e;font-size:7.8px;line-height:1.25}
+body[data-page="cart"] main .m-error.show{display:block}
+body[data-page="cart"] main input.m-field:-webkit-autofill,body[data-page="cart"] main input.m-field:-webkit-autofill:hover,body[data-page="cart"] main input.m-field:-webkit-autofill:focus,body[data-page="cart"] main textarea.m-field:-webkit-autofill,body[data-page="cart"] main textarea.m-field:-webkit-autofill:hover,body[data-page="cart"] main textarea.m-field:-webkit-autofill:focus{-webkit-text-fill-color:#4a3027;box-shadow:0 0 0 1000px rgba(255,252,247,.86) inset,inset 0 1px 0 rgba(255,255,255,.72);transition:background-color 99999s ease-in-out 0s;caret-color:#651116}
+body[data-page="cart"] main .m-rule{height:1px;background:rgba(143,101,52,.16);margin:10px 0 9px}
+body[data-page="cart"] main .m-address-summary{margin-top:7px;padding:9px 10px;border-radius:10px;border:1px solid rgba(143,101,52,.145);background:rgba(255,253,248,.50);box-shadow:0 3px 12px rgba(77,38,19,.028),inset 0 1px 0 rgba(255,255,255,.64);display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+body[data-page="cart"] main .m-address-summary strong{display:block;color:#5b392e;font-size:9.5px}
+body[data-page="cart"] main .m-address-summary p{margin:3px 0 0;color:#806d62;font-size:8.4px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+body[data-page="cart"] main .m-address-summary button{border:0;background:none;padding:0;color:#8b522d;font-size:8px;font-weight:800}
+body[data-page="cart"] main .m-event-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start;margin-top:7px}
+body[data-page="cart"] main .m-date-trigger{width:100%;height:42px;border:1px solid rgba(143,101,52,.18);border-radius:9px;background:rgba(255,253,248,.74);color:#4a3027;padding:0 14px 0 15px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;box-shadow:inset 0 1px 0 rgba(255,255,255,.72)}
+body[data-page="cart"] main .m-date-trigger span{font-size:10.5px;white-space:nowrap}
+body[data-page="cart"] main .m-date-trigger.empty span{color:#a79284}
+body[data-page="cart"] main .m-date-trigger b{font-size:14px;color:#7e685b}
+body[data-page="cart"] main .m-event-choice{display:flex;flex-direction:column}
+body[data-page="cart"] main .m-receive{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:3px;height:42px;border:1px solid rgba(143,101,52,.18);border-radius:10px;background:rgba(255,253,248,.50);box-shadow:inset 0 1px 0 rgba(255,255,255,.68)}
+body[data-page="cart"] main .m-receive button{border:0;border-radius:8px;background:transparent;color:#776055;font-size:8.7px;font-weight:700}
+body[data-page="cart"] main .m-receive button.active{border:1px solid rgba(101,17,22,.55);background:rgba(255,248,240,.95);color:#651116}
+body[data-page="cart"] main .m-location-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;color:#5a3b2f;font-size:9.5px}
+body[data-page="cart"] main .m-location-status{justify-self:end;padding:4px 9px;border-radius:999px;border:1px solid rgba(143,101,52,.15);background:rgba(255,253,248,.60);color:#8b704f;font-size:7.2px;font-weight:700;white-space:nowrap}
+body[data-page="cart"] main .m-location-status.confirmed{color:#3c6c3f}
+body[data-page="cart"] main .m-location-copy{margin:4px 0 0;color:#907c70;font-size:8px;line-height:1.3}
+body[data-page="cart"] main .m-location-actions{display:grid;grid-template-columns:1.08fr .92fr;gap:6px;margin-top:7px}
+body[data-page="cart"] main .m-location-actions button{height:34px;border-radius:8px;font-size:8.4px;font-weight:750;background:rgba(255,253,248,.72);color:#73513d}
+body[data-page="cart"] main .m-location-actions button:first-child{border:1px solid rgba(155,107,45,.50)}
+body[data-page="cart"] main .m-location-actions button:last-child{border:1px solid rgba(143,101,52,.14)}
+body[data-page="cart"] main .m-confirm-summary{margin-top:7px;padding:8px 9px;border-radius:10px;border:1px solid rgba(143,101,52,.135);background:rgba(255,253,248,.50);box-shadow:0 4px 14px rgba(77,38,19,.025),inset 0 1px 0 rgba(255,255,255,.66)}
+body[data-page="cart"] main .m-summary-head{display:flex;justify-content:space-between;gap:10px;align-items:center;padding-bottom:6px;border-bottom:1px solid rgba(143,101,52,.16)}
+body[data-page="cart"] main .m-summary-head strong{font-size:9.4px;color:#5a392e}
+body[data-page="cart"] main .m-summary-head span{max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#8f7a6d;font-size:8px}
+body[data-page="cart"] main .m-sum-row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;color:#806c60;font-size:8.3px}
+body[data-page="cart"] main .m-sum-row strong{color:#59372c}
+body[data-page="cart"] main .m-sum-row.total{margin-top:2px;padding-top:7px;border-top:1px solid rgba(143,101,52,.16);font-weight:700;color:#5a3a30}
+body[data-page="cart"] main .m-sum-row.total strong{color:#98171b;font-size:14px}
+body[data-page="cart"] main .m-fallback{margin-top:5px;color:#927e72;font-size:7.4px;line-height:1.28}
+body[data-page="cart"] main .m-step-footer{border-top:1px solid rgba(143,101,52,.10);background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.34),transparent 44%),linear-gradient(180deg,#f8efe3 0%,#f5eadb 100%);padding:8px 11px calc(9px + env(safe-area-inset-bottom))}
+body[data-page="cart"] main .m-footer-line{display:flex;justify-content:space-between;align-items:center;padding:0 2px 6px;color:#8e796d;font-size:7.9px}
+body[data-page="cart"] main .m-footer-actions{display:grid;grid-template-columns:.34fr .66fr;gap:7px}
+body[data-page="cart"] main .m-primary,body[data-page="cart"] main .m-secondary{height:42px;border-radius:10px;font-size:10.2px;font-weight:800}
+body[data-page="cart"] main .m-primary{border:1px solid rgba(91,9,13,.18);background:linear-gradient(180deg,#9a1a1e,#7d1015);color:#fff8ec;box-shadow:0 7px 16px rgba(101,17,22,.13),inset 0 1px 0 rgba(255,255,255,.10)}
+body[data-page="cart"] main .m-secondary{border:1px solid rgba(143,101,52,.23);background:rgba(255,253,248,.82);color:#725a49}
+body[data-page="cart"] main .m-calendar-overlay{position:fixed;inset:0;z-index:60;display:none;align-items:flex-end;justify-content:center;padding:14px 12px calc(14px + env(safe-area-inset-bottom));background:rgba(45,22,12,.30);backdrop-filter:blur(2px)}
+body[data-page="cart"] main .m-calendar-overlay.open{display:flex}
+body[data-page="cart"] main .m-calendar-sheet{width:min(358px,100%);border-radius:22px;border:1px solid rgba(143,101,52,.20);background:radial-gradient(circle at 50% -10%,rgba(255,255,255,.95),transparent 36%),linear-gradient(180deg,#fffdf8,#f5e8d6);box-shadow:0 20px 48px rgba(58,28,16,.16);overflow:hidden}
+body[data-page="cart"] main .m-calendar-top{padding:14px 15px 11px;border-bottom:1px solid rgba(143,101,52,.12)}
+body[data-page="cart"] main .m-calendar-kicker{color:#8b7568;font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+body[data-page="cart"] main .m-calendar-picked{margin-top:5px;color:#5b392e;font:600 28px/.96 var(--serif)}
+body[data-page="cart"] main .m-calendar-toolbar{margin-top:11px;display:grid;grid-template-columns:34px minmax(0,1fr) 34px;align-items:center;gap:10px}
+body[data-page="cart"] main .m-calendar-toolbar button{height:34px;border:1px solid rgba(143,101,52,.16);border-radius:10px;background:rgba(255,253,248,.65);color:#6e4b3c;font-size:18px;font-weight:700}
+body[data-page="cart"] main #mCalendarTitle{text-align:center;color:#684638;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+body[data-page="cart"] main .m-calendar-body{padding:12px 15px 14px}
+body[data-page="cart"] main .m-calendar-weekdays,body[data-page="cart"] main .m-calendar-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+body[data-page="cart"] main .m-calendar-weekdays{margin-bottom:8px}
+body[data-page="cart"] main .m-calendar-weekdays span{color:#9a8578;font-size:8px;font-weight:700;text-align:center}
+body[data-page="cart"] main .m-calendar-days button,body[data-page="cart"] main .m-calendar-days span{aspect-ratio:1;border-radius:10px;display:grid;place-items:center}
+body[data-page="cart"] main .m-calendar-days button{border:1px solid transparent;background:rgba(255,253,248,.46);color:#634438;font-size:10px;font-weight:600}
+body[data-page="cart"] main .m-calendar-days button.selected{border-color:rgba(101,17,22,.34);background:linear-gradient(180deg,#fff5ea,#f8e7d7);color:#651116}
+body[data-page="cart"] main .m-calendar-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 15px 15px}
+body[data-page="cart"] main .mobile-payment-panel{height:100%;display:flex;flex-direction:column;padding:0;overflow:hidden;background:radial-gradient(circle at 15% -8%,rgba(255,255,255,.94),transparent 34%),radial-gradient(circle at 92% 100%,rgba(183,137,72,.055),transparent 28%),linear-gradient(160deg,#fffdf8,#f7eddf)}
+body[data-page="cart"] main .m-pay-content{min-height:0;flex:1;padding:14px 17px 12px;overflow:hidden;display:flex;flex-direction:column}
+body[data-page="cart"] main .m-pay-kicker-row{display:flex;align-items:center;gap:10px}
+body[data-page="cart"] main .m-pay-kicker{color:#9b6f2c;font-size:8.3px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+body[data-page="cart"] main .m-pay-kicker-row>div:last-child{height:1px;flex:1;background:linear-gradient(90deg,rgba(184,135,63,.65),rgba(184,135,63,.08))}
+body[data-page="cart"] main .m-pay-content h1{margin:7px 0 0;color:#4a2019;font:600 31px/.95 var(--serif);letter-spacing:-.025em}
+body[data-page="cart"] main .m-pay-lead{margin:6px 0 0;color:#8b796e;font-size:8.5px;line-height:1.45}
+body[data-page="cart"] main .m-pay-rule{height:1px;background:rgba(143,101,52,.18);margin:10px 0 9px}
+body[data-page="cart"] main .m-pay-total{display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
+body[data-page="cart"] main .m-pay-total span{color:#5e4439;font-size:10px}
+body[data-page="cart"] main .m-pay-total strong{color:#98171b;font:600 26px/.9 var(--serif)}
+body[data-page="cart"] main .m-pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+body[data-page="cart"] main .m-pay-methods button{min-height:68px;padding:10px 11px;border-radius:12px;border:1px solid rgba(157,111,50,.28);background:rgba(255,252,246,.58);text-align:left}
+body[data-page="cart"] main .m-pay-methods button.active{border-color:rgba(152,23,27,.72);background:linear-gradient(180deg,rgba(255,249,242,.96),rgba(250,236,219,.84))}
+body[data-page="cart"] main .m-pay-methods strong{display:block;color:#5d3c31;font-size:10.2px}
+body[data-page="cart"] main .m-pay-methods button.active strong{color:#651116}
+body[data-page="cart"] main .m-pay-methods span{display:block;margin-top:7px;color:#927f74;font-size:7.8px;line-height:1.35}
+body[data-page="cart"] main .m-payment-canvas{margin:10px auto 0;width:min(230px,72vw);height:min(260px,34vh);min-height:228px;border-radius:16px;border:1px solid rgba(171,119,48,.55);background:radial-gradient(circle at 50% 25%,rgba(255,255,255,.88),transparent 48%),linear-gradient(180deg,#fffaf2,#f8ead5);box-shadow:0 8px 22px rgba(75,32,14,.055),inset 0 1px 0 rgba(255,255,255,.82);display:grid;place-items:center;padding:14px;overflow:hidden}
+body[data-page="cart"] main .m-qris-view{text-align:center}
+body[data-page="cart"] main .m-qr-placeholder{width:min(146px,45vw);height:min(146px,45vw);margin:0 auto 10px;border-radius:11px;border:1px solid rgba(143,101,52,.16);background:linear-gradient(90deg,rgba(91,66,53,.98) 7px,transparent 7px) 0 0/17px 17px,linear-gradient(rgba(91,66,53,.98) 7px,transparent 7px) 0 0/17px 17px,linear-gradient(90deg,transparent 9px,rgba(91,66,53,.96) 9px 14px,transparent 14px) 0 0/17px 17px,linear-gradient(transparent 9px,rgba(91,66,53,.96) 9px 14px,transparent 14px) 0 0/17px 17px,linear-gradient(180deg,#fffdf9,#f9efe1);position:relative}
+body[data-page="cart"] main .m-qr-placeholder:before,body[data-page="cart"] main .m-qr-placeholder:after,body[data-page="cart"] main .m-qr-placeholder span{content:"";position:absolute;width:28px;height:28px;border:4px solid #583a30;border-radius:5px;background:#fffaf3}
+body[data-page="cart"] main .m-qr-placeholder:before{left:8px;top:8px}body[data-page="cart"] main .m-qr-placeholder:after{right:8px;top:8px}body[data-page="cart"] main .m-qr-placeholder span{left:8px;bottom:8px}
+body[data-page="cart"] main .m-canvas-title{color:#633b2c;font:600 18px/1 var(--serif)}
+body[data-page="cart"] main .m-canvas-copy{margin:7px auto 0;max-width:184px;color:#917d70;font-size:7.6px;line-height:1.42}
+body[data-page="cart"] main .m-va-view{width:100%;text-align:center}
+body[data-page="cart"] main .m-bank-title{color:#8e7768;font-size:7.5px;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+body[data-page="cart"] main .m-bank-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:8px}
+body[data-page="cart"] main .m-bank-grid button{height:32px;border-radius:8px;border:1px solid rgba(143,101,52,.14);background:rgba(255,253,248,.62);color:#7a655a;font-size:7.2px;font-weight:700}
+body[data-page="cart"] main .m-bank-grid button.active{border-color:rgba(101,17,22,.38);background:rgba(255,247,239,.92);color:#651116}
+body[data-page="cart"] main .m-va-number{margin-top:12px;padding:12px 8px;border-radius:10px;border:1px dashed rgba(143,101,52,.22);background:rgba(255,253,248,.62);color:#651116;font-size:12.6px;font-weight:800;letter-spacing:.05em;white-space:nowrap;word-break:keep-all;overflow-wrap:normal;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+body[data-page="cart"] main .m-va-label{margin-top:7px;color:#8e786c;font-size:7.4px;line-height:1.35}
+body[data-page="cart"] main .m-pay-helper{margin:9px 0 0;text-align:center;color:#8b796f;font-size:8px;line-height:1.35}
+body[data-page="cart"] main .m-pay-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+body[data-page="cart"] main .m-pay-actions button{height:40px;border-radius:10px;font-size:9px;font-weight:800;border:1px solid rgba(143,101,52,.18);background:rgba(255,253,248,.72);color:#9a8071}
+body[data-page="cart"] main .m-pay-actions button:last-child{background:rgba(147,63,59,.20);color:#a98982}
+body[data-page="cart"] main .m-pay-actions button:disabled{opacity:1}
+body[data-page="cart"] main .m-pay-footer{margin-top:auto;padding:8px 13px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(143,101,52,.10);background:linear-gradient(180deg,rgba(255,253,248,.62),rgba(247,237,224,.86))}
+body[data-page="cart"] main .m-pay-disclaimer{margin:0 4px 8px;color:#927f73;font-size:7.2px;line-height:1.35}
+body[data-page="cart"] main .m-pay-footer>button{width:100%;height:39px;border-radius:10px;border:1px solid rgba(143,101,52,.18);background:rgba(255,253,248,.72);color:#73594b;font-size:9.2px;font-weight:800}
+body[data-page="cart"] main .sheet{padding:12px 12px calc(12px + env(safe-area-inset-bottom))}
+body[data-page="cart"] main .sheet-card{width:min(430px,100%);max-height:min(72svh,560px);overflow:auto}
+body[data-page="cart"] main .desktop-only{display:none}
+}
+'''
+
+          pattern = re.compile(r'/\* MOBILE \*/\n@media \(max-width:900px\)\{.*?\n\}@media \(min-width:901px\)\{', re.S)
+          css_text, n = pattern.subn(mobile_css + '@media (min-width:901px){', css_text, count=1)
+          assert n == 1
+          css.write_text(css_text, encoding='utf-8')
+
+          # Guardrails: no duplicate mobile source blocks, no new !important, no payment truth activation.
+          final_css = css.read_text(encoding='utf-8')
+          final_html = cart.read_text(encoding='utf-8')
+          final_js = js.read_text(encoding='utf-8')
+          assert final_css.count('/* MOBILE */') == 1
+          assert '!important' not in mobile_css
+          assert final_html.count('id="mobileDataPanel"') == 1
+          assert final_html.count('class="panel mobile-payment-panel"') == 1
+          assert 'Pembayaran online belum aktif pada staging.' in final_html
+          assert 'Rp9.000' not in re.search(r'<section class="panel mobile-payment-panel".*?</section>', final_html, re.S).group(0)
+          PY
+          node --check js/cart-page.js
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class P(HTMLParser): pass
+          P().feed(Path('cart.html').read_text(encoding='utf-8'))
+          print('html parse ok')
+          PY
+          git diff --check
+      - name: Commit scoped implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "AYA RAOS Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git rm .github/workflows/b2c-mobile-lock-builder.yml
+          git add cart.html css/site.css js/cart-page.js
+          git diff --cached --check
+          git commit -m "feat: implement locked B2C mobile flow [b2c-mobile-lock]"
+          git push origin HEAD:build/b2c-mobile-lock
