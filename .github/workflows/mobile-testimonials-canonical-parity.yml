@@ -1,0 +1,149 @@
+name: Mobile testimonials canonical parity
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/mobile-testimonials-canonical-parity-20260909
+          fetch-depth: 0
+
+      - name: Apply scoped canonical parity correction
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{path}: expected 1 match, got {count}")
+              p.write_text(text.replace(old, new, 1))
+
+          replace_once(
+              "js/mobile-public-ui.js",
+              'item.name||"Pelanggan AYA"',
+              'item.name||""'
+          )
+          replace_once(
+              "js/mobile-public-ui.js",
+              'item.meta||product?.name||"Produk AYA"',
+              'item.meta||product?.name||""'
+          )
+          replace_once(
+              "js/mobile-public-ui.js",
+              '<figure><img src="${escapeHTML(photoSrc)}" alt="Foto testimoni pelanggan AYA"><figcaption>${escapeHTML(photo?.name||"Cerita pelanggan AYA")}</figcaption></figure>',
+              '<figure><img src="${escapeHTML(photoSrc)}" alt="Foto testimoni pelanggan AYA"></figure>'
+          )
+
+          css = Path("css/site.css")
+          text = css.read_text()
+          dead = '[data-mobile-testimonial-panel="photo"] figcaption{position:absolute;left:12px;bottom:10px;font-size:9px;background:rgba(43,3,5,.72);padding:6px 8px;border-radius:8px;color:#f3dfbf}'
+          if text.count(dead) != 1:
+              raise SystemExit(f"css/site.css: expected one mobile testimonial figcaption selector, got {text.count(dead)}")
+          css.write_text(text.replace(dead, '', 1))
+
+          replace_once(
+              "js/site.js",
+              'js/mobile-public-ui.js?v=20260905-product-book-v24-line-cta',
+              'js/mobile-public-ui.js?v=20260909-mobile-testimonials-parity-v1'
+          )
+          replace_once(
+              "testimonials.html",
+              'css/site.css?v=20260815-testimonials-preview-v1-3',
+              'css/site.css?v=20260909-mobile-testimonials-parity-v1'
+          )
+          replace_once(
+              "testimonials.html",
+              'js/site.js?v=20260809-locked-global-v1',
+              'js/site.js?v=20260909-mobile-testimonials-parity-v1'
+          )
+          PY
+
+      - name: Structural validation
+        run: |
+          node --check js/mobile-public-ui.js
+          node --check js/site.js
+          git diff --check
+          ! grep -F '<figcaption>' js/mobile-public-ui.js
+          ! grep -F 'item.name||"Pelanggan AYA"' js/mobile-public-ui.js
+          ! grep -F 'item.meta||product?.name||"Produk AYA"' js/mobile-public-ui.js
+          grep -F 'js/mobile-public-ui.js?v=20260909-mobile-testimonials-parity-v1' js/site.js
+          grep -F 'css/site.css?v=20260909-mobile-testimonials-parity-v1' testimonials.html
+          grep -F 'js/site.js?v=20260909-mobile-testimonials-parity-v1' testimonials.html
+
+      - name: Install browser checker
+        run: |
+          npm --version
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Smoke test locked mobile Testimonials and Share
+        run: |
+          python3 -m http.server 4173 >/tmp/aya-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID || true' EXIT
+          sleep 2
+          node <<'JS'
+          const { chromium } = require('playwright');
+          (async()=>{
+            const browser = await chromium.launch({headless:true});
+            for (const width of [360,390,430]) {
+              const page = await browser.newPage({viewport:{width,height:844}});
+              const errors=[];
+              page.on('pageerror', e=>errors.push(String(e)));
+
+              await page.goto('http://127.0.0.1:4173/testimonials.html', {waitUntil:'networkidle'});
+              await page.waitForSelector('.aya-mobile-testimonials');
+              const testimonialState = await page.evaluate(()=>({
+                mobile: !!document.querySelector('.aya-mobile-testimonials'),
+                figcaption: !!document.querySelector('[data-mobile-testimonial-panel="photo"] figcaption'),
+                overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1
+              }));
+              if (!testimonialState.mobile || testimonialState.figcaption || testimonialState.overflow) {
+                throw new Error(`Testimonials ${width}: ${JSON.stringify(testimonialState)}`);
+              }
+
+              await page.goto('http://127.0.0.1:4173/share.html', {waitUntil:'networkidle'});
+              await page.waitForSelector('.aya-mobile-share');
+              await page.fill('[data-mobile-field="name"] input','AYA Test');
+              await page.fill('[data-mobile-field="city"] input','Tangerang');
+              await page.click('[data-mobile-product-trigger]');
+              await page.locator('[data-mobile-product]').first().click();
+              await page.click('[data-mobile-format="text"]');
+              await page.fill('[data-mobile-field="story"] textarea','Pengalaman rasa AYA sangat menyenangkan.');
+              await page.click('[data-mobile-share-submit]');
+              await page.waitForSelector('.testimonial-confirm-modal:not([hidden])');
+              const consentState = await page.evaluate(()=>{
+                const consent=document.querySelector('[data-mobile-confirm-consent] input');
+                const send=document.querySelector('[data-confirm-send]');
+                return {consent:!!consent, checked:consent?.checked, disabled:send?.disabled};
+              });
+              if (!consentState.consent || consentState.checked || !consentState.disabled) {
+                throw new Error(`Share consent ${width}: ${JSON.stringify(consentState)}`);
+              }
+              if (errors.length) throw new Error(`Page errors ${width}: ${errors.join(' | ')}`);
+              await page.close();
+            }
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+
+      - name: Commit validated source and remove runner
+        run: |
+          git rm .github/workflows/mobile-testimonials-canonical-parity.yml
+          git diff --check
+          git status --short
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add css/site.css js/site.js js/mobile-public-ui.js testimonials.html
+          git commit -m "fix: align mobile Testimonials with canonical truth"
+          git push origin HEAD:fix/mobile-testimonials-canonical-parity-20260909
