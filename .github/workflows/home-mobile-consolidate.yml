@@ -92,16 +92,16 @@ jobs:
           from playwright.async_api import async_playwright
           BASE='https://aya-raos.vercel.app/'; LOCAL='http://127.0.0.1:8000/'
           sizes=[(360,800),(390,844),(430,932)]
-          stages=[('vp1','.live-home-right'),('vp2','.live-home-left'),('vp3','.home-about'),('vp4','.home-lines'),('vp5','.home-closing-shell')]
+          stages=['vp1','vp2','vp3','vp4','vp5']
           out=Path('/tmp/home-parity'); out.mkdir(exist_ok=True)
           async def snap(browser,url,label,w,h):
               page=await browser.new_page(viewport={'width':w,'height':h},device_scale_factor=1)
               await page.goto(url,wait_until='networkidle',timeout=90000)
               await page.evaluate('document.fonts && document.fonts.ready')
               await page.add_style_tag(content='*{animation:none!important;transition:none!important;caret-color:transparent!important} html{scroll-behavior:auto!important}')
-              for stage,sel in stages:
-                  await page.locator(sel).first.scroll_into_view_if_needed(timeout=15000)
-                  await page.wait_for_timeout(180)
+              for i,stage in enumerate(stages):
+                  await page.evaluate('(i)=>{const m=document.querySelector("#main"); if(m){m.scrollTo(0,i*m.clientHeight)}else{window.scrollTo(0,i*innerHeight)}}',i)
+                  await page.wait_for_timeout(220)
                   await page.screenshot(path=str(out/f'{label}-{w}x{h}-{stage}.png'),full_page=False)
               await page.close()
           async def run():
@@ -113,7 +113,7 @@ jobs:
           asyncio.run(run())
           failed=[]; results=[]
           for w,h in sizes:
-              for stage,_ in stages:
+              for stage in stages:
                   a=Image.open(out/f'base-{w}x{h}-{stage}.png').convert('RGB'); b=Image.open(out/f'local-{w}x{h}-{stage}.png').convert('RGB')
                   d=ImageChops.difference(a,b); mean=sum(ImageStat.Stat(d).mean)/3; px=d.load(); changed=0; total=w*h
                   for y in range(h):
