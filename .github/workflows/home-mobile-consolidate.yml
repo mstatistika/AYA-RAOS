@@ -52,7 +52,7 @@ jobs:
             const marker='/* AYA RAOS — Homepage mobile final cascade consolidation — 2026-09-09 */';
             if(site.includes(marker)) throw new Error('consolidation marker already exists');
             fs.writeFileSync(sitePath,site.trimEnd()+'\n\n'+marker+chunks.join('').trimEnd()+'\n');
-            index=index.split(/\r?\n/).filter(line=>!files.some(f=>line.includes(path.basename(f)))).join('\n')+(index.endsWith('\n')?'\n':'');
+            index=index.split(/\r?\n/).filter(line=>!files.some(f=>line.includes(path.basename(f)))).join('\n').replace(/\n+$/,'')+'\n';
             const old='css/site.css?v=20260811-homepage-text-align-v20'; const neu='css/site.css?v=20260909-home-mobile-consolidated-v1';
             if(index.split(old).length-1!==1) throw new Error('unexpected Homepage site.css cache key');
             fs.writeFileSync('index.html',index.replace(old,neu));
