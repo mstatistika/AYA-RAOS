@@ -1,6 +1,9 @@
 name: Mobile testimonials canonical parity
 
 on:
+  push:
+    branches:
+      - fix/mobile-testimonials-canonical-parity-20260909
   workflow_dispatch:
 
 permissions:
