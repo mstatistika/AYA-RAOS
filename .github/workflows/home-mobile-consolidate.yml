@@ -24,72 +24,35 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import re
-
-          files = [
-              'css/mobile-home-v26f.css',
-              'css/mobile-luxury-v26g.css',
-              'css/mobile-luxury-v26h.css',
-              'css/mobile-luxury-v26i.css',
-              'css/mobile-luxury-v26j.css',
-              'css/mobile-home-semesta-density-v1.css',
-          ]
+          files=['css/mobile-home-v26f.css','css/mobile-luxury-v26g.css','css/mobile-luxury-v26h.css','css/mobile-luxury-v26i.css','css/mobile-luxury-v26j.css','css/mobile-home-semesta-density-v1.css']
+          for f in files: assert Path(f).is_file(), f'missing {f}'
+          index=Path('index.html').read_text()
+          for f in files: assert index.count(Path(f).name)==1, f'{f}: expected one reference'
+          chunks=[]
           for f in files:
-              assert Path(f).is_file(), f'missing {f}'
-
-          index = Path('index.html').read_text()
-          for f in files:
-              name = Path(f).name
-              assert index.count(name) == 1, f'{name}: expected one reference'
-
-          # Preserve exact cascade order. Prefix selectors that were globally written
-          # only because these files were loaded by index.html exclusively.
-          chunks = []
-          for f in files:
-              text = Path(f).read_text()
-              # :root in a Homepage-only file becomes a body-scoped variable source.
-              text = re.sub(r'(?m)(^|\{|\})\s*:root\s*\{', lambda m: m.group(1) + '\n  body[data-page="home"]{', text)
-
-              # Prefix simple unscoped rule selectors. Existing body[data-page="home"]
-              # selectors stay byte-equivalent apart from file relocation.
+              text=Path(f).read_text()
+              text=re.sub(r'(?m)(^|\{|\})\s*:root\s*\{',lambda m:m.group(1)+'\n  body[data-page="home"]{',text)
               def prefix_rule(match):
-                  lead, selectors, brace = match.groups()
-                  stripped = selectors.strip()
-                  if stripped.startswith('@') or stripped.startswith(('from','to','0%','100%')):
-                      return match.group(0)
-                  parts = [p.strip() for p in selectors.split(',')]
-                  scoped = []
-                  for p in parts:
-                      if not p:
-                          continue
-                      if 'body[data-page="home"]' in p:
-                          scoped.append(p)
-                      elif p.startswith('html'):
-                          scoped.append('html:has(body[data-page="home"])' + p[4:])
-                      else:
-                          scoped.append('body[data-page="home"] ' + p)
-                  return lead + ',\n'.join(scoped) + brace
-
-              text = re.sub(r'(^|\})\s*([^@{}][^{}]*?)\s*(\{)', prefix_rule, text, flags=re.M)
+                  lead,selectors,brace=match.groups(); stripped=selectors.strip()
+                  if stripped.startswith('@') or stripped.startswith(('from','to','0%','100%')): return match.group(0)
+                  scoped=[]
+                  for p in [x.strip() for x in selectors.split(',') if x.strip()]:
+                      if 'body[data-page="home"]' in p: scoped.append(p)
+                      elif p.startswith('html'): scoped.append('html:has(body[data-page="home"])'+p[4:])
+                      else: scoped.append('body[data-page="home"] '+p)
+                  return lead+',\n'.join(scoped)+brace
+              text=re.sub(r'(^|\})\s*([^@{}][^{}]*?)\s*(\{)',prefix_rule,text,flags=re.M)
               chunks.append(f'\n/* migrated from {f} — final locked cascade */\n{text.strip()}\n')
-
-          site_path = Path('css/site.css')
-          site = site_path.read_text()
-          marker = '/* AYA RAOS — Homepage mobile final cascade consolidation — 2026-09-09 */'
-          assert marker not in site, 'consolidation marker already exists'
-          site_path.write_text(site.rstrip() + '\n\n' + marker + ''.join(chunks) + '\n')
-
-          # Homepage now consumes the canonical public stylesheet only.
-          lines = index.splitlines()
-          kept = [line for line in lines if not any(Path(f).name in line for f in files)]
-          index = '\n'.join(kept) + ('\n' if index.endswith('\n') else '')
-          old = 'css/site.css?v=20260811-homepage-text-align-v20'
-          new = 'css/site.css?v=20260909-home-mobile-consolidated-v1'
-          assert index.count(old) == 1, 'unexpected Homepage site.css cache key'
-          index = index.replace(old, new, 1)
-          Path('index.html').write_text(index)
-
-          for f in files:
-              Path(f).unlink()
+          site_path=Path('css/site.css'); site=site_path.read_text()
+          marker='/* AYA RAOS — Homepage mobile final cascade consolidation — 2026-09-09 */'
+          assert marker not in site
+          site_path.write_text(site.rstrip()+'\n\n'+marker+''.join(chunks).rstrip()+'\n')
+          lines=index.splitlines(); kept=[line for line in lines if not any(Path(f).name in line for f in files)]
+          index='\n'.join(kept)+('\n' if index.endswith('\n') else '')
+          old='css/site.css?v=20260811-homepage-text-align-v20'; new='css/site.css?v=20260909-home-mobile-consolidated-v1'
+          assert index.count(old)==1
+          Path('index.html').write_text(index.replace(old,new,1))
+          for f in files: Path(f).unlink()
           PY
 
       - name: Structural validation
@@ -103,12 +66,9 @@ jobs:
           git diff --check
           python - <<'PY'
           from pathlib import Path
-          css=Path('css/site.css').read_text()
-          # Lightweight brace/comment sanity; exact CSS validity is also exercised by Chromium below.
-          scrub=css
           import re
-          scrub=re.sub(r'/\*.*?\*/','',scrub,flags=re.S)
-          assert scrub.count('{') == scrub.count('}'), (scrub.count('{'),scrub.count('}'))
+          css=re.sub(r'/\*.*?\*/','',Path('css/site.css').read_text(),flags=re.S)
+          assert css.count('{')==css.count('}'),(css.count('{'),css.count('}'))
           PY
 
       - name: Install visual parity runner
@@ -126,67 +86,43 @@ jobs:
           SERVER_PID=$!
           trap 'kill $SERVER_PID || true' EXIT
           python - <<'PY'
-          import asyncio, json
+          import asyncio,json
           from pathlib import Path
-          from PIL import Image, ImageChops, ImageStat
+          from PIL import Image,ImageChops,ImageStat
           from playwright.async_api import async_playwright
-
-          BASE='https://aya-raos.vercel.app/'
-          LOCAL='http://127.0.0.1:8000/'
+          BASE='https://aya-raos.vercel.app/'; LOCAL='http://127.0.0.1:8000/'
           sizes=[(360,800),(390,844),(430,932)]
-          stages=[
-            ('vp1','.live-home-right'),
-            ('vp2','.live-home-left'),
-            ('vp3','.home-about'),
-            ('vp4','.home-lines'),
-            ('vp5','.home-closing-shell'),
-          ]
+          stages=[('vp1','.live-home-right'),('vp2','.live-home-left'),('vp3','.home-about'),('vp4','.home-lines'),('vp5','.home-closing-shell')]
           out=Path('/tmp/home-parity'); out.mkdir(exist_ok=True)
-          results=[]
-
           async def snap(browser,url,label,w,h):
               page=await browser.new_page(viewport={'width':w,'height':h},device_scale_factor=1)
-              await page.goto(url, wait_until='networkidle', timeout=90000)
+              await page.goto(url,wait_until='networkidle',timeout=90000)
               await page.evaluate('document.fonts && document.fonts.ready')
               await page.add_style_tag(content='*{animation:none!important;transition:none!important;caret-color:transparent!important} html{scroll-behavior:auto!important}')
               for stage,sel in stages:
-                  loc=page.locator(sel).first
-                  await loc.scroll_into_view_if_needed(timeout=15000)
+                  await page.locator(sel).first.scroll_into_view_if_needed(timeout=15000)
                   await page.wait_for_timeout(180)
                   await page.screenshot(path=str(out/f'{label}-{w}x{h}-{stage}.png'),full_page=False)
               await page.close()
-
-          async def main():
+          async def run():
               async with async_playwright() as p:
-                  browser=await p.chromium.launch()
+                  b=await p.chromium.launch()
                   for w,h in sizes:
-                      await snap(browser,BASE,'base',w,h)
-                      await snap(browser,LOCAL,'local',w,h)
-                  await browser.close()
-
-          asyncio.run(main())
-
-          failed=[]
+                      await snap(b,BASE,'base',w,h); await snap(b,LOCAL,'local',w,h)
+                  await b.close()
+          asyncio.run(run())
+          failed=[]; results=[]
           for w,h in sizes:
               for stage,_ in stages:
-                  a=Image.open(out/f'base-{w}x{h}-{stage}.png').convert('RGB')
-                  b=Image.open(out/f'local-{w}x{h}-{stage}.png').convert('RGB')
-                  d=ImageChops.difference(a,b)
-                  stat=ImageStat.Stat(d)
-                  mean=sum(stat.mean)/3
-                  # ratio of pixels with material (>20/255 on any channel) difference
-                  px=d.load(); changed=0; total=w*h
+                  a=Image.open(out/f'base-{w}x{h}-{stage}.png').convert('RGB'); b=Image.open(out/f'local-{w}x{h}-{stage}.png').convert('RGB')
+                  d=ImageChops.difference(a,b); mean=sum(ImageStat.Stat(d).mean)/3; px=d.load(); changed=0; total=w*h
                   for y in range(h):
                       for x in range(w):
                           if max(px[x,y])>20: changed+=1
-                  ratio=changed/total
-                  rec={'viewport':f'{w}x{h}','stage':stage,'mean_diff':round(mean,4),'material_ratio':round(ratio,6)}
-                  results.append(rec)
-                  if mean>1.25 or ratio>0.004:
-                      failed.append(rec)
+                  ratio=changed/total; rec={'viewport':f'{w}x{h}','stage':stage,'mean_diff':round(mean,4),'material_ratio':round(ratio,6)}; results.append(rec)
+                  if mean>1.25 or ratio>0.004: failed.append(rec)
           print(json.dumps(results,indent=2))
-          if failed:
-              raise SystemExit('Visual parity failed: '+json.dumps(failed))
+          if failed: raise SystemExit('Visual parity failed: '+json.dumps(failed))
           PY
 
       - name: Expected path validation and commit
