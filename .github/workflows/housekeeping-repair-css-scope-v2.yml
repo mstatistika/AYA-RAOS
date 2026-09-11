@@ -70,10 +70,9 @@ jobs:
                   i=e
               return out
 
-          def split_direct_foreign(text, domain, media_only=True):
+          def split_direct_foreign(text, domain):
               moved=[]; replacements=[]
               for s,e,pre,raw in children(text,0,len(text)):
-                  if media_only and not pre.startswith('@media'): continue
                   if not pre.startswith('@media'): continue
                   b=text.find('{',s,e); inner_end=e-1
                   remove=[]; rules=[]
@@ -92,11 +91,9 @@ jobs:
               for s,e,r in sorted(replacements,reverse=True): text=text[:s]+r+text[e:]
               return text,moved
 
-          # Move top-level responsive Testimonials rules out of Share.
           share,moved_test=split_direct_foreign(share,'testimonials')
           assert moved_test, 'Testimonials responsive rules were not found'
 
-          # Home's final 380px correction is nested inside Share's mobile envelope.
           nested='@media(max-width:380px)'
           assert share.count(nested)==1, f'expected one nested 380 media, got {share.count(nested)}'
           ns=share.index(nested); nb=share.index('{',ns); ne=close_for(share,nb)
@@ -115,7 +112,6 @@ jobs:
           assert 'body[data-page="testimonials"]' not in share
           assert 'body[data-page="home"]' not in share
 
-          # Testimonials owns its own hidden contract and all its responsive rules.
           old='body[data-page="testimonials"] [hidden],\nbody[data-page="share"] [hidden]{'
           assert testimonials.count(old)==1
           testimonials=testimonials.replace(old,'body[data-page="testimonials"] [hidden]{',1)
@@ -124,7 +120,6 @@ jobs:
           testimonials=testimonials.replace(marker,'\n\n'.join(moved_test).strip()+'\n\n'+marker,1)
           assert 'body[data-page="share"]' not in testimonials
 
-          # Home has exactly one missing close: the canonical Public Mobile UI 900px envelope.
           def stack_for(text):
               st=[]; i=0; q=None; esc=False; com=False
               while i<len(text):
@@ -146,6 +141,7 @@ jobs:
                       st.pop()
                   i+=1
               return st
+
           st=stack_for(home); assert len(st)==1
           pos=st[0]
           ctx=home[max(home.rfind('\n',0,pos),home.rfind('}',0,pos))+1:pos+1].strip()
@@ -153,15 +149,17 @@ jobs:
           home=home.rstrip()+'\n\n'+moved_home+'\n}\n'
           assert not stack_for(home)
 
-          # Final domain invariants.
           def pages(text): return set(re.findall(r'body\[data-page="([^"]+)"\]',text))
           assert pages(share) <= {'share'}, pages(share)
           assert pages(testimonials) <= {'testimonials'}, pages(testimonials)
           assert pages(home) <= {'home'}, pages(home)
 
-          share_path.write_text(share.rstrip()+'\n',encoding='utf-8')
-          testimonials_path.write_text(testimonials.rstrip()+'\n',encoding='utf-8')
-          home_path.write_text(home,encoding='utf-8')
+          def normalize_ws(text):
+              return '\n'.join(line.rstrip() for line in text.splitlines()).rstrip()+'\n'
+
+          share_path.write_text(normalize_ws(share),encoding='utf-8')
+          testimonials_path.write_text(normalize_ws(testimonials),encoding='utf-8')
+          home_path.write_text(normalize_ws(home),encoding='utf-8')
           for p in [
               Path('.github/workflows/housekeeping-css-diagnose.yml'),
               Path('.github/workflows/housekeeping-repair-css-scope.yml'),
