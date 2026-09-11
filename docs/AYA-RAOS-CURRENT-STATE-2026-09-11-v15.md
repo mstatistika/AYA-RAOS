@@ -1,19 +1,20 @@
-# AYA RAOS — CURRENT STATE — 11 September 2026 v14
+# AYA RAOS — CURRENT STATE — 11 September 2026 v15
 
-**Status:** PUBLIC PASOKAN vNEXT + PUBLIC MOBILE UI INCLUDING INFORMATION V18 RELEASED / LOCKED; Admin/B2B platform foundation PRESENT; commercial activation NOT ACTIVE; staging remains `noindex`.
+**Status:** PUBLIC PASOKAN vNEXT + PUBLIC MOBILE UI INCLUDING INFORMATION V18 RELEASED / LOCKED; PUBLIC CSS MODULAR HOUSEKEEPING VERIFIED / ZERO-REGRESSION; Admin/B2B platform foundation PRESENT; commercial activation NOT ACTIVE; staging remains `noindex`.
 
 **Repository:** `mstatistika/AYA-RAOS`
 **Canonical branch:** `main`
-**Pre-release base:** `209d5d8a99704542d8d4dffb326976935ed1e932`
+**Information release base:** `209d5d8a99704542d8d4dffb326976935ed1e932`
+**Modular CSS housekeeping base:** `12020a0ec2b68c499987d30253cf215cd13e7b9b`
 **Production Launch:** NOT APPROVED
 
-> This document supersedes `docs/AYA-RAOS-CURRENT-STATE-2026-08-23-v13.md` as the active repository-state record. Historical Git state remains evidence only.
+> This document supersedes `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md` as the active repository-state record. Historical Git state remains evidence only.
 
 ## 1. Authority
 
 Use this order:
 1. latest explicit user approval/correction;
-2. this CURRENT STATE v14;
+2. this CURRENT STATE v15;
 3. applicable canonical supplement for the active scope;
 4. `AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md` for released mobile presentation;
 5. `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md` for released public Pasokan vNext;
@@ -88,8 +89,17 @@ The former rule that `css/site.css` must contain every public page style is supe
 
 Current architecture:
 - `css/site.css` = shared core, design tokens, global header, shared controls/utilities and genuinely cross-page presentation;
-- `css/pages/<page>.css` = at most one canonical page stylesheet for page/domain-specific presentation;
-- Information is the first migrated page: `css/pages/information.css`.
+- `css/pages/home.css` = Homepage;
+- `css/pages/lines.css` = Farm / Spice Haven / Snacks & Drinks dedicated line pages;
+- `css/pages/products.css` = Product Catalog / Mobile Product Book;
+- `css/pages/product.css` = direct Product Detail;
+- `css/pages/testimonials.css` = public Testimonials;
+- `css/pages/share.css` = Testimonial Share;
+- `css/pages/cart.css` = Cart/B2C;
+- `css/pages/business.css` = public Pasokan Usaha;
+- `css/pages/information.css` = Information.
+
+The locked-page migration was separately approved by the user as housekeeping after Information V18. It is a structural source refactor only and does not reopen any visual/UX lock.
 
 Guardrails:
 - one token system remains mandatory;
@@ -97,7 +107,7 @@ Guardrails:
 - no parallel desktop/mobile stylesheet architecture;
 - desktop and mobile rules for a page stay together in that page's canonical stylesheet when migrated;
 - no stacked patch layers, dead selectors or new `!important` architecture;
-- already locked pages are migrated only when their scope is explicitly reopened or migration is separately approved with zero-regression proof.
+- locked pages may be structurally migrated only by explicit separate approval with zero-regression proof; the 11 September housekeeping approval satisfies this condition for the modules listed above.
 
 This change reduces mutation blast radius without creating a second design system.
 
@@ -114,6 +124,17 @@ Verified before release:
 - geometry checks at `360×800`, `390×844`, and `430×932` kept the mobile root within one viewport;
 - all six tested panels fit without internal overflow at those targets;
 - all six CTAs measured 160×36 and occupied the same layout position.
+
+### Full modular CSS housekeeping verification
+
+Verified against canonical `main` base `12020a0ec2b68c499987d30253cf215cd13e7b9b` before release:
+- page/domain-specific presentation was extracted without redesign, copy change, interaction change or commercial-truth change;
+- all eleven public page/domain HTML entries load exactly one canonical page stylesheet;
+- CSS brace balance, page-scope ownership, asset URL targets, JS syntax and `git diff --check` passed;
+- the shared `.home-scroll-cue` primitive remains in `css/site.css` because Homepage and Pasokan both use it;
+- deterministic browser parity passed **22/22** comparisons at `390×844` and `1440×900` across Homepage, all three Dedicated Lines, Product Catalog, Product Detail, Testimonials, Share, Cart, Pasokan and Information;
+- Product Catalog image loading was made eager only in the parity runner copies to remove lazy-load screenshot timing variance; production `js/catalog.js` remains unchanged;
+- staging / public indexability policy is unchanged and Production Launch is still not approved.
 
 ## 7. Existing B2B / Admin platform state
 
@@ -149,8 +170,8 @@ Not authorized by this release:
 - activating DOKU/Midtrans payments;
 - activating qualification/account lifecycle merely because platform foundations exist;
 - redesigning protected public scopes;
-- bulk-migrating locked page CSS merely for housekeeping.
+- redesigning protected regions or making further architecture changes without explicit scope approval.
 
 ## 10. Next public-web step
 
-After Information V18 release, the public mobile surface returns to protected/locked mode. Any further public work starts with a read-only parity audit and requires explicit reopening before visual or source mutation.
+After the separately approved modular CSS housekeeping, the public surface remains protected/locked. Any further public visual work starts with a read-only parity audit and requires explicit reopening before visual mutation.

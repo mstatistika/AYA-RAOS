@@ -56,11 +56,20 @@ Rules:
 - no parallel `desktop.css` / `mobile.css` architecture;
 - desktop and mobile rules for a migrated page remain together in the same canonical page stylesheet;
 - no stacked CSS patch layers, dead selectors or new `!important` architecture;
-- already locked pages are not bulk-migrated merely for housekeeping.
+- locked pages require explicit reopening or separate approval plus zero-regression proof before structural migration; the 11 September 2026 housekeeping approval authorized the completed migration listed below.
 
-**Information is the first migrated page** and uses `css/pages/information.css`.
+Current canonical page stylesheets are:
+- `css/pages/home.css`;
+- `css/pages/lines.css`;
+- `css/pages/products.css`;
+- `css/pages/product.css`;
+- `css/pages/testimonials.css`;
+- `css/pages/share.css`;
+- `css/pages/cart.css`;
+- `css/pages/business.css`;
+- `css/pages/information.css`.
 
-Existing released Homepage / Dedicated Lines / Product Catalog / Testimonials / Share mobile runtime remains centered on `js/mobile-public-ui.js` with shared `js/site.js` behavior until those scopes are explicitly reopened or separately migrated with zero-regression proof.
+Released Homepage / Dedicated Lines / Product Catalog / Testimonials / Share mobile runtime remains centered on `js/mobile-public-ui.js` with shared `js/site.js` behavior; the CSS presentation for those domains is now housed in the canonical page stylesheets above.
 
 Information V18 uses its existing scoped `js/info-page.js` runtime for the right-rail state and keeps shared header/WhatsApp behavior in `js/site.js`.
 
@@ -284,6 +293,10 @@ Pre-release verification:
 - the tested mobile root remained one viewport;
 - all six panels fit without internal overflow at those review targets;
 - all six CTAs measured 160×36 at the same layout position.
+
+### Modular CSS housekeeping
+
+The later 11 September 2026 housekeeping pass structurally migrated the remaining locked public page CSS without reopening visual scope. Source/asset/syntax checks passed, followed by deterministic browser parity **22/22** at `390×844` and `1440×900`. Product Catalog production lazy-loading remains unchanged; eager loading was used only inside parity runner copies to remove screenshot timing variance.
 
 ## 14. Release discipline
 

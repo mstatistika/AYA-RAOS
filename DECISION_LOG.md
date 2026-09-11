@@ -55,10 +55,10 @@ This file contains only decisions that remain active for the current development
 | AD-047 | Positive status may expose `Aktivasi Akun Pasokan` only from a trusted response with a safe same-origin activation URL. The frontend itself creates no B2B account or commitment. |
 | AD-048 | Broader B2B Commercial Architecture is present in source/database as platform foundation. Current main is under Admin/backend hardening; this does not constitute full live commercial activation. |
 | AD-049 | Admin target access is `Function Registry → Role → Admin User`; one Admin User may have multiple Roles and effective permissions are the union of Role functions. This explicit B2B architecture supersedes Constitution v1.1's older one-user-one-role target statement until Constitution v1.2 is produced. |
-| AD-050 | Public Pasokan vNext implementation scope is exactly `business.html`, the Business source block in `css/site.css`, and `js/business-inquiry.js`; protected scopes remain unchanged. |
+| AD-050 | Current Public Pasokan vNext source boundary is `business.html`, `css/pages/business.css`, shared-core dependencies in `css/site.css`, and `js/business-inquiry.js`; protected commercial truth and runtime contracts remain unchanged. |
 | AD-051 | Public Mobile UI implementation remains scoped to `max-width:900px`; Homepage, Dedicated Lines, Product Catalog, Testimonials, Share and Information now each remain governed by their latest explicit mobile locks. |
 | AD-052 | Final approved mobile visual references are Homepage V3.7, Dedicated Line Pages V4.9, Mobile Product Book V24, Testimonials V6.5, Share V7.23 and Information V18. Mobile presentation is governed by `AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md`. |
-| AD-053 | Existing Homepage/Lines/Catalog/Testimonials/Share mobile runtime remains in `css/site.css`, `js/site.js`, and `js/mobile-public-ui.js` until those scopes are separately migrated. Information V18 uses `css/pages/information.css` + `js/info-page.js`; its superseded Information-only selectors are removed from `css/site.css`. |
+| AD-053 | Public mobile runtime remains centered on shared `js/site.js` / `js/mobile-public-ui.js` where applicable, while page-specific presentation now lives in canonical `css/pages/*.css` modules; Information V18 continues to use `css/pages/information.css` + `js/info-page.js`. |
 | AD-054 | Information V18 does not modify Cart/B2C, Pasokan/B2B, direct Product Detail, testimonial backend contracts, public product data, or the locked desktop Information presentation. |
 | AD-055 | Mobile Catalog uses one active product decision stage with AYA-line filtering, previous/next + swipe, explicit variant selection, inspectable photo and existing Cart runtime. Product/price/variant/fact truth continues to come from canonical public data and may not be invented. |
 | AD-056 | Mobile Testimonials/Share presentation preserves real testimonial/submission data, upload, Supabase, moderation and approval contracts. Preview-only fake submission or fabricated testimonial/video content is never production truth. |
@@ -66,7 +66,7 @@ This file contains only decisions that remain active for the current development
 | AD-058 | Codespaces/remote mutation tooling is reserved for safe actual-source mutation that genuinely requires it, especially scoped `css/site.css` work. If execution stalls or a mutation fails, recover with read-only state verification before any retry; do not infer completion from a spinner, narration or intended command. |
 | AD-059 | The pre-Information canonical main checkpoint is `209d5d8a99704542d8d4dffb326976935ed1e932`; every later mutation must still re-verify actual `main` before release. |
 | AD-060 | Platform foundation and commercial activation are separate states: Admin/B2B/payment/shipping/qualification foundations may exist in source/database while public commercial activation remains disabled. |
-| AD-061 | Active repository-state authority is `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md` until a newer CURRENT STATE is explicitly established. |
+| AD-061 | Active repository-state authority is `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md` until a newer CURRENT STATE is explicitly established. |
 | AD-062 | Observed Supabase state at the v13 reconciliation was 1 admin user, 10 product-master rows, 10 catalog products, 0 B2B relationships, 0 invoices, 0 payment attempts, 0 provider payment attempts, 4 testimonials. Schema existence must not be treated as transaction history and those counts must be rechecked before later operational claims. |
 | AD-063 | Active B2B shipping configuration observed at the v13 reconciliation was Rp5.187/km motor and Rp10.021/km mobil. These are backend configuration facts and do not reopen B2C shipping authority; recheck before later operational use. |
 | AD-064 | Payment architecture is implemented as foundation, but live payment activation remains disabled. DOKU remains primary and Midtrans fallback by approved architecture; `Paid != Settled` remains mandatory. |
@@ -79,7 +79,8 @@ This file contains only decisions that remain active for the current development
 | AD-071 | On mobile Dedicated Line pages (`max-width:900px`), the featured `Lihat Detail` CTA routes into the locked Mobile Product Book for the current line (`products.html?line=farm|spice|snack`). Desktop Dedicated Line CTAs keep their canonical direct `product.html` Product Detail destinations. This is a journey-parity fix only and does not reopen visual locks or Product Detail. |
 | AD-072 | Information Mobile V18 uses the right vertical rail `Produk / Pesan / Kirim / Acara / Pasokan / Bantuan`, quiet inactive states, active maroon bookmark, hero `Sebelum memesan.`, equal 160px maroon CTAs, no internal text-divider architecture, simplified Acara typography and three-point Bantuan. |
 | AD-073 | Information customer routing is truth-based: one-time purchase remains Keranjang regardless of quantity; recurring need is Pasokan; temporary B2C shipping remains Rp25.000 when live route calculation is unavailable; online website payment remains disabled; unresolved policies are referred to AYA instead of fabricated. |
-| AD-074 | Modular CSS migration is incremental. Information is the first migrated page. Already locked pages are not extracted from `css/site.css` merely for housekeeping; migrate only when explicitly reopened or separately approved with zero-regression proof. |
+| AD-074 | Modular CSS migration requires explicit reopening or separate approval with zero-regression proof. On 11 September 2026 the user separately approved locked-page CSS modularization as housekeeping; that migration is now verified without reopening visual locks. |
+| AD-075 | Current canonical CSS map is `site.css` shared core plus `home.css`, `lines.css`, `products.css`, `product.css`, `testimonials.css`, `share.css`, `cart.css`, `business.css`, and `information.css` under `css/pages/`. Deterministic browser parity passed 22/22 comparisons at mobile `390×844` and desktop `1440×900`; no visual redesign is authorized by this structural release. |
 
 ## Canonical supplements
 
@@ -92,6 +93,6 @@ This file contains only decisions that remain active for the current development
 The broader B2B commercial/account/admin architecture remains governed by the active Project Resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md`; repository governance records its platform-foundation/hardening state rather than treating the entire platform as nonexistent.
 
 Latest development baseline:
-- `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md`
+- `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md`
 
 See Git history for superseded baseline detail.
