@@ -1,0 +1,13 @@
+name: Information mobile V18 smoke
+on:
+  push:
+    branches:
+      - release/information-mobile-v18-20260911
+permissions:
+  contents: write
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Smoke
+        run: echo "actions-ok"
