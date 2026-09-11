@@ -1,0 +1,68 @@
+name: Housekeeping Share diagnose 2
+on:
+  push:
+    branches: [housekeeping/modular-page-css-20260911]
+    paths: [.github/workflows/housekeeping-share-diagnose-2.yml]
+permissions:
+  contents: write
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-page-css-20260911
+      - name: Simulate full Share extraction
+        shell: bash
+        run: |
+          set +e
+          REPORT=/tmp/share-diagnose-2.txt
+          : > "$REPORT"
+          python - <<'PY' >> "$REPORT" 2>&1
+          from pathlib import Path
+          import re, traceback
+          try:
+              site=Path('css/site.css'); target=Path('css/pages/share.css'); htmlp=Path('share.html')
+              css=site.read_text(encoding='utf-8')
+              s='/* --------------------------------------------------------------------------\n   SHARE TESTIMONIAL — create in place, then review'
+              e='/* Cross-page short-height discipline */'
+              print('s_count',css.count(s),'e_count',css.count(e))
+              start,end=css.index(s),css.index(e)
+              original=css[start:end]
+              print('share_count',original.count('body[data-page="share"]'))
+              print('cart_present','body[data-page="cart"]' in original)
+              migrated=original.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+              reverse=migrated.replace('url("../../assets/','url("../assets/').replace("url('../../assets/","url('../assets/")
+              print('reversible',reverse==original)
+              target.parent.mkdir(parents=True,exist_ok=True)
+              target.write_text(migrated.rstrip()+'\n',encoding='utf-8')
+              site.write_text(css[:start]+'/* Testimonial Share page styles: css/pages/share.css */\n'+css[end:],encoding='utf-8')
+              html=htmlp.read_text(encoding='utf-8')
+              pattern=r'(<link[^>]+href=["\']css/site\.css[^"\']*["\'][^>]*>)'
+              print('link_count',len(re.findall(pattern,html,flags=re.I)))
+              link='<link href="css/pages/share.css?v=20260911-modular" rel="stylesheet"/>'
+              html=re.sub(pattern,lambda m:m.group(1)+'\n'+link,html,count=1,flags=re.I)
+              htmlp.write_text(html,encoding='utf-8')
+              print('page_link_count',html.count('css/pages/share.css'))
+              print('python_stage=PASS')
+          except Exception:
+              print('python_stage=FAIL')
+              traceback.print_exc()
+          PY
+          echo '--- diff check ---' >> "$REPORT"
+          git diff --check >> "$REPORT" 2>&1; echo "diff_check_exit=$?" >> "$REPORT"
+          echo '--- grep share ---' >> "$REPORT"
+          grep -q 'testimonial-share-page' css/pages/share.css; echo "grep_exit=$?" >> "$REPORT"
+          echo '--- status ---' >> "$REPORT"
+          git status --short >> "$REPORT"
+          git reset --hard HEAD
+          git clean -fd css/pages/share.css
+          mkdir -p tmp
+          cp "$REPORT" tmp/share-extraction-diagnosis-2.txt
+          rm .github/workflows/housekeeping-share-diagnose-2.yml
+          git config user.name 'AYA RAOS Housekeeping Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add tmp/share-extraction-diagnosis-2.txt .github/workflows/housekeeping-share-diagnose-2.yml
+          git commit -m 'chore: capture full Share extraction diagnosis'
+          git push origin HEAD:housekeeping/modular-page-css-20260911
