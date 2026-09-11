@@ -1,0 +1,44 @@
+name: Information CSS extract one-shot
+
+on:
+  push:
+    branches:
+      - implement/information-mobile-v18-modular-20260911
+    paths:
+      - .github/workflows/information-css-extract-one-shot.yml
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: implement/information-mobile-v18-modular-20260911
+          fetch-depth: 0
+
+      - name: Extract Information CSS from shared core
+        run: python scripts/extract-information-css.py
+
+      - name: Validate scoped result
+        run: |
+          git diff --check
+          node --check js/info-page.js
+          test -f css/pages/information.css
+          ! grep -q 'information-hero' css/site.css
+          ! grep -q 'information-layout' css/site.css
+          ! grep -q 'info-viewport' css/site.css
+          grep -q 'Information Mobile V18' css/pages/information.css
+          grep -q 'css/pages/information.css' information.html
+
+      - name: Commit scoped extraction
+        run: |
+          git config user.name "AYA RAOS Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add css/site.css
+          git diff --cached --check
+          git diff --cached --quiet && exit 1 || true
+          git commit -m "refactor: extract Information styles from shared core"
+          git push origin HEAD:implement/information-mobile-v18-modular-20260911
