@@ -1,0 +1,127 @@
+name: Cart CSS parity gate
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-css-locked-pages-20260911
+    paths:
+      - .github/workflows/cart-css-parity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prepare baseline and browser
+        run: |
+          git fetch origin main
+          git worktree add /tmp/aya-main origin/main
+          npm install --no-save playwright@1.55.0 pixelmatch@7 pngjs@7
+          npx playwright install --with-deps chromium
+          python3 -m http.server 4173 --directory /tmp/aya-main >/tmp/base-server.log 2>&1 &
+          python3 -m http.server 4174 --directory "$GITHUB_WORKSPACE" >/tmp/candidate-server.log 2>&1 &
+          sleep 2
+          curl -fsS http://127.0.0.1:4173/cart.html >/dev/null
+          curl -fsS http://127.0.0.1:4174/cart.html >/dev/null
+
+      - name: Capture and compare Cart states
+        run: |
+          cat > /tmp/cart-parity.mjs <<'JS'
+          import { chromium } from 'playwright';
+          import pixelmatch from 'pixelmatch';
+          import { PNG } from 'pngjs';
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const out = '/tmp/cart-parity';
+          fs.mkdirSync(out, { recursive: true });
+          const browser = await chromium.launch({ headless: true });
+
+          async function ready(page) {
+            await page.waitForLoadState('networkidle');
+            await page.evaluate(async () => {
+              if (document.fonts?.ready) await document.fonts.ready;
+              await Promise.all([...document.images].map(img => img.complete ? Promise.resolve() : new Promise(r => { img.addEventListener('load', r, {once:true}); img.addEventListener('error', r, {once:true}); })));
+            });
+            await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}' });
+          }
+
+          async function seededPage(base, viewport) {
+            const context = await browser.newContext({ viewport, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+            const page = await context.newPage();
+            await page.goto(`${base}/cart.html`, { waitUntil: 'networkidle' });
+            await page.evaluate(() => localStorage.setItem('ayaRaos.cart.v2', JSON.stringify([
+              { productId:'sambal-bawang', variantName:'Original', quantity:2 },
+              { productId:'bawang-goreng-sumenep', variantName:'Pouch', quantity:1 }
+            ])));
+            await page.reload({ waitUntil: 'networkidle' });
+            await ready(page);
+            return { page, context };
+          }
+
+          async function capture(base, label) {
+            const shots = [];
+            {
+              const {page,context} = await seededPage(base, {width:1440,height:900});
+              const f = path.join(out, `${label}-desktop-cart.png`);
+              await page.screenshot({path:f, fullPage:false}); shots.push(f); await context.close();
+            }
+            {
+              const {page,context} = await seededPage(base, {width:390,height:844});
+              let f = path.join(out, `${label}-mobile-cart.png`);
+              await page.screenshot({path:f, fullPage:false}); shots.push(f);
+
+              await page.locator('#showInfo').click();
+              await page.waitForTimeout(50);
+              f = path.join(out, `${label}-mobile-data.png`);
+              await page.screenshot({path:f, fullPage:false}); shots.push(f);
+
+              await page.locator('#mName').fill('Michael');
+              await page.locator('#mPhone').fill('081234567890');
+              await page.locator('#mAddress').fill('Alamat parity test');
+              await page.locator('#mToConfirm').click();
+              await page.waitForTimeout(50);
+              f = path.join(out, `${label}-mobile-confirm.png`);
+              await page.screenshot({path:f, fullPage:false}); shots.push(f);
+
+              await page.locator('#mOpenPayment').click();
+              await page.waitForTimeout(50);
+              f = path.join(out, `${label}-mobile-payment.png`);
+              await page.screenshot({path:f, fullPage:false}); shots.push(f);
+              await context.close();
+            }
+            return shots;
+          }
+
+          await capture('http://127.0.0.1:4173','base');
+          await capture('http://127.0.0.1:4174','candidate');
+          await browser.close();
+
+          const states = ['desktop-cart','mobile-cart','mobile-data','mobile-confirm','mobile-payment'];
+          let failed = false;
+          for (const state of states) {
+            const a = PNG.sync.read(fs.readFileSync(path.join(out,`base-${state}.png`)));
+            const b = PNG.sync.read(fs.readFileSync(path.join(out,`candidate-${state}.png`)));
+            if (a.width !== b.width || a.height !== b.height) throw new Error(`${state}: dimension mismatch`);
+            const diff = new PNG({width:a.width,height:a.height});
+            const count = pixelmatch(a.data,b.data,diff.data,a.width,a.height,{threshold:0.1,includeAA:false});
+            const ratio = count / (a.width*a.height);
+            fs.writeFileSync(path.join(out,`diff-${state}.png`), PNG.sync.write(diff));
+            console.log(`${state}: ${count} differing pixels (${(ratio*100).toFixed(5)}%)`);
+            if (ratio > 0.0005) failed = true;
+          }
+          if (failed) process.exit(2);
+          JS
+          node /tmp/cart-parity.mjs
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cart-css-parity
+          path: /tmp/cart-parity/*.png
+          retention-days: 3
