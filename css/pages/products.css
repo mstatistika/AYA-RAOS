@@ -982,3 +982,7 @@ body[data-page="products"] .product-card{
     .aya-book-photo{height:51%}.aya-book-content{top:45.5%;padding-top:20px}.aya-book-product-title{font-size:36px}.aya-book-lead{font-size:14px}.aya-book-notes{margin-top:13px}.aya-book-commerce{bottom:10px}.aya-book-line-signature{top:20px}.aya-book-line-signature img{width:38px;height:38px;flex-basis:38px}.aya-book-control-shield{bottom:44px}.aya-book-variant-pop{bottom:102px}
   }
 }
+
+@media (max-height:720px) and (min-width:901px){
+  .catalog-section{padding-top:14px}
+}

@@ -629,3 +629,5 @@ body[data-page="product"] .product-add-button{
     margin-top:12px;
   }
 }
+
+@media (max-width:520px){.product-info-grid{grid-template-columns:1fr}}
