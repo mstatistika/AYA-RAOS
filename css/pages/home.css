@@ -247,7 +247,7 @@ line-height:1.48;
   .closing-lead h2{font-size:30px}.closing-lead-copy{width:62%;padding-left:12px}.closing-card h3{font-size:16px}.closing-card>p{font-size:5.4px}.closing-cta{font-size:7px}
 }
 
-@media (prefers-reduced-motion:reduce){.home-scroll-cue svg{animation:none}}
+@media (prefers-reduced-motion:reduce){.home-scroll-cue svg{animation:none}.line-world{transition:none}}
 
 @media (max-width:900px){
 body[data-page="home"]{background:#f7ead7;overflow:hidden}

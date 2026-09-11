@@ -127,7 +127,6 @@ body.line-page-snack{--line-accent:#8b4d23;--line-accent-deep:#683518;--line-acc
   .line-stage{height:auto;min-height:0;overflow:visible}.line-stage{padding:54px 0}.line-stage-identity{min-height:720px;padding:0}.line-stage-inner{width:min(calc(100% - 28px),720px);height:auto}.line-identity-photo{position:absolute}.line-identity-copy{width:min(88%,560px);min-height:720px;padding-left:12px}.line-scroll-cue{position:relative;left:auto;bottom:auto;transform:none;margin:18px auto 0}.line-understanding-grid{grid-template-columns:1fr;gap:30px;padding-block:0}.line-category-grid{grid-template-columns:1fr 1fr}.line-stage-featured{display:grid;grid-template-columns:1fr}.line-featured-media{min-height:440px}.line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#2c0506 100%)}.line-page-farm .line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#252b14 100%)}.line-page-snack .line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#552405 100%)}.line-featured-copy{padding:36px 28px}.line-featured-actions{flex-wrap:wrap}
 }
 @media (max-width:520px){.line-category-grid{grid-template-columns:1fr}.line-identity-copy h1{font-size:45px}.line-featured-media{min-height:340px}.line-featured-actions{display:grid}.line-featured-actions .button{width:100%}}
-@media (prefers-reduced-motion:reduce){.line-world{transition:none}}
 
 /* FARM MASTER LOCKED 2026-08-14 — START */
 .farm-master-page{background:#fbf2e1;color:#153d28}.farm-master-page main{background:#fbf2e1}
