@@ -1,0 +1,66 @@
+name: Housekeeping Share diagnose 3
+on:
+  push:
+    branches: [housekeeping/modular-page-css-20260911]
+    paths: [.github/workflows/housekeeping-share-diagnose-3.yml]
+permissions:
+  contents: write
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-page-css-20260911
+      - name: Trace exact Share workflow locally
+        shell: bash
+        run: |
+          set +e
+          BASE=$(git rev-parse HEAD)
+          REPORT=/tmp/share-diag3.txt
+          : > "$REPORT"
+          echo "base=$BASE" >> "$REPORT"
+          python - <<'PY' >> "$REPORT" 2>&1
+          from pathlib import Path
+          import re,traceback
+          try:
+            site=Path('css/site.css'); target=Path('css/pages/share.css'); htmlp=Path('share.html')
+            helper=Path('.github/workflows/housekeeping-modularize-share.yml')
+            css=site.read_text(encoding='utf-8')
+            s='/* --------------------------------------------------------------------------\n   SHARE TESTIMONIAL — create in place, then review'
+            e='/* Cross-page short-height discipline */'
+            start,end=css.index(s),css.index(e)
+            original=css[start:end]
+            print('share_count',original.count('body[data-page="share"]'))
+            migrated=original.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+            target.parent.mkdir(parents=True,exist_ok=True)
+            target.write_text(migrated.rstrip()+'\n',encoding='utf-8')
+            site.write_text(css[:start]+'/* Testimonial Share page styles: css/pages/share.css */\n'+css[end:],encoding='utf-8')
+            html=htmlp.read_text(encoding='utf-8')
+            pattern=r'(<link[^>]+href=["\']css/site\.css[^"\']*["\'][^>]*>)'
+            link='<link href="css/pages/share.css?v=20260911-modular" rel="stylesheet"/>'
+            html=re.sub(pattern,lambda m:m.group(1)+'\n'+link,html,count=1,flags=re.I)
+            htmlp.write_text(html,encoding='utf-8')
+            print('helper_exists_before',helper.exists())
+            helper.unlink()
+            print('helper_exists_after',helper.exists())
+            print('python=PASS')
+          except Exception:
+            print('python=FAIL'); traceback.print_exc()
+          PY
+          git diff --check >> "$REPORT" 2>&1; echo "diff=$?" >> "$REPORT"
+          grep -q 'testimonial-share-page' css/pages/share.css; echo "grep=$?" >> "$REPORT"
+          git config user.name 'AYA RAOS Housekeeping Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add css/site.css css/pages/share.css share.html .github/workflows/housekeeping-modularize-share.yml >> "$REPORT" 2>&1; echo "add=$?" >> "$REPORT"
+          git diff --cached --check >> "$REPORT" 2>&1; echo "cached_diff=$?" >> "$REPORT"
+          git commit -m 'diagnostic local Share commit' >> "$REPORT" 2>&1; echo "commit=$?" >> "$REPORT"
+          git reset --hard "$BASE" >/dev/null 2>&1
+          git clean -fd css/pages/share.css >/dev/null 2>&1
+          mkdir -p tmp
+          cp "$REPORT" tmp/share-extraction-diagnosis-3.txt
+          rm .github/workflows/housekeeping-share-diagnose-3.yml
+          git add tmp/share-extraction-diagnosis-3.txt .github/workflows/housekeeping-share-diagnose-3.yml
+          git commit -m 'chore: capture exact Share workflow trace'
+          git push origin HEAD:housekeeping/modular-page-css-20260911
