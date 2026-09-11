@@ -66,7 +66,7 @@ This file contains only decisions that remain active for the current development
 | AD-058 | Codespaces/remote mutation tooling is reserved for safe actual-source mutation that genuinely requires it, especially scoped `css/site.css` work. If execution stalls or a mutation fails, recover with read-only state verification before any retry; do not infer completion from a spinner, narration or intended command. |
 | AD-059 | The pre-Information canonical main checkpoint is `209d5d8a99704542d8d4dffb326976935ed1e932`; every later mutation must still re-verify actual `main` before release. |
 | AD-060 | Platform foundation and commercial activation are separate states: Admin/B2B/payment/shipping/qualification foundations may exist in source/database while public commercial activation remains disabled. |
-| AD-061 | Active repository-state authority is `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md` until a newer CURRENT STATE is explicitly established. |
+| AD-061 | Active repository-state authority is `docs/AYA-RAOS-CURRENT-STATE-2026-09-12-v16.md` until a newer CURRENT STATE is explicitly established. |
 | AD-062 | Observed Supabase state at the v13 reconciliation was 1 admin user, 10 product-master rows, 10 catalog products, 0 B2B relationships, 0 invoices, 0 payment attempts, 0 provider payment attempts, 4 testimonials. Schema existence must not be treated as transaction history and those counts must be rechecked before later operational claims. |
 | AD-063 | Active B2B shipping configuration observed at the v13 reconciliation was Rp5.187/km motor and Rp10.021/km mobil. These are backend configuration facts and do not reopen B2C shipping authority; recheck before later operational use. |
 | AD-064 | Payment architecture is implemented as foundation, but live payment activation remains disabled. DOKU remains primary and Midtrans fallback by approved architecture; `Paid != Settled` remains mandatory. |
@@ -81,6 +81,8 @@ This file contains only decisions that remain active for the current development
 | AD-073 | Information customer routing is truth-based: one-time purchase remains Keranjang regardless of quantity; recurring need is Pasokan; temporary B2C shipping remains Rp25.000 when live route calculation is unavailable; online website payment remains disabled; unresolved policies are referred to AYA instead of fabricated. |
 | AD-074 | Modular CSS migration requires explicit reopening or separate approval with zero-regression proof. On 11 September 2026 the user separately approved locked-page CSS modularization as housekeeping; that migration is now verified without reopening visual locks. |
 | AD-075 | Current canonical CSS map is `site.css` shared core plus `home.css`, `lines.css`, `products.css`, `product.css`, `testimonials.css`, `share.css`, `cart.css`, `business.css`, and `information.css` under `css/pages/`. Deterministic browser parity passed 22/22 comparisons at mobile `390×844` and desktop `1440×900`; no visual redesign is authorized by this structural release. |
+| AD-076 | September 12 source/asset housekeeping removed only files proven superseded or unreferenced. It did not modify canonical public runtime, locked presentation, Admin/API/server/Supabase foundations, Pasokan commercial truth or payment activation state. Verified housekeeping checkpoint before governance sync is `301237dbe33cab2fc3cf3f00ac1d47df8ed2601b`. |
+| AD-077 | Post-housekeeping staging smoke verification on deployment `dpl_5gfsBviWVh1z33X6jhvyYALx4dNA` passed HTTP checks for Home, all three Line pages, Catalog, Product Detail, Testimonials, Share, Cart, Pasokan, Information and Admin. `noindex` remains active and Vercel reported no runtime errors in the preceding 24 hours. Vercel's `production` target label does not equal AYA RAOS Production Launch approval. |
 
 ## Canonical supplements
 
@@ -93,6 +95,6 @@ This file contains only decisions that remain active for the current development
 The broader B2B commercial/account/admin architecture remains governed by the active Project Resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md`; repository governance records its platform-foundation/hardening state rather than treating the entire platform as nonexistent.
 
 Latest development baseline:
-- `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md`
+- `docs/AYA-RAOS-CURRENT-STATE-2026-09-12-v16.md`
 
 See Git history for superseded baseline detail.
