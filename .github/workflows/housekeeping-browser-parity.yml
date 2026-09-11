@@ -1,0 +1,87 @@
+name: Housekeeping browser parity
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-product-css-20260911-run
+    paths:
+      - .github/workflows/housekeeping-browser-parity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout canonical main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: canonical
+      - name: Checkout modular branch
+        uses: actions/checkout@v4
+        with:
+          ref: housekeeping/modular-product-css-20260911-run
+          path: modular
+      - name: Render deterministic browser parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$CHROME"
+          echo "Chrome: $CHROME"
+
+          # Test-only determinism. These files are runner copies and are never committed.
+          for tree in canonical modular; do
+            cat >> "$tree/css/site.css" <<'CSS'
+          /* browser parity harness only */
+          *,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important;scroll-behavior:auto!important}
+          video{visibility:hidden!important}
+          CSS
+          done
+
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory canonical >/tmp/aya-main-http.log 2>&1 &
+          P1=$!
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory modular >/tmp/aya-mod-http.log 2>&1 &
+          P2=$!
+          trap 'kill $P1 $P2 2>/dev/null || true' EXIT
+          sleep 2
+          curl -fsS http://127.0.0.1:4173/index.html >/dev/null
+          curl -fsS http://127.0.0.1:4174/index.html >/dev/null
+
+          mkdir -p parity/main parity/modular
+          pages=(
+            'index.html'
+            'farm.html'
+            'spice.html'
+            'snacks.html'
+            'products.html'
+            'product.html?id=sambal-bawang'
+            'testimonials.html'
+            'share.html'
+            'cart.html'
+            'business.html'
+            'information.html'
+          )
+          views=('390x844' '1440x900')
+          fail=0
+          for view in "${views[@]}"; do
+            w="${view%x*}"; h="${view#*x}"
+            for page in "${pages[@]}"; do
+              safe="$(printf '%s' "$page" | tr '?=&/' '____')"
+              a="parity/main/${safe}-${view}.png"
+              b="parity/modular/${safe}-${view}.png"
+              "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size="$w,$h" --virtual-time-budget=6000 --run-all-compositor-stages-before-draw --screenshot="$a" "http://127.0.0.1:4173/$page" >/dev/null 2>&1
+              "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size="$w,$h" --virtual-time-budget=6000 --run-all-compositor-stages-before-draw --screenshot="$b" "http://127.0.0.1:4174/$page" >/dev/null 2>&1
+              if cmp -s "$a" "$b"; then
+                echo "PARITY PASS $view $page $(sha256sum "$a" | cut -d' ' -f1)"
+              else
+                echo "PARITY DIFF $view $page"
+                echo "  main    $(sha256sum "$a" | cut -d' ' -f1)"
+                echo "  modular $(sha256sum "$b" | cut -d' ' -f1)"
+                fail=1
+              fi
+            done
+          done
+          test "$fail" -eq 0
