@@ -1,0 +1,79 @@
+name: Modularize Business CSS
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-css-locked-pages-20260911
+    paths:
+      - .github/workflows/modularize-business-css.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Extract Business stylesheet transactionally
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          site_path = Path('css/site.css')
+          page_path = Path('css/pages/business.css')
+          html_path = Path('business.html')
+          site = site_path.read_text(encoding='utf-8')
+          html = html_path.read_text(encoding='utf-8')
+
+          start_marker = '/* Pasokan Usaha — B2B vNext APPROVED 2026-08-20 */'
+          end_marker = '/* Catalog — MOCKUP PARITY SOURCE OF TRUTH 2026-08-15 */'
+          assert site.count(start_marker) == 1, site.count(start_marker)
+          assert site.count(end_marker) == 1, site.count(end_marker)
+          start = site.index(start_marker)
+          end = site.index(end_marker)
+          assert start < end
+          block = site[start:end].rstrip() + '\n'
+
+          assert 'body[data-page="business"]' in block
+          assert 'body[data-page="products"]' not in block
+          assert 'body[data-page="cart"]' not in block
+          assert not page_path.exists()
+          assert html.count('css/site.css?v=20260907-pasokan-vp3-mobile-final') == 1
+          assert 'css/pages/business.css' not in html
+
+          moved = block.replace('url("../assets/', 'url("../../assets/').replace("url('../assets/", "url('../../assets/")
+          proposed_site = site[:start] + site[end:]
+          proposed_html = html.replace(
+              '<link href="css/site.css?v=20260907-pasokan-vp3-mobile-final" rel="stylesheet"/>',
+              '<link href="css/site.css?v=20260907-pasokan-vp3-mobile-final" rel="stylesheet"/>\n<link href="css/pages/business.css?v=20260911-modular-v1" rel="stylesheet"/>',
+              1,
+          )
+
+          assert start_marker not in proposed_site
+          assert 'body[data-page="business"]' not in proposed_site
+          assert proposed_html.count('css/pages/business.css') == 1
+          assert '../assets/visual/business-lock/' not in moved or '../../assets/visual/business-lock/' in moved
+
+          page_path.write_text('/* AYA RAOS — Pasokan Usaha canonical page stylesheet. Structural extraction only; no visual or commercial reinterpretation. */\n\n' + moved, encoding='utf-8')
+          site_path.write_text(proposed_site, encoding='utf-8')
+          html_path.write_text(proposed_html, encoding='utf-8')
+          PY
+
+          git diff --check
+          test -f css/pages/business.css
+          grep -q 'body\[data-page="business"\]' css/pages/business.css
+          ! grep -q 'body\[data-page="business"\]' css/site.css
+          grep -q 'css/pages/business.css?v=20260911-modular-v1' business.html
+          grep -q '../../assets/visual/business-lock/' css/pages/business.css
+
+      - name: Commit Business extraction
+        run: |
+          git config user.name "AYA RAOS Housekeeping Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add css/site.css css/pages/business.css business.html
+          git diff --cached --check
+          git commit -m "refactor: extract Pasokan styles into canonical page CSS"
+          git push origin HEAD:housekeeping/modular-css-locked-pages-20260911
