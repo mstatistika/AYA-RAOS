@@ -1,6 +1,7 @@
 # AYA RAOS Brand Asset Manifest
 Status: CANONICAL
 Date: 2026-08-30
+Cleanup verified: 2026-09-12
 
 ## Principle
 These are AYA RAOS brand assets. They are not mobile-specific assets.
@@ -42,4 +43,5 @@ Identity: orange led, antique-gold supported.
 
 ## Usage
 Consumers must reference these canonical paths. Do not redraw, reinterpret, recolor, or reconstruct a LOCKED identity during implementation.
-Legacy root-level assets under assets/brand/ remain compatibility/history until separately cleaned up.
+
+Legacy root-level SVG aliases under `assets/brand/` were removed after verified zero-reference cleanup on 2026-09-12. Do not recreate compatibility aliases; use the canonical subfolder assets above.
