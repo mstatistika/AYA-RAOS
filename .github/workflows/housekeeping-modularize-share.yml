@@ -39,9 +39,11 @@ jobs:
           assert 'body[data-page="cart"]' not in original
           migrated=original.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
           reverse=migrated.replace('url("../../assets/','url("../assets/').replace("url('../../assets/","url('../assets/")
-          assert reverse==original
+          normalize=lambda text:'\n'.join(line.rstrip() for line in text.splitlines())
+          assert normalize(reverse)==normalize(original)
+          migrated=normalize(migrated).rstrip()+'\n'
           target.parent.mkdir(parents=True,exist_ok=True)
-          target.write_text(migrated.rstrip()+'\n',encoding='utf-8')
+          target.write_text(migrated,encoding='utf-8')
           site.write_text(css[:start]+'/* Testimonial Share page styles: css/pages/share.css */\n'+css[end:],encoding='utf-8')
           html=htmlp.read_text(encoding='utf-8')
           assert 'css/pages/share.css' not in html
@@ -62,5 +64,3 @@ jobs:
           git diff --cached --check
           git commit -m 'refactor: modularize locked Share CSS without visual change'
           git push origin HEAD:housekeeping/modular-page-css-20260911
-
-# rerun only after branch-state diagnosis confirmed zero partial write and clean simulation
