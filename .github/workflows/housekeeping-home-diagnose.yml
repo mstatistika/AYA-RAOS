@@ -1,0 +1,96 @@
+name: Housekeeping Home diagnose
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-page-css-20260911
+    paths:
+      - .github/workflows/housekeeping-home-diagnose.yml
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-page-css-20260911
+      - name: Trace Homepage extraction
+        shell: bash
+        run: |
+          set +e
+          BASE=$(git rev-parse HEAD)
+          REPORT=/tmp/home-diagnosis.txt
+          : > "$REPORT"
+          echo "base=$BASE" >> "$REPORT"
+          python - <<'PY' >> "$REPORT" 2>&1
+          from pathlib import Path
+          import re, traceback
+          try:
+              site=Path('css/site.css'); css=site.read_text(encoding='utf-8')
+              target=Path('css/pages/home.css'); htmlp=Path('index.html')
+              start_a='\n.home-viewport{'; end_a='/* Dedicated Line page styles: css/pages/lines.css */'
+              mobile_start='  body[data-page="home"]{background:#f7ead7;overflow:hidden}'
+              pb_marker='/* Mobile Product Book V24 — visual authority V14; engine authority R5.13. */'
+              late_marker='/* AYA RAOS — Homepage mobile final cascade consolidation — 2026-09-09 */'
+              for label,m in [('start_a',start_a),('end_a',end_a),('mobile_start',mobile_start),('pb',pb_marker),('late',late_marker)]:
+                  print(label+'_count',css.count(m))
+              a1=css.index(start_a)+1; b1=css.index(end_a)
+              a2=css.index(mobile_start); pb=css.index(pb_marker); a3=css.index(late_marker)
+              print('order',a1,b1,a2,pb,a3)
+              print('ordered',a1<b1<a2<pb<a3)
+              desktop=css[a1:b1]
+              print('desktop_home_count',desktop.count('body[data-page="home"]'))
+              print('desktop_live_home', '.live-home-hero' in desktop)
+              segment=css[a2:pb]
+              print('segment_len',len(segment),'segment_rstrip_ends_brace',segment.rstrip().endswith('}'))
+              last_close=segment.rfind('}')
+              print('last_close',last_close)
+              mobile_inner=segment[:last_close]
+              print('mobile_home_count',mobile_inner.count('body[data-page="home"]'))
+              late=css[a3:]
+              print('late_home_count',late.count('body[data-page="home"]'))
+              reduced='@media (prefers-reduced-motion:reduce){.home-scroll-cue svg{animation:none}}\n'
+              parts=[desktop.strip(),reduced.strip(),'@media (max-width:900px){\n'+mobile_inner.strip()+'\n}',late.strip()]
+              joined='\n\n'.join(parts)+'\n'
+              joined=joined.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+              joined='\n'.join(line.rstrip() for line in joined.splitlines()).rstrip()+'\n'
+              print('joined_home_count',joined.count('body[data-page="home"]'))
+              target.parent.mkdir(parents=True,exist_ok=True); target.write_text(joined,encoding='utf-8')
+              newcss=css[:a3]
+              print('newcss_after_late_len',len(newcss))
+              print('a2_in_newcss',a2 < len(newcss),'last_close_abs',a2+last_close)
+              newcss=newcss[:a2]+newcss[a2+last_close:]
+              print('desktop_slice_valid_after_mobile',b1 < len(newcss))
+              newcss=newcss[:a1]+'/* Homepage page styles: css/pages/home.css */\n'+newcss[b1:]
+              site.write_text(newcss,encoding='utf-8')
+              html=htmlp.read_text(encoding='utf-8')
+              pattern=r'(<link[^>]+href=["\']css/site\.css[^"\']*["\'][^>]*>)'
+              print('site_link_count',len(re.findall(pattern,html,flags=re.I)))
+              link='<link href="css/pages/home.css?v=20260911-modular" rel="stylesheet"/>'
+              html=re.sub(pattern,lambda m:m.group(1)+'\n'+link,html,count=1,flags=re.I)
+              htmlp.write_text(html,encoding='utf-8')
+              print('page_link_count',html.count('css/pages/home.css'))
+              print('python=PASS')
+          except Exception:
+              print('python=FAIL'); traceback.print_exc()
+          PY
+          echo '--- diff check ---' >> "$REPORT"
+          git diff --check >> "$REPORT" 2>&1; echo "diff=$?" >> "$REPORT"
+          echo '--- status ---' >> "$REPORT"
+          git status --short >> "$REPORT"
+          git add css/site.css css/pages/home.css index.html >> "$REPORT" 2>&1; echo "add=$?" >> "$REPORT"
+          git diff --cached --check >> "$REPORT" 2>&1; echo "cached_diff=$?" >> "$REPORT"
+          git reset --hard "$BASE" >/dev/null 2>&1
+          git clean -fd css/pages/home.css >/dev/null 2>&1
+          mkdir -p tmp
+          cp "$REPORT" tmp/home-extraction-diagnosis.txt
+          rm .github/workflows/housekeeping-home-diagnose.yml
+          git config user.name 'AYA RAOS Housekeeping Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add tmp/home-extraction-diagnosis.txt .github/workflows/housekeeping-home-diagnose.yml
+          git commit -m 'chore: capture Homepage extraction diagnosis'
+          git push origin HEAD:housekeeping/modular-page-css-20260911
