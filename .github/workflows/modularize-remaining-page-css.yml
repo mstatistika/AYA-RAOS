@@ -1,0 +1,214 @@
+name: Modularize remaining locked page CSS
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-css-locked-pages-20260911
+    paths:
+      - .github/workflows/modularize-remaining-page-css.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install CSS parser
+        run: npm install --no-save postcss@8 postcss-selector-parser@7
+      - name: Write scoped extractor
+        run: |
+          cat > "$GITHUB_WORKSPACE/.extract-page-css.cjs" <<'JS'
+          const fs=require('fs');
+          const postcss=require('postcss');
+          const selectorParser=require('postcss-selector-parser');
+
+          const target=process.argv[2];
+          const configs={
+            home:{file:'home.css',html:['index.html'],start:{kind:'rule',text:'.home-viewport'},end:'Three Line pages'},
+            lines:{file:'lines.css',html:['farm.html','spice.html','snacks.html'],start:{kind:'comment',text:'Three Line pages'},end:'Catalog —'},
+            products:{file:'products.css',html:['products.html'],start:{kind:'comment',text:'Catalog —'},end:'Product Detail —'},
+            product:{file:'product.css',html:['product.html'],start:{kind:'comment',text:'Product Detail —'},end:'Testimonials Experience'},
+            testimonials:{file:'testimonials.css',html:['testimonials.html'],start:{kind:'comment',text:'Testimonials Experience'},end:'SHARE TESTIMONIAL'},
+            share:{file:'share.css',html:['share.html'],start:{kind:'comment',text:'SHARE TESTIMONIAL'},end:'Cross-page short-height discipline'}
+          };
+          const cfg=configs[target]; if(!cfg) throw new Error('unknown target '+target);
+          const sitePath='css/site.css'; const css=fs.readFileSync(sitePath,'utf8'); const root=postcss.parse(css);
+
+          function markerMatch(node,m){
+            if(m.kind==='comment') return node.type==='comment' && node.text.includes(m.text);
+            if(m.kind==='rule') return node.type==='rule' && node.selector.includes(m.text);
+            return false;
+          }
+          let start=-1,end=-1;
+          root.nodes.forEach((n,i)=>{ if(start<0 && markerMatch(n,cfg.start)) start=i; if(start>=0 && end<0 && n.type==='comment' && n.text.includes(cfg.end)) end=i; });
+          if(start<0||end<0||start>=end) throw new Error(`primary boundary not found for ${target}: ${start}/${end}`);
+
+          const explicitPages=['home','line','products','product','testimonials','share','cart','business','information'];
+          function explicitPage(sel){
+            for(const p of explicitPages){
+              if(sel.includes(`body[data-page="${p}"]`)||sel.includes(`body[data-page='${p}']`)) return p==='line'?'lines':p;
+            }
+            return null;
+          }
+          function heuristic(sel){
+            if(target==='home' && /(\.home-|\.live-home|\.about-|\.closing-|\.line-world|\.line-tags|\.line-number|\.line-photo|\.line-category(?!-grid))/.test(sel)) return true;
+            if(target==='lines' && /(\.line-stage|\.line-identity|\.line-understanding|\.line-category-grid|\.line-featured|\.line-info-icon|\.line-when|\.line-scroll-cue|\.line-page-|\.farm-master|\.spice-master|\.snack-master)/.test(sel)) return true;
+            if(target==='products' && /(\.catalog-|\.product-grid|\.product-card|\.product-quick-add|\.filter-drawer|\.aya-book)/.test(sel)) return true;
+            if(target==='product' && /(\.product-info-grid)/.test(sel)) return true;
+            return false;
+          }
+          function splitSelectors(selector){
+            const parts=[];
+            selectorParser(rootSel=>{rootSel.each(s=>parts.push(s.toString()));}).processSync(selector);
+            return parts;
+          }
+          function belongs(sel,inPrimary){
+            const p=explicitPage(sel);
+            if(p) return p===target;
+            if(inPrimary) return true;
+            return heuristic(sel);
+          }
+
+          const pageRoot=postcss.root();
+          function splitContainer(container,inPrimary){
+            const nodes=[...(container.nodes||[])];
+            for(const node of nodes){
+              if(node.type==='comment'){
+                if(inPrimary){ pageRoot.append(node.clone()); node.remove(); }
+                continue;
+              }
+              if(node.type==='rule'){
+                const sels=splitSelectors(node.selector); const yes=sels.filter(s=>belongs(s,inPrimary)); const no=sels.filter(s=>!belongs(s,inPrimary));
+                if(yes.length){ const clone=node.clone({selector:yes.join(',')}); returnAppend(clone); }
+                if(yes.length===sels.length) node.remove(); else if(yes.length) node.selector=no.join(',');
+                continue;
+              }
+              if(node.type==='atrule' && node.nodes){
+                const clone=node.clone({nodes:[]});
+                splitNested(node,clone,inPrimary);
+                if(clone.nodes?.length) pageRoot.append(clone);
+                if(!node.nodes?.length) node.remove();
+                continue;
+              }
+              if(inPrimary){ pageRoot.append(node.clone()); node.remove(); }
+            }
+          }
+          function returnAppend(node){ pageRoot.append(node); }
+          function splitNested(original,clone,inPrimary){
+            for(const child of [...(original.nodes||[])]){
+              if(child.type==='comment'){
+                if(inPrimary){ clone.append(child.clone()); child.remove(); }
+              } else if(child.type==='rule'){
+                const sels=splitSelectors(child.selector); const yes=sels.filter(s=>belongs(s,inPrimary)); const no=sels.filter(s=>!belongs(s,inPrimary));
+                if(yes.length) clone.append(child.clone({selector:yes.join(',')}));
+                if(yes.length===sels.length) child.remove(); else if(yes.length) child.selector=no.join(',');
+              } else if(child.type==='atrule' && child.nodes){
+                const c=child.clone({nodes:[]}); splitNested(child,c,inPrimary); if(c.nodes?.length) clone.append(c); if(!child.nodes?.length) child.remove();
+              } else if(inPrimary){ clone.append(child.clone()); child.remove(); }
+            }
+          }
+
+          // Traverse top-level in original order. Primary-region unscoped rules belong to this page;
+          // later explicitly-scoped or uniquely-prefixed rules are also collected.
+          const top=[...root.nodes];
+          top.forEach((node,idx)=>{
+            const primary=idx>=start && idx<end;
+            if(node.type==='comment'){
+              if(primary){pageRoot.append(node.clone());node.remove();}
+            } else if(node.type==='rule'){
+              const sels=splitSelectors(node.selector); const yes=sels.filter(s=>belongs(s,primary)); const no=sels.filter(s=>!belongs(s,primary));
+              if(yes.length) pageRoot.append(node.clone({selector:yes.join(',')}));
+              if(yes.length===sels.length) node.remove(); else if(yes.length) node.selector=no.join(',');
+            } else if(node.type==='atrule' && node.nodes){
+              const clone=node.clone({nodes:[]}); splitNested(node,clone,primary); if(clone.nodes?.length) pageRoot.append(clone); if(!node.nodes?.length) node.remove();
+            } else if(primary){pageRoot.append(node.clone());node.remove();}
+          });
+
+          let pageCss=pageRoot.toString();
+          if(!pageCss.trim()) throw new Error('empty extraction for '+target);
+          pageCss=pageCss.replaceAll('url("../assets/','url("../../assets/').replaceAll("url('../assets/","url('../../assets/");
+          const outPath='css/pages/'+cfg.file;
+          if(fs.existsSync(outPath)) throw new Error(outPath+' already exists');
+          fs.writeFileSync(outPath,`/* AYA RAOS — ${target} canonical page stylesheet. Structural extraction only; LOCKED visuals unchanged. */\n\n${pageCss.trim()}\n`);
+          fs.writeFileSync(sitePath,root.toString());
+
+          for(const h of cfg.html){
+            let html=fs.readFileSync(h,'utf8');
+            if(html.includes(`css/pages/${cfg.file}`)) throw new Error(`${h} already links ${cfg.file}`);
+            const re=/(<link href="css\/site\.css\?v=[^"]+" rel="stylesheet"\/>)/;
+            if(!re.test(html)) throw new Error('site.css link not found in '+h);
+            html=html.replace(re,`$1\n<link href="css/pages/${cfg.file}?v=20260911-modular-v1" rel="stylesheet"/>`);
+            fs.writeFileSync(h,html);
+          }
+          console.log(`${target}: extracted ${pageCss.split('\n').length} lines -> ${outPath}`);
+          JS
+
+      - name: Extract Homepage CSS
+        run: |
+          node .extract-page-css.cjs home
+          git diff --check
+          git config user.name "AYA RAOS Housekeeping Bot"; git config user.email "actions@users.noreply.github.com"
+          git add css/site.css css/pages/home.css index.html
+          git diff --cached --check
+          git commit -m "refactor: extract Homepage styles into canonical page CSS"
+
+      - name: Extract Dedicated Lines CSS
+        run: |
+          node .extract-page-css.cjs lines
+          git diff --check
+          git add css/site.css css/pages/lines.css farm.html spice.html snacks.html
+          git diff --cached --check
+          git commit -m "refactor: extract Dedicated Line styles into canonical page CSS"
+
+      - name: Extract Product Catalog CSS
+        run: |
+          node .extract-page-css.cjs products
+          git diff --check
+          git add css/site.css css/pages/products.css products.html
+          git diff --cached --check
+          git commit -m "refactor: extract Catalog styles into canonical page CSS"
+
+      - name: Extract Product Detail CSS
+        run: |
+          node .extract-page-css.cjs product
+          git diff --check
+          git add css/site.css css/pages/product.css product.html
+          git diff --cached --check
+          git commit -m "refactor: extract Product Detail styles into canonical page CSS"
+
+      - name: Extract Testimonials CSS
+        run: |
+          node .extract-page-css.cjs testimonials
+          git diff --check
+          git add css/site.css css/pages/testimonials.css testimonials.html
+          git diff --cached --check
+          git commit -m "refactor: extract Testimonials styles into canonical page CSS"
+
+      - name: Extract Testimonial Share CSS
+        run: |
+          node .extract-page-css.cjs share
+          git diff --check
+          git add css/site.css css/pages/share.css share.html
+          git diff --cached --check
+          git commit -m "refactor: extract Share styles into canonical page CSS"
+
+      - name: Verify source partition and push
+        run: |
+          test -f css/pages/home.css
+          test -f css/pages/lines.css
+          test -f css/pages/products.css
+          test -f css/pages/product.css
+          test -f css/pages/testimonials.css
+          test -f css/pages/share.css
+          grep -q 'css/pages/home.css?v=20260911-modular-v1' index.html
+          grep -q 'css/pages/lines.css?v=20260911-modular-v1' farm.html
+          grep -q 'css/pages/products.css?v=20260911-modular-v1' products.html
+          grep -q 'css/pages/product.css?v=20260911-modular-v1' product.html
+          grep -q 'css/pages/testimonials.css?v=20260911-modular-v1' testimonials.html
+          grep -q 'css/pages/share.css?v=20260911-modular-v1' share.html
+          git diff --check HEAD~6..HEAD
+          git push origin HEAD:housekeeping/modular-css-locked-pages-20260911
