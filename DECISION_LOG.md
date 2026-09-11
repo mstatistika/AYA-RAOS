@@ -8,7 +8,7 @@ This file contains only decisions that remain active for the current development
 |---|---|
 | AD-001 | `main` is the canonical branch; public staging remains `noindex` until explicit Production Launch approval. |
 | AD-002 | Homepage v3.8 is locked and may not be changed unless explicitly reopened. |
-| AD-003 | `css/site.css` is the single public-site design system; no parallel CSS architecture, stacked patch layer or `!important`. |
+| AD-003 | `css/site.css` is the shared public design-system core. Page/domain-specific presentation may live in at most one canonical `css/pages/<page>.css`; one token system remains mandatory and duplicate page selectors, parallel desktop/mobile stylesheets, stacked patch layers and new `!important` architecture are prohibited. |
 | AD-004 | `js/data.js` is the current public product-data source of truth during migration; renderers may not invent or override product facts. |
 | AD-005 | WhatsApp source of truth is `AYA_CONFIG.whatsappNumber = 628562646444`. |
 | AD-006 | B2C means one-time purchase, including one-time office/event/bulk purchases; quantity alone never converts a transaction into Pasokan Usaha. |
@@ -42,7 +42,7 @@ This file contains only decisions that remain active for the current development
 | AD-034 | Product Master B2B eligibility exists as platform/database foundation; public Pasokan remains governed by its released source boundary and must not invent Product Master eligibility until a trusted publish/read-model contract is explicitly activated. |
 | AD-035 | Public Pasokan vNext company context requires company/business name, business context, PIC, WhatsApp, start time, delivery location and consent; Email and notes are optional at public entry. |
 | AD-036 | Public Pasokan vNext no longer ends in the former structured WhatsApp inquiry. It proceeds to Summary + trusted system status; if qualification service is unavailable, the website stops truthfully and does not fabricate a result. |
-| AD-037 | Information remains unchanged and protected until explicitly reopened. |
+| AD-037 | Information was explicitly reopened for mobile, approved as **Information Mobile V18**, and returns to protected/locked state after release. Desktop Information remains protected and was not visually reopened. |
 | AD-038 | Cart/B2C implementation checkpoint is `ff431b7` and changes only `cart.html`, Cart/B2C CSS in `css/site.css`, and `js/cart-page.js`; shared `js/site.js`, `js/data.js`, and `js/config.js` contracts were unchanged by that checkpoint. |
 | AD-039 | Cart desktop is approximately 60/40; mobile uses separate Cart and Data Pesanan views. The approved v16 item geometry keeps variant/price/remove on the right without compressing product names. |
 | AD-040 | Cart fallback shipping is Rp25.000 when no authoritative route amount exists. Quantity shipping subsidy is up to Rp25.000 at 50–99 total units and up to Rp50.000 at 100+ units, capped by actual shipping. |
@@ -56,27 +56,30 @@ This file contains only decisions that remain active for the current development
 | AD-048 | Broader B2B Commercial Architecture is present in source/database as platform foundation. Current main is under Admin/backend hardening; this does not constitute full live commercial activation. |
 | AD-049 | Admin target access is `Function Registry → Role → Admin User`; one Admin User may have multiple Roles and effective permissions are the union of Role functions. This explicit B2B architecture supersedes Constitution v1.1's older one-user-one-role target statement until Constitution v1.2 is produced. |
 | AD-050 | Public Pasokan vNext implementation scope is exactly `business.html`, the Business source block in `css/site.css`, and `js/business-inquiry.js`; protected scopes remain unchanged. |
-| AD-051 | Public Mobile UI final implementation checkpoint is `ae52958a4408d9da95464e2f7b07de1544015457`; the mobile runtime is scoped to `max-width:900px` and only Home, Dedicated Lines, Product Catalog, Testimonials and Share. |
-| AD-052 | Final approved mobile visual references are Homepage V3.7, Dedicated Line Pages V4.9, Catalog V5.31, Testimonials V6.5 and Share V7.23. Mobile presentation is governed by `AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md`. |
-| AD-053 | Final Mobile implementation source boundary is exactly `css/site.css`, `js/site.js`, and `js/mobile-public-ui.js`. `css/site.css` remains the only public stylesheet/design system; the temporary standalone mobile stylesheet was removed before release. |
-| AD-054 | Information, Cart/B2C, Pasokan/B2B and direct Product Detail source/page are not modified by the Mobile release and remain governed by their existing locks/current authority. |
+| AD-051 | Public Mobile UI implementation remains scoped to `max-width:900px`; Homepage, Dedicated Lines, Product Catalog, Testimonials, Share and Information now each remain governed by their latest explicit mobile locks. |
+| AD-052 | Final approved mobile visual references are Homepage V3.7, Dedicated Line Pages V4.9, Mobile Product Book V24, Testimonials V6.5, Share V7.23 and Information V18. Mobile presentation is governed by `AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md`. |
+| AD-053 | Existing Homepage/Lines/Catalog/Testimonials/Share mobile runtime remains in `css/site.css`, `js/site.js`, and `js/mobile-public-ui.js` until those scopes are separately migrated. Information V18 uses `css/pages/information.css` + `js/info-page.js`; its superseded Information-only selectors are removed from `css/site.css`. |
+| AD-054 | Information V18 does not modify Cart/B2C, Pasokan/B2B, direct Product Detail, testimonial backend contracts, public product data, or the locked desktop Information presentation. |
 | AD-055 | Mobile Catalog uses one active product decision stage with AYA-line filtering, previous/next + swipe, explicit variant selection, inspectable photo and existing Cart runtime. Product/price/variant/fact truth continues to come from canonical public data and may not be invented. |
 | AD-056 | Mobile Testimonials/Share presentation preserves real testimonial/submission data, upload, Supabase, moderation and approval contracts. Preview-only fake submission or fabricated testimonial/video content is never production truth. |
 | AD-057 | For visual/interaction work, an explicitly approved ChatGPT HTML/browser preview is the implementation authority. After LOCK, implementation is translation rather than a second design phase; visible drift is an implementation defect and must be corrected toward the LOCK. |
-| AD-058 | Codespaces is reserved for safe actual-source mutation that genuinely requires it, especially scoped `css/site.css` work. If execution stalls or a mutation fails, recover with read-only state verification before any retry; do not infer completion from a spinner, narration or intended command. |
-| AD-059 | Current governance reconciliation checkpoint is `afeb5f45403920e9883d53bc0b18cafaf7918f68`. The latest main state is the current Admin/backend hardening state and must be re-verified before mutation. |
+| AD-058 | Codespaces/remote mutation tooling is reserved for safe actual-source mutation that genuinely requires it, especially scoped `css/site.css` work. If execution stalls or a mutation fails, recover with read-only state verification before any retry; do not infer completion from a spinner, narration or intended command. |
+| AD-059 | The pre-Information canonical main checkpoint is `209d5d8a99704542d8d4dffb326976935ed1e932`; every later mutation must still re-verify actual `main` before release. |
 | AD-060 | Platform foundation and commercial activation are separate states: Admin/B2B/payment/shipping/qualification foundations may exist in source/database while public commercial activation remains disabled. |
-| AD-061 | Reconciliation baseline is `docs/AYA-RAOS-CURRENT-STATE-2026-08-23-v13.md`; it is the current repository-state record until a newer CURRENT STATE is explicitly established. |
-| AD-062 | Observed Supabase state at reconciliation: 1 admin user, 10 product-master rows, 10 catalog products, 0 B2B relationships, 0 invoices, 0 payment attempts, 0 provider payment attempts, 4 testimonials. Schema existence must not be treated as transaction history. |
-| AD-063 | Active B2B shipping configuration observed in Supabase is Rp5.187/km motor and Rp10.021/km mobil. These are backend configuration facts and do not reopen B2C shipping authority. |
+| AD-061 | Active repository-state authority is `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md` until a newer CURRENT STATE is explicitly established. |
+| AD-062 | Observed Supabase state at the v13 reconciliation was 1 admin user, 10 product-master rows, 10 catalog products, 0 B2B relationships, 0 invoices, 0 payment attempts, 0 provider payment attempts, 4 testimonials. Schema existence must not be treated as transaction history and those counts must be rechecked before later operational claims. |
+| AD-063 | Active B2B shipping configuration observed at the v13 reconciliation was Rp5.187/km motor and Rp10.021/km mobil. These are backend configuration facts and do not reopen B2C shipping authority; recheck before later operational use. |
 | AD-064 | Payment architecture is implemented as foundation, but live payment activation remains disabled. DOKU remains primary and Midtrans fallback by approved architecture; `Paid != Settled` remains mandatory. |
-| AD-065 | No public visual scope is reopened by this governance sync. Post-release parity/polish remains available only when the user explicitly reopens a region. |
+| AD-065 | After Information V18 release, no public visual scope remains open by default. Post-release parity/polish requires an explicit user reopening of the affected region. |
 | AD-066 | Mobile Product Catalog was explicitly reopened and re-LOCKED as **Mobile Product Book V24**. For this mobile region only, V24 supersedes the older Catalog V5.31 presentation; settled visual authority is V14, interaction authority is R5.13, and V24 wrapper reliability fixes are approved. |
 | AD-067 | R5.13 remains the Product Book physics authority: one product per physical leaf, fixed LEFT binding/gutter, native forward finger-following, approved reverse occluded swap/transition illusion, and FARM/SPICE/SNACKS physical bookmarks as line filters. Bug fixes may wrap but must not reinterpret those mechanics. |
 | AD-068 | Production Mobile Product Book reads canonical public product data and existing Cart runtime. It may not hardcode preview prices/variants/availability or fabricate missing facts; unavailable/no-valid-variant products remain truthfully unavailable. |
 | AD-069 | Mobile Product Book V24 production implementation checkpoint is `485f7f6e3f3bbfb95776677d5e7a7404f6bd434c`. Its source diff against the prior `main` is exactly `css/site.css`, `js/mobile-public-ui.js`, `js/site.js`, and `products.html`; desktop `js/catalog.js`, Product Detail and Cart/B2C contracts remain unchanged. |
-| AD-070 | Staging remains `noindex, nofollow, noarchive`; releasing Mobile Product Book V24 to `main` does not constitute Production Launch approval. |
+| AD-070 | Staging remains `noindex, nofollow, noarchive`; releasing locked mobile changes to `main` does not constitute Production Launch approval. |
 | AD-071 | On mobile Dedicated Line pages (`max-width:900px`), the featured `Lihat Detail` CTA routes into the locked Mobile Product Book for the current line (`products.html?line=farm|spice|snack`). Desktop Dedicated Line CTAs keep their canonical direct `product.html` Product Detail destinations. This is a journey-parity fix only and does not reopen visual locks or Product Detail. |
+| AD-072 | Information Mobile V18 uses the right vertical rail `Produk / Pesan / Kirim / Acara / Pasokan / Bantuan`, quiet inactive states, active maroon bookmark, hero `Sebelum memesan.`, equal 160px maroon CTAs, no internal text-divider architecture, simplified Acara typography and three-point Bantuan. |
+| AD-073 | Information customer routing is truth-based: one-time purchase remains Keranjang regardless of quantity; recurring need is Pasokan; temporary B2C shipping remains Rp25.000 when live route calculation is unavailable; online website payment remains disabled; unresolved policies are referred to AYA instead of fabricated. |
+| AD-074 | Modular CSS migration is incremental. Information is the first migrated page. Already locked pages are not extracted from `css/site.css` merely for housekeeping; migrate only when explicitly reopened or separately approved with zero-regression proof. |
 
 ## Canonical supplements
 
@@ -86,9 +89,9 @@ This file contains only decisions that remain active for the current development
 - `AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md`
 - `AYA-RAOS-CART-B2C-CANONICAL-SUPPLEMENT-v1.md`
 
-The broader B2B commercial/account/admin architecture remains governed by the active Project Resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md`; repository governance now records its actual platform-foundation/hardening state rather than treating the entire platform as nonexistent.
+The broader B2B commercial/account/admin architecture remains governed by the active Project Resource `AYA-RAOS-B2B-COMMERCIAL-ARCHITECTURE-CANONICAL-SUPPLEMENT-v1.1.md`; repository governance records its platform-foundation/hardening state rather than treating the entire platform as nonexistent.
 
 Latest development baseline:
-- `docs/AYA-RAOS-CURRENT-STATE-2026-08-23-v13.md`
+- `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md`
 
 See Git history for superseded baseline detail.
