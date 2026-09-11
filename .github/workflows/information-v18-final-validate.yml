@@ -53,3 +53,5 @@ jobs:
           assert 'grid-template-rows:repeat(6,minmax(0,1fr))' in css
           print('Information V18 final invariants: PASS')
           PY
+
+# rerun after governance whitespace normalization
