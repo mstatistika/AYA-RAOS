@@ -1,0 +1,54 @@
+name: Housekeeping parity diagnostics
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-product-css-20260911-run
+    paths:
+      - .github/workflows/housekeeping-parity-diagnostics.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: canonical
+      - uses: actions/checkout@v4
+        with:
+          ref: housekeeping/modular-product-css-20260911-run
+          path: modular
+      - name: Capture failing parity targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          for tree in canonical modular; do
+            cat >> "$tree/css/site.css" <<'CSS'
+          *,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important;scroll-behavior:auto!important}
+          video{visibility:hidden!important}
+          CSS
+          done
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory canonical >/tmp/main.log 2>&1 & P1=$!
+          python3 -m http.server 4174 --bind 127.0.0.1 --directory modular >/tmp/mod.log 2>&1 & P2=$!
+          trap 'kill $P1 $P2 2>/dev/null || true' EXIT
+          sleep 2
+          mkdir -p parity-diagnostics/main parity-diagnostics/modular
+          specs=('business.html|390|844' 'business.html|1440|900' 'farm.html|1440|900' 'spice.html|1440|900' 'snacks.html|1440|900')
+          for spec in "${specs[@]}"; do
+            IFS='|' read -r page w h <<< "$spec"
+            key="${page%.html}-${w}x${h}"
+            "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size="$w,$h" --virtual-time-budget=6000 --run-all-compositor-stages-before-draw --screenshot="parity-diagnostics/main/$key.png" "http://127.0.0.1:4173/$page" >/dev/null 2>&1
+            "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size="$w,$h" --virtual-time-budget=6000 --run-all-compositor-stages-before-draw --screenshot="parity-diagnostics/modular/$key.png" "http://127.0.0.1:4174/$page" >/dev/null 2>&1
+            echo "$key main=$(sha256sum parity-diagnostics/main/$key.png | cut -d' ' -f1) modular=$(sha256sum parity-diagnostics/modular/$key.png | cut -d' ' -f1)"
+          done
+      - name: Upload parity diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: parity-diagnostics
+          path: parity-diagnostics
+          if-no-files-found: error
