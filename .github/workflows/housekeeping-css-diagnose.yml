@@ -1,0 +1,61 @@
+name: Housekeeping CSS diagnostics
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-product-css-20260911-run
+    paths:
+      - .github/workflows/housekeeping-css-diagnose.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: housekeeping/modular-product-css-20260911-run
+      - name: Pinpoint remaining CSS scope issues
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '--- foreign selectors in share.css ---'
+          grep -nE 'body\[data-page="(home|testimonials)"\]' css/pages/share.css || true
+          echo '--- foreign selector in testimonials.css ---'
+          grep -n 'body\[data-page="share"\]' css/pages/testimonials.css || true
+          echo '--- home.css balance ---'
+          python - <<'PY'
+          from pathlib import Path
+          text=Path('css/pages/home.css').read_text(encoding='utf-8')
+          stack=[]; i=0; quote=None; esc=False; comment=False
+          while i<len(text):
+              if comment:
+                  if text.startswith('*/',i): comment=False; i+=2; continue
+                  i+=1; continue
+              if quote:
+                  ch=text[i]
+                  if esc: esc=False
+                  elif ch=='\\': esc=True
+                  elif ch==quote: quote=None
+                  i+=1; continue
+              if text.startswith('/*',i): comment=True; i+=2; continue
+              ch=text[i]
+              if ch in ('"',"'"): quote=ch
+              elif ch=='{': stack.append(i)
+              elif ch=='}':
+                  if not stack:
+                      print('EXTRA CLOSE line',text.count('\n',0,i)+1)
+                  else: stack.pop()
+              i+=1
+          print('final depth',len(stack),'quote',quote,'comment',comment)
+          for pos in stack[-12:]:
+              line=text.count('\n',0,pos)+1
+              start=max(text.rfind('\n',0,pos),text.rfind('}',0,pos))+1
+              print('UNMATCHED OPEN line',line,'context=',repr(text[start:pos+1].strip()[:240]))
+          print('last 30 lines:')
+          lines=text.splitlines()
+          for n,s in enumerate(lines[-30:],start=max(1,len(lines)-29)):
+              print(f'{n}: {s}')
+          PY
