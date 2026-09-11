@@ -1,0 +1,196 @@
+name: Housekeeping modular CSS governance sync
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-product-css-20260911-run
+    paths:
+      - .github/workflows/housekeeping-governance-sync.yml
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-product-css-20260911-run
+      - name: Sync canonical governance transactionally
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def read(path): return Path(path).read_text(encoding='utf-8')
+          def write(path,text): Path(path).write_text(text,encoding='utf-8')
+          def replace_once(text,old,new,label):
+              n=text.count(old)
+              assert n==1, f'{label}: expected exactly one match, got {n}'
+              return text.replace(old,new,1)
+
+          # CURRENT STATE v15 from active v14.
+          old_state=Path('docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md')
+          assert old_state.exists()
+          state=old_state.read_text(encoding='utf-8')
+          state=replace_once(state,
+              '# AYA RAOS — CURRENT STATE — 11 September 2026 v14',
+              '# AYA RAOS — CURRENT STATE — 11 September 2026 v15', 'state title')
+          state=replace_once(state,
+              '**Status:** PUBLIC PASOKAN vNEXT + PUBLIC MOBILE UI INCLUDING INFORMATION V18 RELEASED / LOCKED; Admin/B2B platform foundation PRESENT; commercial activation NOT ACTIVE; staging remains `noindex`.',
+              '**Status:** PUBLIC PASOKAN vNEXT + PUBLIC MOBILE UI INCLUDING INFORMATION V18 RELEASED / LOCKED; PUBLIC CSS MODULAR HOUSEKEEPING VERIFIED / ZERO-REGRESSION; Admin/B2B platform foundation PRESENT; commercial activation NOT ACTIVE; staging remains `noindex`.', 'state status')
+          state=replace_once(state,
+              '**Pre-release base:** `209d5d8a99704542d8d4dffb326976935ed1e932`',
+              '**Information release base:** `209d5d8a99704542d8d4dffb326976935ed1e932`\n**Modular CSS housekeeping base:** `12020a0ec2b68c499987d30253cf215cd13e7b9b`', 'state base')
+          state=replace_once(state,
+              '> This document supersedes `docs/AYA-RAOS-CURRENT-STATE-2026-08-23-v13.md` as the active repository-state record. Historical Git state remains evidence only.',
+              '> This document supersedes `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md` as the active repository-state record. Historical Git state remains evidence only.', 'state supersedes')
+          state=replace_once(state,'2. this CURRENT STATE v14;','2. this CURRENT STATE v15;','state authority')
+          old_arch='''Current architecture:
+- `css/site.css` = shared core, design tokens, global header, shared controls/utilities and genuinely cross-page presentation;
+- `css/pages/<page>.css` = at most one canonical page stylesheet for page/domain-specific presentation;
+- Information is the first migrated page: `css/pages/information.css`.'''
+          new_arch='''Current architecture:
+- `css/site.css` = shared core, design tokens, global header, shared controls/utilities and genuinely cross-page presentation;
+- `css/pages/home.css` = Homepage;
+- `css/pages/lines.css` = Farm / Spice Haven / Snacks & Drinks dedicated line pages;
+- `css/pages/products.css` = Product Catalog / Mobile Product Book;
+- `css/pages/product.css` = direct Product Detail;
+- `css/pages/testimonials.css` = public Testimonials;
+- `css/pages/share.css` = Testimonial Share;
+- `css/pages/cart.css` = Cart/B2C;
+- `css/pages/business.css` = public Pasokan Usaha;
+- `css/pages/information.css` = Information.
+
+The locked-page migration was separately approved by the user as housekeeping after Information V18. It is a structural source refactor only and does not reopen any visual/UX lock.'''
+          state=replace_once(state,old_arch,new_arch,'state architecture')
+          state=replace_once(state,
+              '- already locked pages are migrated only when their scope is explicitly reopened or migration is separately approved with zero-regression proof.',
+              '- locked pages may be structurally migrated only by explicit separate approval with zero-regression proof; the 11 September housekeeping approval satisfies this condition for the modules listed above.', 'state guardrail')
+          insert='''### Full modular CSS housekeeping verification
+
+Verified against canonical `main` base `12020a0ec2b68c499987d30253cf215cd13e7b9b` before release:
+- page/domain-specific presentation was extracted without redesign, copy change, interaction change or commercial-truth change;
+- all eleven public page/domain HTML entries load exactly one canonical page stylesheet;
+- CSS brace balance, page-scope ownership, asset URL targets, JS syntax and `git diff --check` passed;
+- the shared `.home-scroll-cue` primitive remains in `css/site.css` because Homepage and Pasokan both use it;
+- deterministic browser parity passed **22/22** comparisons at `390×844` and `1440×900` across Homepage, all three Dedicated Lines, Product Catalog, Product Detail, Testimonials, Share, Cart, Pasokan and Information;
+- Product Catalog image loading was made eager only in the parity runner copies to remove lazy-load screenshot timing variance; production `js/catalog.js` remains unchanged;
+- staging / public indexability policy is unchanged and Production Launch is still not approved.
+
+'''
+          state=replace_once(state,'## 7. Existing B2B / Admin platform state',insert+'## 7. Existing B2B / Admin platform state','state verification insert')
+          state=replace_once(state,
+              '- bulk-migrating locked page CSS merely for housekeeping.',
+              '- redesigning protected regions or making further architecture changes without explicit scope approval.', 'state work mode')
+          state=replace_once(state,
+              'After Information V18 release, the public mobile surface returns to protected/locked mode. Any further public work starts with a read-only parity audit and requires explicit reopening before visual or source mutation.',
+              'After the separately approved modular CSS housekeeping, the public surface remains protected/locked. Any further public visual work starts with a read-only parity audit and requires explicit reopening before visual mutation.', 'state next')
+          state='\n'.join(line.rstrip() for line in state.splitlines())+'\n'
+          write('docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md',state)
+          old_state.unlink()
+
+          # README points to the new active state and completed modular map.
+          p=Path('README.md'); s=read(p)
+          s=replace_once(s,'`docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md`','`docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md`','README current state')
+          s=replace_once(s,
+              'Public CSS architecture uses one shared core (`css/site.css`) plus at most one canonical page stylesheet under `css/pages/` for a migrated page/domain. Information V18 is the first migrated page.',
+              'Public CSS architecture uses one shared core (`css/site.css`) plus at most one canonical page stylesheet under `css/pages/` per public page/domain. The separately approved locked-page housekeeping migration is complete with zero-regression proof.', 'README CSS architecture')
+          write(p,s)
+
+          # Decision Log current-source records. Historical checkpoint rows remain historical facts.
+          p=Path('DECISION_LOG.md'); s=read(p)
+          s=replace_once(s,
+              '| AD-050 | Public Pasokan vNext implementation scope is exactly `business.html`, the Business source block in `css/site.css`, and `js/business-inquiry.js`; protected scopes remain unchanged. |',
+              '| AD-050 | Current Public Pasokan vNext source boundary is `business.html`, `css/pages/business.css`, shared-core dependencies in `css/site.css`, and `js/business-inquiry.js`; protected commercial truth and runtime contracts remain unchanged. |', 'AD-050')
+          s=replace_once(s,
+              '| AD-053 | Existing Homepage/Lines/Catalog/Testimonials/Share mobile runtime remains in `css/site.css`, `js/site.js`, and `js/mobile-public-ui.js` until those scopes are separately migrated. Information V18 uses `css/pages/information.css` + `js/info-page.js`; its superseded Information-only selectors are removed from `css/site.css`. |',
+              '| AD-053 | Public mobile runtime remains centered on shared `js/site.js` / `js/mobile-public-ui.js` where applicable, while page-specific presentation now lives in canonical `css/pages/*.css` modules; Information V18 continues to use `css/pages/information.css` + `js/info-page.js`. |', 'AD-053')
+          s=replace_once(s,
+              '| AD-061 | Active repository-state authority is `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md` until a newer CURRENT STATE is explicitly established. |',
+              '| AD-061 | Active repository-state authority is `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md` until a newer CURRENT STATE is explicitly established. |', 'AD-061')
+          s=replace_once(s,
+              '| AD-074 | Modular CSS migration is incremental. Information is the first migrated page. Already locked pages are not extracted from `css/site.css` merely for housekeeping; migrate only when explicitly reopened or separately approved with zero-regression proof. |',
+              '| AD-074 | Modular CSS migration requires explicit reopening or separate approval with zero-regression proof. On 11 September 2026 the user separately approved locked-page CSS modularization as housekeeping; that migration is now verified without reopening visual locks. |\n| AD-075 | Current canonical CSS map is `site.css` shared core plus `home.css`, `lines.css`, `products.css`, `product.css`, `testimonials.css`, `share.css`, `cart.css`, `business.css`, and `information.css` under `css/pages/`. Deterministic browser parity passed 22/22 comparisons at mobile `390×844` and desktop `1440×900`; no visual redesign is authorized by this structural release. |', 'AD-074/075')
+          s=replace_once(s,
+              '- `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md`',
+              '- `docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md`', 'Decision Log current state pointer')
+          write(p,s)
+
+          # Mobile supplement: architecture completion, not visual reinterpretation.
+          p=Path('AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md'); s=read(p)
+          s=replace_once(s,
+              '- already locked pages are not bulk-migrated merely for housekeeping.',
+              '- locked pages require explicit reopening or separate approval plus zero-regression proof before structural migration; the 11 September 2026 housekeeping approval authorized the completed migration listed below.', 'mobile guardrail')
+          s=replace_once(s,
+              '**Information is the first migrated page** and uses `css/pages/information.css`.',
+              '''Current canonical page stylesheets are:
+- `css/pages/home.css`;
+- `css/pages/lines.css`;
+- `css/pages/products.css`;
+- `css/pages/product.css`;
+- `css/pages/testimonials.css`;
+- `css/pages/share.css`;
+- `css/pages/cart.css`;
+- `css/pages/business.css`;
+- `css/pages/information.css`.''', 'mobile module map')
+          s=replace_once(s,
+              'Existing released Homepage / Dedicated Lines / Product Catalog / Testimonials / Share mobile runtime remains centered on `js/mobile-public-ui.js` with shared `js/site.js` behavior until those scopes are explicitly reopened or separately migrated with zero-regression proof.',
+              'Released Homepage / Dedicated Lines / Product Catalog / Testimonials / Share mobile runtime remains centered on `js/mobile-public-ui.js` with shared `js/site.js` behavior; the CSS presentation for those domains is now housed in the canonical page stylesheets above.', 'mobile runtime')
+          verify='''### Modular CSS housekeeping
+
+The later 11 September 2026 housekeeping pass structurally migrated the remaining locked public page CSS without reopening visual scope. Source/asset/syntax checks passed, followed by deterministic browser parity **22/22** at `390×844` and `1440×900`. Product Catalog production lazy-loading remains unchanged; eager loading was used only inside parity runner copies to remove screenshot timing variance.
+
+'''
+          s=replace_once(s,'## 14. Release discipline',verify+'## 14. Release discipline','mobile verification')
+          write(p,s)
+
+          # Product/Catalog supplement current source boundary.
+          p=Path('AYA-RAOS-PRODUCT-CATALOG-CANONICAL-SUPPLEMENT-v1.md'); s=read(p)
+          s=replace_once(s,
+              '- one consolidated Product/Catalog section inside `css/site.css`',
+              '- `css/pages/products.css` for Product Catalog / Mobile Product Book presentation\n- `css/pages/product.css` for direct Product Detail presentation\n- shared design-system core in `css/site.css`', 'product source boundary')
+          s=replace_once(s,
+              'Only `css/site.css` remains the active public design system.',
+              '`css/site.css` remains the shared public design-system core; Product Catalog and Product Detail each use their one canonical page stylesheet above.', 'product design system')
+          write(p,s)
+
+          # Cart supplement current source boundary.
+          p=Path('AYA-RAOS-CART-B2C-CANONICAL-SUPPLEMENT-v1.md'); s=read(p)
+          s=replace_once(s,'- Cart selectors inside `css/site.css`.','- Cart presentation inside `css/pages/cart.css`, with shared core dependencies in `css/site.css`.','cart source boundary')
+          s=replace_once(s,
+              '`css/site.css` remains the single public design system. Product data remains sourced from `js/data.js`.',
+              '`css/site.css` remains the shared public design-system core; Cart page-specific presentation is canonical in `css/pages/cart.css`. Product data remains sourced from `js/data.js`.', 'cart design system')
+          write(p,s)
+
+          # Pasokan supplement current source boundary.
+          p=Path('AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md'); s=read(p)
+          s=replace_once(s,'- Business selectors inside `css/site.css`;','- Business presentation inside `css/pages/business.css`, with shared core dependencies in `css/site.css`;','Pasokan source boundary')
+          s=replace_once(s,
+              '`css/site.css` remains the single public design system.',
+              '`css/site.css` remains the shared public design-system core; public Pasokan page-specific presentation is canonical in `css/pages/business.css`.', 'Pasokan design system')
+          write(p,s)
+
+          # Remove the transient governance workflow from the resulting tree.
+          wf=Path('.github/workflows/housekeeping-governance-sync.yml')
+          assert wf.exists(); wf.unlink()
+          PY
+
+          git diff --check
+          test -f docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v15.md
+          test ! -e docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md
+          ! grep -q 'Information V18 is the first migrated page' README.md
+          grep -q 'AD-075' DECISION_LOG.md
+          grep -q 'css/pages/products.css' AYA-RAOS-PRODUCT-CATALOG-CANONICAL-SUPPLEMENT-v1.md
+          grep -q 'css/pages/cart.css' AYA-RAOS-CART-B2C-CANONICAL-SUPPLEMENT-v1.md
+          grep -q 'css/pages/business.css' AYA-RAOS-PASOKAN-USAHA-CANONICAL-SUPPLEMENT-v2.md
+
+          git config user.name 'AYA RAOS Governance Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'docs: record completed modular public CSS architecture'
+          git push origin HEAD:housekeeping/modular-product-css-20260911-run
