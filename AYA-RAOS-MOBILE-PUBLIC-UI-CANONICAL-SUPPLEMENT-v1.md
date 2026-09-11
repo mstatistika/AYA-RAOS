@@ -2,11 +2,11 @@
 
 **Approved:** 22 Agustus 2026  
 **Scope:** Public Website Mobile UI  
-**Implementation branch:** `feature/mobile-public-ui-locked-20260822`  
-**Implementation checkpoint:** `ae52958a4408d9da95464e2f7b07de1544015457` — `refactor: consolidate locked public mobile UI`  
-**Status:** **FINAL MOBILE VISUAL / UX LOCK — staging / noindex**
-**Product Catalog amendment approved:** 5 September 2026 — **Mobile Product Book V24 FINAL LOCK**
-**Testimonial Share parity correction approved:** 5 September 2026 — **Foto/Video media modal viewport-fit correction**
+**Status:** **FINAL MOBILE VISUAL / UX LOCK — staging / noindex**  
+**Product Catalog amendment approved:** 5 September 2026 — **Mobile Product Book V24 FINAL LOCK**  
+**Testimonial Share parity correction approved:** 5 September 2026 — **Foto/Video media modal viewport-fit correction**  
+**Information amendment approved:** 11 September 2026 — **Information Mobile V18 FINAL LOCK**  
+**CSS architecture amendment approved:** 11 September 2026 — **shared core + canonical page stylesheets**
 
 ## 1. Authority and boundary
 
@@ -14,7 +14,7 @@ This supplement governs the approved **mobile presentation** for the public scop
 
 Read together with:
 1. latest explicit user approval/correction;
-2. latest current development baseline;
+2. latest CURRENT STATE;
 3. this supplement for mobile presentation;
 4. applicable Product/Catalog, Testimonials/Share, Cart/B2C, Pasokan and Dedicated Line canonical rules;
 5. Project Constitution and Execution Discipline;
@@ -24,32 +24,45 @@ Desktop locks remain intact unless explicitly reopened.
 
 ## 2. Implemented mobile scope
 
-The mobile implementation activates only at `max-width: 900px` for:
+The released mobile implementation activates at `max-width: 900px` for:
 - Homepage (`body[data-page="home"]`);
 - Dedicated Line Pages (`body[data-page="line"]`);
 - Product Catalog (`body[data-page="products"]`);
 - Public Testimonials (`body[data-page="testimonials"]`);
-- Testimonial Share (`body[data-page="share"]`).
+- Testimonial Share (`body[data-page="share"]`);
+- **Information (`body[data-page="information"]`) — V18**.
 
-Explicitly outside this mobile release:
-- Information — PARKED / unchanged;
-- Cart/B2C — existing v16 remains protected;
-- Pasokan Usaha / B2B — current released Pasokan vNext remains protected;
-- direct Product Detail source/page — unchanged by this release;
+Still outside this mobile presentation authority unless separately governed:
+- Cart/B2C — existing protected implementation;
+- Pasokan Usaha / B2B — released Pasokan vNext remains protected;
+- direct Product Detail source/page — unchanged by the Information release;
 - testimonial backend/Supabase/moderation contracts — protected.
 
 ## 3. Source architecture
 
-Final implementation source boundary relative to the previous canonical `main`:
-- `css/site.css`;
-- `js/site.js`;
-- `js/mobile-public-ui.js`.
+### Shared public core
 
-`css/site.css` remains the **single public-site stylesheet/design system**. The temporary standalone `css/mobile-public-ui.css` used during implementation was consolidated into `css/site.css` before release and removed.
+`css/site.css` remains the **shared public design-system core**, containing design tokens, global header, shared controls/utilities and genuinely cross-page presentation.
 
-No parallel mobile stylesheet, stacked CSS patch layer, or `!important` architecture is permitted.
+The former requirement that every page-specific style must also live in `css/site.css` is superseded by the 11 September 2026 modular architecture approval.
 
-`js/mobile-public-ui.js` is the scoped mobile runtime. `js/site.js` loads it only for the approved mobile page set. The runtime exits above the mobile breakpoint.
+A public page/domain may have **at most one canonical page stylesheet** under:
+`css/pages/<page>.css`
+
+Rules:
+- one token system only;
+- page-specific selectors belong to the page stylesheet once that page is migrated;
+- no duplicate page selectors between `css/site.css` and the page stylesheet;
+- no parallel `desktop.css` / `mobile.css` architecture;
+- desktop and mobile rules for a migrated page remain together in the same canonical page stylesheet;
+- no stacked CSS patch layers, dead selectors or new `!important` architecture;
+- already locked pages are not bulk-migrated merely for housekeeping.
+
+**Information is the first migrated page** and uses `css/pages/information.css`.
+
+Existing released Homepage / Dedicated Lines / Product Catalog / Testimonials / Share mobile runtime remains centered on `js/mobile-public-ui.js` with shared `js/site.js` behavior until those scopes are explicitly reopened or separately migrated with zero-regression proof.
+
+Information V18 uses its existing scoped `js/info-page.js` runtime for the right-rail state and keeps shared header/WhatsApp behavior in `js/site.js`.
 
 ## 4. Global mobile doctrine
 
@@ -79,11 +92,12 @@ The 1VP rule is geometry-first. Stable hierarchy, whitespace, legibility, and co
 Final approved mobile preview lineage:
 - Homepage — **V3.7**;
 - Dedicated Line Pages — **V4.9**;
-- Catalog — **Product Book V24** (**visual V14 + R5.13 engine + V24 wrapper fixes**);
+- Catalog — **Mobile Product Book V24** (**visual V14 + R5.13 engine + V24 wrapper fixes**);
 - Testimonials — **V6.5**;
-- Testimonial Share — **V7.23**.
+- Testimonial Share — **V7.23**;
+- **Information — V18**.
 
-Standalone preview navigation controls used during review are preview-only and are not part of production website UI.
+Standalone preview navigation controls used during review are preview-only unless explicitly translated into the approved production interaction. Information V18's right-side rail is part of the approved production interaction.
 
 ## 6. Homepage mobile — FINAL LOCK
 
@@ -182,7 +196,46 @@ Post-release parity correction approved on 5 September 2026:
 
 Preview-only fake submission behavior from standalone HTML references is **not** production behavior and is not authorized by this supplement.
 
-## 11. Protection / zero-regression boundary
+## 11. Information mobile — V18 FINAL LOCK
+
+Information V18 is a mobile-only reopened-and-relocked region. Desktop Information was not visually reopened.
+
+Approved navigation architecture:
+`Produk → Pesan → Kirim → Acara → Pasokan → Bantuan`
+
+Approved visual / interaction direction:
+- one calm customer-service workspace below the shared mobile header;
+- content surface on the left and six-item vertical rail on the right;
+- inactive rail items are open/quiet rather than six identical rounded cards;
+- active rail state uses the maroon bookmark treatment;
+- all section CTAs have equal fixed width and the same maroon treatment;
+- hero uses `INFORMASI AYA` with `Sebelum memesan.`;
+- internal text dividers are removed from section copy;
+- Acara uses only a clear heading/body hierarchy, avoiding multiple competing display-font sizes;
+- Bantuan contains three customer-service questions and no separate legal-looking copy block beside the CTA.
+
+Customer-routing truth:
+- one-time purchase, including one-time event/office/hampers/large quantity, remains Keranjang AYA;
+- recurring supply is Pasokan Usaha;
+- quantity alone does not determine the route;
+- no account is required for one-time shopping.
+
+Shipping/payment truth:
+- temporary checkout shipping remains Rp25.000 when authoritative route calculation is unavailable;
+- this fallback is not a live Grab/Gojek tariff;
+- online payment through the website remains unavailable until provider-backed activation is explicitly released.
+
+Pasokan truth:
+- Information summarizes recurring-supply routing but does not calculate qualification;
+- cadence remains customer-facing weekly / two-weekly / monthly / two-monthly, corresponding to W1/W2/M1/M2 authority;
+- price, availability and schedule are not confirmed until the need has been checked;
+- Information does not activate B2B Account, quotation, order, invoice, payment, stock reservation or delivery commitment.
+
+Bantuan truth:
+- unresolved cancellation/refund, allergy, shelf-life, certification and special-needs policies are not invented;
+- the customer is directed to AYA for the actual product/order context.
+
+## 12. Protection / zero-regression boundary
 
 This release does not reopen:
 - desktop Homepage;
@@ -190,35 +243,49 @@ This release does not reopen:
 - desktop Product/Catalog lock;
 - Cart/B2C;
 - Pasokan/B2B;
-- Information;
+- desktop Information;
+- direct Product Detail;
 - testimonial data/upload/Supabase/moderation/approval architecture.
 
-Shared runtime/CSS changes are scoped by page and breakpoint so non-target pages and desktop presentation remain outside the mobile override.
+Shared runtime/CSS changes must remain scoped by page and breakpoint so non-target pages and desktop presentation stay outside the active override.
 
-## 12. Verification checkpoint
+## 13. Verification checkpoints
+
+### Mobile Product Book V24
 
 Mobile Product Book V24 implementation candidate was translated from the LOCK rather than redesigned. The clean implementation checkpoint is `485f7f6e3f3bbfb95776677d5e7a7404f6bd434c`.
 
-Verified implementation boundary relative to the previous canonical `main`:
-- `css/site.css` — replaced the superseded Product-mobile block in place; no parallel public stylesheet and no new `!important` architecture;
+Verified Product Book implementation boundary relative to its previous canonical `main`:
+- `css/site.css` — replaced the superseded Product-mobile block in place;
 - `js/mobile-public-ui.js` — replaced only `initMobileCatalog()` with the V24/R5.13 Product Book runtime;
 - `js/site.js` — Product-mobile runtime cache-bust only;
 - `products.html` — Product page cache-bust only.
 
-`js/catalog.js`, desktop Product Catalog, direct Product Detail, Cart/B2C semantics, Homepage, Dedicated Lines, Testimonials/Share, Pasokan and Information were not reopened by this implementation.
+The 5 September 2026 Share parity correction remains source-scoped to the existing Testimonial Share selector block and did not change testimonial backend contracts.
 
-Validation before governance sync:
-- scoped mutation assertions passed;
-- `node --check js/mobile-public-ui.js` passed;
-- `node --check js/site.js` passed;
-- `git diff --check` and `git diff --cached --check` passed;
-- implementation tree compared with prior `main` shows exactly four changed source paths listed above;
-- Vercel implementation deployment for `a68a0d2c8c69d7392e802c891d1fb54318f9cf60` = READY / HTTP 200;
-- staging remains `noindex, nofollow, noarchive`.
+### Information V18
 
-The 5 September 2026 Share parity correction is source-scoped to the existing Testimonial Share selector block in `css/site.css`; no new stylesheet, runtime file, backend change, or testimonial data-contract change is introduced.
+Information V18 implementation is translated from the approved V18 preview, not redesigned during implementation.
 
-## 13. Release discipline
+Canonical source boundary:
+- `information.html`;
+- `css/pages/information.css`;
+- `js/info-page.js`;
+- removal of superseded Information-only selectors from `css/site.css`.
+
+Pre-release verification:
+- exact pre-mutation `css/site.css` blob was asserted before scoped extraction;
+- `git diff --check` passed;
+- `node --check js/info-page.js` passed;
+- only Information source plus the required shared-core selector extraction changed;
+- Vercel preview reached READY and served Information HTML/CSS/JS with HTTP 200;
+- staging remained `noindex, nofollow, noarchive`;
+- geometry checks passed at `360×800`, `390×844`, and `430×932`;
+- the tested mobile root remained one viewport;
+- all six panels fit without internal overflow at those review targets;
+- all six CTAs measured 160×36 at the same layout position.
+
+## 14. Release discipline
 
 Staging remains `noindex` until explicit Production Launch approval.
 
