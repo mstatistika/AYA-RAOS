@@ -1,0 +1,78 @@
+name: Modularize Cart CSS
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-css-locked-pages-20260911
+    paths:
+      - .github/workflows/modularize-cart-css.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Extract Cart stylesheet transactionally
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          site_path = Path('css/site.css')
+          page_path = Path('css/pages/cart.css')
+          html_path = Path('cart.html')
+          site = site_path.read_text(encoding='utf-8')
+          html = html_path.read_text(encoding='utf-8')
+
+          start_marker = '/* Cart / B2C — approved v16 implementation */'
+          end_marker = '/* Pasokan Usaha — B2B vNext APPROVED 2026-08-20 */'
+          assert site.count(start_marker) == 1, site.count(start_marker)
+          assert site.count(end_marker) == 1, site.count(end_marker)
+          start = site.index(start_marker)
+          end = site.index(end_marker)
+          assert start < end
+          block = site[start:end].rstrip() + '\n'
+
+          assert 'body[data-page="cart"]' in block
+          assert 'body[data-page="business"]' not in block
+          assert 'information-mobile' not in block
+          assert not page_path.exists()
+          assert html.count('css/site.css?v=20260909-b2c-mobile-lock-v1') == 1
+          assert 'css/pages/cart.css' not in html
+
+          proposed_site = site[:start] + site[end:]
+          proposed_html = html.replace(
+              '<link href="css/site.css?v=20260909-b2c-mobile-lock-v1" rel="stylesheet"/>',
+              '<link href="css/site.css?v=20260909-b2c-mobile-lock-v1" rel="stylesheet"/>\n<link href="css/pages/cart.css?v=20260911-modular-v1" rel="stylesheet"/>',
+              1,
+          )
+
+          assert start_marker not in proposed_site
+          assert 'body[data-page="cart"]' not in proposed_site
+          assert proposed_html.count('css/pages/cart.css') == 1
+
+          page_path.parent.mkdir(parents=True, exist_ok=True)
+          page_path.write_text('/* AYA RAOS — Cart/B2C canonical page stylesheet. Structural extraction only; no visual reinterpretation. */\n\n' + block, encoding='utf-8')
+          site_path.write_text(proposed_site, encoding='utf-8')
+          html_path.write_text(proposed_html, encoding='utf-8')
+          PY
+
+          git diff --check
+          test -f css/pages/cart.css
+          grep -q 'body\[data-page="cart"\]' css/pages/cart.css
+          ! grep -q 'body\[data-page="cart"\]' css/site.css
+          grep -q 'css/pages/cart.css?v=20260911-modular-v1' cart.html
+          git status --short
+
+      - name: Commit Cart extraction
+        run: |
+          git config user.name "AYA RAOS Housekeeping Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add css/site.css css/pages/cart.css cart.html
+          git diff --cached --check
+          git commit -m "refactor: extract Cart styles into canonical page CSS"
+          git push origin HEAD:housekeeping/modular-css-locked-pages-20260911
