@@ -1,0 +1,186 @@
+name: Housekeeping repair CSS scopes
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-product-css-20260911-run
+    paths:
+      - .github/workflows/housekeeping-repair-css-scope.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-product-css-20260911-run
+      - name: Repair Home Testimonials and Share stylesheet scopes transactionally
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          share_path=Path('css/pages/share.css')
+          testimonials_path=Path('css/pages/testimonials.css')
+          home_path=Path('css/pages/home.css')
+          helper=Path('.github/workflows/housekeeping-repair-css-scope.yml')
+          diagnostic=Path('.github/workflows/housekeeping-css-diagnose.yml')
+
+          share=share_path.read_text(encoding='utf-8')
+          testimonials=testimonials_path.read_text(encoding='utf-8')
+          home=home_path.read_text(encoding='utf-8')
+
+          def match_block(text, open_brace):
+              depth=1; i=open_brace+1; quote=None; esc=False; comment=False
+              while i<len(text):
+                  if comment:
+                      if text.startswith('*/',i): comment=False; i+=2; continue
+                      i+=1; continue
+                  if quote:
+                      ch=text[i]
+                      if esc: esc=False
+                      elif ch=='\\': esc=True
+                      elif ch==quote: quote=None
+                      i+=1; continue
+                  if text.startswith('/*',i): comment=True; i+=2; continue
+                  ch=text[i]
+                  if ch in ('"',"'"): quote=ch
+                  elif ch=='{': depth+=1
+                  elif ch=='}':
+                      depth-=1
+                      if depth==0: return i
+                  i+=1
+              raise AssertionError('unbalanced block')
+
+          def direct_blocks(text, start, end):
+              out=[]; i=start
+              while i<end:
+                  while i<end and text[i].isspace(): i+=1
+                  if i>=end: break
+                  if text.startswith('/*',i):
+                      j=text.find('*/',i+2,end); assert j!=-1
+                      i=j+2; continue
+                  brace=text.find('{',i,end)
+                  if brace==-1: break
+                  close=match_block(text,brace)
+                  assert close<end
+                  pre=text[i:brace].strip()
+                  out.append((i,close+1,pre,text[i:close+1]))
+                  i=close+1
+              return out
+
+          # Find top-level blocks in Share and split only explicitly foreign-scoped rules.
+          top=direct_blocks(share,0,len(share))
+          media_repairs=[]
+          moved_test=[]
+          moved_home=[]
+          for start,end,pre,raw in top:
+              if not pre.startswith('@media'):
+                  continue
+              brace=share.find('{',start,end)
+              close=end-1
+              children=direct_blocks(share,brace+1,close)
+              remove=[]; test_rules=[]; home_rules=[]
+              for cs,ce,cpre,craw in children:
+                  domains=set(re.findall(r'body\[data-page="([^"]+)"\]',cpre))
+                  foreign=domains & {'testimonials','home'}
+                  if not foreign: continue
+                  assert 'share' not in domains, f'mixed Share/foreign selector group: {cpre}'
+                  assert len(foreign)==1, f'mixed foreign domains: {cpre}'
+                  remove.append((cs,ce))
+                  if 'testimonials' in foreign: test_rules.append(craw.strip())
+                  else: home_rules.append(craw.strip())
+              if not remove: continue
+              body=share[brace+1:close]
+              rel=[(a-(brace+1),b-(brace+1)) for a,b in remove]
+              for a,b in sorted(rel,reverse=True): body=body[:a]+body[b:]
+              repaired=share[start:brace+1]+body+share[close:end]
+              media_repairs.append((start,end,repaired))
+              if test_rules: moved_test.append(pre+'{\n'+'\n'.join(test_rules)+'\n}')
+              if home_rules: moved_home.append(pre+'{\n'+'\n'.join(home_rules)+'\n}')
+
+          assert moved_test, 'no Testimonials responsive rules found in Share CSS'
+          assert len(moved_home)==1, f'expected one Home responsive fragment, got {len(moved_home)}'
+          for start,end,repaired in sorted(media_repairs,reverse=True):
+              share=share[:start]+repaired+share[end:]
+
+          assert 'body[data-page="testimonials"]' not in share
+          assert 'body[data-page="home"]' not in share
+
+          # Remove the redundant Share hidden selector from Testimonials, then restore
+          # the responsive Testimonials rules before the locked mobile V6.5 authority.
+          old_hidden='body[data-page="testimonials"] [hidden],\nbody[data-page="share"] [hidden]{'
+          assert testimonials.count(old_hidden)==1
+          testimonials=testimonials.replace(old_hidden,'body[data-page="testimonials"] [hidden]{',1)
+          mobile_marker='/* Mobile Testimonials V6.5 — canonical locked mobile presentation */'
+          assert testimonials.count(mobile_marker)==1
+          insert='\n\n'.join(moved_test).strip()
+          testimonials=testimonials.replace(mobile_marker,insert+'\n\n'+mobile_marker,1)
+          assert 'body[data-page="share"]' not in testimonials
+
+          # Home extraction deliberately retained the canonical Public Mobile UI outer
+          # @media envelope. It was missing only its final close. Keep the 380px rule
+          # that originally lived at the end of that envelope, then close it.
+          def balance_stack(text):
+              stack=[]; i=0; quote=None; esc=False; comment=False
+              while i<len(text):
+                  if comment:
+                      if text.startswith('*/',i): comment=False; i+=2; continue
+                      i+=1; continue
+                  if quote:
+                      ch=text[i]
+                      if esc: esc=False
+                      elif ch=='\\': esc=True
+                      elif ch==quote: quote=None
+                      i+=1; continue
+                  if text.startswith('/*',i): comment=True; i+=2; continue
+                  ch=text[i]
+                  if ch in ('"',"'"): quote=ch
+                  elif ch=='{': stack.append(i)
+                  elif ch=='}':
+                      assert stack, 'extra closing brace in Home CSS'
+                      stack.pop()
+                  i+=1
+              return stack
+
+          stack=balance_stack(home)
+          assert len(stack)==1, f'Home expected one unmatched open, got {len(stack)}'
+          pos=stack[0]
+          line=home.count('\n',0,pos)+1
+          context=home[max(home.rfind('\n',0,pos),home.rfind('}',0,pos))+1:pos+1].strip()
+          assert context=='@media (max-width:900px){', f'unexpected Home unmatched opener line {line}: {context}'
+          home=home.rstrip()+'\n\n'+moved_home[0].strip()+'\n}\n'
+          assert not balance_stack(home), 'Home CSS still unbalanced after repair'
+
+          # Ensure foreign scope is now absent and the moved rules remain present.
+          assert 'body[data-page="home"]' not in share
+          assert 'body[data-page="testimonials"]' not in share
+          assert 'body[data-page="share"]' not in testimonials
+          assert 'body[data-page="testimonials"]' in testimonials
+          assert 'body[data-page="home"]' in home
+          assert '@media(max-width:380px)' in home.replace(' ','')
+
+          share_path.write_text(share.rstrip()+'\n',encoding='utf-8')
+          testimonials_path.write_text(testimonials.rstrip()+'\n',encoding='utf-8')
+          home_path.write_text(home,encoding='utf-8')
+          if diagnostic.exists(): diagnostic.unlink()
+          helper.unlink()
+          PY
+
+          git diff --check
+          ! grep -q 'body\[data-page="testimonials"\]' css/pages/share.css
+          ! grep -q 'body\[data-page="home"\]' css/pages/share.css
+          ! grep -q 'body\[data-page="share"\]' css/pages/testimonials.css
+
+          git config user.name 'AYA RAOS Housekeeping Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add css/pages/home.css css/pages/testimonials.css css/pages/share.css .github/workflows/housekeeping-css-diagnose.yml .github/workflows/housekeeping-repair-css-scope.yml
+          git diff --cached --check
+          git commit -m 'refactor: repair migrated page CSS scopes without visual change'
+          git push origin HEAD:housekeeping/modular-product-css-20260911-run
