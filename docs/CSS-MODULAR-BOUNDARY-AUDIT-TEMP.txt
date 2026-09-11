@@ -1,0 +1,153 @@
+AYA RAOS CSS MODULAR BOUNDARY AUDIT
+
+COMMENTS / MARKERS
+1: /* AYA RAOS — Final Matrix Design System
+35: /* Global header — geometry inherited from approved Homepage */
+57: /* Small site signature only; not a footer */
+62: /* Reusable controls */
+71: /* Heritage surfaces use photographic atmosphere, not page rails */
+77: /* Common runtime feedback */
+81: /* 404 */
+88: /* Homepage hero */
+113: /* Shared parchment world */
+132: /* Homepage — Tentang AYA */
+156: /* Homepage — Lini AYA — final visual lock 2026-08-11 */
+179: /* Homepage — Mulai dari AYA — final visual lock v5 2026-08-11 */
+335: /* Three Line pages — MASTER REFERENCES 2026-08-14 */
+357: /* VP1 — FEEL */
+379: /* VP2 — UNDERSTAND; intro optical-center left, four icons right, decision rail below */
+410: /* VP3 — DESIRE */
+456: /* Catalog — MOCKUP PARITY SOURCE OF TRUTH 2026-08-15 */
+823: /* Catalog right rail */
+1074: /* Quick-add dialog */
+1142: /* Product Detail — MOCKUP PARITY SOURCE OF TRUTH 2026-08-15 */
+1382: /* Exact locked commerce geometry: summary left, variants + CTA right */
+1557: /* Short-height desktop: preserve mockup hierarchy; allow page scroll rather than crushing it */
+1559: /* Catalog: keep the approved placement, but stop shrinking the editorial text. */
+1668: /* Product Detail: use the vertical stage instead of leaving a large empty lower half. */
+1981: /* Testimonials Experience — approved preview direction 2026-08-15 · surface richness v1.3
+1985: /* --------------------------------------------------------------------------
+2621: /* Public gallery */
+2764: /* --------------------------------------------------------------------------
+2850: /* Share sidebar atmosphere — canonical */
+2852: /*
+2884: /*
+3058: /* Share ivory atmosphere — canonical */
+3060: /*
+3614: /* Tablet: preserve hierarchy, move from 20/40/40 into readable flow. */
+3882: /* Desktop short-height fit: preserve the approved composition inside one viewport.
+4275: /* Share form — vertical format workspace refinement */
+4284: /* Sidebar icons */
+4301: /* Share heading + interaction polish — canonical */
+4303: /* Shared line-icon language */
+4331: /*
+4369: /* -------------------------------------------------------
+4400: /* Header icon interaction only — no geometry change */
+4420: /* Consent validation error uses the existing visible error element */
+4438: /* Horizontal format tabs + full-width workspace */
+4496: /* Tulisan — product companion */
+4570: /* Foto / Video — inspection workspace */
+4583: /* -------------------------------------------------------
+4645: /* -------------------------------------------------------
+4698: /* File identity + change/remove controls */
+4751: /* -------------------------------------------------------
+4810: /* -------------------------------------------------------
+4844: /* Photo mode — use the right column fully with helper copy */
+4862: /* Story always begins under the fixed top zone */
+4883: /* Consent restored */
+4899: /* Main CTA on the right */
+4911: /* Short desktop */
+4940: /*
+5008: /* Mobile = normal vertical flow */
+5083: /* Share submit confirmation — canonical */
+5267: /* Visibility contract — must remain last in the Share scope. */
+5273: /* Cross-page short-height discipline */
+5292: /* FARM MASTER LOCKED 2026-08-14 — START */
+5303: /* FARM MASTER LOCKED 2026-08-14 — END */
+5305: /* SPICE MASTER LOCKED 2026-08-14 — START */
+5315: /* SPICE MASTER LOCKED 2026-08-14 — END */
+5317: /* SNACKS MASTER LOCKED 2026-08-14 — START */
+5318: /* SNACKS COLOR WORLD — TOASTED BROWN / TERRACOTTA / AMBER v1 */
+5328: /* SNACKS MASTER LOCKED 2026-08-14 — END */
+5330: /* AYA RAOS — Public Mobile UI lock implementation — 2026-08-22
+5381: /* Dedicated Lines Mobile — final LOCK 2026-09-03 */
+5443: /* VP1 — keep previously accepted visual */
+5544: /* VP2 — same 4-board + center system, tightened to finish inside one viewport */
+5748: /* VP3 — normal image/copy split: no overlap, no raised panel */
+5935: /* Mobile Product Book V24 — visual authority V14; engine authority R5.13. */
+6029: /* AYA RAOS — Homepage mobile final cascade consolidation — 2026-09-09 */
+6030: /* migrated from css/mobile-home-v26f.css — final locked cascade */
+6031: /* AYA RAOS — mobile homepage fixes v26f
+6042: /* Crest panel first, then copy, then remaining story */
+6049: /* First screen: brand seal — keep crest prominent */
+6071: /* Second screen: readable copy on cream */
+6094: /* migrated from css/mobile-luxury-v26g.css — final locked cascade */
+6095: /* AYA RAOS — mobile luxury polish v26g
+6102: /* ── Header chrome: larger touch targets ── */
+6133: /* ── Shared buttons / form controls ── */
+6145: font-size: 16px; /* prevents iOS zoom */
+6155: /* ── Homepage: keep crest first (reinforce v26f) ── */
+6166: /* Crest screen — slightly more breathing room */
+6182: /* Copy screen — more legible body */
+6207: /* About — larger value icons + readable type */
+6256: /* Lines — less cramped marks & category icons */
+6323: /* Closing cards — larger icons, clearer hierarchy */
+6359: /* Light kickers more readable */
+6366: /* Extra-small phones: keep luxury, tighten only where needed */
+6386: /* migrated from css/mobile-luxury-v26h.css — final locked cascade */
+6387: /* AYA RAOS — mobile luxury polish v26h
+6397: /* ══════════ 1) COPY / HERO LEFT ══════════ */
+6419: /* Hide long desktop paragraphs that still leak on some builds */
+6456: /* ══════════ 2) ABOUT ══════════ */
+6504: /* ══════════ 3) LINES ══════════ */
+6547: /* CTA as proper chip */
+6569: /* Side rail */
+6588: /* ══════════ 4) CLOSING — stack, no overlap ══════════ */
+6607: /* Text block first — full width, no absolute image bleed */
+6632: /* Hide brand-note on mobile to reduce density */
+6636: /* Image below text, full width */
+6654: /* Two cards */
+6692: display: none !important; /* too dense on small screens */
+6718: /* Header touch (keep from v26g) */
+6744: /* migrated from css/mobile-luxury-v26i.css — final locked cascade */
+6745: /* AYA RAOS — mobile luxury v26i
+6753: /* ── Stable viewport units for snap ── */
+6780: /* ── Crest: panorama luxury background ── */
+6810: /* ── 3 line signature icons (copy screen) ── */
+6834: display: none !important; /* hide leftover unicode if any */
+6850: /* ── Lines rail: real marks ── */
+6878: /* ── Closing: image fit + equal cards ── */
+6956: min-height: 2.4em !important; /* equal title block so images align */
+6991: /* migrated from css/mobile-luxury-v26j.css — final locked cascade */
+6992: /* AYA RAOS — mobile luxury v26j
+7030: /* ── Signatures: icon + role only ── */
+7071: /* ── Lines: one viewport, CTA visible ── */
+7161: /* ── Closing: compact, no mess ── */
+7296: /* Root scroll architecture fix — the page itself is the snap viewport. */
+7309: /* migrated from css/mobile-home-semesta-density-v1.css — final locked cascade */
+7310: /* AYA RAOS — Homepage mobile VP2/VP3/VP4/VP5 parity v38
+7357: /* VP2 + VP4 — canonical AYA RAOS brand identity assets */
+7372: /* VP5 — MULAI PERJALANAN RASA */
+7424: /* PREVIEW ONLY — merged VP2 compact brand map V8. */
+
+PAGE SELECTOR COUNTS
+home: 481
+line: 217
+products: 172
+product: 123
+testimonials: 209
+share: 421
+cart: 0
+business: 1
+information: 0
+
+HTML:HAS PAGE COUNTS
+home: 0
+line: 0
+products: 1
+product: 0
+testimonials: 0
+share: 0
+cart: 0
+business: 0
+information: 0
