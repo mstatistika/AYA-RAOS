@@ -78,6 +78,18 @@ body[data-page="home"] .site-signature,body[data-page="testimonials"] .site-sign
 .toast-region{position:fixed;left:16px;bottom:16px;z-index:500;display:grid;gap:7px}.toast{padding:9px 13px;border-radius:8px;background:#fff5e5;color:#591115;border:1px solid #c69753;box-shadow:var(--shadow);font-size:10px}.global-state{position:fixed;z-index:300;left:50%;transform:translateX(-50%);max-width:min(720px,calc(100% - 30px));padding:12px 18px;border-radius:12px;background:#fff2e4;color:#6e1517;box-shadow:var(--shadow);top:calc(var(--header-h) + 9px)}
 .media-dialog{max-width:min(900px,90vw);max-height:90vh}.media-dialog::backdrop{background:rgba(20,2,3,.76)}.media-dialog [data-dialog-content] img{max-height:82vh;border-radius:14px}.dialog-close{width:34px;height:34px;border:0;border-radius:50%;background:#edddc4;color:#641014;font-size:22px}
 
+/* Shared scroll cue — reused by Homepage and Pasokan */
+.home-scroll-cue{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:5;display:inline-flex;flex-direction:column;align-items:center;gap:5px;color:rgba(240,221,173,.7);font:700 11.5px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;opacity:.92;transition:opacity .18s ease,transform .18s ease;}
+.home-scroll-cue:hover{opacity:1;transform:translateX(-50%) translateY(2px);}
+.home-scroll-cue svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;animation:homeCue 1.8s ease-in-out infinite;}
+.home-scroll-cue.light{color:#8a551d;}
+.home-scroll-cue:focus-visible{outline:1px solid currentColor;outline-offset:6px;border-radius:999px;}
+.mobile-only-cue{display:none;}
+@keyframes homeCue{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(4px);}
+}
+
 /* 404 */
 .not-found-section{min-height:calc(100dvh - var(--header-h) - 24px);display:flex;align-items:center}.not-found-layout{display:flex;justify-content:center}.not-found-card{max-width:680px;text-align:center}.error-code{display:block;font-family:var(--serif);font-size:120px;color:#d6a147}.not-found-actions{display:flex;justify-content:center;gap:12px}
 

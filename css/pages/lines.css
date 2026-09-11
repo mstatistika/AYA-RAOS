@@ -166,6 +166,7 @@ body.line-page-snack{--line-accent:#8b4d23;--line-accent-deep:#683518;--line-acc
 @media (max-width:520px){.snacks-master-inner{width:min(calc(100% - 30px),720px)}.snacks-master-vp1{min-height:700px}.snacks-master-hero-copy h1{font-size:46px}.snacks-master-hero-copy h2{font-size:25px}.snacks-master-hero-copy>p br{display:none}.snacks-master-intro h2{font-size:38px}.snacks-master-domains{grid-template-columns:1fr}.snacks-master-actions{display:grid}.snacks-master-btn{width:100%}}
 /* SNACKS MASTER LOCKED 2026-08-14 — END */
 
+@media (max-width:900px){
 /* Dedicated Lines Mobile — final LOCK 2026-09-03 */
   body[data-page="line"]{
     --line-mobile-accent:#74171a;
@@ -719,3 +720,4 @@ body[data-page="line"] .farm-master-when::after,
     body[data-page="line"] .spice-master-actions,
     body[data-page="line"] .snacks-master-actions{margin-top:13px}
   }
+}
