@@ -1,0 +1,72 @@
+name: Business CSS parity gate
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-css-locked-pages-20260911
+    paths:
+      - .github/workflows/business-css-parity.yml
+
+permissions:
+  contents: read
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prepare baseline and browser
+        run: |
+          git fetch origin main
+          git worktree add /tmp/aya-main origin/main
+          npm install --no-save playwright@1.55.0 pixelmatch@7 pngjs@7
+          npx playwright install --with-deps chromium
+          python3 -m http.server 4173 --directory /tmp/aya-main >/tmp/base-server.log 2>&1 &
+          python3 -m http.server 4174 --directory "$GITHUB_WORKSPACE" >/tmp/candidate-server.log 2>&1 &
+          sleep 2
+
+      - name: Capture and compare Pasokan viewports
+        run: |
+          cat > "$GITHUB_WORKSPACE/.business-parity.mjs" <<'JS'
+          import { chromium } from 'playwright';
+          import pixelmatch from 'pixelmatch';
+          import { PNG } from 'pngjs';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out='/tmp/business-parity'; fs.mkdirSync(out,{recursive:true});
+          const browser=await chromium.launch({headless:true});
+          async function capture(base,label,viewport){
+            const context=await browser.newContext({viewport,deviceScaleFactor:1,reducedMotion:'reduce'});
+            const page=await context.newPage();
+            await page.goto(`${base}/business.html`,{waitUntil:'networkidle'});
+            await page.evaluate(async()=>{if(document.fonts?.ready) await document.fonts.ready; await Promise.all([...document.images].map(img=>img.complete?Promise.resolve():new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true});})));});
+            await page.addStyleTag({content:'*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}'});
+            for(const [key,sel] of [['vp1','#pasokan-usaha'],['vp2','#ritme-usaha'],['vp3','#kebutuhan-pasokan']]){
+              await page.locator(sel).screenshot({path:path.join(out,`${label}-${viewport.width}-${key}.png`)});
+            }
+            await context.close();
+          }
+          for(const vp of [{width:1440,height:900},{width:390,height:844}]){await capture('http://127.0.0.1:4173','base',vp);await capture('http://127.0.0.1:4174','candidate',vp);}
+          await browser.close();
+          let failed=false;
+          for(const width of [1440,390]) for(const key of ['vp1','vp2','vp3']){
+            const a=PNG.sync.read(fs.readFileSync(path.join(out,`base-${width}-${key}.png`)));
+            const b=PNG.sync.read(fs.readFileSync(path.join(out,`candidate-${width}-${key}.png`)));
+            if(a.width!==b.width||a.height!==b.height) throw new Error(`${width}-${key}: dimension mismatch ${a.width}x${a.height} vs ${b.width}x${b.height}`);
+            const diff=new PNG({width:a.width,height:a.height});
+            const count=pixelmatch(a.data,b.data,diff.data,a.width,a.height,{threshold:.1,includeAA:false});
+            const ratio=count/(a.width*a.height); fs.writeFileSync(path.join(out,`diff-${width}-${key}.png`),PNG.sync.write(diff));
+            console.log(`${width}-${key}: ${count} (${(ratio*100).toFixed(5)}%)`); if(ratio>.0005) failed=true;
+          }
+          if(failed) process.exit(2);
+          JS
+          node "$GITHUB_WORKSPACE/.business-parity.mjs"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: business-css-parity
+          path: /tmp/business-parity/*.png
+          retention-days: 3
