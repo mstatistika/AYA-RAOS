@@ -1,0 +1,55 @@
+name: Information V18 final validate
+
+on:
+  push:
+    branches:
+      - implement/information-mobile-v18-modular-20260911
+    paths:
+      - .github/workflows/information-v18-final-validate.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate source and governance
+        run: |
+          git fetch origin main
+          git diff --check origin/main...HEAD
+          node --check js/info-page.js
+          test -f css/pages/information.css
+          test -f docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md
+          test ! -f docs/AYA-RAOS-CURRENT-STATE-2026-08-23-v13.md
+          ! grep -q 'information-hero' css/site.css
+          ! grep -q 'information-layout' css/site.css
+          ! grep -q 'info-viewport' css/site.css
+          ! grep -q '!important' css/pages/information.css
+          grep -q 'Sebelum memesan.' information.html
+          grep -q 'css/pages/information.css' information.html
+          grep -q 'Information Mobile V18' AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md
+          grep -q 'CURRENT-STATE-2026-09-11-v14' README.md
+          grep -q 'CURRENT-STATE-2026-09-11-v14' DECISION_LOG.md
+          grep -q 'noindex, nofollow, noarchive' information.html
+
+      - name: Validate Information mobile invariants
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html = Path('information.html').read_text(encoding='utf-8')
+          css = Path('css/pages/information.css').read_text(encoding='utf-8')
+          assert html.count('data-info-mobile-key=') == 6
+          assert html.count('data-info-mobile-panel=') == 6
+          assert html.count('data-info-mobile-cta=') == 6
+          assert 'Rp25.000' in html
+          assert 'Pembayaran online melalui website belum aktif saat ini.' in html
+          assert 'Tidak perlu membuat akun.' in html
+          assert 'width:160px;min-width:160px;max-width:160px;height:36px' in css
+          assert 'grid-template-rows:repeat(6,minmax(0,1fr))' in css
+          print('Information V18 final invariants: PASS')
+          PY
