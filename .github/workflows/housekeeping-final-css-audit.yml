@@ -1,0 +1,120 @@
+name: Housekeeping final CSS audit
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-product-css-20260911-run
+    paths:
+      - .github/workflows/housekeeping-final-css-audit.yml
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-product-css-20260911-run
+      - name: Audit modular CSS source boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git diff --check origin/main...HEAD
+          python - <<'PY'
+          from pathlib import Path
+          import re, sys
+
+          mapping={
+            'index.html':('css/pages/home.css','home'),
+            'farm.html':('css/pages/lines.css','line'),
+            'spice.html':('css/pages/lines.css','line'),
+            'snacks.html':('css/pages/lines.css','line'),
+            'products.html':('css/pages/products.css','products'),
+            'product.html':('css/pages/product.css','product'),
+            'testimonials.html':('css/pages/testimonials.css','testimonials'),
+            'share.html':('css/pages/share.css','share'),
+            'cart.html':('css/pages/cart.css','cart'),
+            'business.html':('css/pages/business.css','business'),
+            'information.html':('css/pages/information.css','information'),
+          }
+          errors=[]
+          for html,(css,page) in mapping.items():
+              hp=Path(html); cp=Path(css)
+              if not hp.exists(): errors.append(f'missing HTML {html}'); continue
+              if not cp.exists(): errors.append(f'missing CSS {css}'); continue
+              h=hp.read_text(encoding='utf-8')
+              if h.count(css)!=1: errors.append(f'{html}: expected exactly one {css} link, got {h.count(css)}')
+              c=cp.read_text(encoding='utf-8')
+              pages=sorted(set(re.findall(r'body\[data-page=["\']([^"\']+)["\']\]',c)))
+              foreign=[x for x in pages if x!=page]
+              if foreign: errors.append(f'{css}: foreign body data-page selectors {foreign}')
+              # Local url() references must resolve from the CSS file directory.
+              for raw in re.findall(r'url\(([^)]+)\)',c):
+                  u=raw.strip().strip('"\'')
+                  if not u or u.startswith(('data:','http:','https:','#')): continue
+                  target=(cp.parent/u.split('?',1)[0].split('#',1)[0]).resolve()
+                  if not target.exists(): errors.append(f'{css}: missing url target {u}')
+
+          site=Path('css/site.css').read_text(encoding='utf-8')
+          forbidden=[
+            '.home-viewport','.live-home-hero','.line-master','.line-stage','.line-world',
+            '.catalog-','.aya-mobile-product-book','body[data-page="product"]','.product-hero',
+            '.testimonial-experience','.aya-mobile-testimonials','.aya-mobile-share',
+            '.cart-shell','.business-layout','.information-mobile'
+          ]
+          for token in forbidden:
+              if token in site: errors.append(f'css/site.css still contains page-specific token {token}')
+
+          # Shared-core page references are limited to signature/header contracts.
+          refs=sorted(set(re.findall(r'body\[data-page=["\']([^"\']+)["\']\]',site)))
+          allowed={'home','line','products','testimonials','share','business'}
+          extra=[x for x in refs if x not in allowed]
+          if extra: errors.append(f'css/site.css unexpected body data-page refs {extra}')
+
+          # Simple balanced-brace check that ignores quoted strings/comments.
+          def balanced(text):
+              depth=0; i=0; quote=None; esc=False; comment=False
+              while i<len(text):
+                  if comment:
+                      if text.startswith('*/',i): comment=False; i+=2; continue
+                      i+=1; continue
+                  if quote:
+                      ch=text[i]
+                      if esc: esc=False
+                      elif ch=='\\': esc=True
+                      elif ch==quote: quote=None
+                      i+=1; continue
+                  if text.startswith('/*',i): comment=True; i+=2; continue
+                  ch=text[i]
+                  if ch in ('"',"'"): quote=ch
+                  elif ch=='{': depth+=1
+                  elif ch=='}':
+                      depth-=1
+                      if depth<0: return False
+                  i+=1
+              return depth==0 and quote is None and not comment
+          for css in ['css/site.css']+sorted(set(v[0] for v in mapping.values())):
+              if not balanced(Path(css).read_text(encoding='utf-8')):
+                  errors.append(f'unbalanced CSS {css}')
+
+          print('Shared core body data-page refs:',refs)
+          for css,page in sorted(set((v[0],v[1]) for v in mapping.values())):
+              c=Path(css).read_text(encoding='utf-8')
+              print(css,'bytes=',len(c.encode()),'data-pages=',sorted(set(re.findall(r'body\[data-page=["\']([^"\']+)["\']\]',c))))
+          if errors:
+              print('\nAUDIT FAIL:')
+              for e in errors: print('-',e)
+              sys.exit(1)
+          print('\nAUDIT PASS')
+          PY
+
+          node --check js/site.js
+          node --check js/catalog.js
+          node --check js/product.js
+          node --check js/cart-page.js
+          node --check js/business-inquiry.js
+          node --check js/info-page.js
