@@ -1,5 +1,6 @@
 name: Housekeeping final CSS audit
 
+# Re-run after temporary diagnosis artifacts were removed.
 on:
   push:
     branches:
@@ -52,7 +53,6 @@ jobs:
               pages=sorted(set(re.findall(r'body\[data-page=["\']([^"\']+)["\']\]',c)))
               foreign=[x for x in pages if x!=page]
               if foreign: errors.append(f'{css}: foreign body data-page selectors {foreign}')
-              # Local url() references must resolve from the CSS file directory.
               for raw in re.findall(r'url\(([^)]+)\)',c):
                   u=raw.strip().strip('"\'')
                   if not u or u.startswith(('data:','http:','https:','#')): continue
@@ -69,13 +69,11 @@ jobs:
           for token in forbidden:
               if token in site: errors.append(f'css/site.css still contains page-specific token {token}')
 
-          # Shared-core page references are limited to signature/header contracts.
           refs=sorted(set(re.findall(r'body\[data-page=["\']([^"\']+)["\']\]',site)))
           allowed={'home','line','products','testimonials','share','business'}
           extra=[x for x in refs if x not in allowed]
           if extra: errors.append(f'css/site.css unexpected body data-page refs {extra}')
 
-          # Simple balanced-brace check that ignores quoted strings/comments.
           def balanced(text):
               depth=0; i=0; quote=None; esc=False; comment=False
               while i<len(text):
