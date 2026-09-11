@@ -1,10 +1,15 @@
 name: Housekeeping modularize Lines CSS
+
 on:
   push:
-    branches: [housekeeping/modular-page-css-20260911]
-    paths: [.github/workflows/housekeeping-modularize-lines.yml]
+    branches:
+      - housekeeping/modular-page-css-20260911
+    paths:
+      - .github/workflows/housekeeping-modularize-lines.yml
+
 permissions:
   contents: write
+
 jobs:
   migrate:
     runs-on: ubuntu-latest
@@ -42,19 +47,19 @@ jobs:
           for i in range(1,len(ranges)):
               assert ranges[i-1][0] < ranges[i][0]
 
-          responsive='''/* Line-specific rules formerly interleaved in the shared responsive discipline. */
-@media (max-height:720px) and (min-width:901px){
-  .line-identity-copy h1{font-size:54px}.line-identity-copy h2{font-size:27px}.line-identity-copy p{font-size:10.5px}.line-identity-mark{height:52px}.line-identity-word{margin:7px 0 10px;font-size:11px}.line-understanding-grid{padding-block:2.5vh}.line-understanding-copy h2{font-size:42px}.line-understanding-copy>p{font-size:10.5px}.line-when{margin-top:14px;padding:12px 15px}.line-when li{font-size:9px}.line-category-grid{gap:9px;margin-top:10px}.line-category-grid article{min-height:118px;padding:12px}.line-info-icon{width:36px;height:36px}.line-category-grid h3{font-size:19px;margin:7px 0 3px}.line-category-grid p{font-size:8.7px}.line-featured-copy h2{font-size:46px}.line-featured-copy>p{font-size:10.5px}.line-featured-facts{margin:12px 0 16px;padding-top:12px}.line-featured-actions .button{min-height:38px;font-size:10px}
-}
-@media (max-width:1100px) and (min-width:901px){.line-stage-inner{width:min(calc(100% - 48px),1000px)}}
-@media (max-width:900px){
-  .line-stage{height:auto;min-height:0;overflow:visible}.line-stage{padding:54px 0}.line-stage-identity{min-height:720px;padding:0}.line-stage-inner{width:min(calc(100% - 28px),720px);height:auto}.line-identity-photo{position:absolute}.line-identity-copy{width:min(88%,560px);min-height:720px;padding-left:12px}.line-scroll-cue{position:relative;left:auto;bottom:auto;transform:none;margin:18px auto 0}.line-understanding-grid{grid-template-columns:1fr;gap:30px;padding-block:0}.line-category-grid{grid-template-columns:1fr 1fr}.line-stage-featured{display:grid;grid-template-columns:1fr}.line-featured-media{min-height:440px}.line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#2c0506 100%)}.line-page-farm .line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#252b14 100%)}.line-page-snack .line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#552405 100%)}.line-featured-copy{padding:36px 28px}.line-featured-actions{flex-wrap:wrap}
-}
-@media (max-width:520px){.line-category-grid{grid-template-columns:1fr}.line-identity-copy h1{font-size:45px}.line-featured-media{min-height:340px}.line-featured-actions{display:grid}.line-featured-actions .button{width:100%}}
-@media (prefers-reduced-motion:reduce){.line-world{transition:none}}
-'''
+          responsive = (
+              '/* Line-specific rules formerly interleaved in the shared responsive discipline. */\n'
+              '@media (max-height:720px) and (min-width:901px){\n'
+              '  .line-identity-copy h1{font-size:54px}.line-identity-copy h2{font-size:27px}.line-identity-copy p{font-size:10.5px}.line-identity-mark{height:52px}.line-identity-word{margin:7px 0 10px;font-size:11px}.line-understanding-grid{padding-block:2.5vh}.line-understanding-copy h2{font-size:42px}.line-understanding-copy>p{font-size:10.5px}.line-when{margin-top:14px;padding:12px 15px}.line-when li{font-size:9px}.line-category-grid{gap:9px;margin-top:10px}.line-category-grid article{min-height:118px;padding:12px}.line-info-icon{width:36px;height:36px}.line-category-grid h3{font-size:19px;margin:7px 0 3px}.line-category-grid p{font-size:8.7px}.line-featured-copy h2{font-size:46px}.line-featured-copy>p{font-size:10.5px}.line-featured-facts{margin:12px 0 16px;padding-top:12px}.line-featured-actions .button{min-height:38px;font-size:10px}\n'
+              '}\n'
+              '@media (max-width:1100px) and (min-width:901px){.line-stage-inner{width:min(calc(100% - 48px),1000px)}}\n'
+              '@media (max-width:900px){\n'
+              '  .line-stage{height:auto;min-height:0;overflow:visible}.line-stage{padding:54px 0}.line-stage-identity{min-height:720px;padding:0}.line-stage-inner{width:min(calc(100% - 28px),720px);height:auto}.line-identity-photo{position:absolute}.line-identity-copy{width:min(88%,560px);min-height:720px;padding-left:12px}.line-scroll-cue{position:relative;left:auto;bottom:auto;transform:none;margin:18px auto 0}.line-understanding-grid{grid-template-columns:1fr;gap:30px;padding-block:0}.line-category-grid{grid-template-columns:1fr 1fr}.line-stage-featured{display:grid;grid-template-columns:1fr}.line-featured-media{min-height:440px}.line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#2c0506 100%)}.line-page-farm .line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#252b14 100%)}.line-page-snack .line-featured-media:after{background:linear-gradient(180deg,transparent 65%,#552405 100%)}.line-featured-copy{padding:36px 28px}.line-featured-actions{flex-wrap:wrap}\n'
+              '}\n'
+              '@media (max-width:520px){.line-category-grid{grid-template-columns:1fr}.line-identity-copy h1{font-size:45px}.line-featured-media{min-height:340px}.line-featured-actions{display:grid}.line-featured-actions .button{width:100%}}\n'
+              '@media (prefers-reduced-motion:reduce){.line-world{transition:none}}\n'
+          )
 
-          # Compose in the same effective order: base line block -> shared responsive line adjustments -> master locks -> dedicated mobile lock.
           parts=[ranges[0][2],responsive,ranges[1][2],ranges[2][2],ranges[3][2],ranges[4][2]]
           joined='\n\n'.join(p.strip() for p in parts if p.strip())+'\n'
           joined=joined.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
@@ -63,13 +68,9 @@ jobs:
           assert 'body[data-page="line"]' in joined
           target.parent.mkdir(parents=True,exist_ok=True); target.write_text(joined,encoding='utf-8')
 
-          # Remove extracted source ranges from end to start; leave mixed shared responsive block for final core cleanup.
           newcss=css
           for a,b,_ in sorted(ranges,key=lambda x:x[0],reverse=True):
               newcss=newcss[:a]+newcss[b:]
-          # Place explicit ownership markers at the first former line block location and before mobile product block.
-          first_a=ranges[0][0]
-          # first_a is valid in original only; add a single marker near the former Cart ownership marker after removals via literal replacement.
           newcss=newcss.replace('/* Cart page styles: css/pages/cart.css */','/* Dedicated Line page styles: css/pages/lines.css */\n/* Cart page styles: css/pages/cart.css */',1)
           site.write_text(newcss,encoding='utf-8')
 
