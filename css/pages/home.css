@@ -1735,3 +1735,9 @@ body[data-page="home"]{background:#f7ead7;overflow:hidden}
   }
   body[data-page="home"] .mobile-copy-cue{display:none!important;}
 }
+
+@media(max-width:380px){
+body[data-page="home"] .home-copy-stage h1{font-size:47px}
+body[data-page="home"] .home-mobile-line-signatures{margin-top:34px}
+}
+}
