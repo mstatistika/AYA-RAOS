@@ -168,10 +168,10 @@ If the trusted qualification service is not connected, the page stops truthfully
 
 Implementation source paths:
 - `business.html`;
-- Business selectors inside `css/site.css`;
+- Business presentation inside `css/pages/business.css`, with shared-core dependencies in `css/site.css`;
 - `js/business-inquiry.js`.
 
-`css/site.css` remains the single public design system.
+`css/site.css` remains the shared public design-system core; public Pasokan page-specific presentation is canonical in `css/pages/business.css`.
 
 The approved Business CSS source block begins with:
 `/* Pasokan Usaha — B2B vNext APPROVED 2026-08-20 */`

@@ -23,7 +23,7 @@ Protected and unchanged as Cart side effects:
 - Pasokan Usaha;
 - Information.
 
-`css/site.css` remains the single public design system. Product data remains sourced from `js/data.js`.
+`css/site.css` remains the shared public design-system core; Cart page-specific presentation is canonical in `css/pages/cart.css`. Product data remains sourced from `js/data.js`.
 
 ## 2. B2C classification
 
@@ -116,7 +116,7 @@ Future dependencies still OPEN include:
 
 The Cart implementation checkpoint changes only:
 - `cart.html`;
-- Cart/B2C selectors inside `css/site.css`;
+- Cart/B2C presentation inside `css/pages/cart.css`, with shared-core dependencies in `css/site.css`;
 - `js/cart-page.js`.
 
 `js/config.js`, `js/data.js`, and `js/site.js` contracts remain unchanged by the implementation checkpoint.
@@ -132,7 +132,7 @@ Resolved:
 
 Source boundary for this correction:
 - `cart.html`;
-- Cart selectors inside `css/site.css`.
+- Cart presentation inside `css/pages/cart.css`, with shared-core dependencies in `css/site.css`.
 
 This is presentation-only. It does not change Cart storage, product/variant/price/quantity truth, B2C classification, customer form, shipping fallback, payment foundation, or the Cart runtime contract.
 

@@ -284,7 +284,9 @@ Expected Product/Catalog source:
 - `product.html`
 - `js/catalog.js`
 - `js/product.js`
-- one consolidated Product/Catalog section inside `css/site.css`
+- `css/pages/products.css` for Product Catalog / Mobile Product Book presentation
+- `css/pages/product.css` for direct Product Detail presentation
+- shared design-system core in `css/site.css`
 - this supplement
 - `DECISION_LOG.md`
 
@@ -299,7 +301,7 @@ Protected:
 - B2B;
 - testimonial/share flow.
 
-Only `css/site.css` remains the active public design system.
+`css/site.css` remains the shared public design-system core; Product Catalog and Product Detail each use their one canonical page stylesheet above.
 
 No patch stylesheet.
 No parallel Product/Catalog token system.
