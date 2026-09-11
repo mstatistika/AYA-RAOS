@@ -1,0 +1,282 @@
+name: Housekeeping modularize Product CSS
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-product-css-20260911-run
+    paths:
+      - .github/workflows/housekeeping-modularize-product-css.yml
+
+permissions:
+  contents: write
+
+jobs:
+  modularize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-product-css-20260911-run
+      - name: Extract Product Catalog and Product Detail CSS transactionally
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          site_path=Path('css/site.css')
+          products_path=Path('css/pages/products.css')
+          product_path=Path('css/pages/product.css')
+          products_html_path=Path('products.html')
+          product_html_path=Path('product.html')
+          helper=Path('.github/workflows/housekeeping-modularize-product-css.yml')
+
+          site=site_path.read_text(encoding='utf-8')
+          products_html=products_html_path.read_text(encoding='utf-8')
+          product_html=product_html_path.read_text(encoding='utf-8')
+
+          catalog_marker='/* Catalog — MOCKUP PARITY SOURCE OF TRUTH 2026-08-15 */'
+          product_marker='/* Product Detail — MOCKUP PARITY SOURCE OF TRUTH 2026-08-15 */'
+          testimonials_marker='/* Testimonials page styles: css/pages/testimonials.css */'
+          book_marker='/* Mobile Product Book V24 — visual authority V14; engine authority R5.13. */'
+
+          for marker in (catalog_marker,product_marker,testimonials_marker,book_marker):
+              assert site.count(marker)==1, f'marker count mismatch: {marker}'
+          assert not products_path.exists(), 'products.css already exists'
+          assert not product_path.exists(), 'product.css already exists'
+          assert 'css/pages/products.css' not in products_html
+          assert 'css/pages/product.css' not in product_html
+
+          def match_block(text, open_brace):
+              depth=1
+              i=open_brace+1
+              quote=None
+              esc=False
+              comment=False
+              while i < len(text):
+                  if comment:
+                      if text.startswith('*/',i):
+                          comment=False; i+=2; continue
+                      i+=1; continue
+                  if quote:
+                      ch=text[i]
+                      if esc:
+                          esc=False
+                      elif ch=='\\':
+                          esc=True
+                      elif ch==quote:
+                          quote=None
+                      i+=1; continue
+                  if text.startswith('/*',i):
+                      comment=True; i+=2; continue
+                  ch=text[i]
+                  if ch in ('"',"'"):
+                      quote=ch
+                  elif ch=='{':
+                      depth+=1
+                  elif ch=='}':
+                      depth-=1
+                      if depth==0:
+                          return i
+                  i+=1
+              raise AssertionError('unbalanced CSS block')
+
+          def top_blocks(text):
+              out=[]
+              i=0
+              n=len(text)
+              while i<n:
+                  while i<n and text[i].isspace(): i+=1
+                  if i>=n: break
+                  if text.startswith('/*',i):
+                      j=text.find('*/',i+2)
+                      assert j!=-1
+                      out.append(('comment',text[i:j+2],None))
+                      i=j+2
+                      continue
+                  brace=text.find('{',i)
+                  if brace==-1:
+                      tail=text[i:].strip()
+                      if tail: out.append(('tail',tail,None))
+                      break
+                  pre=text[i:brace].strip()
+                  end=match_block(text,brace)
+                  body=text[brace+1:end]
+                  out.append(('block',pre,body))
+                  i=end+1
+              return out
+
+          def classify_selector(pre):
+              has_products='body[data-page="products"]' in pre
+              has_product='body[data-page="product"]' in pre and not has_products
+              if has_products and has_product:
+                  raise AssertionError(f'mixed products/product selector: {pre}')
+              if has_products: return 'products'
+              if has_product: return 'product'
+              products_tokens=(
+                  '.catalog-', '.filter-', '.product-grid', '.product-card', '.product-card-',
+                  '.catalog-section', '.catalog-layout', '.catalog-main', '.catalog-toolbar',
+                  '.catalog-sort', '.catalog-search'
+              )
+              product_tokens=(
+                  '.product-hero', '.product-breadcrumb', '.product-gallery', '.product-main-image',
+                  '.product-thumbnails', '.gallery-step', '.product-identity', '.product-intro-trio',
+                  '.product-commerce', '.commerce-', '.variant-fieldset', '.product-add-button',
+                  '.product-info-grid'
+              )
+              p1=any(t in pre for t in products_tokens)
+              p2=any(t in pre for t in product_tokens)
+              if p1 and p2:
+                  raise AssertionError(f'ambiguous selector: {pre}')
+              if p1: return 'products'
+              if p2: return 'product'
+              raise AssertionError(f'unclassified responsive selector: {pre}')
+
+          def split_media(media_pre, body):
+              prod=[]; detail=[]; comments=[]
+              for kind,pre,inner in top_blocks(body):
+                  if kind=='comment':
+                      comments.append(pre)
+                      continue
+                  assert kind=='block', f'unexpected media node: {kind} {pre[:80]}'
+                  who=classify_selector(pre)
+                  rule=pre+'{'+inner+'}'
+                  (prod if who=='products' else detail).append(rule)
+              ptxt=''
+              dtxt=''
+              if prod:
+                  ptxt=media_pre+'{\n'+'\n'.join(prod)+'\n}'
+              if detail:
+                  dtxt=media_pre+'{\n'+'\n'.join(detail)+'\n}'
+              return ptxt,dtxt
+
+          # ---------- Phase A: Product Catalog + Mobile Product Book ----------
+          c=site.index(catalog_marker)
+          p=site.index(product_marker)
+          t=site.index(testimonials_marker)
+          assert c < p < t
+          catalog_base=site[c:p].strip()
+          product_region=site[p:t]
+          first_media=product_region.find('@media')
+          assert first_media!=-1, 'responsive Product region missing'
+          product_base=product_region[:first_media].rstrip()
+          responsive_tail=product_region[first_media:]
+
+          products_responsive=[]
+          product_responsive=[]
+          for kind,pre,inner in top_blocks(responsive_tail):
+              if kind=='comment':
+                  continue
+              assert kind=='block' and pre.startswith('@media'), f'unexpected responsive top node: {pre[:100]}'
+              pp,dd=split_media(pre,inner)
+              if pp: products_responsive.append(pp)
+              if dd: product_responsive.append(dd)
+
+          # Rebuild the catalog/product region with Product Detail only.
+          replacement='/* Product Catalog page styles: css/pages/products.css */\n'+product_base
+          if product_responsive:
+              replacement+='\n\n'+'\n\n'.join(product_responsive)
+          replacement+='\n\n'
+          site1=site[:c]+replacement+site[t:]
+
+          # Extract the dedicated Mobile Product Book envelope from current core.
+          bm=site1.index(book_marker)
+          media_start=site1.rfind('@media (max-width:900px){',0,bm)
+          assert media_start!=-1
+          open_brace=site1.index('{',media_start)
+          media_end=match_block(site1,open_brace)
+          book_block=site1[media_start:media_end+1].strip()
+          assert book_marker in book_block
+          assert '.aya-mobile-product-book' in book_block
+          site1=site1[:media_start].rstrip()+'\n'+site1[media_end+1:]
+
+          def to_page_paths(text):
+              return text.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+
+          products_css=(catalog_base+'\n\n'+'\n\n'.join(products_responsive)+'\n\n'+book_block+'\n')
+          products_css=to_page_paths(products_css)
+          assert 'body[data-page="product"]' not in products_css
+          assert 'body[data-page="products"]' in products_css
+          assert 'Mobile Product Book V24' in products_css
+          assert '.aya-mobile-product-book' in products_css
+          assert '.aya-mobile-product-book' not in site1
+
+          site_link=re.search(r'<link href="css/site\.css\?v=[^"]+" rel="stylesheet"/>',products_html)
+          assert site_link, 'products site stylesheet link missing'
+          products_link='<link href="css/pages/products.css?v=20260911-modular-v1" rel="stylesheet"/>'
+          products_html_new=products_html[:site_link.end()]+'\n'+products_link+products_html[site_link.end():]
+          assert products_html_new.count('css/pages/products.css')==1
+
+          site_path.write_text(site1,encoding='utf-8')
+          products_path.write_text(products_css,encoding='utf-8')
+          products_html_path.write_text(products_html_new,encoding='utf-8')
+          PY
+
+          git diff --check
+          grep -q 'css/pages/products.css?v=20260911-modular-v1' products.html
+          grep -q 'Mobile Product Book V24' css/pages/products.css
+          ! grep -q 'aya-mobile-product-book' css/site.css
+          ! grep -q 'body\[data-page="product"\]' css/pages/products.css
+
+          git config user.name 'AYA RAOS Housekeeping Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add css/site.css css/pages/products.css products.html
+          git diff --cached --check
+          git commit -m 'refactor: modularize locked Product Catalog CSS without visual change'
+
+          # ---------- Phase B: Direct Product Detail ----------
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          site_path=Path('css/site.css')
+          product_path=Path('css/pages/product.css')
+          product_html_path=Path('product.html')
+          helper=Path('.github/workflows/housekeeping-modularize-product-css.yml')
+
+          site=site_path.read_text(encoding='utf-8')
+          html=product_html_path.read_text(encoding='utf-8')
+          product_marker='/* Product Detail — MOCKUP PARITY SOURCE OF TRUTH 2026-08-15 */'
+          testimonials_marker='/* Testimonials page styles: css/pages/testimonials.css */'
+          assert site.count(product_marker)==1
+          assert site.count(testimonials_marker)==1
+          assert not product_path.exists()
+
+          p=site.index(product_marker)
+          t=site.index(testimonials_marker)
+          assert p<t
+          product_css=site[p:t].strip()+'\n'
+          assert 'body[data-page="product"]' in product_css
+          assert 'body[data-page="products"]' not in product_css
+          assert '.catalog-' not in product_css
+          assert '.aya-mobile-product-book' not in product_css
+
+          product_css=product_css.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+          site_new=site[:p]+'/* Product Detail page styles: css/pages/product.css */\n'+site[t:]
+
+          site_link=re.search(r'<link href="css/site\.css\?v=[^"]+" rel="stylesheet"/>',html)
+          assert site_link, 'product site stylesheet link missing'
+          link='<link href="css/pages/product.css?v=20260911-modular-v1" rel="stylesheet"/>'
+          html_new=html[:site_link.end()]+'\n'+link+html[site_link.end():]
+          assert html_new.count('css/pages/product.css')==1
+
+          site_path.write_text(site_new,encoding='utf-8')
+          product_path.write_text(product_css,encoding='utf-8')
+          product_html_path.write_text(html_new,encoding='utf-8')
+          helper.unlink()
+          PY
+
+          git diff --check
+          grep -q 'css/pages/product.css?v=20260911-modular-v1' product.html
+          grep -q 'body\[data-page="product"\]' css/pages/product.css
+          ! grep -q 'body\[data-page="products"\]' css/pages/product.css
+          ! grep -q 'body\[data-page="product"\]' css/site.css
+          ! grep -q 'catalog-' css/pages/product.css
+
+          git add css/site.css css/pages/product.css product.html .github/workflows/housekeeping-modularize-product-css.yml
+          git diff --cached --check
+          git commit -m 'refactor: modularize locked Product Detail CSS without visual change'
+
+          git push origin HEAD:housekeeping/modular-product-css-20260911-run
