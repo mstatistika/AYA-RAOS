@@ -68,7 +68,6 @@ jobs:
           testimonial_segment=canonical_inner[t:s].strip()
           share_segment=canonical_inner[s:].strip()
 
-          # Current housekeeping branch must contain the known broken tail exactly once.
           assert site.count(product_marker)==1
           assert site.count(test_marker)==1
           assert site.count(share_marker)==1
@@ -77,13 +76,11 @@ jobs:
           branch_s=site.index(share_marker)
           assert branch_p < branch_t < branch_s
 
-          # The broken tail is the final page-specific section in the current core.
           tail=site[branch_p:]
           assert '.aya-mobile-product-book' in tail
           assert '.aya-mobile-testimonials' in tail
           assert '.aya-mobile-share' in tail
 
-          # Rebuild only Product Book in core and restore its required mobile envelope.
           repaired_site=site[:branch_p].rstrip() + '\n\n@media (max-width:900px){\n' + product_segment + '\n}\n'
 
           def page_segment(segment: str) -> str:
@@ -95,7 +92,6 @@ jobs:
           testimonials_new=testimonials.rstrip() + '\n\n/* Mobile Testimonials V6.5 — canonical locked mobile presentation */\n' + page_segment(testimonial_segment)
           share_new=share.rstrip() + '\n\n/* Mobile Testimonial Share V7.23 — canonical locked mobile presentation */\n' + page_segment(share_segment)
 
-          # Structural invariants before write.
           assert repaired_site.count('.aya-mobile-testimonials')==0
           assert repaired_site.count('.aya-mobile-share{')==0
           assert repaired_site.count('Mobile Product Book V24')==1
@@ -104,7 +100,6 @@ jobs:
           assert testimonials_new.count('@media (max-width:900px)')>=1
           assert share_new.count('@media (max-width:900px)')>=1
 
-          # Verify the exact locked source was transferred, modulo page-path URL depth.
           def normalize(s: str) -> str:
               return s.replace('../../assets/','../assets/').strip()
           assert normalize(page_segment(testimonial_segment).split('{',1)[1].rsplit('}',1)[0]) == testimonial_segment.strip()
@@ -114,9 +109,8 @@ jobs:
           testimonials_path.write_text(testimonials_new, encoding='utf-8')
           share_path.write_text(share_new, encoding='utf-8')
 
-          # HTML linkage must already be canonical from earlier migrations.
           tests_html=Path('testimonials.html').read_text(encoding='utf-8')
-          share_html=Path('testimonial-share.html').read_text(encoding='utf-8')
+          share_html=Path('share.html').read_text(encoding='utf-8')
           assert tests_html.count('css/pages/testimonials.css')==1
           assert share_html.count('css/pages/share.css')==1
 
