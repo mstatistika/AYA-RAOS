@@ -1,0 +1,138 @@
+name: Housekeeping repair mobile CSS boundaries
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-page-css-20260911
+    paths:
+      - .github/workflows/housekeeping-repair-mobile-boundaries.yml
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-page-css-20260911
+      - name: Repair locked mobile CSS boundaries transactionally
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+
+          site_path=Path('css/site.css')
+          testimonials_path=Path('css/pages/testimonials.css')
+          share_path=Path('css/pages/share.css')
+          helper=Path('.github/workflows/housekeeping-repair-mobile-boundaries.yml')
+
+          site=site_path.read_text(encoding='utf-8')
+          testimonials=testimonials_path.read_text(encoding='utf-8')
+          share=share_path.read_text(encoding='utf-8')
+          main_css=subprocess.check_output(['git','show','origin/main:css/site.css'], text=True)
+
+          outer_marker='/* AYA RAOS — Public Mobile UI lock implementation — 2026-08-22'
+          product_marker='  /* Mobile Product Book V24 — visual authority V14; engine authority R5.13. */'
+          test_marker='  body[data-page="testimonials"]{overflow:hidden;background:#280304}'
+          share_marker='  body[data-page="share"]{overflow:hidden;background:#f3e3cc}'
+
+          assert main_css.count(outer_marker)==1
+          outer_start=main_css.index(outer_marker)
+          media_open=main_css.index('{', main_css.index('@media (max-width:900px)', outer_start))
+          depth=1
+          i=media_open+1
+          while depth and i < len(main_css):
+              ch=main_css[i]
+              if ch=='{': depth+=1
+              elif ch=='}': depth-=1
+              i+=1
+          assert depth==0, 'canonical Public Mobile UI media block did not balance'
+          outer_end=i-1
+          canonical_inner=main_css[media_open+1:outer_end]
+
+          assert canonical_inner.count(product_marker)==1
+          assert canonical_inner.count(test_marker)==1
+          assert canonical_inner.count(share_marker)==1
+          p=canonical_inner.index(product_marker)
+          t=canonical_inner.index(test_marker)
+          s=canonical_inner.index(share_marker)
+          assert p < t < s
+
+          product_segment=canonical_inner[p:t].strip()
+          testimonial_segment=canonical_inner[t:s].strip()
+          share_segment=canonical_inner[s:].strip()
+
+          # Current housekeeping branch must contain the known broken tail exactly once.
+          assert site.count(product_marker)==1
+          assert site.count(test_marker)==1
+          assert site.count(share_marker)==1
+          branch_p=site.index(product_marker)
+          branch_t=site.index(test_marker)
+          branch_s=site.index(share_marker)
+          assert branch_p < branch_t < branch_s
+
+          # The broken tail is the final page-specific section in the current core.
+          tail=site[branch_p:]
+          assert '.aya-mobile-product-book' in tail
+          assert '.aya-mobile-testimonials' in tail
+          assert '.aya-mobile-share' in tail
+
+          # Rebuild only Product Book in core and restore its required mobile envelope.
+          repaired_site=site[:branch_p].rstrip() + '\n\n@media (max-width:900px){\n' + product_segment + '\n}\n'
+
+          def page_segment(segment: str) -> str:
+              segment=segment.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+              return '@media (max-width:900px){\n' + segment + '\n}\n'
+
+          assert '.aya-mobile-testimonials' not in testimonials
+          assert '.aya-mobile-share{' not in share
+          testimonials_new=testimonials.rstrip() + '\n\n/* Mobile Testimonials V6.5 — canonical locked mobile presentation */\n' + page_segment(testimonial_segment)
+          share_new=share.rstrip() + '\n\n/* Mobile Testimonial Share V7.23 — canonical locked mobile presentation */\n' + page_segment(share_segment)
+
+          # Structural invariants before write.
+          assert repaired_site.count('.aya-mobile-testimonials')==0
+          assert repaired_site.count('.aya-mobile-share{')==0
+          assert repaired_site.count('Mobile Product Book V24')==1
+          assert testimonials_new.count('.aya-mobile-testimonials')>=1
+          assert share_new.count('.aya-mobile-share{')>=1
+          assert testimonials_new.count('@media (max-width:900px)')>=1
+          assert share_new.count('@media (max-width:900px)')>=1
+
+          # Verify the exact locked source was transferred, modulo page-path URL depth.
+          def normalize(s: str) -> str:
+              return s.replace('../../assets/','../assets/').strip()
+          assert normalize(page_segment(testimonial_segment).split('{',1)[1].rsplit('}',1)[0]) == testimonial_segment.strip()
+          assert normalize(page_segment(share_segment).split('{',1)[1].rsplit('}',1)[0]) == share_segment.strip()
+
+          site_path.write_text(repaired_site, encoding='utf-8')
+          testimonials_path.write_text(testimonials_new, encoding='utf-8')
+          share_path.write_text(share_new, encoding='utf-8')
+
+          # HTML linkage must already be canonical from earlier migrations.
+          tests_html=Path('testimonials.html').read_text(encoding='utf-8')
+          share_html=Path('testimonial-share.html').read_text(encoding='utf-8')
+          assert tests_html.count('css/pages/testimonials.css')==1
+          assert share_html.count('css/pages/share.css')==1
+
+          helper.unlink()
+          PY
+
+          git diff --check
+          grep -q 'Mobile Product Book V24' css/site.css
+          ! grep -q 'aya-mobile-testimonials' css/site.css
+          ! grep -q 'aya-mobile-share{' css/site.css
+          grep -q 'aya-mobile-testimonials' css/pages/testimonials.css
+          grep -q 'aya-mobile-share{' css/pages/share.css
+
+          git config user.name 'AYA RAOS Housekeeping Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add css/site.css css/pages/testimonials.css css/pages/share.css .github/workflows/housekeeping-repair-mobile-boundaries.yml
+          git diff --cached --check
+          git commit -m 'refactor: repair locked mobile CSS boundaries without visual change'
+          git push origin HEAD:housekeeping/modular-page-css-20260911
