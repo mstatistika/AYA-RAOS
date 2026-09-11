@@ -1,0 +1,93 @@
+name: Modularize Share CSS
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-css-locked-pages-20260911
+    paths:
+      - .github/workflows/modularize-share-css.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install parser
+        run: npm install --no-save postcss@8 postcss-selector-parser@7
+      - name: Extract Share CSS transactionally
+        run: |
+          node <<'JS'
+          const fs=require('fs');
+          const postcss=require('postcss');
+          const selectorParser=require('postcss-selector-parser');
+          const sitePath='css/site.css', outPath='css/pages/share.css', htmlPath='share.html';
+          const root=postcss.parse(fs.readFileSync(sitePath,'utf8'));
+          if(fs.existsSync(outPath)) throw new Error('share.css already exists');
+          let start=-1,end=-1;
+          root.nodes.forEach((n,i)=>{
+            if(start<0 && n.type==='comment' && n.text.includes('SHARE TESTIMONIAL')) start=i;
+            if(start>=0 && end<0 && n.type==='comment' && n.text.includes('Cross-page short-height discipline')) end=i;
+          });
+          if(start<0||end<0||start>=end) throw new Error(`Share primary boundary missing: ${start}/${end}`);
+          const pageRoot=postcss.root();
+          const split=(selector)=>{const a=[];selectorParser(r=>r.each(s=>a.push(s.toString()))).processSync(selector);return a;};
+          const isShare=(s)=>s.includes('body[data-page="share"]')||s.includes("body[data-page='share']");
+          function walkContainer(container,clone,inPrimary){
+            for(const child of [...(container.nodes||[])]){
+              if(child.type==='comment'){
+                if(inPrimary){clone.append(child.clone());child.remove();}
+              } else if(child.type==='rule'){
+                const sels=split(child.selector); const yes=sels.filter(s=>inPrimary?!(s.includes('body[data-page=')&&!isShare(s)):isShare(s)); const no=sels.filter(s=>!yes.includes(s));
+                if(yes.length) clone.append(child.clone({selector:yes.join(',')}));
+                if(yes.length===sels.length) child.remove(); else if(yes.length) child.selector=no.join(',');
+              } else if(child.type==='atrule' && child.nodes){
+                const c=child.clone({nodes:[]}); walkContainer(child,c,inPrimary); if(c.nodes?.length) clone.append(c); if(!child.nodes?.length) child.remove();
+              } else if(inPrimary){clone.append(child.clone());child.remove();}
+            }
+          }
+          const top=[...root.nodes];
+          top.forEach((node,idx)=>{
+            const primary=idx>=start&&idx<end;
+            if(node.type==='comment'){
+              if(primary){pageRoot.append(node.clone());node.remove();}
+            } else if(node.type==='rule'){
+              const sels=split(node.selector); const yes=sels.filter(s=>primary?!(s.includes('body[data-page=')&&!isShare(s)):isShare(s)); const no=sels.filter(s=>!yes.includes(s));
+              if(yes.length) pageRoot.append(node.clone({selector:yes.join(',')}));
+              if(yes.length===sels.length) node.remove(); else if(yes.length) node.selector=no.join(',');
+            } else if(node.type==='atrule'&&node.nodes){
+              const c=node.clone({nodes:[]}); walkContainer(node,c,primary); if(c.nodes?.length) pageRoot.append(c); if(!node.nodes?.length) node.remove();
+            } else if(primary){pageRoot.append(node.clone());node.remove();}
+          });
+          let pageCss=pageRoot.toString();
+          if(!pageCss.includes('body[data-page="share"]')) throw new Error('Share selectors missing after extraction');
+          pageCss=pageCss.replaceAll('url("../assets/','url("../../assets/').replaceAll("url('../assets/","url('../../assets/");
+          pageCss=pageCss.split('\n').map(l=>l.replace(/[ \t]+$/,'')).join('\n').trim()+'\n';
+          let core=root.toString();
+          core=core.split('\n').map(l=>l.replace(/[ \t]+$/,'')).join('\n');
+          fs.writeFileSync(outPath,'/* AYA RAOS — Testimonial Share canonical page stylesheet. Structural extraction only; LOCKED visuals and submission contracts unchanged. */\n\n'+pageCss);
+          fs.writeFileSync(sitePath,core);
+          let html=fs.readFileSync(htmlPath,'utf8');
+          if(html.includes('css/pages/share.css')) throw new Error('share.html already links share.css');
+          const re=/(<link href="css\/site\.css\?v=[^"]+" rel="stylesheet"\/>)/;
+          if(!re.test(html)) throw new Error('site.css link missing in share.html');
+          html=html.replace(re,'$1\n<link href="css/pages/share.css?v=20260911-modular-v1" rel="stylesheet"/>');
+          fs.writeFileSync(htmlPath,html);
+          JS
+          git diff --check
+          test -f css/pages/share.css
+          grep -q 'body\[data-page="share"\]' css/pages/share.css
+          ! grep -q 'body\[data-page="share"\]' css/site.css
+          grep -q 'css/pages/share.css?v=20260911-modular-v1' share.html
+      - name: Commit and push Share extraction
+        run: |
+          git config user.name "AYA RAOS Housekeeping Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add css/site.css css/pages/share.css share.html
+          git diff --cached --check
+          git commit -m "refactor: extract Share styles into canonical page CSS"
+          git push origin HEAD:housekeeping/modular-css-locked-pages-20260911
