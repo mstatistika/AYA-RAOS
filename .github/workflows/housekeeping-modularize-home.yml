@@ -1,0 +1,90 @@
+name: Housekeeping modularize Home CSS
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-page-css-20260911
+    paths:
+      - .github/workflows/housekeeping-modularize-home.yml
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-page-css-20260911
+      - name: Extract locked Homepage CSS in original cascade order
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          site=Path('css/site.css'); css=site.read_text(encoding='utf-8')
+          target=Path('css/pages/home.css'); helper=Path('.github/workflows/housekeeping-modularize-home.yml')
+
+          start_a='\n.home-viewport{'
+          end_a='/* Dedicated Line page styles: css/pages/lines.css */'
+          assert css.count(start_a)==1 and css.count(end_a)==1
+          a1=css.index(start_a)+1; b1=css.index(end_a); assert a1<b1
+          home_desktop=css[a1:b1]
+          assert '.live-home-hero' in home_desktop and '.home-about' in home_desktop
+
+          mobile_home_start='  body[data-page="home"]{background:#f7ead7;overflow:hidden}'
+          product_book_marker='/* Mobile Product Book V24 — visual authority V14; engine authority R5.13. */'
+          assert css.count(mobile_home_start)==1 and css.count(product_book_marker)==1
+          a2=css.index(mobile_home_start); pb=css.index(product_book_marker); assert a2<pb
+          # The Home portion sits inside the Public Mobile @media; retain the final brace in core for shared header rules.
+          segment=css[a2:pb]
+          trimmed=segment.rstrip()
+          assert trimmed.endswith('}')
+          last_close=segment.rfind('}')
+          home_mobile_inner=segment[:last_close]
+          assert 'body[data-page="home"]' in home_mobile_inner
+
+          late_marker='/* AYA RAOS — Homepage mobile final cascade consolidation — 2026-09-09 */'
+          assert css.count(late_marker)==1
+          a3=css.index(late_marker)
+          assert pb<a3
+          home_late=css[a3:]
+          assert home_late.count('body[data-page="home"]')>20
+
+          reduced='@media (prefers-reduced-motion:reduce){.home-scroll-cue svg{animation:none}}\n'
+          parts=[home_desktop.strip(),reduced.strip(),'@media (max-width:900px){\n'+home_mobile_inner.strip()+'\n}',home_late.strip()]
+          joined='\n\n'.join(parts)+'\n'
+          joined=joined.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+          joined='\n'.join(line.rstrip() for line in joined.splitlines()).rstrip()+'\n'
+          assert joined.count('body[data-page="home"]')>30
+          target.parent.mkdir(parents=True,exist_ok=True); target.write_text(joined,encoding='utf-8')
+
+          # Remove late block first, then in-media Home rules, then desktop Home block.
+          newcss=css[:a3]
+          newcss=newcss[:a2]+newcss[last_close:]
+          # Desktop indices precede a2 and remain valid after removing later content.
+          newcss=newcss[:a1]+'/* Homepage page styles: css/pages/home.css */\n'+newcss[b1:]
+          site.write_text(newcss,encoding='utf-8')
+
+          p=Path('index.html'); html=p.read_text(encoding='utf-8')
+          assert 'css/pages/home.css' not in html
+          pattern=r'(<link[^>]+href=["\']css/site\.css[^"\']*["\'][^>]*>)'
+          assert len(re.findall(pattern,html,flags=re.I))==1
+          link='<link href="css/pages/home.css?v=20260911-modular" rel="stylesheet"/>'
+          html=re.sub(pattern,lambda m:m.group(1)+'\n'+link,html,count=1,flags=re.I)
+          p.write_text(html,encoding='utf-8')
+          assert html.count('css/pages/home.css')==1
+          helper.unlink()
+          PY
+          git diff --check
+          grep -q 'Homepage mobile final cascade consolidation' css/pages/home.css
+          grep -q 'live-home-hero' css/pages/home.css
+          git config user.name 'AYA RAOS Housekeeping Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add css/site.css css/pages/home.css index.html .github/workflows/housekeeping-modularize-home.yml
+          git diff --cached --check
+          git commit -m 'refactor: modularize locked Homepage CSS without visual change'
+          git push origin HEAD:housekeeping/modular-page-css-20260911
