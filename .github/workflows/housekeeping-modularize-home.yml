@@ -39,10 +39,8 @@ jobs:
           product_book_marker='/* Mobile Product Book V24 — visual authority V14; engine authority R5.13. */'
           assert css.count(mobile_home_start)==1 and css.count(product_book_marker)==1
           a2=css.index(mobile_home_start); pb=css.index(product_book_marker); assert a2<pb
-          # The Home portion sits inside the Public Mobile @media; retain the final brace in core for shared header rules.
           segment=css[a2:pb]
-          trimmed=segment.rstrip()
-          assert trimmed.endswith('}')
+          assert segment.rstrip().endswith('}')
           last_close=segment.rfind('}')
           home_mobile_inner=segment[:last_close]
           assert 'body[data-page="home"]' in home_mobile_inner
@@ -62,12 +60,10 @@ jobs:
           assert joined.count('body[data-page="home"]')>30
           target.parent.mkdir(parents=True,exist_ok=True); target.write_text(joined,encoding='utf-8')
 
-          # Remove late block first, then in-media Home rules, then desktop Home block.
           newcss=css[:a3]
-          newcss=newcss[:a2]+newcss[last_close:]
-          # Desktop indices precede a2 and remain valid after removing later content.
+          newcss=newcss[:a2]+newcss[a2+last_close:]
           newcss=newcss[:a1]+'/* Homepage page styles: css/pages/home.css */\n'+newcss[b1:]
-          site.write_text(newcss,encoding='utf-8')
+          site.write_text(newcss.rstrip()+'\n',encoding='utf-8')
 
           p=Path('index.html'); html=p.read_text(encoding='utf-8')
           assert 'css/pages/home.css' not in html
