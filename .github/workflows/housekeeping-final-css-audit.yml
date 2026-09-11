@@ -1,6 +1,6 @@
 name: Housekeeping final CSS audit
 
-# Re-run after migrated Home / Testimonials / Share scope repair.
+# Final source re-audit after Lines / Pasokan parity repair and full browser parity.
 on:
   push:
     branches:
