@@ -1,5 +1,6 @@
 name: Housekeeping browser parity
 
+# Re-run after Lines/Pasokan parity repair.
 on:
   push:
     branches:
