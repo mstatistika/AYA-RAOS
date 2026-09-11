@@ -62,3 +62,5 @@ jobs:
           git diff --cached --check
           git commit -m 'refactor: modularize locked Share CSS without visual change'
           git push origin HEAD:housekeeping/modular-page-css-20260911
+
+# rerun only after branch-state diagnosis confirmed zero partial write and clean simulation
