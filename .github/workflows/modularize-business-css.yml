@@ -53,9 +53,11 @@ jobs:
           )
 
           assert start_marker not in proposed_site
-          assert 'body[data-page="business"]' not in proposed_site
+          assert '.business-vp1' not in proposed_site
+          assert '.business-workspace' not in proposed_site
+          assert '.business-mobile-state' not in proposed_site
           assert proposed_html.count('css/pages/business.css') == 1
-          assert '../assets/visual/business-lock/' not in moved or '../../assets/visual/business-lock/' in moved
+          assert '../../assets/visual/business-lock/' in moved
 
           page_path.write_text('/* AYA RAOS — Pasokan Usaha canonical page stylesheet. Structural extraction only; no visual or commercial reinterpretation. */\n\n' + moved, encoding='utf-8')
           site_path.write_text(proposed_site, encoding='utf-8')
@@ -65,7 +67,8 @@ jobs:
           git diff --check
           test -f css/pages/business.css
           grep -q 'body\[data-page="business"\]' css/pages/business.css
-          ! grep -q 'body\[data-page="business"\]' css/site.css
+          ! grep -q '\.business-vp1' css/site.css
+          ! grep -q '\.business-workspace' css/site.css
           grep -q 'css/pages/business.css?v=20260911-modular-v1' business.html
           grep -q '../../assets/visual/business-lock/' css/pages/business.css
 
