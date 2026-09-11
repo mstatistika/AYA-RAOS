@@ -1,6 +1,6 @@
 name: Housekeeping browser parity
 
-# Re-run after Lines/Pasokan parity repair.
+# Final deterministic parity: test-only eager catalog images prevent lazy-load frame variance.
 on:
   push:
     branches:
@@ -33,7 +33,15 @@ jobs:
           test -n "$CHROME"
           echo "Chrome: $CHROME"
 
-          # Test-only determinism. These files are runner copies and are never committed.
+          # Test-only determinism. Runner copies only; repository source is not changed.
+          python3 - <<'PY'
+          from pathlib import Path
+          for tree in ('canonical','modular'):
+              p=Path(tree)/'js/catalog.js'
+              s=p.read_text(encoding='utf-8')
+              assert 'loading="lazy"' in s
+              p.write_text(s.replace('loading="lazy"','loading="eager"'),encoding='utf-8')
+          PY
           for tree in canonical modular; do
             cat >> "$tree/css/site.css" <<'CSS'
           /* browser parity harness only */
@@ -86,3 +94,4 @@ jobs:
             done
           done
           test "$fail" -eq 0
+          echo 'FULL 22-CASE BROWSER PARITY PASS'
