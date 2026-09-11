@@ -2,9 +2,9 @@
 
 **Status:** PUBLIC PASOKAN vNEXT + PUBLIC MOBILE UI INCLUDING INFORMATION V18 RELEASED / LOCKED; Admin/B2B platform foundation PRESENT; commercial activation NOT ACTIVE; staging remains `noindex`.
 
-**Repository:** `mstatistika/AYA-RAOS`  
-**Canonical branch:** `main`  
-**Pre-release base:** `209d5d8a99704542d8d4dffb326976935ed1e932`  
+**Repository:** `mstatistika/AYA-RAOS`
+**Canonical branch:** `main`
+**Pre-release base:** `209d5d8a99704542d8d4dffb326976935ed1e932`
 **Production Launch:** NOT APPROVED
 
 > This document supersedes `docs/AYA-RAOS-CURRENT-STATE-2026-08-23-v13.md` as the active repository-state record. Historical Git state remains evidence only.

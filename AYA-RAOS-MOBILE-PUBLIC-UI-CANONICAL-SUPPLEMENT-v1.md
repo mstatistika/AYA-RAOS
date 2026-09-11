@@ -1,11 +1,11 @@
 # AYA RAOS — MOBILE PUBLIC UI CANONICAL SUPPLEMENT v1
 
-**Approved:** 22 Agustus 2026  
-**Scope:** Public Website Mobile UI  
-**Status:** **FINAL MOBILE VISUAL / UX LOCK — staging / noindex**  
-**Product Catalog amendment approved:** 5 September 2026 — **Mobile Product Book V24 FINAL LOCK**  
-**Testimonial Share parity correction approved:** 5 September 2026 — **Foto/Video media modal viewport-fit correction**  
-**Information amendment approved:** 11 September 2026 — **Information Mobile V18 FINAL LOCK**  
+**Approved:** 22 Agustus 2026
+**Scope:** Public Website Mobile UI
+**Status:** **FINAL MOBILE VISUAL / UX LOCK — staging / noindex**
+**Product Catalog amendment approved:** 5 September 2026 — **Mobile Product Book V24 FINAL LOCK**
+**Testimonial Share parity correction approved:** 5 September 2026 — **Foto/Video media modal viewport-fit correction**
+**Information amendment approved:** 11 September 2026 — **Information Mobile V18 FINAL LOCK**
 **CSS architecture amendment approved:** 11 September 2026 — **shared core + canonical page stylesheets**
 
 ## 1. Authority and boundary
