@@ -1,0 +1,63 @@
+name: Housekeeping Share diagnose
+
+on:
+  push:
+    branches:
+      - housekeeping/modular-page-css-20260911
+    paths:
+      - .github/workflows/housekeeping-share-diagnose.yml
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: housekeeping/modular-page-css-20260911
+      - name: Diagnose Share extraction assertions
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          css=Path('css/site.css').read_text(encoding='utf-8')
+          html=Path('share.html').read_text(encoding='utf-8')
+          s='/* --------------------------------------------------------------------------\n   SHARE TESTIMONIAL — create in place, then review'
+          e='/* Cross-page short-height discipline */'
+          rows=[]
+          rows.append(f'start_count={css.count(s)}')
+          rows.append(f'end_count={css.count(e)}')
+          if css.count(s)==1 and css.count(e)==1:
+            start,end=css.index(s),css.index(e)
+            original=css[start:end]
+            rows.append(f'start_lt_end={start<end}')
+            rows.append(f'contains_share={"body[data-page=\\\"share\\\"]" in original}')
+            rows.append(f'contains_cart={"body[data-page=\\\"cart\\\"]" in original}')
+            rows.append(f'old_double_asset_count={original.count(chr(117)+chr(114)+chr(108)+chr(40)+chr(34)+"../assets/")}')
+            rows.append(f'preexisting_double_parent_asset_count={original.count(chr(117)+chr(114)+chr(108)+chr(40)+chr(34)+"../../assets/")}')
+            migrated=original.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+            reverse=migrated.replace('url("../../assets/','url("../assets/').replace("url('../../assets/","url('../assets/")
+            rows.append(f'reversible={reverse==original}')
+            if reverse!=original:
+              for i,(a,b) in enumerate(zip(original.splitlines(),reverse.splitlines()),1):
+                if a!=b:
+                  rows.append(f'first_reverse_diff_line={i}')
+                  rows.append(f'original={a}')
+                  rows.append(f'reversed={b}')
+                  break
+          pattern=r'(<link[^>]+href=["\']css/site\.css[^"\']*["\'][^>]*>)'
+          rows.append(f'site_link_regex_count={len(re.findall(pattern,html,flags=re.I))}')
+          rows.append(f'page_link_count={html.count("css/pages/share.css")}')
+          Path('tmp').mkdir(exist_ok=True)
+          Path('tmp/share-extraction-diagnosis.txt').write_text('\n'.join(rows)+'\n',encoding='utf-8')
+          Path('.github/workflows/housekeeping-share-diagnose.yml').unlink()
+          PY
+          git config user.name 'AYA RAOS Housekeeping Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add tmp/share-extraction-diagnosis.txt .github/workflows/housekeeping-share-diagnose.yml
+          git commit -m 'chore: capture Share extraction diagnosis'
+          git push origin HEAD:housekeeping/modular-page-css-20260911
