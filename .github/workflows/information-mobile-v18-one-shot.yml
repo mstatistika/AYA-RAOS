@@ -1,0 +1,340 @@
+name: Information mobile V18 one-shot
+
+on:
+  push:
+    branches:
+      - release/information-mobile-v18-20260911
+    paths:
+      - .github/workflows/information-mobile-v18-one-shot.yml
+
+permissions:
+  contents: write
+
+jobs:
+  implement:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release/information-mobile-v18-20260911
+          fetch-depth: 0
+
+      - name: Translate locked Information Mobile V18
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          info_path = Path('information.html')
+          css_path = Path('css/site.css')
+          js_path = Path('js/info-page.js')
+
+          info = info_path.read_text(encoding='utf-8')
+          css = css_path.read_text(encoding='utf-8')
+
+          if 'data-info-mobile' in info or 'Information Mobile V18 — LOCKED 2026-09-11' in css:
+              raise SystemExit('Refusing duplicate Information Mobile V18 implementation')
+
+          main_marker = '<main id="main">\n<section class="information-hero heritage-stage-soft">'
+          if info.count(main_marker) != 1:
+              raise SystemExit(f'Unexpected information hero marker count: {info.count(main_marker)}')
+          if info.count('<section class="information-section">') != 1:
+              raise SystemExit('Unexpected desktop information-section count')
+
+          mobile = r'''<section class="information-mobile" data-info-mobile aria-label="Informasi AYA">
+            <header class="information-mobile-hero">
+              <span>INFORMASI AYA</span>
+              <h1>Sebelum memesan.</h1>
+              <p>Produk, pemesanan, pengiriman, kebutuhan acara, Pasokan Usaha, dan bantuan AYA.</p>
+            </header>
+
+            <div class="information-mobile-stage">
+              <div class="information-mobile-workspace">
+                <div class="information-mobile-panels">
+                  <section class="information-mobile-panel" data-info-mobile-panel="produk" aria-labelledby="info-mobile-produk">
+                    <h2 id="info-mobile-produk">Produk AYA</h2>
+                    <p class="information-mobile-lead">Lihat pilihan AYA beserta varian, harga, dan ketersediaannya di halaman Produk.</p>
+                    <div class="information-mobile-statuses">
+                      <div><strong>Tersedia</strong><span>Sedang dapat dipesan.</span></div>
+                      <div><strong>Pre-order</strong><span>Memerlukan waktu persiapan.</span></div>
+                      <div><strong>Habis</strong><span>Belum dapat dipesan saat ini.</span></div>
+                    </div>
+                  </section>
+
+                  <section class="information-mobile-panel" data-info-mobile-panel="pesan" aria-labelledby="info-mobile-pesan" hidden>
+                    <h2 id="info-mobile-pesan">Cara memesan</h2>
+                    <p class="information-mobile-lead">Untuk pembelian satu kali, Anda dapat langsung memulai dari Keranjang AYA. Tidak perlu membuat akun.</p>
+                    <div class="information-mobile-flow">
+                      <div><i aria-hidden="true"></i><div><strong>Pilih produk dan varian</strong><p>Tentukan pilihan dan jumlah yang Anda inginkan.</p></div></div>
+                      <div><i aria-hidden="true"></i><div><strong>Lengkapi data pesanan</strong><p>Isi nama penerima, WhatsApp, alamat, dan catatan bila diperlukan.</p></div></div>
+                      <div><i aria-hidden="true"></i><div><strong>Tinjau pesanan</strong><p>Periksa kembali kebutuhan, pengiriman, dan total sebelum melanjutkan.</p></div></div>
+                      <div><i aria-hidden="true"></i><div><strong>Lanjut ke pembayaran</strong><p>Pembayaran online melalui website belum aktif saat ini.</p></div></div>
+                    </div>
+                  </section>
+
+                  <section class="information-mobile-panel" data-info-mobile-panel="kirim" aria-labelledby="info-mobile-kirim" hidden>
+                    <h2 id="info-mobile-kirim">Pengiriman pesanan</h2>
+                    <p class="information-mobile-lead">Area layanan utama AYA adalah Lippo Utara dan Jabodetabek. Pengiriman ke area lain mengikuti jenis produk dan metode kirim yang memungkinkan.</p>
+                    <div class="information-mobile-copy-list">
+                      <div><strong>Ongkir pada checkout</strong><span>Saat perhitungan rute langsung belum tersedia, checkout menggunakan ongkir sementara sebesar Rp25.000.</span></div>
+                      <div><strong>Benefit untuk jumlah tertentu</strong><span>Benefit ongkir dapat berlaku sesuai jumlah pesanan dan tidak akan melebihi ongkir yang dikenakan.</span></div>
+                    </div>
+                    <p class="information-mobile-note">Ongkir sementara yang tampil bukan tarif live Grab atau Gojek.</p>
+                  </section>
+
+                  <section class="information-mobile-panel" data-info-mobile-panel="acara" aria-labelledby="info-mobile-acara" hidden>
+                    <h2 id="info-mobile-acara">Pesanan untuk acara</h2>
+                    <p class="information-mobile-lead">Untuk acara, kantor, hampers, atau kebutuhan dalam jumlah besar yang hanya dilakukan satu kali, gunakan Keranjang AYA dan pilih Untuk Acara.</p>
+                    <p class="information-mobile-lead information-mobile-lead-spaced">Jumlah pesanan tidak menentukan jalur. Jika kebutuhan Anda berulang secara rutin, gunakan Pasokan Usaha.</p>
+                  </section>
+
+                  <section class="information-mobile-panel" data-info-mobile-panel="pasokan" aria-labelledby="info-mobile-pasokan" hidden>
+                    <h2 id="info-mobile-pasokan">Pasokan Usaha</h2>
+                    <p class="information-mobile-lead">Pasokan Usaha cocok untuk kebutuhan produk AYA yang datang secara rutin.</p>
+                    <div class="information-mobile-cadence"><strong>Ritme pasokan</strong><span>Mingguan, dua mingguan, bulanan, atau dua bulanan.</span></div>
+                    <div class="information-mobile-mini-flow">
+                      <div><i aria-hidden="true"></i><div><strong>Sampaikan kebutuhan</strong><span>Produk, perkiraan jumlah, ritme, waktu mulai, dan informasi usaha.</span></div></div>
+                      <div><i aria-hidden="true"></i><div><strong>Tinjau ringkasan</strong><span>Pastikan kebutuhan yang disampaikan sudah sesuai.</span></div></div>
+                      <div><i aria-hidden="true"></i><div><strong>Lihat status Pasokan</strong><span>Kebutuhan diperiksa sebelum dapat dilanjutkan.</span></div></div>
+                    </div>
+                    <p class="information-mobile-note">Kebutuhan akan diperiksa terlebih dahulu sebelum harga, ketersediaan, dan jadwal dapat dikonfirmasi.</p>
+                  </section>
+
+                  <section class="information-mobile-panel" data-info-mobile-panel="bantuan" aria-labelledby="info-mobile-bantuan" hidden>
+                    <h2 id="info-mobile-bantuan">Bantuan AYA</h2>
+                    <div class="information-mobile-faq">
+                      <details open><summary>Saya belum yakin harus lewat Keranjang atau Pasokan. Pilih yang mana?</summary><p>Gunakan Keranjang AYA untuk pembelian satu kali. Gunakan Pasokan Usaha jika kebutuhan produk datang kembali secara rutin.</p></details>
+                      <details><summary>Bagaimana jika kebutuhan saya berbeda dari pilihan yang tersedia?</summary><p>Hubungi AYA melalui WhatsApp. Kami akan membantu berdasarkan produk, area, dan layanan yang memang tersedia.</p></details>
+                      <details><summary>Bagaimana jika pertanyaan saya terkait pembatalan, pengembalian dana, alergi, masa simpan, sertifikasi, atau kebutuhan khusus?</summary><p>Silakan hubungi AYA agar kami dapat membantu sesuai produk dan kondisi pesanan Anda.</p></details>
+                    </div>
+                  </section>
+                </div>
+
+                <footer class="information-mobile-footer">
+                  <a class="information-mobile-cta" data-info-mobile-cta="produk" href="products.html">LIHAT PRODUK</a>
+                  <a class="information-mobile-cta" data-info-mobile-cta="pesan" href="cart.html?context=personal" hidden>PESAN SEKARANG</a>
+                  <a class="information-mobile-cta" data-info-mobile-cta="kirim" href="cart.html" hidden>BUKA KERANJANG</a>
+                  <a class="information-mobile-cta" data-info-mobile-cta="acara" href="cart.html?context=event" hidden>PESAN UNTUK ACARA</a>
+                  <a class="information-mobile-cta" data-info-mobile-cta="pasokan" href="business.html" hidden>LIHAT PASOKAN</a>
+                  <button class="information-mobile-cta" data-info-mobile-cta="bantuan" data-whatsapp-help type="button" hidden>HUBUNGI AYA</button>
+                </footer>
+              </div>
+
+              <nav class="information-mobile-rail" aria-label="Bagian informasi">
+                <button class="active" type="button" data-info-mobile-key="produk" aria-selected="true"><span>Produk</span></button>
+                <button type="button" data-info-mobile-key="pesan" aria-selected="false"><span>Pesan</span></button>
+                <button type="button" data-info-mobile-key="kirim" aria-selected="false"><span>Kirim</span></button>
+                <button type="button" data-info-mobile-key="acara" aria-selected="false"><span>Acara</span></button>
+                <button type="button" data-info-mobile-key="pasokan" aria-selected="false"><span>Pasokan</span></button>
+                <button type="button" data-info-mobile-key="bantuan" aria-selected="false"><span>Bantuan</span></button>
+              </nav>
+            </div>
+          </section>'''
+
+          info = info.replace(
+              main_marker,
+              '<main id="main">\n' + mobile + '\n<section class="information-desktop information-hero heritage-stage-soft">',
+              1,
+          )
+          info = info.replace('<section class="information-section">', '<section class="information-desktop information-section">', 1)
+          info = info.replace('css/site.css?v=20260809-locked-global-v1', 'css/site.css?v=20260911-information-mobile-v18', 1)
+          info = info.replace('js/info-page.js?v=20260809-locked-global-v1', 'js/info-page.js?v=20260911-information-mobile-v18', 1)
+          info = info.replace(
+              'Cara pesan, acara, pengiriman, pembayaran, pasokan usaha, FAQ, syarat, dan privasi AYA RAOS.',
+              'Produk, pemesanan, pengiriman, kebutuhan acara, Pasokan Usaha, dan bantuan AYA RAOS.',
+          )
+
+          css_marker = '/* Pasokan Usaha — B2B vNext APPROVED 2026-08-20 */'
+          if css.count(css_marker) != 1:
+              raise SystemExit(f'Unexpected Pasokan marker count: {css.count(css_marker)}')
+
+          mobile_css = r'''
+/* Information Mobile V18 — LOCKED 2026-09-11 */
+.information-mobile{display:none}
+@media (max-width:900px){
+  body[data-page="information"]{overflow:hidden;background:#f1dfc7}
+  body[data-page="information"] #main{height:calc(100svh - var(--header-h));overflow:hidden}
+  body[data-page="information"] .information-desktop{display:none}
+  body[data-page="information"] .information-mobile{
+    height:100%;display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden;
+    color:#4c332b;background:
+      radial-gradient(circle at 80% 0,rgba(255,255,255,.84),transparent 28%),
+      radial-gradient(circle at 0 100%,rgba(183,125,48,.07),transparent 36%),
+      linear-gradient(160deg,#fffaf2 0%,#f1dfc7 100%);
+  }
+  body[data-page="information"] .information-mobile-hero{padding:11px 18px 9px;text-align:left}
+  body[data-page="information"] .information-mobile-hero>span{display:block;color:#9d6929;font-size:8.5px;font-weight:700;letter-spacing:.17em}
+  body[data-page="information"] .information-mobile-hero h1{max-width:330px;margin:5px 0 0;color:#5b1518;font:600 32px/.94 var(--serif);letter-spacing:-.026em}
+  body[data-page="information"] .information-mobile-hero p{max-width:330px;margin:5px 0 0;color:#756259;font-size:9.7px;line-height:1.42}
+  body[data-page="information"] .information-mobile-stage{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 64px;gap:7px;padding:0 10px 9px 12px}
+  body[data-page="information"] .information-mobile-workspace{
+    min-height:0;overflow:hidden;display:grid;grid-template-rows:minmax(0,1fr) auto;
+    border:1px solid rgba(160,111,47,.20);border-radius:18px;
+    background:radial-gradient(circle at 88% -2%,rgba(255,255,255,.78),transparent 28%),linear-gradient(180deg,rgba(255,251,245,.96),rgba(247,234,216,.92));
+    box-shadow:inset 0 1px rgba(255,255,255,.84),0 9px 22px rgba(86,50,28,.045);
+  }
+  body[data-page="information"] .information-mobile-panels{min-height:0;overflow:hidden}
+  body[data-page="information"] .information-mobile-panel{height:100%;min-height:0;overflow-y:auto;scrollbar-width:none;padding:15px 16px 12px}
+  body[data-page="information"] .information-mobile-panel::-webkit-scrollbar{display:none}
+  body[data-page="information"] .information-mobile-panel[hidden]{display:none}
+  body[data-page="information"] .information-mobile-panel h2{margin:1px 0 9px;color:#5d1719;font:600 29px/.96 var(--serif);letter-spacing:-.02em}
+  body[data-page="information"] .information-mobile-lead{margin:0;color:#6f5d54;font-size:10.5px;line-height:1.5}
+  body[data-page="information"] .information-mobile-lead-spaced{margin-top:14px}
+  body[data-page="information"] .information-mobile-statuses{display:grid;gap:0;margin-top:10px;padding:5px 10px}
+  body[data-page="information"] .information-mobile-statuses>div{display:grid;grid-template-columns:76px 1fr;gap:8px;align-items:center;min-height:35px}
+  body[data-page="information"] .information-mobile-statuses strong,
+  body[data-page="information"] .information-mobile-copy-list strong,
+  body[data-page="information"] .information-mobile-cadence strong,
+  body[data-page="information"] .information-mobile-flow strong,
+  body[data-page="information"] .information-mobile-mini-flow strong{color:#573e34;font-size:9.7px}
+  body[data-page="information"] .information-mobile-statuses span,
+  body[data-page="information"] .information-mobile-copy-list span,
+  body[data-page="information"] .information-mobile-cadence span,
+  body[data-page="information"] .information-mobile-mini-flow span{color:#847168;font-size:8.5px;line-height:1.34}
+  body[data-page="information"] .information-mobile-flow{display:grid;gap:7px;margin-top:11px}
+  body[data-page="information"] .information-mobile-flow>div{display:grid;grid-template-columns:9px 1fr;gap:9px;padding:7px 2px}
+  body[data-page="information"] .information-mobile-flow i{width:7px;height:7px;border-radius:50%;margin-top:4px;background:#861a1e;box-shadow:0 0 0 3px rgba(134,26,30,.08)}
+  body[data-page="information"] .information-mobile-flow p{margin:2px 0 0;color:#88756b;font-size:8.7px;line-height:1.41}
+  body[data-page="information"] .information-mobile-copy-list{display:grid;gap:0;margin-top:10px}
+  body[data-page="information"] .information-mobile-copy-list>div{padding:9px 1px}
+  body[data-page="information"] .information-mobile-copy-list span{display:block;margin-top:2px}
+  body[data-page="information"] .information-mobile-note{margin:9px 0 0;padding:0;color:#7b685e;font-size:8.3px;line-height:1.45}
+  body[data-page="information"] .information-mobile-cadence{margin-top:9px;padding:8px 10px}
+  body[data-page="information"] .information-mobile-cadence strong,
+  body[data-page="information"] .information-mobile-cadence span{display:block}
+  body[data-page="information"] .information-mobile-cadence span{margin-top:2px}
+  body[data-page="information"] .information-mobile-mini-flow{display:grid;gap:5px;margin-top:8px}
+  body[data-page="information"] .information-mobile-mini-flow>div{display:grid;grid-template-columns:7px 1fr;gap:8px;align-items:start;padding:6px 2px}
+  body[data-page="information"] .information-mobile-mini-flow i{width:6px;height:6px;margin-top:4px;border-radius:50%;background:#85191d}
+  body[data-page="information"] .information-mobile-mini-flow strong{display:block;font-size:9.3px}
+  body[data-page="information"] .information-mobile-mini-flow span{display:block;margin-top:1px;font-size:8.2px;line-height:1.32}
+  body[data-page="information"] .information-mobile-faq{display:grid;gap:0;margin-top:10px}
+  body[data-page="information"] .information-mobile-faq details{border:0;border-radius:0;background:transparent;overflow:visible}
+  body[data-page="information"] .information-mobile-faq summary{list-style:none;padding:10px 2px;color:#584037;font-size:9.4px;font-weight:700;cursor:pointer}
+  body[data-page="information"] .information-mobile-faq summary::-webkit-details-marker{display:none}
+  body[data-page="information"] .information-mobile-faq summary:after{content:"+";float:right;color:#a46e29;font-size:14px;font-weight:500}
+  body[data-page="information"] .information-mobile-faq details[open] summary:after{content:"–"}
+  body[data-page="information"] .information-mobile-faq p{margin:0;padding:0 2px 10px;color:#7e6b61;font-size:8.6px;line-height:1.46}
+  body[data-page="information"] .information-mobile-footer{padding:8px 10px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:flex-end;background:transparent}
+  body[data-page="information"] .information-mobile-cta{
+    width:160px;min-width:160px;max-width:160px;height:36px;padding:0 13px;border:0;border-radius:10px;
+    background:linear-gradient(180deg,#84191e,#651116);color:#fff2de;font-size:8.8px;font-weight:800;letter-spacing:.03em;
+    display:inline-flex;align-items:center;justify-content:center;text-align:center;white-space:nowrap;
+  }
+  body[data-page="information"] .information-mobile-rail{position:relative;min-height:0;display:grid;grid-template-rows:repeat(6,minmax(0,1fr));gap:0;padding:4px 0 4px 10px;align-self:stretch;background:transparent}
+  body[data-page="information"] .information-mobile-rail:before{content:"";position:absolute;left:0;top:5px;bottom:5px;width:1px;background:linear-gradient(180deg,rgba(176,125,59,.04),rgba(176,125,59,.12),rgba(176,125,59,.04))}
+  body[data-page="information"] .information-mobile-rail button{position:relative;min-width:0;min-height:0;border:0;border-radius:0;background:transparent;color:#7b675d;padding:0 2px 0 8px;display:flex;align-items:center;justify-content:flex-start;text-align:left;box-shadow:none}
+  body[data-page="information"] .information-mobile-rail button+button{border-top:1px solid rgba(160,111,47,.07)}
+  body[data-page="information"] .information-mobile-rail span{font-size:8.1px;line-height:1.08;font-weight:700;letter-spacing:.01em;opacity:.86}
+  body[data-page="information"] .information-mobile-rail button.active{margin-left:-10px;padding-left:15px;border-radius:14px 0 0 14px;background:radial-gradient(circle at 20% 18%,rgba(255,232,190,.09),transparent 34%),linear-gradient(180deg,#7a171b,#5d0f13);color:#fff0d8;box-shadow:-5px 7px 16px rgba(91,20,19,.10),inset 1px 0 rgba(234,199,135,.16)}
+  body[data-page="information"] .information-mobile-rail button.active span{opacity:1}
+  body[data-page="information"] .information-mobile-rail button.active:before{content:"";position:absolute;left:-5px;top:50%;width:5px;height:18px;transform:translateY(-50%);border-radius:4px 0 0 4px;background:#7a171b}
+}
+@media (max-width:370px){
+  body[data-page="information"] .information-mobile-hero{padding-top:13px}
+  body[data-page="information"] .information-mobile-hero h1{font-size:33px}
+  body[data-page="information"] .information-mobile-hero p{font-size:9.9px}
+  body[data-page="information"] .information-mobile-stage{grid-template-columns:minmax(0,1fr) 60px;gap:7px;padding:0 8px 8px 9px}
+  body[data-page="information"] .information-mobile-panel{padding:14px}
+  body[data-page="information"] .information-mobile-panel h2{font-size:28px}
+  body[data-page="information"] .information-mobile-rail span{font-size:6.2px}
+}
+@media (min-width:421px) and (max-width:900px){
+  body[data-page="information"] .information-mobile-stage{grid-template-columns:minmax(0,1fr) 68px;padding-left:16px;padding-right:14px}
+  body[data-page="information"] .information-mobile-panel{padding-left:20px;padding-right:20px}
+}
+'''
+          if '!important' in mobile_css:
+              raise SystemExit('New Information mobile CSS must not introduce !important')
+          css = css.replace(css_marker, mobile_css + '\n' + css_marker, 1)
+
+          js = r'''(() => {
+            "use strict";
+            document.addEventListener("DOMContentLoaded", () => {
+              const sections = [...document.querySelectorAll(".information-content > section[id]")];
+              const links = [...document.querySelectorAll(".information-nav a[href^='#']")];
+              if (sections.length && links.length) {
+                const activate = (id, updateHash=true) => {
+                  const target = sections.find(s => s.id === id) || sections[0];
+                  sections.forEach(s => { s.hidden = s !== target; s.classList.toggle("active", s === target); });
+                  links.forEach(link => {
+                    const active = link.getAttribute("href") === `#${target.id}`;
+                    link.classList.toggle("active", active);
+                    if (active) link.setAttribute("aria-current", "location"); else link.removeAttribute("aria-current");
+                  });
+                  if (updateHash && location.hash !== `#${target.id}`) history.replaceState(null, "", `#${target.id}`);
+                  target.focus?.({preventScroll:true});
+                };
+                links.forEach(link => link.addEventListener("click", e => { e.preventDefault(); activate(link.hash.slice(1)); }));
+                activate(location.hash.slice(1) || sections[0].id, false);
+                addEventListener("hashchange", () => activate(location.hash.slice(1), false));
+              }
+
+              const mobileRoot = document.querySelector("[data-info-mobile]");
+              if (!mobileRoot) return;
+              const mobilePanels = [...mobileRoot.querySelectorAll("[data-info-mobile-panel]")];
+              const mobileButtons = [...mobileRoot.querySelectorAll("[data-info-mobile-key]")];
+              const mobileCtas = [...mobileRoot.querySelectorAll("[data-info-mobile-cta]")];
+              if (!mobilePanels.length || !mobileButtons.length || !mobileCtas.length) return;
+
+              const activateMobile = (key) => {
+                const target = mobilePanels.find(panel => panel.dataset.infoMobilePanel === key) || mobilePanels[0];
+                const activeKey = target.dataset.infoMobilePanel;
+                mobilePanels.forEach(panel => { panel.hidden = panel !== target; });
+                mobileButtons.forEach(button => {
+                  const active = button.dataset.infoMobileKey === activeKey;
+                  button.classList.toggle("active", active);
+                  button.setAttribute("aria-selected", active ? "true" : "false");
+                });
+                mobileCtas.forEach(action => { action.hidden = action.dataset.infoMobileCta !== activeKey; });
+                target.scrollTop = 0;
+              };
+
+              mobileButtons.forEach(button => button.addEventListener("click", () => activateMobile(button.dataset.infoMobileKey)));
+              activateMobile(mobileButtons[0].dataset.infoMobileKey);
+            });
+          })();
+'''
+
+          if info.count('data-info-mobile-key=') != 6:
+              raise SystemExit('Expected exactly six mobile rail controls')
+          if info.count('data-info-mobile-panel=') != 6:
+              raise SystemExit('Expected exactly six mobile panels')
+          if info.count('data-info-mobile-cta=') != 6:
+              raise SystemExit('Expected exactly six mobile CTAs')
+
+          info_path.write_text(info, encoding='utf-8')
+          css_path.write_text(css, encoding='utf-8')
+          js_path.write_text(js, encoding='utf-8')
+          PY
+
+          node --check js/info-page.js
+          git diff --check
+
+          python - <<'PY'
+          from pathlib import Path
+          info = Path('information.html').read_text(encoding='utf-8')
+          css = Path('css/site.css').read_text(encoding='utf-8')
+          js = Path('js/info-page.js').read_text(encoding='utf-8')
+          assert info.count('data-info-mobile-key=') == 6
+          assert info.count('data-info-mobile-panel=') == 6
+          assert info.count('data-info-mobile-cta=') == 6
+          assert css.count('Information Mobile V18 — LOCKED 2026-09-11') == 1
+          assert 'Sebelum memesan.' in info
+          assert 'Informasi untuk memesan.' not in info
+          assert 'secondary:true' not in js
+          assert 'information-mobile-rail button.active' in css
+          assert 'information-mobile-cta' in css
+          print('Information Mobile V18 invariants: PASS')
+          PY
+
+      - name: Commit implementation and remove one-shot workflow
+        shell: bash
+        run: |
+          rm .github/workflows/information-mobile-v18-one-shot.yml
+          git config user.name "AYA RAOS Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add information.html css/site.css js/info-page.js .github/workflows/information-mobile-v18-one-shot.yml
+          git diff --cached --check
+          git commit -m "feat: implement locked Information mobile V18"
+          git push origin HEAD:release/information-mobile-v18-20260911
