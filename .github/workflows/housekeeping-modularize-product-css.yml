@@ -135,10 +135,9 @@ jobs:
               raise AssertionError(f'unclassified responsive selector: {pre}')
 
           def split_media(media_pre, body):
-              prod=[]; detail=[]; comments=[]
+              prod=[]; detail=[]
               for kind,pre,inner in top_blocks(body):
                   if kind=='comment':
-                      comments.append(pre)
                       continue
                   assert kind=='block', f'unexpected media node: {kind} {pre[:80]}'
                   who=classify_selector(pre)
@@ -152,7 +151,6 @@ jobs:
                   dtxt=media_pre+'{\n'+'\n'.join(detail)+'\n}'
               return ptxt,dtxt
 
-          # ---------- Phase A: Product Catalog + Mobile Product Book ----------
           c=site.index(catalog_marker)
           p=site.index(product_marker)
           t=site.index(testimonials_marker)
@@ -174,14 +172,12 @@ jobs:
               if pp: products_responsive.append(pp)
               if dd: product_responsive.append(dd)
 
-          # Rebuild the catalog/product region with Product Detail only.
           replacement='/* Product Catalog page styles: css/pages/products.css */\n'+product_base
           if product_responsive:
               replacement+='\n\n'+'\n\n'.join(product_responsive)
           replacement+='\n\n'
           site1=site[:c]+replacement+site[t:]
 
-          # Extract the dedicated Mobile Product Book envelope from current core.
           bm=site1.index(book_marker)
           media_start=site1.rfind('@media (max-width:900px){',0,bm)
           assert media_start!=-1
@@ -191,12 +187,13 @@ jobs:
           assert book_marker in book_block
           assert '.aya-mobile-product-book' in book_block
           site1=site1[:media_start].rstrip()+'\n'+site1[media_end+1:]
+          site1=site1.rstrip()+'\n'
 
           def to_page_paths(text):
               return text.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
 
           products_css=(catalog_base+'\n\n'+'\n\n'.join(products_responsive)+'\n\n'+book_block+'\n')
-          products_css=to_page_paths(products_css)
+          products_css=to_page_paths(products_css).rstrip()+'\n'
           assert 'body[data-page="product"]' not in products_css
           assert 'body[data-page="products"]' in products_css
           assert 'Mobile Product Book V24' in products_css
@@ -226,7 +223,6 @@ jobs:
           git diff --cached --check
           git commit -m 'refactor: modularize locked Product Catalog CSS without visual change'
 
-          # ---------- Phase B: Direct Product Detail ----------
           python - <<'PY'
           from pathlib import Path
           import re
@@ -253,8 +249,9 @@ jobs:
           assert '.catalog-' not in product_css
           assert '.aya-mobile-product-book' not in product_css
 
-          product_css=product_css.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
+          product_css=product_css.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/").rstrip()+'\n'
           site_new=site[:p]+'/* Product Detail page styles: css/pages/product.css */\n'+site[t:]
+          site_new=site_new.rstrip()+'\n'
 
           site_link=re.search(r'<link href="css/site\.css\?v=[^"]+" rel="stylesheet"/>',html)
           assert site_link, 'product site stylesheet link missing'
