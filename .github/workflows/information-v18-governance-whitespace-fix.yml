@@ -1,0 +1,47 @@
+name: Information V18 governance whitespace fix
+
+on:
+  push:
+    branches:
+      - implement/information-mobile-v18-modular-20260911
+    paths:
+      - .github/workflows/information-v18-governance-whitespace-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: implement/information-mobile-v18-modular-20260911
+          fetch-depth: 0
+
+      - name: Remove trailing whitespace from changed governance files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          paths = [
+              Path('docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md'),
+              Path('AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md'),
+              Path('DECISION_LOG.md'),
+              Path('README.md'),
+          ]
+          for path in paths:
+              text = path.read_text(encoding='utf-8')
+              cleaned = '\n'.join(line.rstrip() for line in text.splitlines()) + '\n'
+              path.write_text(cleaned, encoding='utf-8')
+          PY
+          git diff --check
+
+      - name: Commit cleanup and remove helper
+        run: |
+          rm .github/workflows/information-v18-governance-whitespace-fix.yml
+          git config user.name "AYA RAOS Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/AYA-RAOS-CURRENT-STATE-2026-09-11-v14.md AYA-RAOS-MOBILE-PUBLIC-UI-CANONICAL-SUPPLEMENT-v1.md DECISION_LOG.md README.md .github/workflows/information-v18-governance-whitespace-fix.yml
+          git diff --cached --check
+          git commit -m "docs: normalize Information V18 governance whitespace"
+          git push origin HEAD:implement/information-mobile-v18-modular-20260911
