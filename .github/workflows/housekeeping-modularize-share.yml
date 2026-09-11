@@ -35,7 +35,7 @@ jobs:
           start,end=css.index(start_marker),css.index(end_marker)
           assert start<end
           original=css[start:end]
-          assert 'body[data-page="share"]' in original
+          assert original.count('body[data-page="share"]') > 50
           assert 'body[data-page="cart"]' not in original
           migrated=original.replace('url("../assets/','url("../../assets/').replace("url('../assets/","url('../../assets/")
           reverse=migrated.replace('url("../../assets/','url("../assets/').replace("url('../../assets/","url('../assets/")
@@ -54,7 +54,8 @@ jobs:
           helper.unlink()
           PY
           git diff --check
-          grep -q 'body\[data-page="share"\]' css/pages/share.css
+          test -f css/pages/share.css
+          grep -q 'testimonial-share-page' css/pages/share.css
           git config user.name 'AYA RAOS Housekeeping Bot'
           git config user.email 'actions@users.noreply.github.com'
           git add css/site.css css/pages/share.css share.html .github/workflows/housekeeping-modularize-share.yml
