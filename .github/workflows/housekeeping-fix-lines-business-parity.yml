@@ -41,9 +41,9 @@ jobs:
           lines = before.rstrip() + '\n\n@media (max-width:900px){\n' + marker + mobile.rstrip() + '\n}\n'
 
           # 2) .home-scroll-cue is a shared primitive: business.html reuses it.
-          start='.home-scroll-cue{'
+          start='.home-scroll-cue{position:absolute;left:50%;bottom:14px;'
           end='/* Homepage — Tentang AYA */'
-          assert home.count(start)==1, f'expected one shared cue base in home.css, got {home.count(start)}'
+          assert home.count(start)==1, f'expected one shared cue base signature in home.css, got {home.count(start)}'
           assert home.count(end)==1
           s=home.index(start)
           e=home.index(end,s)
@@ -93,8 +93,9 @@ jobs:
           assert lines.count('@media (max-width:900px){\n/* Dedicated Lines Mobile — final LOCK 2026-09-03 */')==1
           site=Path('css/site.css').read_text(encoding='utf-8')
           home=Path('css/pages/home.css').read_text(encoding='utf-8')
-          assert site.count('.home-scroll-cue{')==1
-          assert '.home-scroll-cue{' not in home
+          sig='.home-scroll-cue{position:absolute;left:50%;bottom:14px;'
+          assert site.count(sig)==1
+          assert sig not in home
           PY
 
           git config user.name 'AYA RAOS Housekeeping Bot'
