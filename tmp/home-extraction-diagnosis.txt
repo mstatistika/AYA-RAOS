@@ -1,0 +1,31 @@
+base=720bff4b02f27e020b8adb4fa74b3c8649625dec
+start_a_count 1
+end_a_count 1
+mobile_start_count 1
+pb_count 1
+late_count 1
+order 9457 38822 80959 91798 120322
+ordered True
+desktop_home_count 2
+desktop_live_home True
+segment_len 10839 segment_rstrip_ends_brace True
+last_close 10834
+mobile_home_count 102
+late_home_count 370
+joined_home_count 474
+newcss_after_late_len 120322
+a2_in_newcss True last_close_abs 91793
+desktop_slice_valid_after_mobile True
+site_link_count 1
+page_link_count 1
+python=PASS
+--- diff check ---
+css/site.css:1746: new blank line at EOF.
+diff=2
+--- status ---
+ M css/site.css
+ M index.html
+?? css/pages/home.css
+add=0
+css/site.css:1746: new blank line at EOF.
+cached_diff=2
