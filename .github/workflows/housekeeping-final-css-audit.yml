@@ -1,6 +1,6 @@
 name: Housekeeping final CSS audit
 
-# Re-run after temporary diagnosis artifacts were removed.
+# Re-run after migrated Home / Testimonials / Share scope repair.
 on:
   push:
     branches:
