@@ -17,13 +17,31 @@
       let source = await response.text();
 
       source = source.replace('const S = {const S = {', 'const S = {');
+      source = source.replace('sb = initSb();', 'sb = window.AYA_ADMIN_AUTH;');
       source = source.replace('fx: new Set(),', 'fx: new Set(window.AYA_ADMIN_FUNCTIONS || []),');
       source = source.replace('S.fx = new Set(previewFx);', 'S.fx = new Set(window.AYA_ADMIN_FUNCTIONS || []);');
       source = source.replace('S.previewMode = true;', 'S.previewMode = false;');
       source = source.replace('const can = k => S.fx.has(k) || S.previewMode;', 'const can = k => S.fx.has(k);');
 
-      // auth.js is the single owner of login. Never install the legacy login handler.
+      // auth.js is the single owner of the browser Supabase/Auth client and login flow.
       source = source.replace(legacyLoginHandler, '// Login handled by auth.js.');
+
+      // Authenticated staging must not describe itself as an anonymous preview surface.
+      // Module-level "preview/local-only" labels remain where persistence is genuinely not active.
+      source = source.replace(
+        "'Preview mode — data mungkin sample. Hubungkan backend untuk data live.',chip('Preview Mode','warn')",
+        "'Authenticated staging — sebagian modul masih foundation/local-only sampai aktivasi backend.',chip('Authenticated','good')"
+      );
+      source = source.replaceAll(
+        "<b>Preview Mode</b><small>Admin panel tanpa login untuk UI/UX review.</small></div>${chip('Active','good')}",
+        "<b>Admin access</b><small>Authenticated session required; anonymous preview bypass disabled.</small></div>${chip('Protected','good')}"
+      );
+
+      // End the authenticated session instead of merely hiding the app shell.
+      source = source.replace(
+        "$('#toggleLoginBtn').onclick = () => { $('#loginView').hidden=false; $('#appView').hidden=true; };",
+        "$('#toggleLoginBtn').onclick = async () => { try { await window.AYA_ADMIN_AUTH.auth.signOut(); } finally { window.location.reload(); } };"
+      );
 
       // The app shell may only be opened after auth.js has verified the Admin user.
       source = source.replace(
