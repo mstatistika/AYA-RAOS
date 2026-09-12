@@ -17,13 +17,20 @@
       let source = await response.text();
 
       source = source.replace('const S = {const S = {', 'const S = {');
+      source = source.replace('sb = initSb();', 'sb = window.AYA_ADMIN_AUTH;');
       source = source.replace('fx: new Set(),', 'fx: new Set(window.AYA_ADMIN_FUNCTIONS || []),');
       source = source.replace('S.fx = new Set(previewFx);', 'S.fx = new Set(window.AYA_ADMIN_FUNCTIONS || []);');
       source = source.replace('S.previewMode = true;', 'S.previewMode = false;');
       source = source.replace('const can = k => S.fx.has(k) || S.previewMode;', 'const can = k => S.fx.has(k);');
 
-      // auth.js is the single owner of login. Never install the legacy login handler.
+      // auth.js is the single owner of the browser Supabase/Auth client and login flow.
       source = source.replace(legacyLoginHandler, '// Login handled by auth.js.');
+
+      // End the authenticated session instead of merely hiding the app shell.
+      source = source.replace(
+        "$('#toggleLoginBtn').onclick = () => { $('#loginView').hidden=false; $('#appView').hidden=true; };",
+        "$('#toggleLoginBtn').onclick = async () => { try { await window.AYA_ADMIN_AUTH.auth.signOut(); } finally { window.location.reload(); } };"
+      );
 
       // The app shell may only be opened after auth.js has verified the Admin user.
       source = source.replace(
