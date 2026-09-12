@@ -26,6 +26,17 @@
       // auth.js is the single owner of the browser Supabase/Auth client and login flow.
       source = source.replace(legacyLoginHandler, '// Login handled by auth.js.');
 
+      // Authenticated staging must not describe itself as an anonymous preview surface.
+      // Module-level "preview/local-only" labels remain where persistence is genuinely not active.
+      source = source.replace(
+        "'Preview mode — data mungkin sample. Hubungkan backend untuk data live.',chip('Preview Mode','warn')",
+        "'Authenticated staging — sebagian modul masih foundation/local-only sampai aktivasi backend.',chip('Authenticated','good')"
+      );
+      source = source.replaceAll(
+        "<b>Preview Mode</b><small>Admin panel tanpa login untuk UI/UX review.</small></div>${chip('Active','good')}",
+        "<b>Admin access</b><small>Authenticated session required; anonymous preview bypass disabled.</small></div>${chip('Protected','good')}"
+      );
+
       // End the authenticated session instead of merely hiding the app shell.
       source = source.replace(
         "$('#toggleLoginBtn').onclick = () => { $('#loginView').hidden=false; $('#appView').hidden=true; };",
