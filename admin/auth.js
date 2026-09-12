@@ -24,18 +24,31 @@ const message=(id,text,type='error')=>{
   el.textContent=text||'';
   el.className=`form-error ${type}`;
   if(text){
-    el.style.cssText=`display:block;padding:10px 12px;border-radius:10px;margin:0 0 4px;background:${type==='success'?'rgba(64,105,85,.14)':'rgba(151,61,61,.14)'};color:${type==='success'?'#406955':'#973d3d'};font-size:14px;font-weight:600;`;
+    const ok=type==='success';
+    el.style.cssText=`display:block;padding:10px 12px;border-radius:10px;margin:0 0 4px;background:${ok?'rgba(64,105,85,.14)':'rgba(151,61,61,.14)'};color:${ok?'#406955':'#973d3d'};font-size:14px;font-weight:600;`;
   }else{
     el.style.cssText='min-height:16px;margin:0;';
   }
 };
 const classify=e=>{
   const m=String(e?.message||e||'');
+  const n=String(e?.name||'');
+  if(/AbortError/i.test(n)||/aborted|timeout/i.test(m))return 'Koneksi ke Supabase terlalu lama. Periksa koneksi lalu coba lagi.';
   if(/invalid api key/i.test(m))return 'Konfigurasi Supabase tidak valid. Periksa URL dan publishable key.';
   if(/invalid login credentials|invalid password|invalid_credentials/i.test(m))return 'Email atau password salah.';
   if(/network|fetch|failed to fetch/i.test(m))return 'Tidak dapat terhubung ke Supabase.';
   if(/email rate limit|over_email_send_rate_limit/i.test(m))return 'Terlalu banyak permintaan. Coba lagi nanti.';
   return m||'Login gagal. Silakan coba lagi.';
+};
+const adminFetch=(input,init={})=>{
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),20000);
+  const inherited=init.signal;
+  if(inherited){
+    if(inherited.aborted)controller.abort();
+    else inherited.addEventListener('abort',()=>controller.abort(),{once:true});
+  }
+  return window.fetch(input,{...init,signal:controller.signal}).finally(()=>clearTimeout(timer));
 };
 
 async function bootstrap(){
@@ -49,9 +62,9 @@ async function bootstrap(){
   }
 
   const sb=window.supabase.createClient(cfg.url,cfg.publishableKey,{
-    auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
+    auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true},
+    global:{fetch:adminFetch}
   });
-  // Expose client immediately; all Admin modules reuse this verified browser client.
   window.AYA_ADMIN_AUTH=sb;
   window.AYA_ADMIN_AUTH_READY=Promise.resolve(sb);
 
@@ -60,6 +73,12 @@ async function bootstrap(){
     if(login)login.hidden=view!=='login';
     if(reset)reset.hidden=view!=='reset';
     if(app)app.hidden=view!=='app';
+  };
+  const clearAdminState=()=>{
+    delete window.AYA_ADMIN_USER;
+    delete window.AYA_ADMIN_ROLES;
+    delete window.AYA_ADMIN_FUNCTIONS;
+    delete window.AYA_ADMIN_SYSTEM_ONLY;
   };
 
   async function verifyAdmin(session){
@@ -84,15 +103,19 @@ async function bootstrap(){
     return{ok:true,user:{user_id:data.user_id,display_name:data.display_name,email:session.user.email||''},roles:roleRows,functionKeys:assignableFunctions,systemOnlyGranted};
   }
 
+  let entering=false;
   async function enter(session){
-    if(!session){show('login');return;}
+    if(!session){show('login');return false;}
+    if(entering)return false;
+    entering=true;
     try{
       const v=await verifyAdmin(session);
       if(!v.ok){
-        await sb.auth.signOut();
+        clearAdminState();
         show('login');
         message('loginError',v.msg);
-        return;
+        void sb.auth.signOut({scope:'local'}).catch(()=>{});
+        return false;
       }
       window.AYA_ADMIN_USER=v.user;
       window.AYA_ADMIN_ROLES=v.roles;
@@ -100,14 +123,18 @@ async function bootstrap(){
       window.AYA_ADMIN_SYSTEM_ONLY=new Set(v.systemOnlyGranted);
       show('app');
       window.dispatchEvent(new CustomEvent('aya:admin-auth-ready',{detail:{session,adminUser:v.user,roles:v.roles,functionKeys:v.functionKeys}}));
+      return true;
     }catch(e){
-      await sb.auth.signOut();
+      clearAdminState();
       show('login');
       message('loginError',`Admin access gagal diverifikasi: ${classify(e)}`);
+      void sb.auth.signOut({scope:'local'}).catch(()=>{});
+      return false;
+    }finally{
+      entering=false;
     }
   }
 
-  // Bind form handlers before any getSession await so slow mobile storage cannot block input.
   const form=$('loginForm');
   form?.addEventListener('submit',async event=>{
     event.preventDefault();
@@ -116,11 +143,13 @@ async function bootstrap(){
     const password=$('loginPassword')?.value||'';
     if(!email||!password){message('loginError','Email dan password wajib diisi.');return;}
     const btn=form.querySelector('button[type="submit"]');
-    if(btn){btn.disabled=true;btn.textContent='Memproses…';}
+    if(btn){btn.disabled=true;btn.textContent='Menghubungkan…';}
     try{
       const{data,error}=await sb.auth.signInWithPassword({email,password});
       if(error)throw error;
-      await enter(data.session);
+      if(btn)btn.textContent='Memverifikasi…';
+      const ok=await enter(data.session);
+      if(!ok&&btn)btn.textContent='Masuk';
     }catch(e){
       message('loginError',classify(e));
     }finally{
@@ -157,34 +186,27 @@ async function bootstrap(){
     const{error}=await sb.auth.updateUser({password});
     if(error)return message('resetError',classify(error));
     window.history.replaceState({},document.title,`${window.location.pathname}${window.location.search}`);
+    clearAdminState();
     show('login');
     message('loginError','Password berhasil diperbarui. Silakan login kembali.','success');
   });
 
+  // Never make awaited Supabase calls inside onAuthStateChange; schedule restore outside the callback.
   sb.auth.onAuthStateChange((event,session)=>{
-    if(event==='PASSWORD_RECOVERY')show('reset');
-    else if(event==='SIGNED_OUT')show('login');
+    if(event==='PASSWORD_RECOVERY'){show('reset');return;}
+    if(event==='SIGNED_OUT'){clearAdminState();show('login');return;}
+    if(event==='INITIAL_SESSION'&&session){
+      setTimeout(()=>{void enter(session);},0);
+    }
   });
 
-  // Touch compatibility shim may delegate only after canonical handlers are installed.
+  // Canonical handlers are ready. No parallel getSession() call here: on older Android/WebView
+  // it can hold the GoTrue storage lock and block a later signInWithPassword request.
   window.AYA_ADMIN_AUTH_HANDLERS_BOUND=true;
   window.dispatchEvent(new Event('aya:admin-auth-ready-to-bind'));
   const badge=$('authBuildBadge');
-  if(badge)badge.textContent='auth v26e · ready';
-
-  // Session restore in background — must not block handler binding.
-  (async()=>{
-    try{
-      const recovery=window.location.hash.includes('type=recovery');
-      if(recovery)show('reset');
-      const{data}=await sb.auth.getSession();
-      if(data?.session&&!recovery)await enter(data.session);
-      else if(!recovery)show('login');
-    }catch(e){
-      console.warn('[AYA Admin] getSession failed',e);
-      show('login');
-    }
-  })();
+  if(badge)badge.textContent='auth v26f · ready';
+  show('login');
 }
 
 bootstrap().catch(e=>{
