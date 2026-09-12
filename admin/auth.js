@@ -51,7 +51,7 @@ async function bootstrap(){
   const sb=window.supabase.createClient(cfg.url,cfg.publishableKey,{
     auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
   });
-  // Expose client IMMEDIATELY so mobile bridge can bind without waiting for getSession.
+  // Expose client immediately; all Admin modules reuse this verified browser client.
   window.AYA_ADMIN_AUTH=sb;
   window.AYA_ADMIN_AUTH_READY=Promise.resolve(sb);
 
@@ -107,7 +107,7 @@ async function bootstrap(){
     }
   }
 
-  // CRITICAL: bind form handlers BEFORE any await getSession — mobile storage can hang.
+  // Bind form handlers before any getSession await so slow mobile storage cannot block input.
   const form=$('loginForm');
   form?.addEventListener('submit',async event=>{
     event.preventDefault();
@@ -166,10 +166,11 @@ async function bootstrap(){
     else if(event==='SIGNED_OUT')show('login');
   });
 
-  // Tell mobile bridge client is ready — do this before getSession.
+  // Touch compatibility shim may delegate only after canonical handlers are installed.
+  window.AYA_ADMIN_AUTH_HANDLERS_BOUND=true;
   window.dispatchEvent(new Event('aya:admin-auth-ready-to-bind'));
   const badge=$('authBuildBadge');
-  if(badge)badge.textContent='auth v26d · ready';
+  if(badge)badge.textContent='auth v26e · ready';
 
   // Session restore in background — must not block handler binding.
   (async()=>{
