@@ -143,9 +143,10 @@
   }
   function statusClass(value){
     const v = String(value || '').toLowerCase();
+    if(['reject','cancel','void','failed','expired','inactive','nonaktif','habis'].some(x=>v.includes(x))) return 'bad';
     if(['active','aktif','approved','published','paid','settled','delivered','normal','verified','terverifikasi','tersedia','issued'].some(x=>v.includes(x))) return 'good';
     if(['pending','draft','grace','review','staging','pre-order','due','waiting','menunggu','jeda','paused'].some(x=>v.includes(x))) return 'warn';
-    if(['reject','cancel','void','failed','expired','inactive','nonaktif','habis'].some(x=>v.includes(x))) return 'bad';
+    
     return 'neutral';
   }
 
@@ -382,7 +383,7 @@
     if(tab==='supply'){
       const canSupply=can('product.edit')&&can('product.b2b.manage');
       const canEconomics=can('b2b.cogs.edit')||can('b2b.unit_price.edit');
-      panel=`<div class="aya-m-field"><label>Pasokan Usaha</label><strong>${b2b?.supply_eligible?'Bisa':'Tidak Bisa'}</strong></div><div class="aya-m-field"><label>Ukuran Pasokan</label><strong>${measures.length} konfigurasi</strong><small>Unit · Biaya Dasar · Harga Akhir</small></div>${canSupply?'<button type="button" class="aya-m-row-action" id="ayaEditSupply"><div><strong>Ubah Pasokan Usaha</strong><small>Kelayakan produk untuk Pasokan</small></div><span>›</span></button>':''}${measures.map(m=>canEconomics?`<button type="button" class="aya-m-row-action" data-edit-measure="${esc(m.id)}"><div><strong>${esc(m.variant_name)}</strong><small>${esc(m.unit_label||'—')} · ${money(m.final_unit_price)}</small></div><span>›</span></button>`:`<div class="aya-m-field"><label>${esc(m.variant_name)}</label><strong>${esc(m.unit_label||'—')}</strong><small>${money(m.final_unit_price)}</small></div>`).join('')}<div class="aya-m-inline-note">Unit dan status komersial ditampilkan sebagai data sistem. Mobile hanya mengubah field yang sudah memiliki action backend terkontrol.</div>`;
+      panel=`<div class="aya-m-field"><label>Pasokan Usaha</label><strong>${b2b?.supply_eligible?'Bisa':'Tidak Bisa'}</strong></div><div class="aya-m-field"><label>Ukuran Pasokan</label><strong>${measures.length} konfigurasi</strong><small>Unit · Biaya Dasar · Harga Akhir</small></div>${canSupply&&cat?'<button type="button" class="aya-m-row-action" id="ayaEditSupply"><div><strong>Ubah Pasokan Usaha</strong><small>Kelayakan produk untuk Pasokan</small></div><span>›</span></button>':canSupply&&!cat?'<div class="aya-m-inline-note">Status Pasokan belum dapat diubah dari mobile karena produk ini belum memiliki data publik yang dibutuhkan action backend saat ini.</div>':''}${measures.map(m=>canEconomics?`<button type="button" class="aya-m-row-action" data-edit-measure="${esc(m.id)}"><div><strong>${esc(m.variant_name)}</strong><small>${esc(m.unit_label||'—')} · ${money(m.final_unit_price)}</small></div><span>›</span></button>`:`<div class="aya-m-field"><label>${esc(m.variant_name)}</label><strong>${esc(m.unit_label||'—')}</strong><small>${money(m.final_unit_price)}</small></div>`).join('')}<div class="aya-m-inline-note">Unit dan status komersial ditampilkan sebagai data sistem. Mobile hanya mengubah field yang sudah memiliki action backend terkontrol.</div>`;
     }
     const body=`<nav class="aya-m-sheet-tabs">${[['identity','Produk'],['variants','Varian'],['public','Publik'],['supply','Pasokan']].map(([k,l])=>`<button type="button" class="${tab===k?'active':''}" data-product-sheet-tab="${k}">${l}</button>`).join('')}</nav>${panel}`;
     openSheet(p.product_name,p.product_id,body,{eyebrow:'PRODUK',key:`product:${id}:${tab}`,onOpen:host=>{
@@ -752,7 +753,8 @@
       $('#ayaSaveRoles',host).onclick=async()=>{
         try{
           if(next.size<1) throw new Error('Admin User harus memiliki setidaknya satu Role.');
-          for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(had!==want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:want});}
+          for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(!had&&want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:true});}
+          for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(had&&!want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:false});}
           toast('Role disimpan.');closeSheet();state.accessCache=null;await renderAccess(true);
         }catch(e){toast(e.message);}
       };
