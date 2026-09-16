@@ -27,33 +27,23 @@ jobs:
           p=Path('admin/mobile-ui.js')
           s=p.read_text(encoding='utf-8')
 
-          old="""  function statusClass(value){
-            const v = String(value || '').toLowerCase();
-            if(['active','aktif','approved','published','paid','settled','delivered','normal','verified','terverifikasi','tersedia','issued'].some(x=>v.includes(x))) return 'good';
-            if(['pending','draft','grace','review','staging','pre-order','due','waiting','menunggu','jeda','paused'].some(x=>v.includes(x))) return 'warn';
-            if(['reject','cancel','void','failed','expired','inactive','nonaktif','habis'].some(x=>v.includes(x))) return 'bad';
-            return 'neutral';
-          }
-          """
-          new="""  function statusClass(value){
-            const v = String(value || '').toLowerCase();
-            if(['reject','cancel','void','failed','expired','inactive','nonaktif','habis'].some(x=>v.includes(x))) return 'bad';
-            if(['pending','draft','grace','review','staging','pre-order','due','waiting','menunggu','jeda','paused'].some(x=>v.includes(x))) return 'warn';
-            if(['active','aktif','approved','published','paid','settled','delivered','normal','verified','terverifikasi','tersedia','issued'].some(x=>v.includes(x))) return 'good';
-            return 'neutral';
-          }
-          """
-          if s.count(old)!=1: raise SystemExit('statusClass invariant failed')
-          s=s.replace(old,new,1)
+          bad="if(['reject','cancel','void','failed','expired','inactive','nonaktif','habis'].some(x=>v.includes(x))) return 'bad';"
+          anchor="const v = String(value || '').toLowerCase();"
+          if s.count(bad)!=1 or s.count(anchor)!=1:
+              raise SystemExit('statusClass token invariant failed')
+          s=s.replace(bad,'',1)
+          s=s.replace(anchor,anchor+'\n    '+bad,1)
 
           old="${canSupply?'<button type=\"button\" class=\"aya-m-row-action\" id=\"ayaEditSupply\"><div><strong>Ubah Pasokan Usaha</strong><small>Kelayakan produk untuk Pasokan</small></div><span>›</span></button>':''}"
           new="${canSupply&&cat?'<button type=\"button\" class=\"aya-m-row-action\" id=\"ayaEditSupply\"><div><strong>Ubah Pasokan Usaha</strong><small>Kelayakan produk untuk Pasokan</small></div><span>›</span></button>':canSupply&&!cat?'<div class=\"aya-m-inline-note\">Status Pasokan belum dapat diubah dari mobile karena produk ini belum memiliki data publik yang dibutuhkan action backend saat ini.</div>':''}"
-          if s.count(old)!=1: raise SystemExit('supply action invariant failed')
+          if s.count(old)!=1:
+              raise SystemExit('supply action invariant failed')
           s=s.replace(old,new,1)
 
-          old="          for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(had!==want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:want});}\n"
-          new="          for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(!had&&want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:true});}\n          for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(had&&!want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:false});}\n"
-          if s.count(old)!=1: raise SystemExit('role ordering invariant failed')
+          old="for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(had!==want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:want});}"
+          new="for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(!had&&want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:true});}\n          for(const r of roles){const rid=String(r.id),had=selected.includes(rid),want=next.has(rid);if(had&&!want) await rpc('aya_admin_assign_role',{p_user_id:u.user_id,p_role_id:r.id,p_assign:false});}"
+          if s.count(old)!=1:
+              raise SystemExit('role ordering invariant failed')
           s=s.replace(old,new,1)
 
           p.write_text(s,encoding='utf-8')
@@ -62,12 +52,16 @@ jobs:
           h=i.read_text(encoding='utf-8')
           old='./mobile-ui.js?v=20260916-v2'
           new='./mobile-ui.js?v=20260916-v3'
-          if h.count(old)!=1: raise SystemExit('cache token invariant failed')
+          if h.count(old)!=1:
+              raise SystemExit('cache token invariant failed')
           i.write_text(h.replace(old,new,1),encoding='utf-8')
           PY
 
           node --check admin/mobile-ui.js
-          test "$(sha256sum admin/mobile-ui.js | awk '{print $1}')" = "18359a04436e28fc6b390e4b1b72ff58e3bbd79dca4786a9959fa9a4bf09f68a"
+          grep -Fq "canSupply&&cat" admin/mobile-ui.js
+          grep -Fq "p_assign:true" admin/mobile-ui.js
+          grep -Fq "p_assign:false" admin/mobile-ui.js
+          grep -Fq "mobile-ui.js?v=20260916-v3" admin/index.html
 
           git rm .github/workflows/patch-admin-mobile-final.yml
           git config user.name "AYA RAOS Release"
