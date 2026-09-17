@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const sourceUrl = './app.js?authBootstrap=20260825';
+  const sourceUrl = '/admin/app.js?authBootstrap=20260917-v27a';
   let loaded = false;
 
   const legacyLoginHandler = "$('#loginForm').onsubmit = async e => {\n  e.preventDefault();\n  $('#loginError').textContent='';\n  if(!sb){$('#loginError').textContent='Supabase tidak tersambung.'; return;}\n  const {data,error}=await sb.auth.signInWithPassword({email:$('#loginEmail').value.trim(),password:$('#loginPassword').value});\n  if(error){$('#loginError').textContent=error.message; return;}\n  $('#loginView').hidden=true; $('#appView').hidden=false; boot();\n};";
