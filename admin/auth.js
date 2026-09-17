@@ -31,7 +31,7 @@ const loadScriptWithTimeout=(src,timeoutMs=6500)=>new Promise(resolve=>{
 const loadSupabaseFallback=async()=>{
   if(window.supabase?.createClient)return true;
   const sources=[
-    './vendor/supabase.min.js?v=2.111.0',
+    '/admin/vendor/supabase.min.js?v=2.111.0',
     'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js',
     'https://unpkg.com/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js'
   ];
@@ -78,7 +78,7 @@ async function bootstrap(){
   const ready=await loadSupabaseFallback();
   if(!ready||!cfg.url||!cfg.publishableKey){
     const badge=$('authBuildBadge');
-    if(badge)badge.textContent='auth v26h · gagal memuat';
+    if(badge)badge.textContent='auth v26i · gagal memuat';
     message('loginError','Supabase Admin belum siap. Silakan muat ulang halaman.');
     window.dispatchEvent(new Event('aya:admin-auth-failed'));
     return;
@@ -228,14 +228,14 @@ async function bootstrap(){
   window.AYA_ADMIN_AUTH_HANDLERS_BOUND=true;
   window.dispatchEvent(new Event('aya:admin-auth-ready-to-bind'));
   const badge=$('authBuildBadge');
-  if(badge)badge.textContent='auth v26h · ready';
+  if(badge)badge.textContent='auth v26i · ready';
   show('login');
 }
 
 bootstrap().catch(e=>{
   ensureHiddenStyles();
   const badge=$('authBuildBadge');
-  if(badge)badge.textContent='auth v26h · gagal memuat';
+  if(badge)badge.textContent='auth v26i · gagal memuat';
   message('loginError',`Admin Auth gagal dimuat: ${classify(e)}`);
   window.dispatchEvent(new Event('aya:admin-auth-failed'));
 });
