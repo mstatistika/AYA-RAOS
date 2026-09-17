@@ -1,0 +1,329 @@
+name: Temporary Admin Mobile Navigation Repair
+
+on:
+  push:
+    branches:
+      - hotfix/admin-mobile-nav-actions-20260917
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: hotfix/admin-mobile-nav-actions-20260917
+          fetch-depth: 0
+
+      - name: Patch approved Admin Mobile companion
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new, label):
+              p = Path(path)
+              s = p.read_text(encoding='utf-8')
+              count = s.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected 1 match, found {count}')
+              p.write_text(s.replace(old, new, 1), encoding='utf-8')
+
+          # 1) Mobile UI must own its navigation instead of depending on hidden desktop nav.
+          p = Path('admin/mobile-ui.js')
+          s = p.read_text(encoding='utf-8')
+
+          old = """  const PAGE_META = {
+    dashboard:{label:'Ringkasan',eyebrow:'AYA ADMIN',icon:'⌂'},
+    cms:{label:'Website',eyebrow:'KONTEN',icon:'▤'},
+    products:{label:'Produk',eyebrow:'PRODUK',icon:'◫'},
+    b2c:{label:'Pesanan',eyebrow:'B2C',icon:'▣'},
+    b2b:{label:'Pasokan',eyebrow:'PASOKAN',icon:'⇄'},
+    testimonials:{label:'Testimoni',eyebrow:'TESTIMONI',icon:'★'},
+    finance:{label:'Keuangan',eyebrow:'KEUANGAN',icon:'¤'},
+    access:{label:'Akses',eyebrow:'AKSES',icon:'◌'},
+    history:{label:'Riwayat',eyebrow:'RIWAYAT',icon:'≡'},
+    system:{label:'Sistem',eyebrow:'SISTEM',icon:'⚙'}
+  };
+
+  const state = {
+"""
+          new = """  const PAGE_META = {
+    dashboard:{label:'Ringkasan',eyebrow:'AYA ADMIN',icon:'⌂'},
+    cms:{label:'Website',eyebrow:'KONTEN',icon:'▤'},
+    products:{label:'Produk',eyebrow:'PRODUK',icon:'◫'},
+    b2c:{label:'Pesanan',eyebrow:'B2C',icon:'▣'},
+    b2b:{label:'Pasokan',eyebrow:'PASOKAN',icon:'⇄'},
+    testimonials:{label:'Testimoni',eyebrow:'TESTIMONI',icon:'★'},
+    finance:{label:'Keuangan',eyebrow:'KEUANGAN',icon:'¤'},
+    access:{label:'Akses',eyebrow:'AKSES',icon:'◌'},
+    history:{label:'Riwayat',eyebrow:'RIWAYAT',icon:'≡'},
+    system:{label:'Sistem',eyebrow:'SISTEM',icon:'⚙'}
+  };
+  const PAGE_PERMISSION = {
+    dashboard:'dashboard.view', cms:'website.view', products:'product.view',
+    b2c:'b2c.view', b2b:'b2b.view', testimonials:'testimonial.view',
+    finance:'finance.view', access:'users.access.view', history:'audit.view', system:'system.view'
+  };
+
+  const state = {
+"""
+          if s.count(old) != 1:
+              raise SystemExit('PAGE_PERMISSION insertion invariant failed')
+          s = s.replace(old, new, 1)
+
+          old = """  function buildBottomNav(){
+    if(!mobile()) return;
+    shell();
+    const sourceButtons = $$('#nav [data-go]');
+    if(!sourceButtons.length) return;
+    const wrap = $('#ayaMobileBottom .aya-mobile-nav-scroll');
+    const allowed = sourceButtons.map(b=>b.dataset.go).filter(k=>PAGE_META[k]);
+    wrap.innerHTML = allowed.map(k=>`<button type=\"button\" class=\"aya-mobile-nav-item ${k===state.page?'active':''}\" data-aya-mobile-go=\"${k}\"><span class=\"aya-m-nav-icon\">${PAGE_META[k].icon}</span><span class=\"aya-m-nav-label\">${PAGE_META[k].label}</span></button>`).join('');
+    $$('[data-aya-mobile-go]',wrap).forEach(b=>b.onclick=()=>navigate(b.dataset.ayaMobileGo));
+    requestAnimationFrame(()=>wrap.querySelector('.active')?.scrollIntoView({inline:'center',block:'nearest'}));
+  }
+"""
+          new = """  function allowedMobilePages(){
+    return Object.keys(PAGE_META).filter(k=>!PAGE_PERMISSION[k] || can(PAGE_PERMISSION[k]));
+  }
+  function buildBottomNav(){
+    if(!mobile()) return;
+    shell();
+    const wrap = $('#ayaMobileBottom .aya-mobile-nav-scroll');
+    if(!wrap) return;
+    const allowed = allowedMobilePages();
+    wrap.innerHTML = allowed.map(k=>`<button type=\"button\" class=\"aya-mobile-nav-item ${k===state.page?'active':''}\" data-aya-mobile-go=\"${k}\"><span class=\"aya-m-nav-icon\">${PAGE_META[k].icon}</span><span class=\"aya-m-nav-label\">${PAGE_META[k].label}</span></button>`).join('');
+    $$('[data-aya-mobile-go]',wrap).forEach(b=>b.onclick=()=>navigate(b.dataset.ayaMobileGo));
+    requestAnimationFrame(()=>wrap.querySelector('.active')?.scrollIntoView({inline:'nearest',block:'nearest'}));
+  }
+"""
+          if s.count(old) != 1:
+              raise SystemExit('buildBottomNav invariant failed')
+          s = s.replace(old, new, 1)
+
+          old = """  function navigate(page){
+    if(!PAGE_META[page]) return;
+    state.page = page;
+    setHeader();
+    syncBottomNav();
+    $(`#nav [data-go=\"${page}\"]`)?.click();
+    scheduleRender(40);
+    scheduleRender(220);
+  }
+"""
+          new = """  function markSourcePage(page){
+    $$('.page').forEach(p=>p.classList.toggle('active',p.dataset.page===page));
+    window.AYA_ADMIN_MOBILE_PAGE = page;
+  }
+  function navigate(page){
+    if(!PAGE_META[page] || (PAGE_PERMISSION[page] && !can(PAGE_PERMISSION[page]))) return;
+    state.page = page;
+    markSourcePage(page);
+    setHeader();
+    syncBottomNav();
+    const legacy = $(`#nav [data-go=\"${page}\"]`);
+    if(legacy) legacy.click();
+    scheduleRender(40);
+    scheduleRender(220);
+  }
+"""
+          if s.count(old) != 1:
+              raise SystemExit('navigate invariant failed')
+          s = s.replace(old, new, 1)
+
+          old = """  function closeSheet(){
+    const host = $('#ayaMobileSheetHost');
+    if(host){host.classList.remove('open');host.innerHTML='';}
+    state.activeSheet = null;
+  }
+"""
+          new = """  function closeSheet(){
+    const host = $('#ayaMobileSheetHost');
+    if(host){host.classList.remove('open');host.innerHTML='';}
+    state.activeSheet = null;
+  }
+  function openAdminMenu(){
+    shell();
+    const user = window.AYA_ADMIN_USER || {};
+    openSheet('Menu Admin',user.display_name||'Admin AYA',`<div class=\"aya-m-field\"><label>Akun</label><strong>${esc(user.display_name||'Admin AYA')}</strong><small>${esc(user.email||'')}</small></div><button type=\"button\" class=\"aya-m-row-action\" id=\"ayaMobileLogout\"><div><strong>Keluar</strong><small>Akhiri sesi Admin di perangkat ini.</small></div><span>›</span></button>`,{eyebrow:'AYA ADMIN',onOpen:host=>{
+      $('#ayaMobileLogout',host).onclick=async()=>{
+        const btn=$('#ayaMobileLogout',host);if(btn)btn.disabled=true;
+        try{await client()?.auth.signOut();}finally{window.location.reload();}
+      };
+    }});
+  }
+  function bindMobileTopActions(){
+    const btn = $('#toggleLoginBtn');
+    if(!btn) return;
+    if(!btn.__ayaDesktopOnClickCaptured){btn.__ayaDesktopOnClickCaptured=true;btn.__ayaDesktopOnClick=btn.onclick;}
+    btn.onclick = e=>{e.preventDefault();e.stopPropagation();openAdminMenu();};
+    btn.setAttribute('aria-label','Menu Admin');
+    btn.title='Menu Admin';
+  }
+  function restoreDesktopTopActions(){
+    const btn=$('#toggleLoginBtn');
+    if(btn?.__ayaDesktopOnClickCaptured)btn.onclick=btn.__ayaDesktopOnClick||null;
+  }
+  function syncViewportInset(){
+    const vv=window.visualViewport;
+    const inset=vv?Math.max(0,Math.round(window.innerHeight-vv.height-vv.offsetTop)):0;
+    document.documentElement.style.setProperty('--aya-m-vv-bottom',`${inset}px`);
+  }
+"""
+          if s.count(old) != 1:
+              raise SystemExit('mobile menu insertion invariant failed')
+          s = s.replace(old, new, 1)
+
+          old = """  async function renderCurrent(){
+    if(!mobile()||$('#appView')?.hidden) return;
+    shell();
+    const source=sourceActivePage();if(PAGE_META[source])state.page=source;
+    setHeader();syncBottomNav();
+"""
+          new = """  function invalidateMobilePage(page){
+    if(page==='cms')state.cmsCache=null;
+    if(page==='products')state.productCache=null;
+    if(page==='testimonials')state.testimonialCache=null;
+    if(page==='b2c')state.orderCache=null;
+    if(page==='b2b')state.b2bCache=null;
+    if(page==='finance')state.financeCache=null;
+    if(page==='access')state.accessCache=null;
+    if(page==='history')state.historyCache=null;
+  }
+  async function refreshMobile(){
+    invalidateMobilePage(state.page);
+    await renderCurrent();
+  }
+  window.AYA_ADMIN_MOBILE_REFRESH = refreshMobile;
+
+  async function renderCurrent(){
+    if(!mobile()||$('#appView')?.hidden) return;
+    shell();
+    bindMobileTopActions();
+    const source=sourceActivePage();if(PAGE_META[source])state.page=source;
+    window.AYA_ADMIN_MOBILE_PAGE=state.page;
+    setHeader();syncBottomNav();
+"""
+          if s.count(old) != 1:
+              raise SystemExit('renderCurrent invariant failed')
+          s = s.replace(old, new, 1)
+
+          old = """  function start(){
+    if(!mobile()||$('#appView')?.hidden) return;
+    if(!$('#nav [data-go]')){setTimeout(start,100);return;}
+    shell();
+    const active=sourceActivePage();if(PAGE_META[active])state.page=active;
+    buildBottomNav();setHeader();scheduleRender(20);
+  }
+"""
+          new = """  function start(){
+    if(!mobile()||$('#appView')?.hidden) return;
+    shell();
+    syncViewportInset();
+    bindMobileTopActions();
+    const active=sourceActivePage();if(PAGE_META[active]&&(!PAGE_PERMISSION[active]||can(PAGE_PERMISSION[active])))state.page=active;
+    window.AYA_ADMIN_MOBILE_PAGE=state.page;
+    buildBottomNav();setHeader();scheduleRender(20);
+  }
+"""
+          if s.count(old) != 1:
+              raise SystemExit('start invariant failed')
+          s = s.replace(old, new, 1)
+
+          old = """  window.addEventListener('aya:admin-auth-ready',()=>setTimeout(start,80));
+  window.addEventListener('resize',()=>{if(mobile())start();else closeSheet();});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{observe();setTimeout(start,180);});else{observe();setTimeout(start,180);}
+"""
+          new = """  window.addEventListener('aya:admin-auth-ready',()=>setTimeout(start,80));
+  window.addEventListener('resize',()=>{if(mobile())start();else{restoreDesktopTopActions();closeSheet();}});
+  window.visualViewport?.addEventListener('resize',()=>{if(mobile())syncViewportInset();});
+  window.visualViewport?.addEventListener('scroll',()=>{if(mobile())syncViewportInset();});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{observe();setTimeout(start,180);});else{observe();setTimeout(start,180);}
+"""
+          if s.count(old) != 1:
+              raise SystemExit('event wiring invariant failed')
+          s = s.replace(old, new, 1)
+          p.write_text(s, encoding='utf-8')
+
+          # 2) Refresh should call the mobile renderer directly, and legacy nav lookup may include mobile rail.
+          replace_once(
+              'admin/domain-refresh.js',
+              "  const activePage = () => document.querySelector('.page.active')?.dataset.page || 'dashboard';\n  const navButton = page => document.querySelector(`[data-go=\"${page}\"]`) || document.querySelector(`[data-mgo=\"${page}\"]`);",
+              "  const activePage = () => window.AYA_ADMIN_MOBILE_PAGE || document.querySelector('.page.active')?.dataset.page || 'dashboard';\n  const navButton = page => document.querySelector(`[data-go=\"${page}\"]`) || document.querySelector(`[data-mgo=\"${page}\"]`) || document.querySelector(`[data-aya-mobile-go=\"${page}\"]`);",
+              'domain refresh nav lookup'
+          )
+          replace_once(
+              'admin/domain-refresh.js',
+              """    try {
+      if (!nav) throw new Error('Navigasi halaman aktif tidak ditemukan.');
+      nav.click();
+      await waitForLoadingToSettle();
+      button.textContent = 'Diperbarui';
+""",
+              """    try {
+      const mobileRefresh = window.matchMedia('(max-width:900px)').matches && typeof window.AYA_ADMIN_MOBILE_REFRESH === 'function';
+      if (mobileRefresh) {
+        await window.AYA_ADMIN_MOBILE_REFRESH();
+      } else {
+        if (!nav) throw new Error('Navigasi halaman aktif tidak ditemukan.');
+        nav.click();
+        await waitForLoadingToSettle();
+      }
+      button.textContent = 'Diperbarui';
+""",
+              'domain refresh mobile direct path'
+          )
+
+          # 3) app-loader also needs a route-stable source path for /admin and /admin/.
+          replace_once(
+              'admin/app-loader.js',
+              "  const sourceUrl = './app.js?authBootstrap=20260825';",
+              "  const sourceUrl = '/admin/app.js?authBootstrap=20260917-v27a';",
+              'app-loader absolute source'
+          )
+
+          # 4) Keep fixed bottom rail above mobile browser visual viewport when the toolbar overlays layout viewport.
+          replace_once(
+              'admin/admin-mobile.css',
+              ".aya-mobile-root{display:block;height:100%;overflow:hidden;padding:10px 14px 78px;color:var(--aya-m-ink);}",
+              ".aya-mobile-root{display:block;height:100%;overflow:hidden;padding:10px 14px calc(78px + var(--aya-m-vv-bottom,0px));color:var(--aya-m-ink);}",
+              'mobile root bottom clearance'
+          )
+          replace_once(
+              'admin/admin-mobile.css',
+              ".aya-mobile-bottom{display:block;position:fixed;left:0;right:0;bottom:0;z-index:420;",
+              ".aya-mobile-bottom{display:block;position:fixed;left:0;right:0;bottom:var(--aya-m-vv-bottom,0px);z-index:420;",
+              'mobile rail visual viewport inset'
+          )
+          replace_once(
+              'admin/admin-mobile.css',
+              ".aya-mobile-toast{display:block;position:fixed;left:50%;bottom:82px;z-index:720;",
+              ".aya-mobile-toast{display:block;position:fixed;left:50%;bottom:calc(82px + var(--aya-m-vv-bottom,0px));z-index:720;",
+              'mobile toast visual viewport inset'
+          )
+
+          # 5) Cache-bust only the touched Admin assets.
+          replace_once('admin/index.html','/admin/admin-mobile.css?v=20260916-v1','/admin/admin-mobile.css?v=20260917-v2','mobile css version')
+          replace_once('admin/index.html','/admin/app-loader.js?v=20260912-v26g','/admin/app-loader.js?v=20260917-v27a','app loader version')
+          replace_once('admin/index.html','/admin/domain-refresh.js?v=20260912-v26g','/admin/domain-refresh.js?v=20260917-v27a','domain refresh version')
+          replace_once('admin/index.html','/admin/mobile-ui.js?v=20260916-v3','/admin/mobile-ui.js?v=20260917-v4','mobile ui version')
+          PY
+
+          node --check admin/mobile-ui.js
+          node --check admin/domain-refresh.js
+          node --check admin/app-loader.js
+          git diff --check
+
+      - name: Commit final source only
+        shell: bash
+        run: |
+          git config user.name "AYA RAOS Release"
+          git config user.email "actions@users.noreply.github.com"
+          rm -f .github/workflows/tmp-admin-mobile-nav-fix.yml
+          git add admin/mobile-ui.js admin/domain-refresh.js admin/app-loader.js admin/admin-mobile.css admin/index.html .github/workflows/tmp-admin-mobile-nav-fix.yml
+          git diff --cached --check
+          git commit -m "fix(admin): restore mobile navigation and session actions"
+          git push origin HEAD:hotfix/admin-mobile-nav-actions-20260917
