@@ -1,0 +1,57 @@
+name: Vendor Supabase Auth Runtime
+
+on:
+  push:
+    branches:
+      - hotfix/admin-auth-vendor-supabase-20260917
+
+permissions:
+  contents: write
+
+jobs:
+  vendor:
+    if: github.actor != 'actions'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Vendor Supabase and patch Admin auth
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p admin/vendor
+          curl -fL --retry 3 --retry-delay 2 --connect-timeout 10 --max-time 90 \
+            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js' \
+            -o admin/vendor/supabase.min.js
+          test -s admin/vendor/supabase.min.js
+          python - <<'PY'
+          from pathlib import Path
+
+          index = Path('admin/index.html')
+          text = index.read_text(encoding='utf-8')
+          old = '  <script src="./auth.js?v=20260917-v26g"></script>'
+          new = '  <script src="./vendor/supabase.min.js?v=2.111.0"></script>\n  <script src="./auth.js?v=20260917-v26h"></script>'
+          assert text.count(old) == 1, 'auth script marker mismatch'
+          text = text.replace(old, new, 1)
+          index.write_text(text, encoding='utf-8')
+
+          auth = Path('admin/auth.js')
+          text = auth.read_text(encoding='utf-8')
+          old_sources = "  const sources=[\n    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js',\n    'https://unpkg.com/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js'\n  ];"
+          new_sources = "  const sources=[\n    './vendor/supabase.min.js?v=2.111.0',\n    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js',\n    'https://unpkg.com/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js'\n  ];"
+          assert text.count(old_sources) == 1, 'loader source marker mismatch'
+          text = text.replace(old_sources, new_sources, 1)
+          text = text.replace('auth v26g · gagal memuat', 'auth v26h · gagal memuat')
+          text = text.replace('auth v26g · ready', 'auth v26h · ready')
+          auth.write_text(text, encoding='utf-8')
+          PY
+          node --check admin/auth.js
+          node --check admin/vendor/supabase.min.js
+          git diff --check
+          git config user.name 'AYA RAOS Release'
+          git config user.email 'actions@users.noreply.github.com'
+          git add admin/auth.js admin/index.html admin/vendor/supabase.min.js
+          git rm .github/workflows/vendor-supabase-hotfix.yml
+          git commit -m 'fix(admin): serve Supabase auth runtime locally'
+          git push origin HEAD:${GITHUB_REF_NAME}
