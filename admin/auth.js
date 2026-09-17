@@ -8,16 +8,36 @@ const ensureHiddenStyles=()=>{
   style.textContent='#loginView[hidden],#resetView[hidden],#appView[hidden],#mobileNavPanel[hidden]{display:none!important}.login-card input,.login-card button{pointer-events:auto;touch-action:manipulation}';
   document.head.appendChild(style);
 };
-const loadSupabaseFallback=()=>{
-  if(window.supabase?.createClient)return Promise.resolve(true);
-  return new Promise(resolve=>{
-    const s=document.createElement('script');
-    s.src='https://unpkg.com/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js';
-    s.async=false;
-    s.onload=()=>resolve(!!window.supabase?.createClient);
-    s.onerror=()=>resolve(false);
-    document.head.appendChild(s);
-  });
+const loadScriptWithTimeout=(src,timeoutMs=6500)=>new Promise(resolve=>{
+  if(window.supabase?.createClient){resolve(true);return;}
+  const script=document.createElement('script');
+  let settled=false;
+  const finish=ok=>{
+    if(settled)return;
+    settled=true;
+    clearTimeout(timer);
+    script.onload=null;
+    script.onerror=null;
+    if(!ok)script.remove();
+    resolve(!!(ok&&window.supabase?.createClient));
+  };
+  const timer=setTimeout(()=>finish(false),timeoutMs);
+  script.src=src;
+  script.async=true;
+  script.onload=()=>finish(true);
+  script.onerror=()=>finish(false);
+  document.head.appendChild(script);
+});
+const loadSupabaseFallback=async()=>{
+  if(window.supabase?.createClient)return true;
+  const sources=[
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js',
+    'https://unpkg.com/@supabase/supabase-js@2.111.0/dist/umd/supabase.min.js'
+  ];
+  for(const src of sources){
+    if(await loadScriptWithTimeout(src))return true;
+  }
+  return false;
 };
 const message=(id,text,type='error')=>{
   const el=$(id);if(!el)return;
@@ -56,6 +76,8 @@ async function bootstrap(){
   const cfg=window.AYA_CONFIG?.supabase||{};
   const ready=await loadSupabaseFallback();
   if(!ready||!cfg.url||!cfg.publishableKey){
+    const badge=$('authBuildBadge');
+    if(badge)badge.textContent='auth v26g · gagal memuat';
     message('loginError','Supabase Admin belum siap. Silakan muat ulang halaman.');
     window.dispatchEvent(new Event('aya:admin-auth-failed'));
     return;
@@ -205,12 +227,14 @@ async function bootstrap(){
   window.AYA_ADMIN_AUTH_HANDLERS_BOUND=true;
   window.dispatchEvent(new Event('aya:admin-auth-ready-to-bind'));
   const badge=$('authBuildBadge');
-  if(badge)badge.textContent='auth v26f · ready';
+  if(badge)badge.textContent='auth v26g · ready';
   show('login');
 }
 
 bootstrap().catch(e=>{
   ensureHiddenStyles();
+  const badge=$('authBuildBadge');
+  if(badge)badge.textContent='auth v26g · gagal memuat';
   message('loginError',`Admin Auth gagal dimuat: ${classify(e)}`);
   window.dispatchEvent(new Event('aya:admin-auth-failed'));
 });
