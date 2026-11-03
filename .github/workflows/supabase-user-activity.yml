@@ -1,0 +1,40 @@
+# Infrastructure-only health activity; no application/code/schema/row writes.
+# Public publishable key is already shipped in js/config.js; NEVER use service-role.
+# GitHub cron uses UTC: 00:17/08:17/16:17 = 07:17/15:17/23:17 WIB.
+name: Supabase - user database activity
+
+on:
+  schedule:
+    - cron: "17 0,8,16 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-user-activity
+  cancel-in-progress: false
+
+jobs:
+  public-read-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Read approved testimonial RPC (no data mutation)
+        env:
+          SUPABASE_URL: "https://zysxhtlbfgqaymgwbjaq.supabase.co"
+          # This is the PUBLIC publishable key, not a secret or service-role key.
+          SUPABASE_PUBLISHABLE_KEY: "sb_publishable_WyTnT4aUSaYybXpo1a0gNQ_PPbTcRQb"
+        shell: bash
+        run: |
+          set -euo pipefail
+          body="$(curl --fail --silent --show-error --retry 2 --retry-delay 5 --retry-all-errors \
+            --connect-timeout 10 --max-time 35 \
+            --request POST \
+            --header "apikey: ${SUPABASE_PUBLISHABLE_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_PUBLISHABLE_KEY}" \
+            --header "Content-Type: application/json" \
+            --data '{"p_environment":"staging"}' \
+            "${SUPABASE_URL}/rest/v1/rpc/get_approved_aya_testimonials")"
+          printf '%s' "$body" | python3 -c "import json,sys; result=json.load(sys.stdin); assert isinstance(result,list), 'RPC response must be a JSON array'"
+          echo "Supabase Data API read-only RPC successful."
